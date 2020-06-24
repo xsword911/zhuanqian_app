@@ -1,0 +1,88 @@
+{
+	"pages": [{
+		"path": "pages/game/game",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle": "custom",
+			"app-plus": {
+			"titleNView": false,
+			"animationType": "slide-in-bottom"
+			}
+		}
+	},{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录"
+		}
+	},{
+		"path": "pages/register/register",
+		"style": {
+			"navigationBarTitleText": "注册"
+		}
+	},{
+		"path": "pages/work/work",
+		"style": {
+			"navigationBarTitleText": "",
+			"navigationStyle": "custom",
+			"app-plus": {
+			"titleNView": false,
+			"animationType": "slide-in-bottom"
+			}
+		}
+	},{
+		"path": "pages/extractMoney/extractMoney",
+		"style": {
+			"navigationBarTitleText": "提现"
+		}
+	},{
+		"path": "pages/my/my",
+		"style": {
+			"navigationBarTitleText": "我的"
+		}
+	},{
+		"path": "pages/my/setting/setting",
+		"style": {
+			"navigationBarTitleText": "设置"
+		}
+	},{
+		"path": "pages/my/detailed/detailed",
+		"style": {
+			"navigationBarTitleText": "现金收益明细"
+		}
+	}],
+	
+	"tabBar": {
+	    "color": "#7A7E83",
+	    "selectedColor": "#ff7b13",  //#1E9FFF
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/game/game",
+	        "iconPath": "static/img/game.png",
+	        "selectedIconPath": "static/img/game_active.png",
+	        "text": "游戏"
+	    },{
+	        "pagePath": "pages/work/work",
+	        "iconPath": "static/img/work.png",
+	        "selectedIconPath": "/static/img/work_active.png",
+	        "text": "任务"
+	    },{
+	        "pagePath": "pages/extractMoney/extractMoney",
+	        "iconPath": "/static/img/extractMoney.png",
+	        "selectedIconPath": "static/img/extractMoney_active.png",
+	        "text": "提现"
+	    },{
+	        "pagePath": "pages/my/my",
+	        "iconPath": "static/img/my.png",
+	        "selectedIconPath": "static/img/my_active.png",
+	        "text": "我的"
+	    }]
+	},
+	
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#fcd030",  //#1E9FFF
+		"backgroundColor": "#FFFFFF"
+	}
+}
