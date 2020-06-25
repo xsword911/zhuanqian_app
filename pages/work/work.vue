@@ -319,7 +319,7 @@ export default{
 
 <style>
 	.head_box{
-		background-color:#FFCA00;
+		background-color:#fcd030;/* FFCA00 */
 		width:100%;
 		height:400rpx;
 		color: #fff;

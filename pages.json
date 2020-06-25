@@ -22,12 +22,7 @@
 	},{
 		"path": "pages/work/work",
 		"style": {
-			"navigationBarTitleText": "",
-			"navigationStyle": "custom",
-			"app-plus": {
-			"titleNView": false,
-			"animationType": "slide-in-bottom"
-			}
+			"navigationBarTitleText": "任务"
 		}
 	},{
 		"path": "pages/extractMoney/extractMoney",
@@ -80,9 +75,9 @@
 	},
 	
 	"globalStyle": {
-		"navigationBarTextStyle": "black",
+		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#fcd030",  //#1E9FFF
+		"navigationBarBackgroundColor": "#fcd030",  //#1E9FFF  fcd030
 		"backgroundColor": "#FFFFFF"
 	}
 }
