@@ -4,7 +4,7 @@
 		<view class="name">
 			<tui-icon name="people" color="#6d7a87" :size="20"></tui-icon>
 			<view class="ipt">
-				<input type="text" :value="userName" placeholder="请输入用户名" :adjust-position="false" maxlength="30"/>
+				<input type="text" value=" " v-model="userName" placeholder="请输入用户名" :adjust-position="false" maxlength="30"/>
 			</view>
 		</view>
 		
@@ -12,7 +12,7 @@
 		<view class="pwd">
 			<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
 			<view class="ipt">
-				<input type="text" :value="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30"/>
+				<input type="text" value=" " v-model="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30" password="true" />
 			</view>
 		</view>
 		
@@ -23,12 +23,14 @@
 		
 		<!-- 登录按钮 -->
 		<view class="login">
-			<button type="default" class="login_btn">登录</button>
+			<button type="default" class="login_btn" @tap="bindLogin">登录</button>
 		</view>
 	</view>
 </template>
 
 <script>
+import api from "@/api/api.js";
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
@@ -41,7 +43,52 @@ export default{
 		toReg(){
 			uni.navigateTo({
 				url: '/pages/register/register'
-			})
+			});
+		},
+		//登录检测
+		bindLogin() {
+		    if (this.userName.length < 3) {
+		        uni.showToast({
+		            icon: 'none',
+		            title: '账号最短为 3 个字符'
+		        });
+		        return;
+		    }
+		    if (this.passWord.length < 3) {
+		        uni.showToast({
+		            icon: 'none',
+		            title: '密码最短为 3 个字符'
+		        });
+		        return;
+		    }
+		    let data = {
+		        account: this.userName,
+		        pwd: this.passWord
+		    };
+			this.login(data);
+		},
+		//登录提交
+		login(data){
+			api.login(data, (res)=>{
+				let code = api.getCode(res);
+				let msg = api.getMsg(res);
+				if(code == 0){
+					storage.setMyInfo(api.getData(res).user);  //保存我的信息
+					this.toGame();
+				}else{
+					uni.showToast({
+						title: msg,
+						image: "/static/img/fail-circle.png",
+						duration: 2000
+					});
+				}
+			});
+		},
+		//登录成功跳转到game页面
+		toGame(){
+			uni.reLaunch({
+				url: "/pages/game/game"
+			});
 		},
 	}
 }

@@ -4,7 +4,7 @@
 		<view class="name">
 			<tui-icon name="people" color="#6d7a87" :size="20"></tui-icon>
 			<view class="ipt">
-				<input type="text" :value="userName" placeholder="请输入用户名" :adjust-position="false" maxlength="30"/>
+				<input type="text" v-model="userName" placeholder="请输入用户名" :adjust-position="false" maxlength="30"/>
 			</view>
 		</view>
 		
@@ -12,34 +12,88 @@
 		<view class="pwd">
 			<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
 			<view class="ipt">
-				<input type="text" :value="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30"/>
+				<input type="text" v-model="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30" :password="true" />
 			</view>
 		</view>
 		
 		<!-- 手机号 -->
-		<view class="phone">
-			<tui-icon name="mobile" color="#6d7a87" :size="20"></tui-icon>
+		<view class="code">
+			<tui-icon name="member" color="#6d7a87" :size="24"></tui-icon>
 			<view class="ipt">
-				<input type="text" :value="passWord" placeholder="请输入手机号" :adjust-position="false" maxlength="11"/>
+				<input type="text" v-model="code"placeholder="请输入邀请码" :adjust-position="false" maxlength="30"/>
 			</view>
 		</view>
 		
 		<!-- 登录按钮 -->
 		<view class="login">
-			<button type="default" class="login_btn">注册</button>
+			<button type="default" class="login_btn" @tap="bindReg">注册</button>
 		</view>
 	</view>
 </template>
 
 <script>
+import util from "@/common/util.js";
+import api from "@/api/api.js";
 export default{
 	data() {
 		return {
 			userName: null,  //用户名
 			passWord: null,  //密码
+			code: null,  //邀请码
 		}
 	},
-	methods:{}
+	methods:{
+		//注册检测
+		bindReg() {
+		    if (this.userName.length < 3) {
+		        uni.showToast({
+		            icon: 'none',
+		            title: '账号最短为 3 个字符'
+		        });
+		        return;
+		    }
+		    if (this.passWord.length < 3) {
+		        uni.showToast({
+		            icon: 'none',
+		            title: '密码最短为 3 个字符'
+		        });
+		        return;
+		    }
+		    let data = {
+		        account: this.userName,
+		        pwd: this.passWord
+		    };
+			if(!util.isEmpty(this.code)) data.upperCode = this.code;
+			this.register(data);
+		},
+		//注册
+		register(data){
+			api.register(data, (res)=>{
+				let code = api.getCode(res);
+				let msg = api.getMsg(res);
+				if(code == 0){
+					uni.showToast({
+						title: msg,
+						image: "/static/img/check-circle.png",
+						duration: 1500,
+						success() {
+							setTimeout(function(){ 
+								uni.navigateBack({
+									delta: 1
+								}) 
+							}, 1600);
+						}
+					})
+				}else{
+					uni.showToast({
+						title: msg,
+						image: "/static/img/fail-circle.png",
+						duration: 2000
+					})
+				}
+			});
+		},
+	}
 }
 </script>
 
@@ -48,7 +102,7 @@ export default{
 		padding-top:100rpx;
 		box-sizing:border-box;
 	}
-	.name, .pwd, .phone{
+	.name, .pwd, .code{
 		display:flex;
 		padding:40rpx;
 		border-bottom:1px solid #F2F4F6;

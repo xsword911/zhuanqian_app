@@ -118,15 +118,15 @@
 		
 		<!-- 退出/登录按钮 -->
 		<view class="btn">
-			<button type="default" class="exit_btn" v-show="isLogin">退出登录</button>
+			<button type="default" class="exit_btn" v-show="isLogin" @tap="exit">退出登录</button>
 			<button type="default" class="login_btn" v-show="!isLogin">前往登录</button>
 		</view>
 	</view>
 </template>
 
 <script>
-// import icon from "@/components/tui-icon/tui-icon.vue";
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
+import storage from "@/api/storage.js";
 export default{
 	comments:{
 		// icon
@@ -134,14 +134,22 @@ export default{
 	},
 	data() {
 		return {
-			userName: '游客14314',  //用户昵称
-			yqm: 45453453,  //邀请码
-			todayCoin: 40,   //今日金币
-			currentCoin: 2323,  //当前金币
-			profit: 3.21  ,//现金收益
+			userEn: [],  //我的信息
+			userName: '',  //用户昵称
+			yqm: '',  //邀请码
+			todayCoin: 0,   //今日金币
+			currentCoin: 0,  //当前金币
+			profit: ''  ,//现金收益
 			modal8: false,  //控制金币换现金弹窗显示
 			isLogin: true,  //是否已登录
 		}
+	},
+	onShow(){
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.userName = this.userEn.account;
+		this.yqm = this.userEn.code;
+		this.currentCoin = this.userEn.gold;
+		this.profit = this.userEn.balance;
 	},
 	methods:{
 		//跳转到设置页
@@ -162,11 +170,20 @@ export default{
 			    url: '/pages/extractMoney/extractMoney'
 			});
 		},
+		//关闭弹窗
 		hide8() {
 			this.modal8 = false;
 		},
+		//打开弹窗
 		show8() {
 			this.modal8 = true;
+		},
+		//退出登录
+		exit(){
+			storage.outLogin();  //清空我的信息
+			uni.reLaunch({
+				url: "/pages/login/login"
+			})
 		},
 	}
 }

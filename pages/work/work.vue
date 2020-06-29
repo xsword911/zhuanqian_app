@@ -304,15 +304,21 @@
 </template>
 
 <script>
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
-			myCoin: 3768,  //我的金币
-			todayCoin: 40,  //今日金币
+			userEn: [],  //我的信息
+			myCoin: 0,  //我的金币
+			todayCoin: 0,  //今日金币
 			sign: 3,   //连续签到天数
 			continuedSign: 4,  //距离领取下一次奖励所需要的天数
 			nextReward: 5  //下一次奖励的金额
 		}
+	},
+	onShow(){
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.myCoin = this.userEn.gold;
 	},
 }
 </script>

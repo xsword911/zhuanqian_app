@@ -1,5 +1,10 @@
 {
 	"pages": [{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录"
+		}
+	},{
 		"path": "pages/game/game",
 		"style": {
 			"navigationBarTitleText": "",

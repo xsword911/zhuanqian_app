@@ -30,15 +30,22 @@
 </template>
 
 <script>
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
-			sumMoney: 2.57,   //可提现金额
-			userName: 'kkkkk',  //账号用户名
+			userEn: [],  //我的信息
+			sumMoney: null,   //可提现金额
+			userName: null,  //账号用户名
 			userImg: null,  //账号头像
 			optionSumMoney: [50, 100, 200, 300],  //可选的提现金额值
 			selectSumMoney: null  //选中的提现金额值索引
 		}
+	},
+	onShow(){
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.sumMoney = this.userEn.balance;
+		this.userName = this.userEn.account;
 	},
 	methods:{
 		//确认提现
