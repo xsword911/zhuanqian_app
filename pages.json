@@ -40,9 +40,29 @@
 			"navigationBarTitleText": "我的"
 		}
 	},{
+		"path": "pages/my/more/more",
+		"style": {
+			"navigationBarTitleText": "更多"
+		}
+	},{
 		"path": "pages/my/setting/setting",
 		"style": {
 			"navigationBarTitleText": "设置"
+		}
+	},{
+		"path": "pages/my/setting/bank/bank",
+		"style": {
+			"navigationBarTitleText": "银行卡"
+		}
+	},{
+		"path": "pages/my/setting/bank/updBank/updBank",
+		"style": {
+			"navigationBarTitleText": "修改银行卡信息"
+		}
+	},{
+		"path": "pages/goldDetails/goldDetails",
+		"style": {
+			"navigationBarTitleText": "金币收益明细"
 		}
 	},{
 		"path": "pages/my/detailed/detailed",

@@ -31,4 +31,25 @@ module.exports = {
 	
 	//注册
 	register: function(path, funSuccess) {httpUtil.post('user/register', path, funSuccess);},
+	
+	//查询用户详细信息
+	getUser: function(path, funSuccess) {httpUtil.post('user/getUser', path, funSuccess);},
+	
+	//查询用户绑定银行卡
+	getUserBank: function(path, funSuccess) {httpUtil.post('user/getUserBank', path, funSuccess);},
+	
+	//修改用户绑定银行
+	updUserBank: function(path, funSuccess) {httpUtil.post('user/updUserBank', path, funSuccess);},
+	
+	//添加用户绑定银行
+	addUserBank: function(path, funSuccess) {httpUtil.post('user/addUserBank', path, funSuccess);},
+	
+	//添加用户绑定银行
+	delUserBankArr: function(path, funSuccess) {httpUtil.post('user/delUserBankArr', path, funSuccess);},
+	
+	//获取任务列表
+	getTask: function(path, funSuccess) {httpUtil.post('activity/getTask', path, funSuccess);},
+	
+	//查询今天统计金额
+	getStatisticsToday: function(path, funSuccess) {httpUtil.post('money/getStatisticsToday', path, funSuccess);},
 }

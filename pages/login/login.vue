@@ -63,7 +63,8 @@ export default{
 		    }
 		    let data = {
 		        account: this.userName,
-		        pwd: this.passWord
+		        pwd: this.passWord,
+				type: 0
 		    };
 			this.login(data);
 		},
@@ -73,7 +74,6 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
-					storage.setMyInfo(api.getData(res).user);  //保存我的信息
 					this.toGame();
 				}else{
 					uni.showToast({
@@ -84,10 +84,13 @@ export default{
 				}
 			});
 		},
-		//登录成功跳转到game页面
+		//登录成功查询我的信息并跳转到game页面
 		toGame(){
-			uni.reLaunch({
-				url: "/pages/game/game"
+			api.getUser({account: this.userName}, (res)=>{
+				storage.setMyInfo(api.getData(res));
+				uni.reLaunch({
+					url: "/pages/game/game"
+				});
 			});
 		},
 	}

@@ -2,6 +2,13 @@
 	<view class="container">
 		<!-- 我的信息 -->
 		<view class="my_info">
+			<view class="gold_details" @tap="toGoldDetails">
+				<view class="gole_img an">
+					<image src="/static/img/gold1.png" mode="widthFix"></image>
+				</view>
+				<text>金币明细</text>
+			</view>
+			
 			<view class="info_left">
 				<view class="my_headImg">
 					<image src="/static/img/headImg.jpg" mode="widthFix"></image>
@@ -15,7 +22,7 @@
 			</view>
 			
 			<view class="info_right">
-				<button type="default" class="invite_btn">去邀请好友</button>
+				<button type="default" class="invite_btn">邀请好友</button>
 			</view>
 			
 			<view class="gold_coin">
@@ -55,7 +62,7 @@
 			<view class="setting" @tap="toSetting">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/share.png" mode="widthFix"></image>
+						<image src="/static/img/setting1.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">设置</text>
 				</view>
@@ -68,9 +75,22 @@
 			<view class="share">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/setting.png" mode="widthFix"></image>
+						<image src="/static/img/share1.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">分享给好友</text>
+				</view>
+				
+				<view class="func_right">
+					<tui-icon name="arrowright" :size="30"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="more" @tap="toMore">
+				<view class="func_left">
+					<view class="func_img">
+						<image src="/static/img/more.png" mode="widthFix"></image>
+					</view>
+					<text class="func_test">更多</text>
 				</view>
 				
 				<view class="func_right">
@@ -89,7 +109,7 @@
 							我的金币
 						</view>
 						<view class="num ">
-							3728
+							{{currentCoin}}
 						</view>
 						<view class="num tips">
 							10000金币=1元
@@ -101,7 +121,7 @@
 							可兑换现金
 						</view>
 						<view class="num ">
-							￥0.37
+							￥{{currentCoin | cashExchange}}
 						</view>
 					</view>
 				</view>
@@ -127,17 +147,30 @@
 <script>
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import storage from "@/api/storage.js";
+import api from "@/api/api.js";
+import util from "@/common/util.js";
 export default{
 	comments:{
 		// icon
 		tuiModal
+	},	
+	filters:{
+		//金币转换现金计算
+		cashExchange(val){
+			if(val < 10000) return 0;
+			else{
+				let num = val/10000;
+				num = num.toFixed(2);
+				return num;
+			}
+		},
 	},
 	data() {
 		return {
 			userEn: [],  //我的信息
 			userName: '',  //用户昵称
 			yqm: '',  //邀请码
-			todayCoin: 0,   //今日金币
+			todayCoin: null,   //今日金币
 			currentCoin: 0,  //当前金币
 			profit: ''  ,//现金收益
 			modal8: false,  //控制金币换现金弹窗显示
@@ -150,12 +183,33 @@ export default{
 		this.yqm = this.userEn.code;
 		this.currentCoin = this.userEn.gold;
 		this.profit = this.userEn.balance;
+		this.getGoldAdd();
 	},
 	methods:{
+		//获取今日金币
+		getGoldAdd(){
+			api.getStatisticsToday({account: this.userEn.account}, (res) =>{
+				let data = api.getData(res);
+				if(util.isEmpty(data)) this.todayCoin = 0;
+				else this.todayCoin = data.goldAdd;
+			});
+		},
+		//跳转到金币明细页
+		toGoldDetails(){
+			uni.navigateTo({
+				url: "/pages/goldDetails/goldDetails"
+			})
+		},
 		//跳转到设置页
 		toSetting(){
 			uni.navigateTo({
 				url: '/pages/my/setting/setting'
+			})
+		},
+		//跳转到更多
+		toMore(){
+			uni.navigateTo({
+				url: '/pages/my/more/more'
 			})
 		},
 		//跳转到现金收益明细页
@@ -209,6 +263,36 @@ export default{
 		justify-content:space-between;
 		position:relative;
 	}
+	.gold_details{
+		background-color: #FEF1C1;
+		width:240rpx;
+		height:80rpx;
+		position:absolute;
+		right:0;
+		top: 0;
+		font-size:14px;
+		border-radius:40rpx 0 0 40rpx;
+		display:flex;
+		align-items:center;
+		padding-left:20rpx;
+		box-sizing:border-box;
+	}
+	.gole_img{
+		width:60rpx;
+		height:60rpx;
+		margin-right:20rpx;
+	}
+	@-webkit-keyframes rotation{
+	    from {-webkit-transform: rotateY(0deg);}
+	    to {-webkit-transform: rotateY(360deg);}
+	}
+	.an{
+	    -webkit-transform: rotateY(360deg);
+	    animation: rotation 5s linear infinite;
+	    -moz-animation: rotation 5s linear infinite;
+	    -webkit-animation: rotation 5s linear infinite;
+	    -o-animation: rotation 5s linear infinite;
+	}
 	.info_left{
 		display:flex;
 		align-items:center;
@@ -238,7 +322,7 @@ export default{
 		color:#fcd030;
 		border-radius:30rpx;
 		width:200rpx;
-		font-size:14px;
+		font-size:13px;
 	}
 	.gold_coin{
 		width:92%;
@@ -332,7 +416,7 @@ export default{
 	.func_test{
 		margin-left:12rpx;
 	}
-	.setting, .share{
+	.setting, .share, .more{
 		display:flex;
 		justify-content:space-between;
 		margin-top:20rpx;
