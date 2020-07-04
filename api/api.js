@@ -50,6 +50,33 @@ module.exports = {
 	//获取任务列表
 	getTask: function(path, funSuccess) {httpUtil.post('activity/getTask', path, funSuccess);},
 	
+	//做一个任务
+	taskDo: function(path, funSuccess) {httpUtil.post('activity/taskDo', path, funSuccess);},
+	
+	//查询任务完成情况
+	getTaskDetails: function(path, funSuccess) {httpUtil.post('activity/getTaskDetails', path, funSuccess);},
+	
 	//查询今天统计金额
 	getStatisticsToday: function(path, funSuccess) {httpUtil.post('money/getStatisticsToday', path, funSuccess);},
+	
+	//发起提现申请
+	addMoneyDraw: function(path, funSuccess) {httpUtil.post('money/addMoneyDraw', path, funSuccess);},
+	
+	//金额和金币转换
+	moneyTran: function(path, funSuccess) {httpUtil.post('money/moneyTran', path, funSuccess);},
+	
+	//查询提现记录
+	getMoneyDraw: function(path, funSuccess) {httpUtil.post('money/getMoneyDraw', path, funSuccess);},
+	
+	//查询提现记录
+	getMoneyTran: function(path, funSuccess) {httpUtil.post('money/getMoneyTran', path, funSuccess);},
+	
+	//查询账变记录
+	getMoney: function(path, funSuccess) {httpUtil.post('money/getMoney', path, funSuccess);},
+	
+	//查询签到进度
+	getSignProgress: function(path, funSuccess) {httpUtil.post('activity/getSignProgress', path, funSuccess);},
+	
+	//签到领奖
+	sign: function(path, funSuccess) {httpUtil.post('activity/sign', path, funSuccess);},
 }

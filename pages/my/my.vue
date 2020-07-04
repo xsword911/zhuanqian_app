@@ -37,7 +37,7 @@
 				</view>
 				
 				<view class="exchange">
-					<button type="default" class="exchange_btn" @tap="show8">兑换现金</button>
+					<button type="default" class="exchange_btn" @tap="toMoneyChange">兑换现金</button>
 				</view>
 			</view>
 		</view>
@@ -99,43 +99,6 @@
 			</view>
 		</view>
 		
-		<!-- 金币换现金弹窗 -->		
-		<tui-modal :show="modal8" @cancel="hide8" :custom="true">
-			<view class="tui-modal-custom" style="position:relative;">
-				<view class="close" @tap="hide8"><tui-icon name="shut" :size="16"></tui-icon></view>
-				<view class="info">
-					<view class="info_test">
-						<view class="">
-							我的金币
-						</view>
-						<view class="num ">
-							{{currentCoin}}
-						</view>
-						<view class="num tips">
-							10000金币=1元
-						</view>
-					</view>
-					
-					<view class="info_test">
-						<view class="">
-							可兑换现金
-						</view>
-						<view class="num ">
-							￥{{currentCoin | cashExchange}}
-						</view>
-					</view>
-				</view>
-				
-				<view class="">
-					<button type="default" class="exChange">立即兑换</button>
-				</view>
-				
-				<view class="exchange_tips">
-					金币只能兑换10000的倍数
-				</view>
-			</view>
-		</tui-modal>
-		
 		<!-- 退出/登录按钮 -->
 		<view class="btn">
 			<button type="default" class="exit_btn" v-show="isLogin" @tap="exit">退出登录</button>
@@ -157,9 +120,9 @@ export default{
 	filters:{
 		//金币转换现金计算
 		cashExchange(val){
-			if(val < 10000) return 0;
+			if(val < 100) return 0;
 			else{
-				let num = val/10000;
+				let num = val/100;
 				num = num.toFixed(2);
 				return num;
 			}
@@ -182,7 +145,7 @@ export default{
 		this.userName = this.userEn.account;
 		this.yqm = this.userEn.code;
 		this.currentCoin = this.userEn.gold;
-		this.profit = this.userEn.balance;
+		this.profit = this.userEn.money;
 		this.getGoldAdd();
 	},
 	methods:{
@@ -193,6 +156,12 @@ export default{
 				if(util.isEmpty(data)) this.todayCoin = 0;
 				else this.todayCoin = data.goldAdd;
 			});
+		},
+		//跳转到兑换现金页
+		toMoneyChange(){
+			uni.navigateTo({
+				url: "/pages/moneyChange/moneyChange"
+			})
 		},
 		//跳转到金币明细页
 		toGoldDetails(){
@@ -223,14 +192,6 @@ export default{
 			uni.switchTab({
 			    url: '/pages/extractMoney/extractMoney'
 			});
-		},
-		//关闭弹窗
-		hide8() {
-			this.modal8 = false;
-		},
-		//打开弹窗
-		show8() {
-			this.modal8 = true;
 		},
 		//退出登录
 		exit(){
@@ -420,46 +381,6 @@ export default{
 		display:flex;
 		justify-content:space-between;
 		margin-top:20rpx;
-	}
-	.close{
-		position:absolute;
-		right:0;
-		top:0;
-	}
-	.info{
-		display:flex;
-		width:100%;
-		font-size:12px;
-	}
-	.info_test{
-		width:50%;
-	}
-	.num{
-		font-size:16px;
-		margin-top:20rpx;
-	}
-	.tips{
-		font-size:12px;
-		background-color:#ff6b17;
-		width:auto;
-		text-align:center;
-		color:#fff;
-	}
-	.exChange{
-		margin-top:30rpx;
-		background-color:#d1d1d1;
-		border-radius:30rpx;
-		color:#fff;
-		font-size:14px;
-	}
-	.exChange:after{
-		border: none;
-	}
-	.exchange_tips{
-		width:100%;
-		margin-top:20rpx;
-		font-size:12px;
-		text-align:center;
 	}
 	.btn{
 		margin-top:40rpx;

@@ -30,6 +30,11 @@
 			"navigationBarTitleText": "任务"
 		}
 	},{
+		"path": "pages/receiveAward/receiveAward",
+		"style": {
+			"navigationBarTitleText": "领取奖励"
+		}
+	},{
 		"path": "pages/extractMoney/extractMoney",
 		"style": {
 			"navigationBarTitleText": "提现"
@@ -58,6 +63,11 @@
 		"path": "pages/my/setting/bank/updBank/updBank",
 		"style": {
 			"navigationBarTitleText": "修改银行卡信息"
+		}
+	},{
+		"path": "pages/moneyChange/moneyChange",
+		"style": {
+			"navigationBarTitleText": "收益转换"
 		}
 	},{
 		"path": "pages/goldDetails/goldDetails",

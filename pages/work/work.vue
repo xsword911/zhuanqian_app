@@ -21,7 +21,7 @@
 					</view>
 				</view>		
 				
-				<view class="" @tap="show8(-1)">
+				<view class="" @tap="toMoneyChange">
 					<button type="default" class="extract_btn">兑换现金 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
 				</view>
 				
@@ -34,17 +34,33 @@
 				</view>
 				
 				<view class="signIn_test">
-					<view class="">
-						已连续签到<text class="tips_text">{{sign}}</text>天
+					<view class="" v-show="timeOut">						
+						<view class="continued_sign">
+							<view class="" v-show="awardType == 0">
+								再过<text class="tips_text">{{range}}{{unit}}</text>即可获得<text class="tips_text">{{award}}金币</text>
+							</view>
+							
+							<view class="" v-show="awardType == 1">
+								再过<text class="tips_text">{{range}}{{unit}}</text>即可获得<text class="tips_text">{{award}}现金</text>
+							</view>
+							
+						</view>
 					</view>
 					
-					<view class="continued_sign">
-						再签到<text class="tips_text">{{continuedSign}}</text>天可获得<text class="tips_text">{{nextReward}}</text>元现金红包
+					<view class="" v-show="!timeOut">
+						<view class="" v-show="awardType == 0">
+							当前可领取奖励：<text class="tips_text">{{award}}金币</text>
+						</view>
+						
+						<view class="" v-show="awardType == 1">
+							当前可领取奖励：<text class="tips_text">{{award}}现金</text>
+						</view>
 					</view>
 				</view>
 				
 				<view class="countDown_box">
-					16:22
+					<text v-show="timeOut">{{time}}</text>
+					<text v-show="!timeOut" style="font-size:16px; color: #fff;" @tap="receive(-2)">领取</text>
 				</view>
 			</view>
 			
@@ -88,7 +104,7 @@
 						</view>
 					</view>
 					
-					<view class="activity_right" @tap="show8(item.type, item.rule, item.title)">
+					<view class="activity_right" @tap="show8(item)">
 						<view class="activity_btn">
 							<view class="activity_btnImg">
 								<image src="/static/img/work_btn.png" mode="widthFix"></image>
@@ -118,7 +134,7 @@
 						</view>
 					</view>
 					
-					<view class="activity_right" @tap="show8(item.type, item.rule, item.title)">
+					<view class="activity_right" @tap="show8(item)">
 						<view class="activity_btn">
 							<view class="activity_btnImg">
 								<image src="/static/img/work_btn.png" mode="widthFix"></image>
@@ -167,7 +183,7 @@
 						</view>
 						
 						<view class="copy">
-							<button type="default">复制内容并跳转</button>
+							<button type="default" @tap="toWx">复制内容并跳转</button>
 						</view>
 					</view>
 					
@@ -183,7 +199,7 @@
 						</view>
 						
 						<view class="copy">
-							<button type="default">复制内容并跳转</button>
+							<button type="default" @tap="toWx">复制内容并跳转</button>
 						</view>
 					</view>
 					
@@ -199,7 +215,7 @@
 						</view>
 						
 						<view class="copy">
-							<button type="default">复制内容并跳转</button>
+							<button type="default" @tap="toWx">复制内容并跳转</button>
 						</view>
 					</view>
 					
@@ -213,7 +229,7 @@
 									{{myCoin}}
 								</view>
 								<view class="num tips">
-									10000金币=1元
+									100金币=1元
 								</view>
 							</view>
 							
@@ -232,7 +248,27 @@
 						</view>
 						
 						<view class="exchange_tips">
-							金币只能兑换10000的倍数
+							金币只能兑换100的倍数
+						</view>
+					</view>
+					
+					<view class="box" v-show="type == -2">
+						<view class="receive_btn">
+							<view class="receive_title receive_btnB">领取奖励</view>
+							
+							<view class="receive_btnB">
+								<view class="" v-show="awardType == 0">
+									恭喜你获得<text class="tips_text">{{award}}金币</text>
+								</view>
+								
+								<view class="" v-show="awardType == 1">
+									恭喜你获得：<text class="tips_text">{{award}}现金</text>
+								</view>
+							</view>
+							
+							<view class="receive_Mbtn">
+								<button type="default" @tap="hide8">确定</button>
+							</view>
 						</view>
 					</view>
 					
@@ -255,9 +291,9 @@ export default{
 	filters:{
 		//金币转换现金计算
 		cashExchange(val){
-			if(val < 10000) return 0;
+			if(val < 100) return 0;
 			else{
-				let num = val/10000;
+				let num = val/100;
 				num = num.toFixed(2);
 				return num;
 			}
@@ -268,15 +304,22 @@ export default{
 			userEn: [],  //我的信息
 			myCoin: 0,  //我的金币
 			todayCoin: 0,  //今日金币
-			sign: 3,   //连续签到天数
-			continuedSign: 4,  //距离领取下一次奖励所需要的天数
-			nextReward: 5,  //下一次奖励的金额
 			hotActivity: [],  //热门活动列表
 			recommend: [],  //限时推荐列表
 			modal8: false,  //控制金币换现金弹窗显示
 			text: null, //弹窗的文字内容
 			type: 0, //弹窗类型
 			title: '', //弹窗标题
+			id: null ,//任务id
+			timeOut: false, //控制时间倒计时显示
+			time: "",  //倒计时
+			range: "",  //距离下次领取奖励的大概时间
+			unit: '',   //距离下次领取奖励的时间单位
+			award: null,  //当前奖励
+			awardType: null, //奖励类型 0:金币 1:现金
+			day: null,  //签到天数
+			signSecond: null, //距离下次签到多少秒
+			intervalID: null,  //定时器id
 		}
 	},
 	onShow(){
@@ -285,29 +328,125 @@ export default{
 		this.getTaskList();  //获取任务列表
 		this.myCoin = storage.getMyInfo().gold;
 		this.getGoldAdd();
+		this.getSignProgress();  //查询奖励信息
+		this.timeAuto();  //开启计时器
 	},
 	methods:{
+		//开启定时器
+		timeAuto(){
+			clearInterval(this.intervalID);
+			this.intervalID = setInterval(this.getShowTimeBySecond, 1000);
+		},
+		//查询奖励信息
+		getSignProgress(){
+			api.getSignProgress({account: this.userEn.account}, (res)=>{
+				let data = api.getData(res);
+				//sign为空时表示没有可领取的奖励
+				if(util.isEmpty(data.sign)){
+					this.timeOut = true;
+					this.awardType = data.nextSign.awardType;
+					this.award = data.nextSign.award;
+					this.signSecond = data.nextSecond;
+					
+					//this.getShowTimeBySecond();
+
+				}else{
+					this.signSecond = null;
+					this.timeOut = false;
+					this.awardType = data.sign.awardType;
+					this.award = data.sign.award;
+					this.day = data.sign.day;
+				}
+			});
+		},
+		//把秒转换为对应显示格式
+		getShowTimeBySecond(){			
+			if(this.signSecond == null) return;
+			let sp = this.signSecond;
+			// console.log(sp);
+			//大于一小时转换为最小单位 分
+			if(sp > 3600){
+				let hour = parseInt(sp / 3600);  //获取小时
+				let min = parseInt([sp - (hour * 3600)] / 60); //获取分钟
+				this.range = hour;  //显示倒计时的小时
+				this.unit = "小时";
+				this.time = `${hour}:${min}`;
+			}else if(sp >= 0){
+				let min = parseInt(sp / 60); //获取分钟
+				let second = parseInt(sp - (min * 60)); //获取秒
+				// console.log(second);
+				this.range = min;  //显示倒计时的分钟
+				this.unit = "分钟";
+				this.time = `${min}:${second}`;
+				
+				if(this.range == 0){
+					this.range = second;  //显示倒计时的秒
+					this.unit = "秒";
+					this.time = `${second}`;
+				}
+			}else{
+				this.getSignProgress();  //再次请求数据
+			}
+		    this.signSecond += -1;  //每秒减一
+		},
+		//领取奖励
+		receive(type){
+			this.show8(type);
+			api.sign({
+				account: this.userEn.account, 
+				day: this.day
+			}, (res)=>{
+				let code = api.getCode(res);
+				let msg = api.getMsg(res);
+				if(code == 0){
+					
+					this.getSignProgress();  //再次查询数据
+				}else{
+					uni.showToast({
+						title: msg,
+						image: "/static/img/fail-circle.png",
+						duration: 2000
+					})
+				}
+			});
+		},
+		//跳转到领取奖励界面
+		toReceive(){
+			uni.navigateTo({
+				url: "/pages/receiveAward/receiveAward"
+			})
+		},
+		//跳转到兑换现金页
+		toMoneyChange(){
+			uni.navigateTo({
+				url: "/pages/moneyChange/moneyChange"
+			})
+		},
 		//复制内容并跳转到微信
 		toWx(){
 			let test = '';
 			test = this.text;
 			if(this.type == 0) test = '我的邀请码是' + this.userEn.code + "下载链接是" + this.text;
+			this.taskDo();
+			// ifdef H5
+			return;
+			// endif
 			uni.setClipboardData({
 				data: test,
 				success() {
-					if (plus.os.name == "iOS") {  
-					    plus.runtime.openURL("weixin://")  
-					} else if (plus.os.name == "andriod") {  
-					    var Intent = plus.android.importClass("android.content.Intent");  
-					    var ComponentName = plus.android.importClass('android.content.ComponentName')  
-					    var intent = new Intent();  
-					    intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));  
-					    //intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);  
-					    intent.setFlags(335544320);  
-					    intent.setAction("android.intent.action.VIEW");  
-					    var main = plus.android.runtimeMainActivity();  
-					    main.startActivity(intent);  
-					}  
+					// if (plus.os.name == "iOS") {  
+					//     plus.runtime.openURL("weixin://")  
+					// } else if (plus.os.name == "andriod") {  
+					//     var Intent = plus.android.importClass("android.content.Intent");  
+					//     var ComponentName = plus.android.importClass('android.content.ComponentName')  
+					//     var intent = new Intent();  
+					//     intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));  
+					//     //intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);  
+					//     intent.setFlags(335544320);  
+					//     intent.setAction("android.intent.action.VIEW");  
+					//     var main = plus.android.runtimeMainActivity();  
+					//     main.startActivity(intent);  
+					// }  
 				}
 			});
 		},
@@ -348,12 +487,41 @@ export default{
 			this.modal8 = false;
 		},
 		//打开弹窗
-		show8(type, text, title) {
-			if(type == 4) return;
+		show8(item) {
+			if(item.type == 4) return;
 			this.modal8 = true;
-			this.type = type;
-			this.text = text;
-			this.title = title;
+			if(item == -2){
+				this.type = item;
+				return;
+			};
+			this.type = item.type;
+			this.text = item.rule;
+			this.title = item.title;
+			this.id = item.id;
+		},
+		//做一个任务
+		taskDo(){
+			api.taskDo({
+				account: this.userEn.account, 
+				taskId: this.id,
+			}, (res)=>{
+				let code = api.getCode(res);
+				let msg = api.getMsg(res);
+				this.hide8();
+				if(code == 0){
+					uni.showToast({
+						title: msg,
+						image: "/static/img/check-circle.png",
+						duration: 1500
+					})
+				}else{
+					uni.showToast({
+						title: msg,
+						image: "/static/img/fail-circle.png",
+						duration: 2000
+					})
+				}
+			});
 		},
 	}
 }
@@ -474,7 +642,7 @@ export default{
 		align-items:center;
 		padding:40rpx 10rpx;
 		box-sizing:border-box;
-		border-top:1px solid #f5f5f5;
+		border-bottom:1px solid #f5f5f5;
 	}
 	.boder_none{
 		border:none;
@@ -568,7 +736,6 @@ export default{
 	}
 	.box{
 		width:100%;
-		text-align:center;
 	}
 	.info{
 		display:flex;
@@ -620,5 +787,21 @@ export default{
 	}
 	.tips_text{
 		color:#FF0000;
+	}
+	.receive_btn{
+		text-align:center;
+	}
+	.receive_btnB{
+		width:100%;
+		margin-bottom:60rpx;
+	}
+	.receive_title{
+		font-size:16px;
+	}
+	.receive_Mbtn button{
+		border-radius:40rpx;
+		background-color:#FCD030;
+		color:#000;
+		font-size:14px;
 	}
 </style>

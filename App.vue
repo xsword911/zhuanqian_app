@@ -23,6 +23,7 @@ export default {
 	.content{
 		padding:0 20rpx;
 		box-sizing:border-box;
+		font-size:16px;
 	}
 	image{
 		width:100%;

@@ -2,21 +2,31 @@
     <view class="page">
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
-			<view class="income" v-for="(item,index) in incomeList" :key='index' v-show="incomeList != []">
+			<view class="income" v-for="(item,index) in incomeList" :key='index'  v-show="showIncome" @tap="open(item.id)">
 				<view class="incomeTime">
-					<text class="info_from">{{item.from}}</text>
-					<text class="info_time">{{item.time}}</text>
+					<text class="info_from">{{item.title}}</text>
+					<text class="info_time">{{item.finishTime}}</text>
 				</view>
 				
 				<view class="incomeNum">
-					<text class="num">+ {{item.num}}</text>
+					<text class="num">+ {{item.award}}</text>
 					<view class="gold_img">
 						<image src="/static/img/gold2.png" mode="widthFix"></image>
+					</view>
+					<view class="open">
+						<tui-icon name="arrowdown" :size="20" v-show="!item.openTag"></tui-icon>
+						<tui-icon name="arrowup" :size="20" v-show="item.openTag"></tui-icon>
+					</view>
+				</view>
+				
+				<view class="open_box" v-show="item.id == openId">
+					<view class="">
+						内容：<text class="income_data">{{item.explain}}</text>
 					</view>
 				</view>
 			</view>
 			
-			<view class="data_lack" v-show="incomeList == []">
+			<view class="data_lack" v-show="!showIncome">
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
@@ -29,38 +39,83 @@
 
 <script>
 import util from "@/common/util.js";
+import api from "@/api/api.js";
+import storage from "@/api/storage.js";
 export default {
     data() {
         return {
+			userEn: [],  //我的信息
 			showIncome: true, // 收入明细列表是否显示
-			//收入明细列表
-			incomeList:[{
-				from: '转盘',
-				time: "2020-06-22",
-				num: 10
-			},{
-				from: '转盘',
-				time: "2020-06-22",
-				num: 10
-			},{
-				from: '转盘',
-				time: "2020-06-22",
-				num: 10
-			},{
-				from: '转盘',
-				time: "2020-06-22",
-				num: 10
-			},{
-				from: '转盘',
-				time: "2020-06-22",
-				num: 10
-			}]   //提现明细列表
+			incomeList:[]   ,//提现明细列表
+			openTag: false,  //展开图表控制
+			// openBox: false,  //控制内容盒子是否打开
+			openId: null,  //展开内容盒子的id
+			page: 1,  //查询页数
         };
     },
     onShow(){
-		if(util.isEmpty(this.incomeList)) this.showIncome = false;
-		else this.showIncome = true;
-	}
+		this.userEn = storage.getMyInfo();  //获取我的信息		
+		this.getTaskDetails();  //获取金币收入明细表		
+	},
+	methods:{
+		// 判断金币收入明细表是否有数据
+		isShowIncome(){
+			if(util.isEmpty(this.incomeList)) this.showIncome = false;
+			else this.showIncome = true;
+		},
+		//获取金币收入明细表
+		getTaskDetails(){
+			api.getTaskDetails({
+				account: this.userEn.account,
+				state: 1,
+				page: this.page,
+				count: 10
+			}, (res)=>{
+				let data = api.getData(res).data;
+				if(util.isEmpty(data))
+					 this.isShowIncome();  //控制金币收入明细表显示
+				else{
+					data.forEach((item) =>{
+						data.openTag = false;
+					});
+					this.incomeList = data;
+					this.showIncome = true;
+				}
+			});
+		},
+		//展开活动内容
+		open(id){
+			if(this.openId == id){
+				this.openId = -1;				
+			} 
+			else
+			 this.openId = id;
+			
+			this.incomeList.forEach((item) =>{
+				if(item.id == this.openId){
+					item.openTag = true;
+				}else{
+					item.openTag = false;
+				}
+			});
+		},
+	},
+	//上拉获取更多金币收益明细数据
+	onReachBottom(){
+		this.page = this.page + 1;
+		api.getTaskDetails({
+			account: this.userEn.account,
+			state: 1,
+			page: this.page,
+			count: 10
+		}, (res)=>{
+			let data = api.getData(res).data;
+			if(util.isEmpty(data)) return;
+			data.forEach((item) =>{
+				this.incomeList.push(item);
+			});
+		});
+	},
 };
 </script>
 
@@ -78,6 +133,7 @@ export default {
 		display:flex;
 		justify-content:space-between;
 		align-items:center;
+		flex-wrap: wrap;
 		border-bottom:1px solid #eee;
 	}
 	.lack_box{
@@ -129,5 +185,18 @@ export default {
 	.num{
 		margin-right:20rpx;
 		font-size:16px;
+	}
+	.open{
+		margin-left:10rpx;
+	}
+	.open_box{
+		margin-top:20rpx;
+		width:100%;
+	}
+	.income_data{
+		color:#959FA6;
+	}
+	.open_box>view{
+		margin-top:10rpx;
 	}
 </style>
