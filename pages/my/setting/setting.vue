@@ -2,55 +2,80 @@
 	<view class="content">
 		<!-- 功能栏 -->
 		<view class="content func">
-			<view class="setting" @tap="toSetting">
+			<view class="setting" @tap="">
 				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/update.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">版本更新</text>
+					<text class="func_test">账号</text>
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<view class="">{{1212}}</view>
+					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</view>
 			
-			<view class="setting" @tap="toSetting">
+			<view class="setting" @tap="">
 				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/feedback.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">问题反馈</text>
+					<text class="func_test">昵称</text>
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<view class="">{{1212}}</view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</view>
 			
-			<view class="setting" @tap="toSetting">
+			<view class="setting" @tap="">
 				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/help.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">帮助中心</text>
+					<text class="func_test">手机号</text>
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<view class="">{{1212}}</view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</view>
 			
-			<view class="setting" @tap="toSetting">
+			<view class="setting" @tap="">
 				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/about.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">关于我们</text>
+					<text class="func_test">邀请码</text>
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<view class="">{{1212}}</view>
+					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting" @tap="">
+				<view class="func_left">
+					<text class="func_test">注册时间</text>
+				</view>
+				
+				<view class="func_right">
+					<view class="">{{ }}</view>
+					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting" @tap="">
+				<view class="func_left">
+					<text class="func_test">最后一次登录时间</text>
+				</view>
+				
+				<view class="func_right">
+					<view class="">{{ }}</view>
+					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting" @tap="toBank">
+				<view class="func_left">
+					<text class="func_test">银行卡</text>
+				</view>
+				
+				<view class="func_right">
+					<view class="">{{ }}</view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</view>
 		</view>
@@ -58,25 +83,34 @@
 </template>
 
 <script>
+export default{
+	data() {
+		return {
+			
+		}
+	},
+	methods:{
+		//跳转到银行卡信息页
+		toBank(){
+			uni.navigateTo({
+				url: '/pages/my/setting/bank/bank'
+			})
+		},
+	}
+}
 </script>
 
 <style>
-	image{
-		width:100%;
-		height:100%;
-	}
-	.content{
-		padding:0 10rpx;
-		box-sizing:border-box;
-	}
-	.func_img{
-		width:55rpx;
-		height:55rpx;
-	}
 	.func_left{
-		font-size:14px;
+		font-size:15px;
 		display:flex;
 		align-items:center;
+	}
+	.func_right{
+		display:flex;
+		align-items:center;
+		color:#999999;
+		font-size:15px;
 	}
 	.func_test{
 		margin-left:12rpx;

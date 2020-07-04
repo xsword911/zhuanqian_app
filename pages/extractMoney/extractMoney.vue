@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="info_bar">
 			<view class="test">可提现金额</view>
-			<view class="sum">{{sumMoney}}</view>
+			<view class="sum">￥{{sumMoney}}</view>
 		</view>
 		
 		<view class="info_bar">
@@ -12,15 +12,19 @@
 					 <image src="/static/img/headImg.jpg" mode="widthFix"></image>
 				</view>
 				<view class="info">
-					<text>{{userName}}</text>
-					<text class="tips_test">1个工作日内打款微信账户零钱</text>
+					<view class="bank_code">
+						<text class="hide_code">····    ····    ····</text>
+						<text>{{userBankCode}}</text>
+					</view>
+					<text class="tips_test">{{userBankName}}</text>
 				</view>
 			</view>
 		</view>
 		
 		<view class="info_bar" style="border: none;">提现金额</view>
 		<view class="option">
-			<view class="option_box" v-for="(item,index) in optionSumMoney" :key='index' @tap="option(index)" :class="index == selectSumMoney ? 'select' : '' ">{{item}}元</view>
+			<view class="option_box" v-for="(item,index) in optionSumMoney" :key='index' @tap="option(index)" 
+			:class="index == selectSumIndex ? 'select' : '' ">{{item}}元</view>
 		</view>
 		
 		<view class="confirm_btn">
@@ -30,36 +34,120 @@
 </template>
 
 <script>
+import storage from "@/api/storage.js";
+import util from "@/common/util.js";
+import api from "@/api/api.js";
+import utilCore from "@/api/utilCore.js";
 export default{
 	data() {
 		return {
-			sumMoney: 2.57,   //可提现金额
-			userName: 'kkkkk',  //账号用户名
+			userEn: [],  //我的信息
+			userBankEn: [],  //我的绑定银行卡信息
+			sumMoney: null,   //可提现金额
+			userName: null,  //账号用户名
 			userImg: null,  //账号头像
-			optionSumMoney: [50, 100, 200, 300],  //可选的提现金额值
-			selectSumMoney: null  //选中的提现金额值索引
+			optionSumMoney: [10, 30, 50, 100, 200, 300],  //可选的提现金额值
+			selectSumMoney: null  ,//选中的提现金额值
+			selectSumIndex: null  ,//选中的提现金额值索引
+			userBankName: null,  //绑定银行卡名称
+			userBankCode: null, //绑定银行卡号
 		}
 	},
+	onShow(){
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.getMyBankInfo();  //获取我的绑定银行卡信息
+		this.sumMoney = this.userEn.money;
+		this.userName = this.userEn.account;
+	},
 	methods:{
+		//获取用户绑定银行卡信息
+		getMyBankInfo(){
+			let postData = {
+				account: this.userEn.account,
+				page: 1,
+				count:5,
+			}
+			api.getUserBank(postData, (res)=>{
+				let data = api.getData(res).data;
+				if(!util.isEmpty(data)) {
+					this.userBankEn = data[0];
+					this.userBankName = data[0].bank;
+					this.userBankCode = data[0].bankCode.substring(data[0].bankCode.length - 4);  //银行卡号截取最后四位数;
+					storage.setMyBankInfo(data[0]);
+				}else{
+					uni.switchTab({
+						url: '/pages/my/my'
+					});
+					uni.navigateTo({
+						url: '/pages/my/setting/setting'
+					});
+					uni.navigateTo({
+						url: '/pages/my/setting/bank/bank'
+					})
+				}
+			});
+		},
 		//确认提现
 		confirm(){
+			let _this = this;
 			uni.showModal({
 			    title: '提示',
 			    content: '您确定提现？',
 			    success: function (res) {
 			        if (res.confirm) {
-			            console.log('用户点击确定');
+			            if(_this.selectSumMoney == undefined){
+							uni.showToast({
+								title: "请选择提现金额",
+								image: "/static/img/fail-circle.png",
+								duration: 2000
+							})
+						}else{
+							if(parseInt(_this.sumMoney) < _this.selectSumMoney){
+								uni.showToast({
+									title: "可提现金额不足",
+									image: "/static/img/fail-circle.png",
+									duration: 2000
+								})
+								return;
+							};
+							_this.submitExtractMoney();
+						}
 			        } else if (res.cancel) {
 			            console.log('用户点击取消');
 			        }
 			    }
 			});
 		},
+		//提交提现申请
+		submitExtractMoney(){
+			api.addMoneyDraw({
+				account: this.userEn.account, 
+				money: this.selectSumMoney
+			}, (res)=>{
+				let code = api.getCode(res);
+				let msg = api.getMsg(res);
+				if(code == 0){
+					uni.showToast({
+						title: "申请提交" + msg,
+						image: "/static/img/check-circle.png",
+						duration: 2000
+					})
+				}else{
+					uni.showToast({
+						title: msg,
+						image: "/static/img/fail-circle.png",
+						duration: 2000
+					})
+				}
+			});
+		},
 		//选择提现金额值 
 		option(index){
+			//设置选中效果
 			for(let i = 0; i <= this.optionSumMoney.length-1; ++i){
-				if(i == index) this.selectSumMoney = index;
+				if(i == index) this.selectSumIndex = index;
 			}
+			this.selectSumMoney = this.optionSumMoney[index];  //获取选中的提现金额值
 		},
 	}
 }
@@ -88,6 +176,7 @@ export default{
 	.sum{
 		width:70%;
 		display:flex;
+		align-items:center;
 	}
 	.user_img{
 		width:80rpx;
@@ -134,5 +223,14 @@ export default{
 	}
 	.confirm_btn>button::after{
 		border:none;
+	}
+	.bank_code{
+		display:flex;
+		align-items:center;
+	}
+	.hide_code{
+		font-size:20px;
+		font-weight:bold;
+		margin-right:20rpx;
 	}
 </style>
