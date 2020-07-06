@@ -92,11 +92,18 @@
 					<view class="item1" >
 						<view class="income" v-for="(item,index) in extractMoneyList" :key='index' @tap="moneyDrawopen(item.id)">
 							<view class="incomeTime">
-								<text>{{item.addTime}}</text>
+								<view class="">
+									<text v-show="item.state == 0">提现申请</text>
+									<text v-show="item.state == 1">提现成功</text>
+									<text v-show="item.state == 2">提现失败</text>
+								</view>
+								<view class="moneyTran_time">
+									<text v-show="item.state == 0">{{item.addTime}}</text>
+								</view>
 							</view>
 							
 							<view class="incomeNum">
-								<text>+ {{item.money}} 元</text>
+								<text>{{item.money}} 元</text>
 								<view class="open">
 									<tui-icon name="arrowdown" :size="20" v-show="!item.openMoneyDrawTag"></tui-icon>
 									<tui-icon name="arrowup" :size="20" v-show="item.openMoneyDrawTag"></tui-icon>
@@ -191,19 +198,19 @@ import storage from "@/api/storage.js";
         data() {
             return {
 				moneyTranList:[],   //金额转换列表
-				moneyTranShow: false,  //金额转换列表是否显示
+				moneyTranShow: true,  //金额转换列表是否显示
 				moneyTranPage: 1,  //金额转换记录查询页数
 				openMoneyTranTag: false,  //展开图表控制
 				openMoneyTranId: null,  //展开内容盒子的id
 				
 				extractMoneyList:[],   //提现明细列表
-				moneyDrawShow: false,  //提现明细列表是否显示
+				moneyDrawShow: true,  //提现明细列表是否显示
 				moneyDrawPage: 1,  //提现记录查询页数
 				openMoneyDrawTag: false,  //展开图表控制
 				openMoneyDrawId: null,  //展开内容盒子的id
 				
 				moneyList:[],   //账变记录列表
-				moneyShow: false,  //账变记录列表是否显示
+				moneyShow: true,  //账变记录列表是否显示
 				moneyPage: 1,  //账变记录记录查询页数
 				openMoneyTag: false,  //展开图表控制
 				openMoneyId: null,  //展开内容盒子的id

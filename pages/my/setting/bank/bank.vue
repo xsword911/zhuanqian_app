@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="bank" v-show="bankName != null">
+		<view class="bank" v-show="isBankShow">
 			<view class="bank_info">
 				<view class="bank_test">
 					<view class="bank_name">
@@ -20,7 +20,7 @@
 			</view>
 		</view>
 		
-		<view class="data_lack" v-show="bankName == null">
+		<view class="data_lack" v-show="!isBankShow">
 			<view class="lack_box">
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还未绑定银行卡</text>
@@ -42,6 +42,7 @@ export default{
 			bankName: null, //银行名称
 			bankBranch: null,  //开户支行名称
 			bankCode: null,  //银行卡号（只显示最后四位数）
+			isBankShow: true,  //显示银行卡信息
 		}
 	},
 	onShow() {
@@ -59,13 +60,19 @@ export default{
 		getUserBank(){
 			api.getUserBank({account: this.userEn.account}, (res) => {
 				let data = api.getData(res).data;
-				data.forEach((item, index) => {
-					this.userBankEn = item;
-					this.bankName = item.bank;
-					this.bankBranch = item.bankBranch;
-					this.bankCode = item.bankCode.substring(item.bankCode.length - 4);  //银行卡号截取最后四位数
-					storage.setMyBankInfo(item);  //将银行卡信息保存到storage
-				});	
+				if(!util.isEmpty(data)) {
+					data.forEach((item, index) => {
+						this.userBankEn = item;
+						this.bankName = item.bank;
+						this.bankBranch = item.bankBranch;
+						this.bankCode = item.bankCode.substring(item.bankCode.length - 4);  //银行卡号截取最后四位数
+						storage.setMyBankInfo(item);  //将银行卡信息保存到storage
+						this.isBankShow = true;
+					});	
+				}else{
+					this.isBankShow = false;
+				}
+				
 			});
 		},
 	}

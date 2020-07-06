@@ -7,12 +7,13 @@
 	},{
 		"path": "pages/game/game",
 		"style": {
-			"navigationBarTitleText": "",
-			"navigationStyle": "custom",
-			"app-plus": {
-			"titleNView": false,
-			"animationType": "slide-in-bottom"
-			}
+			// "navigationBarTitleText": "",
+			// "navigationStyle": "custom",
+			// "app-plus": {
+			// "titleNView": false,
+			// "animationType": "slide-in-bottom"
+			// }
+			"navigationBarTitleText": "疯狂消消乐"
 		}
 	},{
 		"path": "pages/login/login",

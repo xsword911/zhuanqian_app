@@ -62,9 +62,9 @@
 			<view class="setting" @tap="toSetting">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/setting1.png" mode="widthFix"></image>
+						<image src="/static/img/more.png" mode="widthFix"></image>
 					</view>
-					<text class="func_test">设置</text>
+					<text class="func_test">个人信息</text>
 				</view>
 				
 				<view class="func_right">
@@ -88,7 +88,7 @@
 			<view class="more" @tap="toMore">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/more.png" mode="widthFix"></image>
+						<image src="/static/img/setting1.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">更多</text>
 				</view>
