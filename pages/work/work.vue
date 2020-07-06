@@ -322,16 +322,29 @@ export default{
 			intervalID: null,  //定时器id
 		}
 	},
+	onLoad() {
+		// this.userEn = storage.getMyInfo();  //获取我的信息
+		// this.myCoin = this.userEn.gold;
+		// this.getGoldAdd();   //查询今日金币
+		// this.getTaskList();  //获取任务列表
+	},
 	onShow(){
 		this.userEn = storage.getMyInfo();  //获取我的信息
-		this.myCoin = this.userEn.gold;
+		this.getMyInfo();  //刷新我的信息
 		this.getTaskList();  //获取任务列表
-		this.myCoin = storage.getMyInfo().gold;
-		this.getGoldAdd();
 		this.getSignProgress();  //查询奖励信息
 		this.timeAuto();  //开启计时器
 	},
 	methods:{
+		//刷新我的信息
+		getMyInfo(){
+			api.getUser({account: storage.getMyInfo().account}, (res)=>{
+				storage.setMyInfo(api.getData(res));
+				this.userEn = api.getData(res);
+				this.myCoin = this.userEn.gold;
+				this.getGoldAdd();   //查询今日金币
+			});
+		},
 		//开启定时器
 		timeAuto(){
 			clearInterval(this.intervalID);
@@ -501,6 +514,7 @@ export default{
 		},
 		//做一个任务
 		taskDo(){
+			let _this = this;
 			api.taskDo({
 				account: this.userEn.account, 
 				taskId: this.id,
@@ -512,7 +526,13 @@ export default{
 					uni.showToast({
 						title: msg,
 						image: "/static/img/check-circle.png",
-						duration: 1500
+						duration: 1500,
+						success() {
+							setTimeout(function(){
+								_this.getMyInfo();  //刷新我的信息
+								_this.getGoldAdd();   //查询今日金币
+							}, 1600);
+						}
 					})
 				}else{
 					uni.showToast({

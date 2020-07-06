@@ -173,7 +173,7 @@
 	.fxied{
 		position: fixed;
 		z-index: 2;
-		margin-top:90rpx;
+		margin-top:44px;
 	}
 	.tabList{
 		padding-bottom: 8rpx;

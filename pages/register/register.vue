@@ -11,8 +11,19 @@
 		<!-- 密码 -->
 		<view class="pwd">
 			<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
+			<view class="ipt pwd_ipt">
+				<input type="text" v-model="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30" :password="isPwd" />
+				<view class="open_pwd" @tap="isPassWord">
+					<tui-icon name="eye" :size="30"></tui-icon>
+				</view>
+			</view>
+		</view>
+		
+		<!-- 密码 -->
+		<view class="pwd">
+			<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
 			<view class="ipt">
-				<input type="text" v-model="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30" :password="true" />
+				<input type="text" v-model="passWordAgain" placeholder="请再次输入密码" :adjust-position="false" maxlength="30" :password="true" />
 			</view>
 		</view>
 		
@@ -34,15 +45,22 @@
 <script>
 import util from "@/common/util.js";
 import api from "@/api/api.js";
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
 			userName: null,  //用户名
 			passWord: null,  //密码
+			passWordAgain: null, //确认密码
 			code: null,  //邀请码
+			isPwd: true, //密码输入框类型切换
 		}
 	},
 	methods:{
+		//查看密码
+		isPassWord(){
+			this.isPwd = this.isPwd ? false : true;
+		},
 		//注册检测
 		bindReg() {
 		    if (this.userName.length < 3) {
@@ -59,6 +77,13 @@ export default{
 		        });
 		        return;
 		    }
+			if(this.passWord != this.passWordAgain){
+				uni.showToast({
+				    icon: 'none',
+				    title: '二次密码输入不一致'
+				});
+			}
+			return;
 		    let data = {
 		        account: this.userName,
 		        pwd: this.passWord
@@ -68,6 +93,7 @@ export default{
 		},
 		//注册
 		register(data){
+			let _this = this;
 			api.register(data, (res)=>{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
@@ -77,10 +103,13 @@ export default{
 						image: "/static/img/check-circle.png",
 						duration: 1500,
 						success() {
-							setTimeout(function(){ 
-								uni.navigateBack({
-									delta: 1
-								}) 
+							setTimeout(function(){
+								api.getUser({account: _this.userName}, (res)=>{
+									storage.setMyInfo(api.getData(res));
+									uni.reLaunch({
+										url: "/pages/game/game"
+									});
+								});
 							}, 1600);
 						}
 					})
@@ -132,6 +161,15 @@ export default{
 		color:#999999;
 		font-size:15px;
 		padding:10rpx 0;
+	}
+	.pwd_ipt{
+		position:relative;
+	}
+	.open_pwd{
+		position:absolute;
+		right:20rpx;
+		top:50%;
+		transform:translateY(-50%);
 	}
 </style>
 

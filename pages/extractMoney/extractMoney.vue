@@ -53,13 +53,25 @@ export default{
 			userBankCode: null, //绑定银行卡号
 		}
 	},
+	onLoad() {
+		this.userEn = storage.getMyInfo();  //获取我的信息
+	},
 	onShow(){
 		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.getMyInfo();  //刷新我的信息
 		this.getMyBankInfo();  //获取我的绑定银行卡信息
-		this.sumMoney = this.userEn.money;
-		this.userName = this.userEn.account;
 	},
 	methods:{
+		//刷新我的信息
+		getMyInfo(){
+			api.getUser({account: this.userEn.account}, (res)=>{
+				storage.setMyInfo(api.getData(res));
+				this.userEn = api.getData(res);
+				this.userName = this.userEn.account;
+				this.sumMoney = this.userEn.money;
+				this.getMyBankInfo();  //获取我的绑定银行卡信息
+			});
+		},
 		//获取用户绑定银行卡信息
 		getMyBankInfo(){
 			let postData = {
@@ -130,7 +142,14 @@ export default{
 					uni.showToast({
 						title: "申请提交" + msg,
 						image: "/static/img/check-circle.png",
-						duration: 2000
+						duration: 1500,
+						success() {
+							setTimeout(function(){ 
+								uni.navigateTo({
+									url: "/pages/my/detailed/detailed?type=1"
+								})
+							}, 1600);
+						}
 					})
 				}else{
 					uni.showToast({

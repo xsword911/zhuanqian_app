@@ -110,6 +110,7 @@
 	},
 	
 	"globalStyle": {
+		"pageOrientation": "portrait",
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#fcd030",  //#1E9FFF  fcd030

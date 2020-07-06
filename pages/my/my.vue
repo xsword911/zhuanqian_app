@@ -140,15 +140,30 @@ export default{
 			isLogin: true,  //是否已登录
 		}
 	},
-	onShow(){
+	onLoad() {
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.userName = this.userEn.account;
 		this.yqm = this.userEn.code;
 		this.currentCoin = this.userEn.gold;
 		this.profit = this.userEn.money;
-		this.getGoldAdd();
+		this.getGoldAdd();  //获取今日金币
+	},
+	onShow(){
+		this.getMyInfo();  //刷新我的信息
+		this.getGoldAdd(); //获取今日金币
 	},
 	methods:{
+		//刷新我的信息
+		getMyInfo(){
+			api.getUser({account: this.userEn.account}, (res)=>{
+				storage.setMyInfo(api.getData(res));
+				this.userEn = api.getData(res);
+				this.userName = this.userEn.account;
+				this.yqm = this.userEn.code;
+				this.currentCoin = this.userEn.gold;
+				this.profit = this.userEn.money;
+			});
+		},
 		//获取今日金币
 		getGoldAdd(){
 			api.getStatisticsToday({account: this.userEn.account}, (res) =>{

@@ -82,8 +82,6 @@ export default{
 		return {
 			userEn: [],  //我的信息
 			radio: 1,  //单选框控制
-			exChangeMoney: 0.00, //可兑换现金
-			exChangeGold: 0, //可兑换金币
 			money: "", //输入现金数
 			gold: "", //输入金币数
 		}
@@ -181,9 +179,12 @@ export default{
 						duration: 1500,
 						success() {
 							setTimeout(function(){ 
-								uni.navigateBack({
-									delta: 1
-								}) 
+								uni.switchTab({
+									url: '/pages/my/my'
+								});
+								uni.navigateTo({
+									url: "/pages/my/detailed/detailed?type=0"
+								})
 							}, 1600);
 						}
 					})
