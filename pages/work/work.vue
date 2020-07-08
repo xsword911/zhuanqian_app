@@ -58,8 +58,12 @@
 					</view>
 				</view>
 				
-				<view class="countDown_box">
-					<text v-show="timeOut">{{time}}</text>
+				<view class="countDown_box" @tap="toSign">
+					<view class="countDown" v-show="timeOut">
+						<tui-round-progress progressColor="#FF5357" fontColor="#fff"
+						:percentage="timeRoundProgress" :defaultShow="false" :diam="65" :percentText="time"
+						:lineWidth="5" :fontSize="16"></tui-round-progress>
+					</view>
 					<text v-show="!timeOut" style="font-size:16px; color: #fff;" @tap="receive(-2)">领取</text>
 				</view>
 			</view>
@@ -80,7 +84,7 @@
 					</view>
 				</view>
 				
-				<view class="receive">领取</view>
+				<view class="receive" @tap="toLuckDraw">领取</view>
 			</view>
 		</view>
 		
@@ -284,9 +288,11 @@ import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
+import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
 export default{
 	comments:{
-		tuiModal
+		tuiModal,
+		tuiRoundProgress
 	},
 	filters:{
 		//金币转换现金计算
@@ -311,7 +317,7 @@ export default{
 			type: 0, //弹窗类型
 			title: '', //弹窗标题
 			id: null ,//任务id
-			timeOut: false, //控制时间倒计时显示
+			timeOut: true, //控制时间倒计时显示
 			time: "",  //倒计时
 			range: "",  //距离下次领取奖励的大概时间
 			unit: '',   //距离下次领取奖励的时间单位
@@ -320,6 +326,7 @@ export default{
 			day: null,  //签到天数
 			signSecond: null, //距离下次签到多少秒
 			intervalID: null,  //定时器id
+			timeRoundProgress: 0,//倒计时进度条
 		}
 	},
 	onLoad() {
@@ -336,6 +343,12 @@ export default{
 		this.timeAuto();  //开启计时器
 	},
 	methods:{
+		//计算圆形进度条长度
+		computeLength(){
+			if(this.unit == '小时') this.timeRoundProgress = parseFloat(100 - [(this.range / 24) * 100]);
+			else if(this.unit == '分钟' || this.unit == '秒') this.timeRoundProgress = parseFloat(100 - [(this.range / 60) * 100]);
+			else if(this.unit == '天') this.timeRoundProgress = parseFloat(100 - [(this.range / 30) * 100]);
+		},
 		//刷新我的信息
 		getMyInfo(){
 			api.getUser({account: storage.getMyInfo().account}, (res)=>{
@@ -381,6 +394,13 @@ export default{
 			if(sp > 3600){
 				let hour = parseInt(sp / 3600);  //获取小时
 				let min = parseInt([sp - (hour * 3600)] / 60); //获取分钟
+				if(hour > 100){
+					let day = parseInt(sp / 86400);  //获取天数
+					this.range = day;  //显示倒计时的天数
+					this.unit = "天";
+					this.time = `${day}天`;
+					return;
+				};
 				this.range = hour;  //显示倒计时的小时
 				this.unit = "小时";
 				this.time = `${hour}:${min}`;
@@ -401,6 +421,7 @@ export default{
 				this.getSignProgress();  //再次请求数据
 			}
 		    this.signSecond += -1;  //每秒减一
+			this.computeLength();
 		},
 		//领取奖励
 		receive(type){
@@ -412,8 +433,18 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
-					
 					this.getSignProgress();  //再次查询数据
+					uni.showModal({
+						content: "领取奖励成功",
+						showCancel: false,
+						success(res) {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: "/pages/receiveAward/receiveAward"
+								})
+							};
+						}
+					});
 				}else{
 					uni.showToast({
 						title: msg,
@@ -423,10 +454,16 @@ export default{
 				}
 			});
 		},
-		//跳转到领取奖励界面
-		toReceive(){
+		//跳转查看签到页
+		toSign(){
 			uni.navigateTo({
-				url: "/pages/receiveAward/receiveAward"
+				url: '/pages/receiveAward/receiveAward'
+			})
+		},
+		//跳转到幸运转盘页
+		toLuckDraw(){
+			uni.navigateTo({
+				url: '/pages/work/luckDraw/luckDraw'
 			})
 		},
 		//跳转到兑换现金页
@@ -523,23 +560,21 @@ export default{
 				let msg = api.getMsg(res);
 				this.hide8();
 				if(code == 0){
-					uni.showToast({
-						title: msg,
-						image: "/static/img/check-circle.png",
-						duration: 1500,
-						success() {
-							setTimeout(function(){
+					uni.showModal({
+						content: "任务" + msg,
+						showCancel: false,
+						success(res) {
+							if (res.confirm) {
 								_this.getMyInfo();  //刷新我的信息
 								_this.getGoldAdd();   //查询今日金币
-							}, 1600);
+							};
 						}
-					})
+					});
 				}else{
-					uni.showToast({
-						title: msg,
-						image: "/static/img/fail-circle.png",
-						duration: 2000
-					})
+					uni.showModal({
+						content: msg,
+						showCancel: false
+					});
 				}
 			});
 		},
@@ -629,8 +664,8 @@ export default{
 		margin-top:10rpx;
 	}
 	.countDown_box{
-		width:120rpx;
-		height:120rpx;
+		width:118rpx;
+		height:118rpx;
 		border-radius:50%;
 		background-color:#FFCA00;
 		position: absolute;
@@ -640,6 +675,13 @@ export default{
 		line-height:120rpx;
 		font-size:15px;
 		font-weight:bolder;
+		position:absolute;
+		right: 16rpx;
+	}
+	.countDown{
+		position:absolute;
+		top:-4rpx;
+		right:-6rpx;
 	}
 	.main{
 		margin-top:160rpx;

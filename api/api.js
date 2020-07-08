@@ -35,6 +35,9 @@ module.exports = {
 	//查询用户详细信息
 	getUser: function(path, funSuccess) {httpUtil.post('user/getUser', path, funSuccess);},
 	
+	//修改用户信息
+	setUser: function(path, funSuccess) {httpUtil.post('user/setUser', path, funSuccess);},
+	
 	//查询用户绑定银行卡
 	getUserBank: function(path, funSuccess) {httpUtil.post('user/getUserBank', path, funSuccess);},
 	
@@ -79,4 +82,7 @@ module.exports = {
 	
 	//签到领奖
 	sign: function(path, funSuccess) {httpUtil.post('activity/sign', path, funSuccess);},
+	
+	//查询月签到详情
+	getMonthSignDetails: function(path, funSuccess) {httpUtil.post('activity/getMonthSignDetails', path, funSuccess);},
 }

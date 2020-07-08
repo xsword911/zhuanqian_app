@@ -139,24 +139,22 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
-					uni.showToast({
-						title: "申请提交" + msg,
-						image: "/static/img/check-circle.png",
-						duration: 1500,
-						success() {
-							setTimeout(function(){ 
+					uni.showModal({
+						content: "提现申请提交" + msg,
+						showCancel: false,
+						success(res) {
+							if (res.confirm) {
 								uni.navigateTo({
 									url: "/pages/my/detailed/detailed?type=1"
 								})
-							}, 1600);
+							};
 						}
-					})
+					});
 				}else{
-					uni.showToast({
-						title: msg,
-						image: "/static/img/fail-circle.png",
-						duration: 2000
-					})
+					uni.showModal({
+						content: "提现申请申请提交" + msg,
+						showCancel: false
+					});
 				}
 			});
 		},

@@ -1,5 +1,16 @@
 <template>
     <view class="page">
+		<!-- 筛选时间 -->
+		<view class="search_column" >
+			<view class="" style="display:flex; align-items:center;">
+				<input type="text" value="" v-model="begTime" :disabled="true" @tap="openDrawer" placeholder="开始时间"/>
+				<text>至</text>
+				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
+			</view>
+			<view class="sea_btn">
+				<button type="default" @tap="getTaskDetails">查询</button>
+			</view>
+		</view>
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
 			<view class="income" v-for="(item,index) in incomeList" :key='index'  v-show="showIncome" @tap="open(item.id)">
@@ -33,7 +44,34 @@
 					<button type="default" class="coin_query">去获取金币</button>
 				</view>
 			</view>
+			
 		</view>
+		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
+		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
+		 
+		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer">
+		 	<view class="d-container">
+				<view class="search_time">
+					<view class="search_test">
+						<text>开始时间</text>
+					</view>
+					<view class="">
+						<input type="text" value="" @tap="show(1)" v-model="begTime" :disabled="true" />
+					</view>
+				</view>
+				<view class="search_time">
+					<view class="search_test">
+						<text>结束时间</text>
+					</view>
+					<view class="">
+						<input type="text" value="" @tap="show(2)" v-model="endTime" :disabled="true" />
+					</view>
+				</view>
+				<view class="search_btn">
+					<button type="default" @tap="closeDrawer">确定</button>
+				</view>
+			</view>
+		 </tui-drawer>
     </view>
 </template>
 
@@ -41,9 +79,17 @@
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import tuiDatetime from "@/components/tui-datetime/tui-datetime.vue";
+import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 export default {
+	components:{
+		tuiDatetime,
+		tuiDrawer
+	},
     data() {
         return {
+			rightDrawer: false,//抽屉开关
+			
 			userEn: [],  //我的信息
 			showIncome: true, // 收入明细列表是否显示
 			incomeList:[]   ,//提现明细列表
@@ -51,6 +97,17 @@ export default {
 			// openBox: false,  //控制内容盒子是否打开
 			openId: null,  //展开内容盒子的id
 			page: 1,  //查询页数
+			
+			
+			begTime: "", //开始时间
+			endTime: "", //结束时间
+			type: 0,
+			startYear: 1980,
+			endYear: 2030,
+			cancelColor: "#888",
+			color: "#5677fc",
+			setDateTime: "",
+			num: null,    //区分开始时间和结束时间的标识
         };
     },
     onShow(){
@@ -58,6 +115,46 @@ export default {
 		this.getTaskDetails();  //获取金币收入明细表		
 	},
 	methods:{
+		//关闭抽屉
+		closeDrawer(e) {
+			this.rightDrawer = false;
+		},
+		//打开抽屉
+		openDrawer() {
+			this.rightDrawer = true;
+		},
+		//区分开始时间和结束时间
+		show(num){
+			this.cancelColor = "#888";
+			this.color = "#5677fc";
+			this.setDateTime = "";
+			this.startYear = 1980;
+			this.endYear = 2030;
+		    this.type = 2;
+			switch (num){
+				case 1:
+					this.num = 1;
+					break;
+				case 2:
+					this.num = 2;
+					break;														
+				default:
+					break;
+			}
+			this.$refs.dateTime.show()
+		},
+		change: function(e) {
+			switch (this.num){
+				case 1:
+					this.begTime = e.result;
+					break;
+				case 2:
+					this.endTime = e.result;
+					break;
+				default:
+					break;
+			}
+		},
 		// 判断金币收入明细表是否有数据
 		isShowIncome(){
 			if(util.isEmpty(this.incomeList)) this.showIncome = false;
@@ -65,23 +162,33 @@ export default {
 		},
 		//获取金币收入明细表
 		getTaskDetails(){
-			api.getTaskDetails({
+			this.page = 1;
+			let data = {
 				account: this.userEn.account,
 				state: 1,
 				page: this.page,
 				count: 10
-			}, (res)=>{
-				let data = api.getData(res).data;
-				if(util.isEmpty(data))
-					 this.isShowIncome();  //控制金币收入明细表显示
-				else{
-					data.forEach((item) =>{
-						data.openTag = false;
-					});
-					this.incomeList = data;
-					this.showIncome = true;
-				}
-			});
+			};
+		if(!util.isEmpty(this.begTime)){
+			let time = this.begTime + " 00:00:00";
+			data.begFinishTime = time
+		};		
+		if(!util.isEmpty(this.endTime)){
+			let time = this.endTime + " 23:59:59";
+			data.endFinishTime = time;
+		};
+		api.getTaskDetails(data, (res)=>{
+			let data = api.getData(res).data;
+			if(util.isEmpty(data)) this.showIncome = false;
+				 //this.isShowIncome();  //控制金币收入明细表显示
+			else{
+				data.forEach((item) =>{
+					data.openTag = false;
+				});
+				this.incomeList = data;
+				this.showIncome = true;
+			}
+		});
 		},
 		//展开活动内容
 		open(id){
@@ -160,7 +267,7 @@ export default {
 		border:none;
 	}
 	.gold_info{
-		padding-top:40rpx;
+		
 	}
 	.incomeTime{
 		display:flex;
@@ -198,5 +305,51 @@ export default {
 	}
 	.open_box>view{
 		margin-top:10rpx;
+	}
+	.search_column{
+		display:flex;
+		align-items: center;
+		justify-content:center;
+		margin-top:20rpx;
+		font-size:16px;
+		padding:0 40rpx 10rpx;
+		box-sizing:border-box;
+		border-bottom:1px solid #808080;
+	}
+	.search_column input{
+		text-align:center;
+	}
+	.sea_btn{
+		
+	}
+	.sea_btn button{
+		font-size:14px;
+		background-color:#FCD030;
+		color:#fff;
+		width:120rpx;
+	}
+	.d-container{
+		padding:80rpx;
+		font-size:15px;
+	}
+	.search_time{
+		margin-top:40rpx;
+	}
+	.search_test{
+		margin-bottom:20rpx;
+	}
+	.d-container input{
+		border-bottom:1px solid #808080;
+		color:#808080;
+	}
+	.search_btn{
+		margin-top:100rpx;
+	}
+	.search_btn button{
+		font-size:14px;
+		background-color:#FCD030;
+		color:#fff;
+		border-radius:40rpx;
+		padding:0 !important;
 	}
 </style>

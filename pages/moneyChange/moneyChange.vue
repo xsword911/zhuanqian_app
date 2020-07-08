@@ -173,27 +173,22 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
-					uni.showToast({
-						title: msg,
-						image: "/static/img/check-circle.png",
-						duration: 1500,
-						success() {
-							setTimeout(function(){ 
-								uni.switchTab({
-									url: '/pages/my/my'
-								});
+					uni.showModal({
+						content: "兑换" + msg,
+						showCancel: false,
+						success(res) {
+							if (res.confirm) {
 								uni.navigateTo({
 									url: "/pages/my/detailed/detailed?type=0"
 								})
-							}, 1600);
+							};
 						}
-					})
+					});
 				}else{
-					uni.showToast({
-						title: msg,
-						image: "/static/img/fail-circle.png",
-						duration: 2000
-					})
+					uni.showModal({
+						content: msg,
+						showCancel: false
+					});
 				}
 			});
 		},

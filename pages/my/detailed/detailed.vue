@@ -10,7 +10,7 @@
 		:scrollFlag='true' :isEqually='true' @clickItem="onClickItem"></tabControl>
 		
 		
-        <swiper :current="current" class="swiper-box" style="flex: 1;" :duration="300" @change="ontabchange">
+        <swiper :current="current" class="swiper-box" style="flex: 1;" :duration="200" @change="ontabchange">
 			
            <!-- <swiper-item class="swiper-item" v-for="(tab,index1) in newsList" :key="index1"> -->
 				<!-- #ifdef APP-NVUE -->
@@ -45,6 +45,17 @@
 			<swiper-item class="swiper-item" style="flex: 1;">
 				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow">
 					<view class="item0" >
+						<!-- 筛选时间 -->
+						<view class="search_column" >
+							<view class="" style="display:flex; align-items:center;">
+								<input type="text" value="" v-model="moneyTranBegTime" :disabled="true" @tap="openDrawer(0)" placeholder="开始时间"/>
+								<text>至</text>
+								<input type="text" value="" v-model="moneyTranEndTime" :disabled="true" @tap="openDrawer(0)" placeholder="结束时间"/>
+							</view>
+							<view class="sea_btn">
+								<button type="default" @tap="getMoneyTran">查询</button>
+							</view>
+						</view>
 						<view class="income" v-for="(item,index) in moneyTranList" :key='index' @tap="moneyTranOpen(item.id)">
 							<view class="incomeTime">
 								<text v-show="item.type == 0">金币转换现金</text>
@@ -90,6 +101,17 @@
 			<swiper-item class="swiper-item"  style="flex: 1;">
 				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow">
 					<view class="item1" >
+						<!-- 筛选时间 -->
+						<view class="search_column" >
+							<view class="" style="display:flex; align-items:center;">
+								<input type="text" value="" v-model="extractMoneyBegTime" :disabled="true" @tap="openDrawer(1)" placeholder="开始时间"/>
+								<text>至</text>
+								<input type="text" value="" v-model="extractMoneyEndTime" :disabled="true" @tap="openDrawer(1)" placeholder="结束时间"/>
+							</view>
+							<view class="sea_btn">
+								<button type="default" @tap="getMoneyDraw">查询</button>
+							</view>
+						</view>
 						<view class="income" v-for="(item,index) in extractMoneyList" :key='index' @tap="moneyDrawopen(item.id)">
 							<view class="incomeTime">
 								<view class="">
@@ -140,6 +162,17 @@
 			<swiper-item class="swiper-item"  style="flex: 1;">
 				<scroll-view scroll-y="true" id="swiper"  :show-scrollbar="true"  style="flex: 1;" v-show="moneyShow" >
 					<view class="item2" >
+						<!-- 筛选时间 -->
+						<view class="search_column" >
+							<view class="" style="display:flex; align-items:center;">
+								<input type="text" value="" v-model="moneyBegTime" :disabled="true" @tap="openDrawer(2)" placeholder="开始时间"/>
+								<text>至</text>
+								<input type="text" value="" v-model="moneyEndTime" :disabled="true" @tap="openDrawer(2)" placeholder="结束时间"/>
+							</view>
+							<view class="sea_btn">
+								<button type="default" @tap="getMoney">查询</button>
+							</view>
+						</view>
 						<view class="income" v-for="(item,index) in moneyList" :key='index' @tap="moneyOpen(item.id)">
 							<view class="incomeTime">
 								<text v-show="item.type == 0">金币转换现金</text>
@@ -178,6 +211,36 @@
 				</view>
 			</swiper-item>
         </swiper>
+		
+		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
+		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
+		 
+		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer">
+		 	<view class="d-container">
+				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 0"><text>转换明细</text></view>
+				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 1"><text>提现明细</text></view>
+				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 2"><text>账变明细</text></view>
+				<view class="search_time">
+					<view class="search_test">
+						<text>开始时间</text>
+					</view>
+					<view class="">
+						<input type="text" value="" @tap="show(1)" v-model="drawerBegTime" :disabled="true" />
+					</view>
+				</view>
+				<view class="search_time">
+					<view class="search_test">
+						<text>结束时间</text>
+					</view>
+					<view class="">
+						<input type="text" value="" @tap="show(2)" v-model="drawerEndTime" :disabled="true" />
+					</view>
+				</view>
+				<view class="search_btn">
+					<button type="default" @tap="closeDrawer">确定</button>
+				</view>
+			</view>
+		 </tui-drawer>
     </view>
 </template>
 <script>
@@ -185,9 +248,13 @@ import tabControl from '@/components/tabControl-tag/tabControl-tag.vue';
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import tuiDatetime from "@/components/tui-datetime/tui-datetime.vue";
+import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
     export default {
         components: {
-			tabControl
+			tabControl,
+			tuiDatetime,
+			tuiDrawer
         },
 		onShow() {
 			this.userEn = storage.getMyInfo();  //获取我的信息
@@ -197,18 +264,24 @@ import storage from "@/api/storage.js";
 		},
         data() {
             return {
+				moneyTranBegTime: "", //金额转换开始时间
+				moneyTranEndTime: "", //金额转换结束时间
 				moneyTranList:[],   //金额转换列表
 				moneyTranShow: true,  //金额转换列表是否显示
 				moneyTranPage: 1,  //金额转换记录查询页数
 				openMoneyTranTag: false,  //展开图表控制
 				openMoneyTranId: null,  //展开内容盒子的id
 				
+				extractMoneyBegTime: "", //提现明细开始时间
+				extractMoneyEndTime: "", //提现明细结束时间
 				extractMoneyList:[],   //提现明细列表
 				moneyDrawShow: true,  //提现明细列表是否显示
 				moneyDrawPage: 1,  //提现记录查询页数
 				openMoneyDrawTag: false,  //展开图表控制
 				openMoneyDrawId: null,  //展开内容盒子的id
 				
+				moneyBegTime: "", //账变记录开始时间
+				moneyEndTime: "", //账变记录结束时间
 				moneyList:[],   //账变记录列表
 				moneyShow: true,  //账变记录列表是否显示
 				moneyPage: 1,  //账变记录记录查询页数
@@ -220,6 +293,10 @@ import storage from "@/api/storage.js";
 				current: 0,
                 newsList: [],
                 cacheTab: [],
+				rightDrawer: false,//抽屉开关
+				drawerType: 0,  //抽屉类型
+				drawerBegTime: '', //抽屉开始时间 
+				drawerEndTime: '', //抽屉结束时间 
                 tabIndex: 0,
                 tabBars: [{
                     name: '关注',
@@ -231,38 +308,132 @@ import storage from "@/api/storage.js";
                     name: '体育',
                     id: 'tiyu',
 				}],
-                // scrollInto: "",
-                // showTips: false,
-                // navigateFlag: false,
-                // pulling: false,
-                // refreshIcon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAB5QTFRFcHBw3Nzct7e39vb2ycnJioqK7e3tpqam29vb////D8oK7wAAAAp0Uk5T////////////ALLMLM8AAABxSURBVHja7JVBDoAgDASrjqj//7CJBi90iyYeOHTPMwmFZrHjYyyFYYUy1bwUZqtJIYVxhf1a6u0R7iUvWsCcrEtwJHp8MwMdvh2amHduiZD3rpWId9+BgPd7Cc2LIkPyqvlQvKxKBJ//Qwq/CacAAwDUv0a0YuKhzgAAAABJRU5ErkJggg=="
+				
+				type: 0,
+				startYear: 1980,
+				endYear: 2030,
+				cancelColor: "#888",
+				color: "#5677fc",
+				setDateTime: "",
+				num: null,    //区分开始时间和结束时间的标识
             }
         },
         onLoad(res) {
 			if(res.type) this.current = parseInt(res.type);
-            // setTimeout(()=>{
-            //   this.tabBars.forEach((tabBar) => {
-            //       this.newsList.push({
-            //           data: [],
-            //           isLoading: false,
-            //           refreshText: "",
-            //           loadingText: '加载更多...'
-            //       });
-            //   });
-            //   this.getList(0);
-            // },350)
         },
         methods: {
+			//区分开始时间和结束时间
+			show(num){
+				this.cancelColor = "#888";
+				this.color = "#5677fc";
+				this.setDateTime = "";
+				this.startYear = 1980;
+				this.endYear = 2030;
+			    this.type = 2;
+				//num  1：开始时间 2：结束时间
+				switch (num){
+					case 1:
+						this.num = 1;
+						break;
+					case 2:
+						this.num = 2;
+						break;														
+					default:
+						break;
+				}
+				this.$refs.dateTime.show()
+			},
+			change: function(e) {
+				if(this.drawerType == 0){
+					switch (this.num){
+						case 1:
+							this.moneyTranBegTime = e.result;
+							this.drawerBegTime = e.result;
+							break;
+						case 2:
+							this.moneyTranEndTime = e.result;
+							this.drawerEndTime = e.result;
+							break;
+						default:
+							break;
+					}
+				}else if(this.drawerType == 1){
+					switch (this.num){
+						case 1:
+							this.extractMoneyBegTime = e.result;
+							this.drawerBegTime = e.result;
+							break;
+						case 2:
+							this.extractMoneyEndTime = e.result;
+							this.drawerEndTime = e.result;
+							break;
+						default:
+							break;
+					}
+				}else if(this.drawerType == 2){
+					switch (this.num){
+						case 1:
+							this.moneyBegTime = e.result;
+							this.drawerBegTime = e.result;
+							break;
+						case 2:
+							this.moneyEndTime = e.result;
+							this.drawerEndTime = e.result;
+							break;
+						default:
+							break;
+					}
+				}
+			},
+			//关闭抽屉
+			closeDrawer(e) {
+				this.rightDrawer = false;
+			},
+			//打开抽屉
+			openDrawer(type) {
+				this.rightDrawer = true;
+				//抽屉类型 0：转换列表时间 1：提现列表时间 2：账变列表时间
+				switch (type){
+					case 0:
+						this.drawerType =  type;
+						this.drawerEndTime = this.moneyTranEndTime;
+						this.drawerBegTime = this.moneyTranBegTime;
+						break;
+					case 1:
+						this.drawerType =  type;
+						this.drawerEndTime = this.extractMoneyEndTime;
+						this.drawerBegTime = this.extractMoneyBegTime;
+						break;
+					case 2:
+						this.drawerType =  type;
+						this.drawerEndTime = this.moneyEndTime;
+						this.drawerBegTime = this.moneyBegTime;
+						break;
+					default:
+						break;
+				}
+			},
 			//获取账变记录
 			getMoney(){
-				api.getMoney({
-					account: this.userEn.account, 
-					page: this.moneyTranPage, 
-					count: 10,
-				}, (res)=>{
+				this.moneyPage = 1;
+				let data = {
+					account: this.userEn.account,
+					page: this.moneyPage, 
+					count: 15,
+				};
+				if(!util.isEmpty(this.moneyBegTime)){
+					let time = this.moneyBegTime + " 00:00:00";
+					data.begAddTime = time;
+				};		
+				if(!util.isEmpty(this.moneyEndTime)){
+					let time = this.moneyEndTime + " 23:59:59";
+					data.endAddTime = time;
+				};
+				api.getMoney(data, (res)=>{
 					let data = api.getData(res).data;
 					if(util.isEmpty(data))
-						 this.isShowMoney();  //控制转换收入明细表显示;
+						this.moneyShow = false;
+						//this.isShowMoney();  //控制转换收入明细表显示;
 					else{
 						data.forEach((item) =>{
 							data.openMoneyTag = false;
@@ -298,14 +469,25 @@ import storage from "@/api/storage.js";
 			
 			//获取提现记录
 			getMoneyDraw(){
-				api.getMoneyDraw({
-					account: this.userEn.account, 
+				this.moneyDrawPage = 1;
+				let data = {
+					account: this.userEn.account,
 					page: this.moneyDrawPage, 
-					count: 12,
-				}, (res)=>{
+					count: 15,
+				};
+				if(!util.isEmpty(this.extractMoneyBegTime)){
+					let time = this.extractMoneyBegTime + " 00:00:00";
+					data.begAddTime = time
+				};		
+				if(!util.isEmpty(this.extractMoneyEndTime)){
+					let time = this.extractMoneyEndTime + " 23:59:59";
+					data.endAddTime = time;
+				};
+				api.getMoneyDraw(data, (res)=>{
 					let data = api.getData(res).data;
 					if(util.isEmpty(data))
-						 this.isShowMoneyDraw();  //控制金币收入明细表显示
+						this.moneyDrawShow = false;
+						 //this.isShowMoneyDraw();  //控制金币收入明细表显示
 					else{
 						data.forEach((item) =>{
 							data.openMoneyDrawTag = false;
@@ -340,14 +522,25 @@ import storage from "@/api/storage.js";
 			
 			//获取金额转换记录
 			getMoneyTran(){
-				api.getMoneyTran({
-					account: this.userEn.account, 
+				this.moneyTranPage = 1;
+				let data = {
+					account: this.userEn.account,
 					page: this.moneyTranPage, 
-					count: 14,
-				}, (res)=>{
+					count: 15,
+				};
+				if(!util.isEmpty(this.moneyTranBegTime)){
+					let time = this.moneyTranBegTime + " 00:00:00";
+					data.begAddTime = time
+				};		
+				if(!util.isEmpty(this.moneyTranEndTime)){
+					let time = this.moneyTranEndTime + " 23:59:59";
+					data.endAddTime = time;
+				};
+				api.getMoneyTran(data, (res)=>{
 					let data = api.getData(res).data;
 					if(util.isEmpty(data))
-						 this.isShowMoneyTran();  //控制转换收入明细表显示;
+						this.moneyTranShow = false;
+						//this.isShowMoneyTran();  //控制转换收入明细表显示;
 					else{
 						data.forEach((item) =>{
 							data.openMoneyTranTag = false;
@@ -721,5 +914,51 @@ import storage from "@/api/storage.js";
 		margin-top:10rpx;
 		font-size:12px;
 		color:#808080;
+	}
+	.search_column{
+		display:flex;
+		align-items: center;
+		justify-content:center;
+		margin-top:20rpx;
+		font-size:16px;
+		padding:0 40rpx 10rpx;
+		box-sizing:border-box;
+		border-bottom:1px solid #808080;
+	}
+	.search_column input{
+		text-align:center;
+	}
+	.sea_btn{
+		
+	}
+	.sea_btn button{
+		font-size:14px;
+		background-color:#FCD030;
+		color:#fff;
+		width:120rpx;
+	}
+	.d-container{
+		padding:80rpx;
+		font-size:15px;
+	}
+	.search_time{
+		margin-top:40rpx;
+	}
+	.search_test{
+		margin-bottom:20rpx;
+	}
+	.d-container input{
+		border-bottom:1px solid #808080;
+		color:#808080;
+	}
+	.search_btn{
+		margin-top:100rpx;
+	}
+	.search_btn button{
+		font-size:14px;
+		background-color:#FCD030;
+		color:#fff;
+		border-radius:40rpx;
+		padding:0 !important;
 	}
 </style>

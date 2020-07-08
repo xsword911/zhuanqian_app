@@ -2,68 +2,78 @@
 	<view class="content">
 		<!-- 功能栏 -->
 		<view class="content func">
-			<view class="setting" @tap="">
+			<view class="setting">
 				<view class="func_left">
 					<text class="func_test">账号</text>
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{1212}}</view>
+					<view class="">{{userEn.account}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</view>
 			
-			<view class="setting" @tap="">
-				<view class="func_left">
-					<text class="func_test">昵称</text>
-				</view>
-				
-				<view class="func_right">
-					<view class="">{{1212}}</view>
-					<tui-icon name="arrowright" :size="26"></tui-icon>
-				</view>
-			</view>
-			
-			<view class="setting" @tap="">
-				<view class="func_left">
-					<text class="func_test">手机号</text>
-				</view>
-				
-				<view class="func_right">
-					<view class="">{{1212}}</view>
-					<tui-icon name="arrowright" :size="26"></tui-icon>
-				</view>
-			</view>
-			
-			<view class="setting" @tap="">
+			<view class="setting">
 				<view class="func_left">
 					<text class="func_test">邀请码</text>
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{1212}}</view>
+					<view class="">{{userEn.code}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</view>
 			
-			<view class="setting" @tap="">
+			<view class="setting" @tap="toUpdInfo('nick', '昵称', userEn.nick)">
+				<view class="func_left">
+					<text class="func_test">昵称</text>
+				</view>
+				
+				<view class="func_right">
+					<view class="">{{userEn.nick}}</view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting" @tap="toUpdInfo('tel', '手机号',userEn.tel)">
+				<view class="func_left">
+					<text class="func_test">手机号</text>
+				</view>
+				
+				<view class="func_right">
+					<view class="">{{userEn.tel}}</view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)">
+				<view class="func_left">
+					<text class="func_test">修改密码</text>
+				</view>
+				
+				<view class="func_right">
+					<tui-icon name="arrowright" :size="26"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting">
 				<view class="func_left">
 					<text class="func_test">注册时间</text>
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{ }}</view>
+					<view class="">{{userEn.regTime}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</view>
 			
-			<view class="setting" @tap="">
+			<view class="setting">
 				<view class="func_left">
 					<text class="func_test">最后一次登录时间</text>
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{ }}</view>
+					<view class="">{{userEn.loginTime}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</view>
@@ -74,7 +84,6 @@
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{ }}</view>
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</view>
@@ -83,17 +92,33 @@
 </template>
 
 <script>
+import storage from "@/api/storage.js";
+import api from "@/api/api.js";
 export default{
 	data() {
 		return {
-			
+			userEn: [],  //我的信息
 		}
+	},
+	onShow() {
+		this.userEn = storage.getMyInfo();
+		api.getUser({account: this.userEn.account}, (res)=>{
+			let data = api.getData(res);
+			this.userEn = data;
+			storage.setMyInfo(this.userEn);
+		});
 	},
 	methods:{
 		//跳转到银行卡信息页
 		toBank(){
 			uni.navigateTo({
 				url: '/pages/my/setting/bank/bank'
+			})
+		},
+		//跳转到修改信息页
+		toUpdInfo(type, title, value){
+			uni.navigateTo({
+				url: '/pages/my/setting/updMyInfo/updMyInfo?type=' + type + "&title=" + title + "&value=" +value
 			})
 		},
 	}

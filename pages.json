@@ -31,9 +31,14 @@
 			"navigationBarTitleText": "任务"
 		}
 	},{
+		"path": "pages/work/luckDraw/luckDraw",
+		"style": {
+			"navigationBarTitleText": "幸运大转盘"
+		}
+	},{
 		"path": "pages/receiveAward/receiveAward",
 		"style": {
-			"navigationBarTitleText": "领取奖励"
+			"navigationBarTitleText": "签到"
 		}
 	},{
 		"path": "pages/extractMoney/extractMoney",
@@ -54,6 +59,11 @@
 		"path": "pages/my/setting/setting",
 		"style": {
 			"navigationBarTitleText": "设置"
+		}
+	},{
+		"path": "pages/my/setting/updMyInfo/updMyInfo",
+		"style": {
+			"navigationBarTitleText": "修改信息"
 		}
 	},{
 		"path": "pages/my/setting/bank/bank",
