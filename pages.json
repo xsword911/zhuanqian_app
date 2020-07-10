@@ -66,6 +66,11 @@
 			"navigationBarTitleText": "修改信息"
 		}
 	},{
+		"path": "pages/my/setting/updMyImg/updMyImg",
+		"style": {
+			"navigationBarTitleText": "裁剪头像"
+		}
+	},{
 		"path": "pages/my/setting/bank/bank",
 		"style": {
 			"navigationBarTitleText": "银行卡"
@@ -83,12 +88,17 @@
 	},{
 		"path": "pages/goldDetails/goldDetails",
 		"style": {
-			"navigationBarTitleText": "金币收益明细"
+			"navigationBarTitleText": "金币账变明细"
+		}
+	},{
+		"path": "pages/workDetails/workDetails",
+		"style": {
+			"navigationBarTitleText": "任务收益明细"
 		}
 	},{
 		"path": "pages/my/detailed/detailed",
 		"style": {
-			"navigationBarTitleText": "现金收益明细"
+			"navigationBarTitleText": "明细"
 		}
 	}],
 	

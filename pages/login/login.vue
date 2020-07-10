@@ -12,7 +12,11 @@
 		<view class="pwd">
 			<tui-icon name="pwd" color="#6d7a87" :size="20"></tui-icon>
 			<view class="ipt">
-				<input type="text" value=" " v-model="passWord" placeholder="请输入密码" :adjust-position="false" maxlength="30" password="true" />
+				<input type="text" value=" " v-model="passWord" placeholder="请输入密码" 
+				:adjust-position="false" maxlength="30" :password="isPwd" />
+			</view>
+			<view class="open_pwd" @tap="isPassWord">
+				<tui-icon name="eye" :size="30"></tui-icon>
 			</view>
 		</view>
 		
@@ -36,9 +40,14 @@ export default{
 		return {
 			userName: null,  //用户名
 			passWord: null,  //密码
+			isPwd: true,  //是否是密码框
 		}
 	},
 	methods:{
+		//查看密码
+		isPassWord(){
+			this.isPwd = this.isPwd ? false : true;
+		},
 		//跳转到注册页
 		toReg(){
 			uni.navigateTo({
@@ -107,6 +116,15 @@ export default{
 		padding:40rpx;
 		border-bottom:1px solid #F2F4F6;
 		margin-bottom:40rpx;
+	}
+	.pwd{
+		position:relative;
+	}
+	.open_pwd{
+		position:absolute;
+		right:40rpx;
+		top:50%;
+		transform:translateY(-50%);
 	}
 	.ipt{
 		margin-left:20rpx;

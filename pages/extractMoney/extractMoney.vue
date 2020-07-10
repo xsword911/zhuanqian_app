@@ -9,7 +9,7 @@
 			<view class="test">到账账号</view>
 			<view class="sum">
 				<view class="user_img">
-					 <image src="/static/img/headImg.jpg" mode="widthFix"></image>
+					 <image :src="userEn.headUrl == '' ? '/static/img/headImg.jpg' : userEn.headUrl" mode="widthFix"></image>
 				</view>
 				<view class="info">
 					<view class="bank_code">

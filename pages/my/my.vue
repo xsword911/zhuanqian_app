@@ -10,8 +10,8 @@
 			</view>
 			
 			<view class="info_left">
-				<view class="my_headImg">
-					<image src="/static/img/headImg.jpg" mode="widthFix"></image>
+				<view class="my_headImg" @tap="revise">
+					<image :src="userEn.headUrl == '' ? '/static/img/headImg.jpg' : userEn.headUrl" mode="widthFix"></image>
 				</view>
 				<view class="my_name">
 					<text class="name">{{userName}}</text>
@@ -170,6 +170,12 @@ export default{
 				let data = api.getData(res);
 				if(util.isEmpty(data)) this.todayCoin = 0;
 				else this.todayCoin = data.goldAdd;
+			});
+		},
+		//查看头像
+		revise(){
+			uni.previewImage({
+				urls: [this.userEn.headUrl],
 			});
 		},
 		//跳转到兑换现金页

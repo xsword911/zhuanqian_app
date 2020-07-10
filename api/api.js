@@ -77,6 +77,9 @@ module.exports = {
 	//查询账变记录
 	getMoney: function(path, funSuccess) {httpUtil.post('money/getMoney', path, funSuccess);},
 	
+	//查询金币账变记录
+	getGold: function(path, funSuccess) {httpUtil.post('money/getGold', path, funSuccess);},
+	
 	//查询签到进度
 	getSignProgress: function(path, funSuccess) {httpUtil.post('activity/getSignProgress', path, funSuccess);},
 	
@@ -85,4 +88,11 @@ module.exports = {
 	
 	//查询月签到详情
 	getMonthSignDetails: function(path, funSuccess) {httpUtil.post('activity/getMonthSignDetails', path, funSuccess);},
+	
+	//玩家查询抽奖列表
+	getOpenLucky: function(path, funSuccess) {httpUtil.post('activity/getOpenLucky', path, funSuccess);},
+	
+	//进行幸运抽奖
+	openLucky: function(path, funSuccess) {httpUtil.post('activity/openLucky', path, funSuccess);},
+	
 }

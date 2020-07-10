@@ -2,9 +2,17 @@
 	<view class="container">
 		<view class="tui-dot" :class="['tui-dot-'+(index+1)]" v-for="(item,index) in circleList" :key="index"></view>
 		<view class="tui-container-in">
-			<view class="tui-content-out" :class="['tui-award-'+(index+1),index==indexSelect?'tui-awardSelect':'']" v-for="(item,index) in awardList"
-			 :key="index">
-				<image class="tui-award-image" :src="'/static/img/luck/'+item.img"></image>
+			<view class="tui-content-out box" :class="['tui-award-'+(index+1),item.id==indexSelect?'tui-awardSelect':'']" 
+			v-for="(item,index) in awardList"
+			 :key="item.id">
+				<view class="img_box">
+					<image class="" src="/static/img/Lucky_img1.png" v-show="item.type == 0" mode="widthFix"></image>
+					<image class="" src="/static/img/Lucky_img2.png" v-show="item.type == 1" mode="widthFix"></image>
+					<image class="" src="/static/img/Lucky_img3.png" v-show="item.type == 10" mode="widthFix"></image>
+				</view>
+				<view class="test">
+					<text>{{item.title}}</text>
+				</view>
 			</view>
 			<view class="tui-btn-start" :class="[isRunning?'tui-ative':'']" @tap="startDrawing">立即抽奖</view>
 		</view>
@@ -12,86 +20,140 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				circleList: 24, //圆点
-				awardList: [{
-					img: "luck-1.png",
-					name: ".top域名 1元/年"
-				}, {
-					img: "luck-2.png",
-					name: "VPS 1元/30天"
-				}, {
-					img: "luck-3.png",
-					name: "免费主机1年"
-				}, {
-					img: "luck-4.png",
-					name: "虚拟主机1元/年"
-				}, {
-					img: "luck-1.png",
-					name: ".top域名 1元/年"
-				}, {
-					img: "luck-2.png",
-					name: "VPS 1元/30天"
-				}, {
-					img: "luck-3.png",
-					name: "免费主机1年"
-				}, {
-					img: "luck-4.png",
-					name: "虚拟主机1元/年"
-				}], //奖品数组
-				indexSelect: 0, //被选中的奖品index
-				isRunning: false //是否正在抽奖
-			}
-		},
-		methods: {
-			//获取随机数
-			getRandom: function(u) {
-				let rnd = Math.random() > 0.5 ? "2" : "1";
-				u = u || 3;
-				for (var i = 0; i < u; i++) {
-					rnd += Math.floor(Math.random() * 10);
-				}
-				return Number(rnd);
-			},
-			//开始抽奖
-			startDrawing: function() {
-				if (this.isRunning) return
-				this.isRunning = true;
-				let indexSelect = 0;
-				let i = 0;
-				let randomNum = this.getRandom(3);
-				let timer = setInterval(() => {
-					++indexSelect;
-					//这里用y=30*x+150函数做的处理.可根据自己的需求改变转盘速度
-					indexSelect = indexSelect % 8;
-					this.indexSelect = indexSelect;
-					i += 40;
-					if (i > randomNum) {
-						//去除循环
-						clearInterval(timer)
-						timer = null;
-						//获奖提示
-						uni.showModal({
-							title: '恭喜您',
-							content: '获得了奖品【' + this.awardList[indexSelect].name + '】',
-							confirmColor: '#5677FC',
-							showCancel: false, //去掉取消按钮
-							success: (res) => {
-								if (res.confirm) {
-									this.isRunning = false
-								}
+import api from "@/api/api.js";
+import storage from "@/api/storage.js";
+import util from "@/common/util.js";
+export default {
+	data() {
+		return {
+			circleList: 24, //圆点
+			awardList: [], //奖品数组
+			indexSelect: 1, //被选中的奖品index
+			isRunning: false ,//是否正在抽奖
+			userEn: [],  //我的信息
+		}
+	},
+	onShow() {
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.getOpenLucky();
+	},
+	methods: {
+		//获取转盘信息列表
+		getOpenLucky(){
+			api.getOpenLucky({account: this.userEn.account}, (res)=>{
+				let code = api.getCode(res);
+				if(code != 0){
+					uni.showModal({
+						content: "获取转盘信息错误",
+						showCancel: false,
+						success(res) {
+							if(res.confirm){
+								uni.navigateBack({
+									delta: 1
+								});
 							}
-						})
-					}
-				}, (70 + i))
+						}
+					});
+				}else{
+					let data = api.getData(res).data;
+					this.awardList = data;
+				}
+			});
+		},
+		//获取随机数
+		getRandom: function(u) {
+			let rnd = Math.random() > 0.5 ? "2" : "1";
+			u = u || 3;
+			for (var i = 0; i < u; i++) {
+				rnd += Math.floor(Math.random() * 10);
 			}
+			return Number(rnd);
+		},
+		//开始抽奖
+		startDrawing: function() {
+			let _this = this;
+			uni.showModal({
+				title: "幸运抽奖",
+				content: "确定消耗10金币进行一次抽奖？",
+				success(res) {
+					if(res.confirm){
+						if (_this.isRunning) return;
+						_this.isRunning = true;
+						api.openLucky({account: _this.userEn.account}, (res)=>{
+							let code = api.getCode(res);
+							if(code != 0){
+								uni.showModal({
+									content: "获取转盘信息错误",
+									showCancel: false,
+									success(res) {
+										if(res.confirm){
+											uni.navigateBack({
+												delta: 1
+											});
+										}
+									}
+								});
+							}else{
+								let data = api.getData(res);
+								console.log(data);
+								let indexSelect = 0;
+								let i = 0;
+								let timer = setInterval(() => {
+									++indexSelect;
+									//这里用y=30*x+150函数做的处理.可根据自己的需求改变转盘速度
+									indexSelect = indexSelect % 8;
+									//获奖提示
+									_this.indexSelect = indexSelect;
+									i += 40;
+									if (i > 1500) {
+										//去除循环
+										clearInterval(timer);
+										timer = null;
+										_this.indexSelect = data.id;
+										uni.showModal({
+											title: '恭喜您',
+											content: '获得了奖品【' + data.title + '】',
+											confirmColor: '#5677FC',
+											showCancel: false, //去掉取消按钮
+											success: (res) => {
+												if (res.confirm) {
+													_this.isRunning = false;
+												};
+											}
+										})
+									}
+								}, (70 + i))
+							}
+						});
+					}
+				}
+			})
 		}
 	}
+}
 </script>
 
 <style>
+	.box{
+		display:flex;
+		flex-direction: column;
+		justify-content:center;
+		align-items:center;
+	}
+	.img_box{
+		height: 80rpx;
+		width: 88rpx;
+		text-align:center;
+	}
+	image{
+		width:100%;
+		height:auto;
+	}
+	.test{
+		margin-top:20rpx;
+		font-size:12px;
+		color:#FF0000;
+	}
 	.container {
 		height: 600rpx;
 		width: 650rpx;

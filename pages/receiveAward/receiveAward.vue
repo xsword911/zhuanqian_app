@@ -2,13 +2,14 @@
 	<view class="">
 		<view class="main">
 			<view class="receive_title">
-				<image src="/static/img/receive_award.png" mode="widthFix"></image>
+				<text>签到送现金</text>
 			</view>
 			
 			<view>
 				<!-- 插入模式 -->
 				<uni-calendar class="uni-calendar--hook" :selected="info.selected" :showMonth="false" 
-				@change="change" @monthSwitch="monthSwitch" />
+				@change="change" @monthSwitch="monthSwitch" :start-date="'2019-01-01'"
+				:end-date="'2022-01-01'" />
 			</view>
 		</view>
 	</view>
@@ -51,34 +52,36 @@ import util from "@/common/util.js";
 					lunar: true,
 					range: true,
 					insert: false,
-					selected: []
-				}
+					selected: [],
+				},
 			}
 		},
 		onReady() {
 			// TODO 模拟请求异步同步数据
-			setTimeout(() => {
-				this.info.date = getDate(new Date(), -30).fullDate;  		//获取30天前的日期 2020-06-08
-				this.info.startDate = getDate(new Date(), -60).fullDate;  	//获取60天前的日期 2020-05-09
-				this.info.endDate = getDate(new Date(), 30).fullDate;  		//获取30天后的日期 2020-08-07
-				this.info.selected = [{
-						date: getDate(new Date(), -7).fullDate,
-						info: '￥100'
-					},
-					{
-						date: getDate(new Date(), -2).fullDate,
-						info: '签到',
-						data: {
-							custom: '自定义信息',
-							name: '自定义消息头'
-						}
-					},
-					{
-						date: getDate(new Date(), -1).fullDate,
-						info: '100金币'
-					}
-				]
-			}, 2000);
+			// setTimeout(() => {
+			// 	this.info.date = getDate(new Date(), -30).fullDate;  		//获取30天前的日期 2020-06-08
+			// 	this.info.startDate = getDate(new Date(), -60).fullDate;  	//获取60天前的日期 2020-05-09
+			// 	this.info.endDate = getDate(new Date(), 30).fullDate;  		//获取30天后的日期 2020-08-07
+			// 	this.info.selected = [{
+			// 			date: getDate(new Date(), -7).fullDate,
+			// 			info: '￥100'
+			// 		},
+			// 		{
+			// 			date: getDate(new Date(), -2).fullDate,
+			// 			info: '签到',
+			// 			data: true
+			// 		},
+			// 		{
+			// 			date: getDate(new Date(), 3).fullDate,
+			// 			data: true
+			// 		},
+			// 		{
+			// 			date: getDate(new Date(), -1).fullDate,
+			// 			info: '100金币' 
+			// 		}
+			// 	]
+			// 	console.log(this.info.selected);
+			// }, 2000);
 		},
 		onShow() {
 			this.getMonthSignDetails();  //获取月签到详情
@@ -107,7 +110,73 @@ import util from "@/common/util.js";
 						});
 					}else{
 						let data = api.getData(res);
-						console.log(data);
+						let signList = [];  //已签到天数
+						// console.log(data);
+						let signDetailList = [];  //已签到天数信息列表
+						let signNonelList = [];  //未签到天数信息列表
+						
+						let today = getDate(new Date()).fullDate;   //今天的日期
+						let format = today.slice(0, 8);   //获取当前时间格式 2020-07-   y-m-
+						data.forEach((item, index) =>{
+							// console.log(item);
+							if(!util.isEmpty(item.signDetail)){   //已签到
+								let obj = {};
+								signList.push(item.day - 1);
+								obj.date = item.signDetail.finishTime.slice(0, 10);
+								if(item.signDetail.awardType == 0)  //奖励金币
+								{
+									// 奖励数量超过3位数时进行文字显示处理  2000 = 2k
+									if(item.signDetail.award.length >= 4){
+										let k = item.signDetail.award.slice(0, 1);
+										item.signDetail.award = k + 'k';
+									}
+									obj.info = item.signDetail.award + "金币";
+								}
+								else{  	//奖励现金
+									obj.info = "￥" + item.signDetail.award;
+								}
+								signDetailList.push(obj);	
+							}
+							else if(util.isEmpty(item.signDetail)){  	//未签到
+								let obj = {};
+								//判断日期是否是个位数
+								if(item.day.toString().length < 2){
+									
+									obj.date = format + '0' + item.day.toString();
+									let getDay = today.slice(1, 2);
+								}else obj.date = format + item.day;
+								
+								
+								if(!util.isEmpty(item.sign)){    //sign不为空时
+									if(item.sign.awardType == 0)  //奖励金币
+									{
+										// 奖励数量超过3位数时进行文字显示处理  2000 = 2k
+										if(item.sign.award.length >= 4){
+											let k = item.sign.award.slice(0, 1);
+											item.sign.award = k + 'k';
+										}
+										obj.info = item.sign.award + "金币";
+									}
+									else{  	//奖励现金
+										obj.info = "￥" + item.sign.award;
+									}
+									obj.data = {
+										custom: '自定义信息',
+										name: '自定义消息头',
+									};
+								}
+								// console.log(obj);
+								signNonelList.push(obj);	
+							}
+						});  //foreach循环结束;
+							// console.log(signNonelList);
+							for (let i = 0; i <= signList.length; ++i) {
+								let index = signList[i];  //插入元素的数组下标
+								signNonelList.splice(index, 0, signDetailList[i]);
+							}
+							signNonelList.splice(0, 1); 
+							// console.log(signNonelList);
+							this.info.selected = signNonelList;
 					}
 				});
 			},
@@ -138,9 +207,12 @@ import util from "@/common/util.js";
 		padding-top:60rpx;
 	}
 	.receive_title{
-		width:40%;
-		height:100rpx;
-		margin:0 auto;
+		width: 100%;
+		text-align:center;
+		font-family: "Times New Roman", Times, serif;
+		font-size:22px;
+		margin-bottom:20rpx;
+		color:#000;
 	}
 	/* 头条小程序组件内不能引入字体 */
 	/* #ifdef MP-TOUTIAO */

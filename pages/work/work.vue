@@ -21,8 +21,8 @@
 					</view>
 				</view>		
 				
-				<view class="" @tap="toMoneyChange">
-					<button type="default" class="extract_btn">兑换现金 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
+				<view class="" @tap="toGoldDetails">
+					<button type="default" class="extract_btn">收益明细 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
 				</view>
 				
 			</view>
@@ -84,7 +84,7 @@
 					</view>
 				</view>
 				
-				<view class="receive" @tap="toLuckDraw">领取</view>
+				<view class="receive" @tap="toLuckDraw">抽奖</view>
 			</view>
 		</view>
 		
@@ -466,12 +466,6 @@ export default{
 				url: '/pages/work/luckDraw/luckDraw'
 			})
 		},
-		//跳转到兑换现金页
-		toMoneyChange(){
-			uni.navigateTo({
-				url: "/pages/moneyChange/moneyChange"
-			})
-		},
 		//复制内容并跳转到微信
 		toWx(){
 			let test = '';
@@ -577,6 +571,12 @@ export default{
 					});
 				}
 			});
+		},
+		//跳转到任务金币明细页
+		toGoldDetails(){
+			uni.navigateTo({
+				url: "/pages/workDetails/workDetails"
+			})
 		},
 	}
 }

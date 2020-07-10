@@ -15,18 +15,12 @@
 		<view class="gold_info">
 			<view class="income" v-for="(item,index) in incomeList" :key='index'  v-show="showIncome" @tap="open(item.id)">
 				<view class="incomeTime">
-					<text class="info_from" v-show="item.type == 0">余额转金币</text>
-					<text class="info_from" v-show="item.type == 1">做任务奖励</text>
-					<text class="info_from" v-show="item.type == 2">签到奖励</text>
-					<text class="info_from" v-show="item.type == 3">幸运抽奖获奖</text>
-					<text class="info_from" v-show="item.type == 101">金币转余额</text>
-					<text class="info_from" v-show="item.type == 102">幸运抽奖扣除</text>
-					
-					<text class="info_time">{{item.addTime}}</text>
+					<text class="info_from">{{item.title}}</text>
+					<text class="info_time">{{item.finishTime}}</text>
 				</view>
 				
 				<view class="incomeNum">
-					<text class="num">{{item.gold}}</text>
+					<text class="num">+ {{item.award}}</text>
 					<view class="gold_img">
 						<image src="/static/img/gold2.png" mode="widthFix"></image>
 					</view>
@@ -38,7 +32,7 @@
 				
 				<view class="open_box" v-show="item.id == openId">
 					<view class="">
-						交易订单号：<text class="">{{item.sn}}</text>
+						内容：<text class="income_data">{{item.explain}}</text>
 					</view>
 				</view>
 			</view>
@@ -166,23 +160,24 @@ export default {
 			if(util.isEmpty(this.incomeList)) this.showIncome = false;
 			else this.showIncome = true;
 		},
-		//获取金币明细表
+		//获取金币收入明细表
 		getTaskDetails(){
 			this.page = 1;
 			let data = {
 				account: this.userEn.account,
+				state: 1,
 				page: this.page,
 				count: 10
 			};
 		if(!util.isEmpty(this.begTime)){
 			let time = this.begTime + " 00:00:00";
-			data.begAddTime = time
+			data.begFinishTime = time
 		};		
 		if(!util.isEmpty(this.endTime)){
 			let time = this.endTime + " 23:59:59";
-			data.endAddTime = time;
+			data.endFinishTime = time;
 		};
-		api.getGold(data, (res)=>{
+		api.getTaskDetails(data, (res)=>{
 			let data = api.getData(res).data;
 			if(util.isEmpty(data)) this.showIncome = false;
 				 //this.isShowIncome();  //控制金币收入明细表显示

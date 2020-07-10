@@ -52,7 +52,8 @@
 				</view>
 				<view class="uni-calendar__weeks" v-for="(item,weekIndex) in weeks" :key="weekIndex">
 					<view class="uni-calendar__weeks-item" v-for="(weeks,weeksIndex) in item" :key="weeksIndex">
-						<calendar-item class="uni-calendar-item--hook" :weeks="weeks" :calendar="calendar" :selected="selected" :lunar="lunar" @change="choiceDate"></calendar-item>
+						<calendar-item class="uni-calendar-item--hook" :weeks="weeks" :calendar="calendar" :selected="selected" 
+						 :lunar="lunar" @change="choiceDate"></calendar-item>
 					</view>
 				</view>
 			</view>
@@ -125,7 +126,7 @@
 			clearDate: {
 				type: Boolean,
 				default: true
-			}
+			},
 		},
 		data() {
 			return {

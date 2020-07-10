@@ -2,6 +2,19 @@
 	<view class="content">
 		<!-- 功能栏 -->
 		<view class="content func">
+			<view class="setting" @tap="toUpdMyImg">
+				<view class="func_left">
+					<text class="func_test">头像</text>
+				</view>
+				
+				<view class="func_right">
+					<view class="header_img" @tap.stop="revise" >
+						<image :src="userEn.headUrl == '' ? '/static/img/headImg.jpg' : userEn.headUrl" mode="widthFix"></image>
+					</view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
+				</view>
+			</view>
+			
 			<view class="setting">
 				<view class="func_left">
 					<text class="func_test">账号</text>
@@ -109,6 +122,12 @@ export default{
 		});
 	},
 	methods:{
+		//查看头像
+		revise(){
+			uni.previewImage({
+				urls: [this.userEn.headUrl],
+			});
+		},
 		//跳转到银行卡信息页
 		toBank(){
 			uni.navigateTo({
@@ -119,6 +138,12 @@ export default{
 		toUpdInfo(type, title, value){
 			uni.navigateTo({
 				url: '/pages/my/setting/updMyInfo/updMyInfo?type=' + type + "&title=" + title + "&value=" +value
+			})
+		},
+		//跳转到修改头像页
+		toUpdMyImg(){
+			uni.navigateTo({
+				url: "/pages/my/setting/updMyImg/updMyImg"
 			})
 		},
 	}
@@ -146,5 +171,14 @@ export default{
 		margin-top:20rpx;
 		border-bottom:1px solid #f9f9f9;
 		padding:10rpx 0;
+	}
+	.header_img {
+		width: 100rpx;
+		height: 100rpx;
+		border-radius:50%;
+		overflow: hidden;
+	    display:flex;
+		align-items:center;
+		margin-right:10rpx;
 	}
 </style>

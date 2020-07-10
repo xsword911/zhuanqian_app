@@ -6,12 +6,23 @@
 		
 		<view class="modify_box" v-show="type == 'pwd'">
 			<text>旧密码</text>
-			<input type="text" v-model="pwdOld" />
+			<input type="text" v-model="pwdOld" :password="isOldPwd" />
+			<view class="open_pwd" @tap="isOldPassWord">
+				<tui-icon name="eye" :size="30"></tui-icon>
+			</view>
 		</view>
 		
 		<view class="modify_box" v-show="type == 'pwd'">
 			<text>新密码</text>
-			<input type="text" v-model="pwd" />
+			<input type="text" v-model="pwd" :password="isPwd" />
+			<view class="open_pwd" @tap="isPassWord">
+				<tui-icon name="eye" :size="30"></tui-icon>
+			</view>
+		</view>
+		
+		<view class="modify_box" v-show="type == 'pwd'">
+			<text>确认密码</text>
+			<input type="text" v-model="pwd2" />
 		</view>
 		<view class="modify_test">
 			请修改信息
@@ -32,9 +43,12 @@ export default{
 		return {
 			val: null,
 			pwd:  null,  //新密码
+			pwd2: null,  //确认密码
 			pwdOld:  null, //旧密码
 			type: null,
 			userEn: [],  //我的信息
+			isOldPwd: true,  //旧密码栏类型
+			isPwd: true,  //新密码栏类型
 		}
 	},
 	onShow(){
@@ -46,6 +60,14 @@ export default{
 		util.setBarTitle('修改' + res.title);
 	},
 	methods:{
+		//查看新密码
+		isPassWord(){
+			this.isPwd = this.isPwd ? false : true;
+		},
+		//查看旧密码
+		isOldPassWord(){
+			this.isOldPwd = this.isOldPwd ? false : true;
+		},
 		//判断修改信息是否合法
 		apply(){
 			if(this.type != 'pwd'){
@@ -89,6 +111,12 @@ export default{
 				}else if(this.pwd.length > 12){
 					uni.showModal({
 						content: "密码长度不能大于12位",
+						showCancel: false
+					});
+					return;
+				}else if(this.pwd2 != this.pwd){
+					uni.showModal({
+						content: "二次密码输入不一致",
 						showCancel: false
 					});
 					return;
@@ -140,6 +168,7 @@ export default{
 		padding-top:50rpx;
 		padding-left:15rpx;
 		box-sizing:border-box;
+		position:relative;
 	}
 	.modify_box text{
 		font-size:14px;
@@ -159,5 +188,11 @@ export default{
 		font-size:14px;
 		width:60%;
 		border-radius:40rpx;
+	}
+	.open_pwd{
+		position:absolute;
+		right:20rpx;
+		top:70%;
+		transform:translateY(-50%);
 	}
 </style>

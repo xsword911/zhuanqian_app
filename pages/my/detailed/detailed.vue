@@ -176,9 +176,11 @@
 						<view class="income" v-for="(item,index) in moneyList" :key='index' @tap="moneyOpen(item.id)">
 							<view class="incomeTime">
 								<text v-show="item.type == 0">金币转换现金</text>
-								<text v-show="item.type == 101">现金转换金币</text>
-								<text class="income_data" v-show="item.type > 0 && item.type < 100">收入</text>
-								<text class="income_data" v-show="item.type >= 100 && item.type <= 200 && item.type != 101">支出</text>
+								<text v-show="item.type == 1">提现审核失败</text>
+								<text v-show="item.type == 2">签到奖励</text>
+								<text v-show="item.type == 3">幸运抽奖获奖</text>
+								<text v-show="item.type == 100">提现</text>
+								<text v-show="item.type == 101">余额转金币</text>
 								<view class="moneyTran_time">
 									{{item.addTime}}
 								</view>

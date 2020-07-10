@@ -178,9 +178,12 @@ export default{
 						showCancel: false,
 						success(res) {
 							if (res.confirm) {
+								uni.switchTab({
+									url: "/pages/my/my"
+								});
 								uni.navigateTo({
 									url: "/pages/my/detailed/detailed?type=0"
-								})
+								});
 							};
 						}
 					});

@@ -8,7 +8,7 @@
 		'uni-calendar-item--after-checked':weeks.afterMultiple,
 		}" @click="choiceDate(weeks)">
 		<view class="uni-calendar-item__weeks-box-item">
-			<text v-if="selected&&weeks.extraInfo" class="uni-calendar-item__weeks-box-circle"></text>
+			<text v-if="selected&&weeks.extraInfo&&weeks.extraInfo.data != null" class="uni-calendar-item__weeks-box-circle"></text>
 			<text class="uni-calendar-item__weeks-box-text" :class="{
 				'uni-calendar-item--isDay-text': weeks.isDay,
 				'uni-calendar-item--isDay':calendar.fullDate === weeks.fullDate && weeks.isDay,
@@ -73,12 +73,17 @@
 			lunar: {
 				type: Boolean,
 				default: false
-			}
+			},
 		},
 		methods: {
 			choiceDate(weeks) {
-				// this.$emit('change', weeks)
+				// this.$emit('change', weeks);
+				// console.log(weeks.data);
 			}
+			
+		},
+		onShow() {
+			console.log(weeks.data);
 		}
 	}
 </script>
@@ -132,7 +137,7 @@
 		color: #c0c0c0;
 	}
 
-/* 	.uni-calendar-item--isDay-text {
+	.uni-calendar-item--isDay-text {
 		color: #007aff;
 	}
 
@@ -140,14 +145,14 @@
 		background-color: #007aff;
 		opacity: 0.8;
 		color: #fff;
-	} */
+	}
 
 	.uni-calendar-item--extra {
 		color: #dd524d;
 		opacity: 0.8;
 	}
 
-/* 	.uni-calendar-item--checked {
+	.uni-calendar-item--checked {
 		background-color: #007aff;
 		color: #fff;
 		opacity: 0.8;
@@ -157,7 +162,7 @@
 		background-color: #007aff;
 		color: #fff;
 		opacity: 0.8;
-	} */
+	}
 
 	.uni-calendar-item--before-checked {
 		background-color: #ff5a5f;
