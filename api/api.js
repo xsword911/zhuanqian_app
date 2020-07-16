@@ -33,7 +33,7 @@ module.exports = {
 	register: function(path, funSuccess) {httpUtil.post('user/register', path, funSuccess);},
 	
 	//查询用户详细信息
-	getUser: function(path, funSuccess) {httpUtil.post('user/getUser', path, funSuccess);},
+	getUserByAccount: function(path, funSuccess) {httpUtil.post('user/getUserByAccount', path, funSuccess);},
 	
 	//修改用户信息
 	setUser: function(path, funSuccess) {httpUtil.post('user/setUser', path, funSuccess);},

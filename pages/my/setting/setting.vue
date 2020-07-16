@@ -115,7 +115,7 @@ export default{
 	},
 	onShow() {
 		this.userEn = storage.getMyInfo();
-		api.getUser({account: this.userEn.account}, (res)=>{
+		api.getUserByAccount({account: this.userEn.account}, (res)=>{
 			let data = api.getData(res);
 			this.userEn = data;
 			storage.setMyInfo(this.userEn);

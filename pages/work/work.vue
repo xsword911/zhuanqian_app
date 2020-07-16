@@ -351,7 +351,7 @@ export default{
 		},
 		//刷新我的信息
 		getMyInfo(){
-			api.getUser({account: storage.getMyInfo().account}, (res)=>{
+			api.getUserByAccount({account: storage.getMyInfo().account}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.myCoin = this.userEn.gold;

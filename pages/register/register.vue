@@ -104,7 +104,7 @@ export default{
 						duration: 1500,
 						success() {
 							setTimeout(function(){
-								api.getUser({account: _this.userName}, (res)=>{
+								api.getUserByAccount({account: _this.userName}, (res)=>{
 									storage.setMyInfo(api.getData(res));
 									uni.reLaunch({
 										url: "/pages/game/game"

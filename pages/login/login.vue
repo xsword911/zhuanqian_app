@@ -95,7 +95,7 @@ export default{
 		},
 		//登录成功查询我的信息并跳转到game页面
 		toGame(){
-			api.getUser({account: this.userName}, (res)=>{
+			api.getUserByAccount({account: this.userName}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				uni.reLaunch({
 					url: "/pages/game/game"

@@ -155,7 +155,7 @@ export default{
 	methods:{
 		//刷新我的信息
 		getMyInfo(){
-			api.getUser({account: this.userEn.account}, (res)=>{
+			api.getUserByAccount({account: this.userEn.account}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.userName = this.userEn.account;
