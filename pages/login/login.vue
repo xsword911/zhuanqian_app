@@ -54,9 +54,10 @@ export default{
 		}
 	},
 	onLoad() {
-		if(!util.isEmpty(storage.getMyUserInfo())){
-			this.userName = storage.getMyUserInfo().userName;
-			this.passWord = storage.getMyUserInfo().passWord; 
+		let userPwd = storage.getUserPwd();
+		if(!util.isEmpty(userPwd)){
+			this.userName = userPwd.userName;
+			this.passWord = userPwd.passWord; 
 		}
 	},
 	methods:{
@@ -108,9 +109,9 @@ export default{
 							userName: this.userName,
 							passWord: this.passWord
 						}
-						storage.setMyUserInfo(userInfo);
+						storage.setUserPwd(userInfo);
 					}else{
-						storage.delMyUserInfo();
+						storage.delUserPwd(); 
 					}
 					this.toGame();
 				}else{
