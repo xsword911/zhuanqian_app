@@ -26,74 +26,13 @@
 				</view>
 				
 			</view>
-			
-			<!-- 签到信息 -->
-			<view class="signIn_box">
-				<view class="signIn_img">
-					<image src="/static/img/hongbao.png" mode="widthFix"></image>
-				</view>
-				
-				<view class="signIn_test">
-					<view class="" v-show="timeOut">						
-						<view class="continued_sign">
-							<view class="" v-show="awardType == 0">
-								再过<text class="tips_text">{{range}}{{unit}}</text>即可获得<text class="tips_text">{{award}}金币</text>
-							</view>
-							
-							<view class="" v-show="awardType == 1">
-								再过<text class="tips_text">{{range}}{{unit}}</text>即可获得<text class="tips_text">{{award}}现金</text>
-							</view>
-							
-						</view>
-					</view>
-					
-					<view class="" v-show="!timeOut">
-						<view class="" v-show="awardType == 0">
-							当前可领取奖励：<text class="tips_text">{{award}}金币</text>
-						</view>
-						
-						<view class="" v-show="awardType == 1">
-							当前可领取奖励：<text class="tips_text">{{award}}现金</text>
-						</view>
-					</view>
-				</view>
-				
-				<view class="countDown_box" @tap="toSign">
-					<view class="countDown" v-show="timeOut">
-						<tui-round-progress progressColor="#FF5357" fontColor="#fff"
-						:percentage="timeRoundProgress" :defaultShow="false" :diam="65" :percentText="time"
-						:lineWidth="5" :fontSize="16"></tui-round-progress>
-					</view>
-					<text v-show="!timeOut" style="font-size:16px; color: #fff;" @tap="receive(-2)">领取</text>
-				</view>
-			</view>
-			
-			<!-- 幸运大抽奖 -->
-			<view class="signIn_box luckDraw_box">
-				<view class="signIn_img">
-					<image src="/static/img/qiandao.png" mode="widthFix"></image>
-				</view>
-				
-				<view class="signIn_test">
-					<view class="">
-						幸运大抽奖
-					</view>
-					
-					<view class="continued_sign">
-						赚取更多奖励  上不封顶
-					</view>
-				</view>
-				
-				<view class="receive" @tap="toLuckDraw">抽奖</view>
-			</view>
-		</view>
-		
+	</view>
 		<view class="content main">
 			<!-- 热门活动 -->
 			<view class="hot_activity">
-				<view class="activity_bar">热门活动</view>
+				<view class="activity_bar">赚赚</view>
 				
-				<view class="activity_column" v-for="(item, index) in hotActivity" :key="index">
+				<view class="activity_column" v-for="(item, index) in earn" :key="index">
 					<view class="activity_left">
 						<view class="activity_img">
 							<image :src="item.imgUrl == ' '? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
@@ -114,36 +53,6 @@
 								<image src="/static/img/work_btn.png" mode="widthFix"></image>
 							</view>
 							<text>+{{item.award}}</text>
-						</view>
-					</view>
-				</view>
-			</view>
-			
-			<!-- 限时推荐-->
-			<view class="hot_activity">
-				<view class="activity_bar">限时推荐</view>
-				
-				<view class="activity_column"  v-for="(item, index) in recommend" :key="index">
-					<view class="activity_left">
-						<view class="activity_img">
-							<image :src="item.imgUrl == ' '? '/static/img/work_img1.png' : item.imgUrl" mode="widthFix"></image>
-						</view>
-						<view class="activity_test">
-							<view class="">
-								<text>{{item.title}}</text>
-								<view class="activity_tag" v-if="item.tip == 0">NEW <text></text></view>
-								<view class="activity_tag" v-if="item.tip == 1">HOT <text></text></view>
-							</view>
-							<view class="activity_test1">{{item.explain}}</view>
-						</view>
-					</view>
-					
-					<view class="activity_right" @tap="show8(item)">
-						<view class="activity_btn">
-							<view class="activity_btnImg">
-								<image src="/static/img/work_btn.png" mode="widthFix"></image>
-							</view>
-								<text>+{{item.award}}</text>
 						</view>
 					</view>
 				</view>
@@ -310,8 +219,7 @@ export default{
 			userEn: [],  //我的信息
 			myCoin: 0,  //我的金币
 			todayCoin: 0,  //今日金币
-			hotActivity: [],  //热门活动列表
-			recommend: [],  //限时推荐列表
+			earn: [],  //赚赚活动列表
 			modal8: false,  //控制金币换现金弹窗显示
 			text: null, //弹窗的文字内容
 			type: 0, //弹窗类型
@@ -338,7 +246,7 @@ export default{
 	onShow(){
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
-		this.getTaskList();  //获取任务列表
+		this.getTaskList();  //获取赚赚列表
 		this.getSignProgress();  //查询奖励信息
 		this.timeAuto();  //开启计时器
 	},
@@ -504,26 +412,13 @@ export default{
 		},
 		//获取任务列表
 		getTaskList(){
-			api.getTask1({
+			api.getTask2({
 				state: 1,
 				page: 1,
-				count: 15,
+				count: 10
 			}, (res)=> {
 				let data = api.getData(res).data;
-				let hotList = [];
-				let recommendList = [];
-				let list = []; 
-				//获取任务状态为开启的全部任务列表
-				data.forEach((item, index) =>{
-					if(item.state == 1) list.push(item);
-				});
-				//分类热门活动列表和限时推荐列表
-				list.forEach((item, index) =>{
-					if(item.sort == 0) hotList.push(item);
-					if(item.sort == 1) recommendList.push(item);
-				});
-				this.hotActivity = hotList;
-				this.recommend = recommendList;
+				this.earn = data;
 			});
 		},
 		//关闭弹窗
@@ -586,12 +481,11 @@ export default{
 	.head_box{
 		background-color:#fcd030;/* FFCA00 */
 		width:100%;
-		height:400rpx;
+		height:220rpx;
 		color: #fff;
 		padding:40rpx 40rpx 20rpx;
 		box-sizing:border-box;
-		position:relative;
-		border-radius:0 0 20rpx 20rpx;
+		/* border-radius:0 0 20rpx 20rpx; */
 	}
 	.coin{
 		width:100%;
@@ -620,74 +514,11 @@ export default{
 	.tag:before{
 		color:#FFCA00;
 	}
-	.signIn_box{
-		width:100%;
-		height:140rpx;
-		background-color:#fff;
-		margin-top:40rpx;
-		border-radius:20rpx 200rpx 200rpx 20rpx;
-		padding:20rpx;
-		box-sizing:border-box;
-		display:flex;
-		align-items:center;
-		position:relative;
-	}
-	.luckDraw_box{
-		display:flex;
-		align-items:center;
-		justify-content:space-between;
-		font-size:14px;
-		width:90%;
-		border-radius:20rpx;
-		position:absolute;
-		bottom:-110rpx;
-		box-shadow: 5px 7px 10px rgb(255,244,212), -5px 7px 10px rgb(255,244,212);
-	}
-	.receive{
-		border-radius:40rpx;
-		text-align:center;
-		width:140rpx;
-		height:80rpx;
-		line-height:80rpx;
-		background-image:linear-gradient(to right, rgb(255,139,6) , rgb(255,194,7));
-	}
-	.signIn_img{
-		width:90rpx;
-		height:90rpx;
-	}
-	.signIn_test{
-		font-size:14px;
-		color:#808080;
-		margin-left:20rpx;
-	}
-	.continued_sign{
-		margin-top:10rpx;
-	}
-	.countDown_box{
-		width:118rpx;
-		height:118rpx;
-		border-radius:50%;
-		background-color:#FFCA00;
-		position: absolute;
-		right:20rpx;
-		color:#FF1409;
-		text-align:center;
-		line-height:120rpx;
-		font-size:15px;
-		font-weight:bolder;
-		position:absolute;
-		right: 16rpx;
-	}
-	.countDown{
-		position:absolute;
-		top:-4rpx;
-		right:-6rpx;
-	}
 	.main{
-		margin-top:160rpx;
+		margin-top:20rpx;
 	}
 	.hot_activity{
-		margin-top:20rpx;
+		margin-top:40rpx;
 	}
 	.activity_bar{
 		width:100%;

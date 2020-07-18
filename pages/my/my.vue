@@ -210,8 +210,8 @@ export default{
 		},
 		//跳转到提现页
 		toExtractMoney(){
-			uni.switchTab({
-			    url: '/pages/extractMoney/extractMoney'
+			uni.navigateTo({
+				url: '/pages/extractMoney/extractMoney'
 			});
 		},
 		//退出登录

@@ -50,8 +50,11 @@ module.exports = {
 	//添加用户绑定银行
 	delUserBankArr: function(path, funSuccess) {httpUtil.post('user/delUserBankArr', path, funSuccess);},
 	
-	//获取任务列表
-	getTask: function(path, funSuccess) {httpUtil.post('activity/getTask', path, funSuccess);},
+	//查询打工任务
+	getTask1: function(path, funSuccess) {httpUtil.post('activity/getTask1', path, funSuccess);},
+	
+	//查询赚赚任务
+	getTask2: function(path, funSuccess) {httpUtil.post('activity/getTask2', path, funSuccess);},
 	
 	//做一个任务
 	taskDo: function(path, funSuccess) {httpUtil.post('activity/taskDo', path, funSuccess);},

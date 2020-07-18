@@ -20,6 +20,14 @@
 			</view>
 		</view>
 		
+		<view class="input-group">
+			<view class="input-row savePwd">
+			    <text class="title login_info text-df margin-right-sm" style="width: 50%;">记住密码：</text>
+			    <!-- <switch @change="SetShadow" :class="shadow?'checked':''" color="#39B54A"></switch> -->
+				<switch @change="SetShadow" checked color="#FCD030"></switch>
+			</view>
+		</view>
+		
 		<!-- 注册链接 -->
 		<view class="reg">
 			还没有账号？<text class="reg_test" @tap="toReg">注册</text>
@@ -35,15 +43,27 @@
 <script>
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import util from "@/common/util.js";
 export default{
 	data() {
 		return {
 			userName: null,  //用户名
 			passWord: null,  //密码
 			isPwd: true,  //是否是密码框
+			shadow: true
+		}
+	},
+	onLoad() {
+		if(!util.isEmpty(storage.getMyUserInfo())){
+			this.userName = storage.getMyUserInfo().userName;
+			this.passWord = storage.getMyUserInfo().passWord; 
 		}
 	},
 	methods:{
+		//控制勾选按钮
+		SetShadow(e) {
+			this.shadow = e.detail.value;
+		},
 		//查看密码
 		isPassWord(){
 			this.isPwd = this.isPwd ? false : true;
@@ -83,6 +103,15 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
+					if(this.shadow){
+						let userInfo = {
+							userName: this.userName,
+							passWord: this.passWord
+						}
+						storage.setMyUserInfo(userInfo);
+					}else{
+						storage.delMyUserInfo();
+					}
 					this.toGame();
 				}else{
 					uni.showToast({
@@ -150,5 +179,17 @@ export default{
 		color:#999999;
 		font-size:15px;
 		padding:10rpx 0;
+	}
+	.savePwdGroup{
+		margin-top:10rpx;
+	}
+	.savePwd{
+		padding:10rpx 10rpx 10rpx 50rpx;
+		box-sizing:border-box;
+		display:flex;
+		justify-content: space-between;
+		align-items:center;
+		font-size:14px;
+		color: #999999;
 	}
 </style>

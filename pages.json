@@ -7,13 +7,13 @@
 	},{
 		"path": "pages/game/game",
 		"style": {
-			// "navigationBarTitleText": "",
-			// "navigationStyle": "custom",
-			// "app-plus": {
-			// "titleNView": false,
-			// "animationType": "slide-in-bottom"
-			// }
-			"navigationBarTitleText": "疯狂消消乐"
+			"navigationBarTitleText": "",
+			"navigationStyle": "custom",
+			"app-plus": {
+			"titleNView": false,
+			"animationType": "slide-in-bottom"
+			}
+			// "navigationBarTitleText": "疯狂消消乐"
 		}
 	},{
 		"path": "pages/login/login",
@@ -28,7 +28,12 @@
 	},{
 		"path": "pages/work/work",
 		"style": {
-			"navigationBarTitleText": "任务"
+			"navigationBarTitleText": "打工"
+		}
+	},{
+		"path": "pages/earn/earn",
+		"style": {
+			"navigationBarTitleText": "赚赚"
 		}
 	},{
 		"path": "pages/work/luckDraw/luckDraw",
@@ -116,12 +121,12 @@
 	        "pagePath": "pages/work/work",
 	        "iconPath": "static/img/work.png",
 	        "selectedIconPath": "/static/img/work_active.png",
-	        "text": "任务"
+	        "text": "打工"
 	    },{
-	        "pagePath": "pages/extractMoney/extractMoney",
+	        "pagePath": "pages/earn/earn",
 	        "iconPath": "/static/img/extractMoney.png",
 	        "selectedIconPath": "static/img/extractMoney_active.png",
-	        "text": "提现"
+	        "text": "赚赚"
 	    },{
 	        "pagePath": "pages/my/my",
 	        "iconPath": "static/img/my.png",
