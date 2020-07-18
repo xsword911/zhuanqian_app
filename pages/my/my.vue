@@ -149,6 +149,13 @@ export default{
 		this.getGoldAdd();  //获取今日金币
 	},
 	onShow(){
+		//查询是否登录
+		if(util.isEmpty(storage.getMyUserInfo())){
+			uni.reLaunch({
+				url: "/pages/login/login"
+			});
+			return;
+		}
 		this.getMyInfo();  //刷新我的信息
 		this.getGoldAdd(); //获取今日金币
 	},

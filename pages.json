@@ -1,10 +1,5 @@
 {
 	"pages": [{
-		"path": "pages/login/login",
-		"style": {
-			"navigationBarTitleText": "登录"
-		}
-	},{
 		"path": "pages/game/game",
 		"style": {
 			"navigationBarTitleText": "",
@@ -14,6 +9,16 @@
 			"animationType": "slide-in-bottom"
 			}
 			// "navigationBarTitleText": "疯狂消消乐"
+		}
+	},{
+		"path": "pages/my/my",
+		"style": {
+			"navigationBarTitleText": "我的"
+		}
+	},{
+		"path": "pages/login/login",
+		"style": {
+			"navigationBarTitleText": "登录"
 		}
 	},{
 		"path": "pages/login/login",
@@ -49,11 +54,6 @@
 		"path": "pages/extractMoney/extractMoney",
 		"style": {
 			"navigationBarTitleText": "提现"
-		}
-	},{
-		"path": "pages/my/my",
-		"style": {
-			"navigationBarTitleText": "我的"
 		}
 	},{
 		"path": "pages/my/more/more",
