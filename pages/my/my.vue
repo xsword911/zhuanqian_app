@@ -298,13 +298,16 @@ export default{
 		padding:10rpx;
 		margin-top:10rpx;
 	}
-	.invite_btn{
+	.info_right>button{
 		outline:none;
 		background-color:#000;
 		color:#fcd030;
 		border-radius:30rpx;
 		width:200rpx;
 		font-size:13px;
+	}
+	.invite_btn{
+
 	}
 	.gold_coin{
 		width:92%;
@@ -332,14 +335,14 @@ export default{
 		font-size:20px;
 		margin-top:20rpx;
 	}
-	.exchange_btn{
+	.exchange>button{
 		border-radius:20rpx;
 		outline:none;
 		background-color:#e7ecf2;
 		font-size:15px;
 	}
-	.exchange_btn::after{
-		border:none;		
+	.exchange>button:after{
+		border:none;
 	}
 	.profit{
 		width:96%;
@@ -375,13 +378,16 @@ export default{
 	.profit_box{
 		font-size:14px;
 	}
-	.extract_btn{
+	.extract_money>button{
 		background-color:#fcd030;
 		border-radius:30rpx;
 		width:180rpx;
 		height:60rpx;
 		font-size:14px;
 		line-height:60rpx;
+	}
+	.extract_btn{
+
 	}
 	.extract_btn::after{
 		border:none;		
@@ -406,13 +412,13 @@ export default{
 	.btn{
 		margin-top:40rpx;
 	}
-	.exit_btn, .login_btn{
+	.btn>button{
 		width:90%;
 		border-radius:60rpx;
 		font-size:15px;
 		background-color:#fcd030;
 	}
-	.exit_btn:after, .login_btn:after{
+	.btn>button:after{
 		border:none;
 	}
 </style>

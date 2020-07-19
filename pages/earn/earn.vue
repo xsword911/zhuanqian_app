@@ -21,8 +21,8 @@
 					</view>
 				</view>		
 				
-				<view class="" @tap="toGoldDetails">
-					<button type="default" class="extract_btn">收益明细 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
+				<view class="" @tap="toGoldDetails" class="extract_btn">
+					<button type="default" class="">收益明细 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
 				</view>
 				
 			</view>
@@ -504,7 +504,7 @@ export default{
 		font-size:14px;
 		margin-top:20rpx;
 	}
-	.extract_btn{
+	.extract_btn>button{
 		font-size:14px;
 		border-radius: 60rpx;
 		color:#FFCA00;
