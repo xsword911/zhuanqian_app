@@ -6,41 +6,11 @@
             </view>
         </scroll-view>
         <view class="line-h"></view> -->
-		<tabControl :current="current" :values="items" bgc="#fff" :fixed="true"
+		<tabControl :current="current" :values="items" bgc="#fff" :fixed="true" class="tab_class"
 		:scrollFlag='true' :isEqually='true' @clickItem="onClickItem"></tabControl>
 		
 		
         <swiper :current="current" class="swiper-box" style="flex: 1;" :duration="200" @change="ontabchange">
-			
-           <!-- <swiper-item class="swiper-item" v-for="(tab,index1) in newsList" :key="index1"> -->
-				<!-- #ifdef APP-NVUE -->
-<!-- 				<list class="scroll-v list" enableBackToTop="true" scroll-y loadmoreoffset="15" @loadmore="loadMore(index1)">
-					<refresh class="refresh" @refresh="onrefresh(index1)" @pullingdown="onpullingdown" :display="tab.refreshing ? 'show' : 'hide'">
-						<div class="refresh-view">
-							<image class="refresh-icon" :src="refreshIcon" :style="{width: (tab.refreshing || pulling) ? 0: '30px'}" :class="{'refresh-icon-active': tab.refreshFlag}"></image>
-							<loading-indicator class="loading-icon" animating="true" v-if="tab.refreshing"></loading-indicator>
-							<text class="loading-text">{{tab.refreshText}}</text>
-						</div>
-					</refresh>
-					<cell v-for="(newsitem,index2) in tab.data" :key="newsitem.id">
-						<media-item :options="newsitem" @close="close(index1,index2)" @click="goDetail(newsitem)"></media-item>
-					</cell>
-					<cell class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
-						<text class="loading-more-text">{{tab.loadingText}}</text>
-					</cell>
-				</list> -->
-				<!-- #endif -->
-				<!-- #ifndef APP-NVUE -->
-<!-- 				<scroll-view class="scroll-v list" enableBackToTop="true" scroll-y @scrolltolower="loadMore(index1)">
-					<view v-for="(newsitem,index2) in tab.data" :key="newsitem.id">
-						<media-item :options="newsitem" @close="close(index1,index2)" @click="goDetail(newsitem)"></media-item>
-					</view>
-					<view class="loading-more" v-if="tab.isLoading || tab.data.length > 4">
-						<text class="loading-more-text">{{tab.loadingText}}</text>
-					</view>
-				</scroll-view> -->
-				<!-- #endif -->
-<!--            </swiper-item> -->
 			
 			<swiper-item class="swiper-item" style="flex: 1;">
 				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow">
@@ -702,14 +672,11 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 </script>
 
 <style>
-    /* #ifndef APP-PLUS */
     page {
         width: 100%;
         min-height: 100%;
         display: flex;
     }
-
-    /* #endif */
 
     .tabs {
         flex: 1;
@@ -717,18 +684,13 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
         flex-direction: column;
         overflow: hidden;
         background-color: #ffffff;
-        /* #ifdef MP-ALIPAY || MP-BAIDU */
-        height: 100vh;
-        /* #endif */
     }
 
     .scroll-h {
         width: 750rpx;
         height: 80rpx;
         flex-direction: row;
-        /* #ifndef APP-PLUS */
         white-space: nowrap;
-        /* #endif */
         /* flex-wrap: nowrap; */
         /* border-color: #cccccc;
 		border-bottom-style: solid;
@@ -741,9 +703,8 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
     }
 
     .uni-tab-item {
-        /* #ifndef APP-PLUS */
         display: inline-block;
-        /* #endif */
+
         flex-wrap: nowrap;
         padding-left: 34rpx;
         padding-right: 34rpx;
@@ -755,9 +716,7 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
         height: 80rpx;
         line-height: 80rpx;
         flex-wrap: nowrap;
-        /* #ifndef APP-PLUS */
         white-space: nowrap;
-        /* #endif */
     }
 
     .uni-tab-item-title-active {
@@ -768,6 +727,17 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
         flex: 1;
 		margin-top:40px;
     }
+
+    /* 指定h5高度样式, app样式高度为组件内定义 */
+    .tab_class{
+		/* #ifdef H5 */
+		margin-top:44px;  
+		/* #endif */
+		
+		/* #ifdef APP-NVUE */
+		margin-top:0px;
+		/* #endif */
+	}
 
     .swiper-item {
 		display:flex;

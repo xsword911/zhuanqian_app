@@ -1,5 +1,6 @@
 <template name="tabControl">
-		<scroll-view  scroll-x="true" :style="'background-color:'+bgc+';top:'+top+'px;'" :class="fixed?'fxied':''" :scroll-left='scrollLeft' scroll-with-animation id="tabcard">
+		<scroll-view  scroll-x="true" :style="'background-color:'+bgc+';top:'+top+'px;'" :class="fixed?'fxied':''" 
+		:scroll-left='scrollLeft' scroll-with-animation id="tabcard">
 			<view class="tabList" :style="isEqually?'display: flex;justify-content: space-between;padding-left:0;':''">
 				<view
 					:class="'tabItem'+(currentIndex==index?' thisOpenSelect':'')"
@@ -173,7 +174,8 @@
 	.fxied{
 		position: fixed;
 		z-index: 2;
-		margin-top:44px;
+		// margin-top:44px;
+		margin-top:0px;  //h5和app距离顶部高度都是0
 	}
 	.tabList{
 		padding-bottom: 8rpx;

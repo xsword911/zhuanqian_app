@@ -5,6 +5,7 @@ export default {
 	},
 	onShow: function() {
 		console.log('App Show');
+		// plus.navigator.setFullscreen(true);
 	},
 	onHide: function() {
 		console.log('App Hide');
