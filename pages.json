@@ -26,11 +26,6 @@
 			"navigationBarTitleText": "登录"
 		}
 	},{
-		"path": "pages/login/login",
-		"style": {
-			"navigationBarTitleText": "登录"
-		}
-	},{
 		"path": "pages/register/register",
 		"style": {
 			"navigationBarTitleText": "注册"
@@ -98,17 +93,20 @@
 	},{
 		"path": "pages/goldDetails/goldDetails",
 		"style": {
-			"navigationBarTitleText": "金币账变明细"
+			"navigationBarTitleText": "金币账变明细",
+			"enablePullDownRefresh": true
 		}
 	},{
 		"path": "pages/workDetails/workDetails",
 		"style": {
-			"navigationBarTitleText": "任务收益明细"
+			"navigationBarTitleText": "任务收益明细",
+			"enablePullDownRefresh": true
 		}
 	},{
 		"path": "pages/my/detailed/detailed",
 		"style": {
-			"navigationBarTitleText": "明细"
+			"navigationBarTitleText": "明细",
+			"enablePullDownRefresh": true
 		}
 	}],
 	

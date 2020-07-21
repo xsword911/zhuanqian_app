@@ -1,11 +1,5 @@
 <template>
     <view class="tabs">
-<!--        <scroll-view id="tab-bar" class="scroll-h" :scroll-x="false" :show-scrollbar="false" :scroll-into-view="scrollInto" style="display: flex; justify-content: space-between;">
-            <view v-for="(tab,index) in tabBars" :key="tab.id" class="uni-tab-item" :id="tab.id" :data-current="index" @click="ontabtap">
-                <text class="uni-tab-item-title" :class="tabIndex==index ? 'uni-tab-item-title-active' : ''">{{tab.name}}</text>
-            </view>
-        </scroll-view>
-        <view class="line-h"></view> -->
 		<tabControl :current="current" :values="items" bgc="#fff" :fixed="true" class="tab_class"
 		:scrollFlag='true' :isEqually='true' @clickItem="onClickItem"></tabControl>
 		
@@ -13,17 +7,17 @@
         <swiper :current="current" class="swiper-box" style="flex: 1;" :duration="200" @change="ontabchange">
 			
 			<swiper-item class="swiper-item" style="flex: 1;">
-				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow">
+				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow" @scrolltolower="getMoneyTran(1)" lower-threshold="40">
 					<view class="item0" >
 						<!-- 筛选时间 -->
-						<view class="search_column" >
+						<view class="search_column">
 							<view class="" style="display:flex; align-items:center;">
 								<input type="text" value="" v-model="moneyTranBegTime" :disabled="true" @tap="openDrawer(0)" placeholder="开始时间"/>
 								<text>至</text>
 								<input type="text" value="" v-model="moneyTranEndTime" :disabled="true" @tap="openDrawer(0)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn">
-								<button type="default" @tap="getMoneyTran">查询</button>
+								<button type="default" @tap="getMoneyTran(0)">查询</button>
 							</view>
 						</view>
 						<view class="income" v-for="(item,index) in moneyTranList" :key='index' @tap="moneyTranOpen(item.id)">
@@ -55,6 +49,11 @@
 							</view>
 						</view>
 					</view>
+					
+					<!--加载loadding-->
+					<tui-loadmore v-if="moneyTranLoadding" :index="3" type="primary"></tui-loadmore>
+					<tui-nomore v-if="!moneyTranPullUpOn"></tui-nomore>
+					<!--加载loadding-->
 				</scroll-view>
 			
 				
@@ -69,7 +68,7 @@
 			
 			<!-- 提现明细 -->
 			<swiper-item class="swiper-item"  style="flex: 1;">
-				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow">
+				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow" @scrolltolower="getMoneyDraw(1)" lower-threshold="40">
 					<view class="item1" >
 						<!-- 筛选时间 -->
 						<view class="search_column" >
@@ -79,7 +78,7 @@
 								<input type="text" value="" v-model="extractMoneyEndTime" :disabled="true" @tap="openDrawer(1)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn">
-								<button type="default" @tap="getMoneyDraw">查询</button>
+								<button type="default" @tap="getMoneyDraw(0)">查询</button>
 							</view>
 						</view>
 						<view class="income" v-for="(item,index) in extractMoneyList" :key='index' @tap="moneyDrawopen(item.id)">
@@ -116,6 +115,11 @@
 							</view>
 						</view>
 					</view>
+					
+					<!--加载loadding-->
+					<tui-loadmore v-if="moneyDrawLoadding" :index="3" type="primary"></tui-loadmore>
+					<tui-nomore v-if="!moneyDrawPullUpOn"></tui-nomore>
+					<!--加载loadding-->
 				</scroll-view>
 				
 				<view class="data_lack" v-show="!moneyDrawShow">
@@ -130,7 +134,7 @@
 			
 			<!-- 账变明细 -->
 			<swiper-item class="swiper-item"  style="flex: 1;">
-				<scroll-view scroll-y="true" id="swiper"  :show-scrollbar="true"  style="flex: 1;" v-show="moneyShow" >
+				<scroll-view scroll-y="true" id="swiper"  :show-scrollbar="true"  style="flex: 1;" v-show="moneyShow" @scrolltolower="getMoney(1)" lower-threshold="40">
 					<view class="item2" >
 						<!-- 筛选时间 -->
 						<view class="search_column" >
@@ -140,7 +144,7 @@
 								<input type="text" value="" v-model="moneyEndTime" :disabled="true" @tap="openDrawer(2)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn">
-								<button type="default" @tap="getMoney">查询</button>
+								<button type="default" @tap="getMoney(0)">查询</button>
 							</view>
 						</view>
 						<view class="income" v-for="(item,index) in moneyList" :key='index' @tap="moneyOpen(item.id)">
@@ -172,6 +176,11 @@
 							</view>
 						</view>
 					</view>
+					
+					<!--加载loadding-->
+					<tui-loadmore v-if="moneyLoadding" :index="3" type="primary"></tui-loadmore>
+					<tui-nomore v-if="!moneyPullUpOn"></tui-nomore>
+					<!--加载loadding-->
 				</scroll-view>
 				
 				<view class="data_lack" v-show="!moneyShow">
@@ -222,17 +231,21 @@ import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import tuiDatetime from "@/components/tui-datetime/tui-datetime.vue";
 import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
+import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
+import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
     export default {
         components: {
 			tabControl,
 			tuiDatetime,
-			tuiDrawer
+			tuiDrawer,
+			tuiLoadmore,
+			tuiNomore
         },
 		onShow() {
 			this.userEn = storage.getMyInfo();  //获取我的信息
-			this.getMoneyTran();  //获取金额转换记录
-			this.getMoneyDraw();  //获取提现记录
-			this.getMoney();  //获取账变记录
+			this.getMoneyTran(0);  //获取金额转换记录
+			this.getMoneyDraw(0);  //获取提现记录
+			this.getMoney(0);  //获取账变记录
 		},
         data() {
             return {
@@ -243,6 +256,8 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 				moneyTranPage: 1,  //金额转换记录查询页数
 				openMoneyTranTag: false,  //展开图表控制
 				openMoneyTranId: null,  //展开内容盒子的id
+				moneyTranLoadding: false, //金额转换加载数据提示
+				moneyTranPullUpOn: true,  //金额转换上拉加载数据
 				
 				extractMoneyBegTime: "", //提现明细开始时间
 				extractMoneyEndTime: "", //提现明细结束时间
@@ -251,6 +266,8 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 				moneyDrawPage: 1,  //提现记录查询页数
 				openMoneyDrawTag: false,  //展开图表控制
 				openMoneyDrawId: null,  //展开内容盒子的id
+				moneyDrawLoadding: false, //提现明细加载数据提示
+				moneyDrawPullUpOn: true,  //提现明细上拉加载数据
 				
 				moneyBegTime: "", //账变记录开始时间
 				moneyEndTime: "", //账变记录结束时间
@@ -259,6 +276,8 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 				moneyPage: 1,  //账变记录记录查询页数
 				openMoneyTag: false,  //展开图表控制
 				openMoneyId: null,  //展开内容盒子的id
+				moneyLoadding: false, //提现明细加载数据提示
+				moneyPullUpOn: true,  //提现明细上拉加载数据
 				
 				userEn: [], //我的信息
 				items: ['转换明细', '提现明细', '账变流水'],
@@ -294,6 +313,51 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 			if(res.type) this.current = parseInt(res.type);
         },
         methods: {
+			//上拉刷新
+			onPullDownRefresh: function() {
+				if(this.current == 0){
+					//延时为了看效果
+					setTimeout(() => {
+						this.moneyTranPage = 1;
+						this.getMoneyTran(0);
+						this.moneyTranPullUpOn = true;
+						this.moneyTranLoadding = false;
+						uni.stopPullDownRefresh();
+						uni.showToast({
+							title: '刷新成功',
+							icon: "none",
+							duration: 1000
+						});
+					}, 200)
+				}else if(this.current == 1){
+					setTimeout(() => {
+						this.moneyDrawPage = 1;
+						this.getMoneyDraw(0);
+						this.moneyDrawPullUpOn = true;
+						this.moneyDrawLoadding = false;
+						uni.stopPullDownRefresh();
+						uni.showToast({
+							title: '刷新成功',
+							icon: "none",
+							duration: 1000
+						});
+					}, 200)
+				}else if(this.current == 2){
+					setTimeout(() => {
+						this.moneyPage = 1;
+						this.getMoney(0);
+						this.moneyPullUpOn = true;
+						this.moneyLoadding = false;
+						uni.stopPullDownRefresh();
+						uni.showToast({
+							title: '刷新成功',
+							icon: "none",
+							duration: 1000
+						});
+					}, 200)
+				}
+			},
+			
 			//区分开始时间和结束时间
 			show(num){
 				this.cancelColor = "#888";
@@ -385,13 +449,19 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 						break;
 				}
 			},
-			//获取账变记录
-			getMoney(){
-				this.moneyPage = 1;
+			//获取账变记录   0:普通查询 1：加载更多数据
+			getMoney(type){
+				let page = null;
+				if(type == 1){
+					if (!this.moneyPullUpOn) return;
+					this.moneyLoadding = true;
+					this.moneyPage = this.moneyPage + 1;
+					page = this.moneyPage;
+				}else page = 1;
 				let data = {
 					account: this.userEn.account,
-					page: this.moneyPage, 
-					count: 15,
+					page: page, 
+					count: 10,
 				};
 				if(!util.isEmpty(this.moneyBegTime)){
 					let time = this.moneyBegTime + " 00:00:00";
@@ -403,15 +473,29 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 				};
 				api.getMoney(data, (res)=>{
 					let data = api.getData(res).data;
-					if(util.isEmpty(data))
-						this.moneyShow = false;
-						//this.isShowMoney();  //控制转换收入明细表显示;
-					else{
-						data.forEach((item) =>{
-							data.openMoneyTag = false;
-						});
-						this.moneyList = data;
-						this.moneyShow = true;
+					if(type == 0){
+						if(util.isEmpty(data))
+							this.moneyShow = false;
+							//this.isShowMoney();  //控制转换收入明细表显示;
+						else{
+							data.forEach((item) =>{
+								item.openMoneyTag = false;
+							});
+							this.moneyList = data;
+							this.moneyShow = true;
+						}
+					}else if(type == 1){
+						if(util.isEmpty(data)){
+							this.moneyLoadding = false;
+							this.moneyPullUpOn = false;
+						}else{
+							this.moneyLoadding = false;
+							data.forEach((item) =>{
+								item.openMoneyTag = false;
+								this.moneyList.push(item);
+							});
+							this.moneyShow = true;
+						}
 					}
 				});
 			},
@@ -439,13 +523,19 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 			
 			
 			
-			//获取提现记录
-			getMoneyDraw(){
-				this.moneyDrawPage = 1;
+			//获取提现记录  0:普通查询 1：加载更多数据
+			getMoneyDraw(type){
+				let page = null;
+				if(type == 1){
+					if (!this.moneyDrawPullUpOn) return;
+					this.moneyDrawLoadding = true;
+					this.moneyDrawPage = this.moneyDrawPage + 1;
+					page = this.moneyDrawPage;
+				}else page = 1;
 				let data = {
 					account: this.userEn.account,
-					page: this.moneyDrawPage, 
-					count: 15,
+					page: page, 
+					count: 10,
 				};
 				if(!util.isEmpty(this.extractMoneyBegTime)){
 					let time = this.extractMoneyBegTime + " 00:00:00";
@@ -457,15 +547,29 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 				};
 				api.getMoneyDraw(data, (res)=>{
 					let data = api.getData(res).data;
-					if(util.isEmpty(data))
-						this.moneyDrawShow = false;
-						 //this.isShowMoneyDraw();  //控制金币收入明细表显示
-					else{
-						data.forEach((item) =>{
-							data.openMoneyDrawTag = false;
-						});
-						this.extractMoneyList = data;
-						this.moneyDrawShow = true;
+					if(type == 0){
+						if(util.isEmpty(data))
+							this.moneyDrawShow = false;
+							 //this.isShowMoneyDraw();  //控制金币收入明细表显示
+						else{
+							data.forEach((item) =>{
+								item.openMoneyDrawTag = false;
+								this.extractMoneyList = data;
+							});
+							this.moneyDrawShow = true;
+						}
+					}else if(type == 1){
+						if(util.isEmpty(data)){
+							this.moneyDrawLoadding = false;
+							this.moneyDrawPullUpOn = false;
+						}else{
+							this.moneyDrawLoadding = false;
+							data.forEach((item) =>{
+								item.openMoneyDrawTag = false;
+								this.extractMoneyList.push(item);
+							});
+							this.moneyDrawShow = true;
+						}
 					}
 				});
 			},
@@ -492,13 +596,19 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 			},
 			
 			
-			//获取金额转换记录
-			getMoneyTran(){
-				this.moneyTranPage = 1;
+			//获取金额转换记录  0:普通查询 1：加载更多数据
+			getMoneyTran(type){
+				let page = null;
+				if(type == 1){
+					if (!this.moneyTranPullUpOn) return;
+					this.moneyTranLoadding = true;
+					this.moneyTranPage = this.moneyTranPage + 1;
+					page = this.moneyTranPage;
+				}else page = 1;
 				let data = {
 					account: this.userEn.account,
-					page: this.moneyTranPage, 
-					count: 15,
+					page: page, 
+					count: 10,
 				};
 				if(!util.isEmpty(this.moneyTranBegTime)){
 					let time = this.moneyTranBegTime + " 00:00:00";
@@ -510,15 +620,29 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 				};
 				api.getMoneyTran(data, (res)=>{
 					let data = api.getData(res).data;
-					if(util.isEmpty(data))
-						this.moneyTranShow = false;
-						//this.isShowMoneyTran();  //控制转换收入明细表显示;
-					else{
-						data.forEach((item) =>{
-							data.openMoneyTranTag = false;
-						});
-						this.moneyTranList = data;
-						this.moneyTranShow = true;
+					if(type == 0){
+						if(util.isEmpty(data))
+							this.moneyTranShow = false;
+							//this.isShowMoneyTran();  //控制转换收入明细表显示;
+						else{
+							data.forEach((item) =>{
+								item.openMoneyTranTag = false;
+							});
+							this.moneyTranList = data;
+							this.moneyTranShow = true;
+						}
+					}else if(type == 1){
+						if(util.isEmpty(data)){
+							this.moneyTranLoadding = false;
+							this.moneyTranPullUpOn = false;
+						}else{
+							this.moneyTranLoadding = false;
+							data.forEach((item) =>{
+								item.openMoneyTranTag = false;
+								this.moneyTranList.push(item);
+							});
+							this.moneyTranShow = true;
+						}
 					}
 				});
 			},
@@ -542,131 +666,13 @@ import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 						item.openMoneyTranTag = false;
 					}
 				});
-			},
-			
-			
+			},	
 			onClickItem(val) {
-			    this.current = val.currentIndex
+			    this.current = val.currentIndex;
 			},
-    //         getList(index) {
-    //             let activeTab = this.newsList[index];
-    //             let list = [];
-    //             for (let i = 1; i <= 10; i++) {
-    //                 let item = Object.assign({}, newsData['data' + Math.floor(Math.random() * 5)]);
-    //                 item.id = this.newGuid();
-    //                 list.push(item);
-    //             }
-    //             activeTab.data = activeTab.data.concat(list);
-    //         },
-    //         goDetail(e) {
-    //             if (this.navigateFlag) {
-    //                 return;
-    //             }
-    //             this.navigateFlag = true;
-    //             uni.navigateTo({
-    //                 url: './detail/detail?title=' + e.title
-    //             });
-    //             setTimeout(() => {
-    //                 this.navigateFlag = false;
-    //             }, 200)
-    //         },
-    //         close(index1, index2) {
-    //             uni.showModal({
-    //                 content: '是否删除本条信息？',
-    //                 success: (res) => {
-    //                     if (res.confirm) {
-    //                         this.newsList[index1].data.splice(index2, 1);
-    //                     }
-    //                 }
-    //             })
-    //         },
-    //         loadMore(e) {
-    //             setTimeout(() => {
-    //                 this.getList(this.tabIndex);
-    //             }, 500)
-    //         },
-    //         ontabtap(e) {
-    //             let index = e.target.dataset.current || e.currentTarget.dataset.current;
-    //             this.switchTab(index);
-    //         },
             ontabchange(e) {
-                // let index = e.target.current || e.detail.current;
-                // this.switchTab(index);
-				
-				    this.current = e.target.current;
+				this.current = e.target.current;
             },
-    //         // switchTab(index) {
-            //     if (this.newsList[index].data.length === 0) {
-            //         this.getList(index);
-            //     }
-
-            //     if (this.tabIndex === index) {
-            //         return;
-            //     }
-
-            //     // 缓存 tabId
-            //     if (this.newsList[this.tabIndex].data.length > MAX_CACHE_DATA) {
-            //         let isExist = this.cacheTab.indexOf(this.tabIndex);
-            //         if (isExist < 0) {
-            //             this.cacheTab.push(this.tabIndex);
-            //             //console.log("cache index:: " + this.tabIndex);
-            //         }
-            //     }
-
-            //     this.tabIndex = index;
-            //     this.scrollInto = this.tabBars[index].id;
-
-            //     // 释放 tabId
-            //     if (this.cacheTab.length > MAX_CACHE_PAGE) {
-            //         let cacheIndex = this.cacheTab[0];
-            //         this.clearTabData(cacheIndex);
-            //         this.cacheTab.splice(0, 1);
-            //         //console.log("remove cache index:: " + cacheIndex);
-            //     }
-            // },
-     //        clearTabData(e) {
-     //            this.newsList[e].data.length = 0;
-     //            this.newsList[e].loadingText = "加载更多...";
-     //        },
-     //        refreshData() {},
-     //        onrefresh(e) {
-     //            var tab = this.newsList[this.tabIndex];
-     //            if (!tab.refreshFlag) {
-     //                return;
-     //            }
-     //            tab.refreshing = true;
-     //            tab.refreshText = "正在刷新...";
-
-     //            setTimeout(() => {
-     //                this.refreshData();
-     //                this.pulling = true;
-     //                tab.refreshing = false;
-					// tab.refreshFlag = false;
-     //                tab.refreshText = "已刷新";
-     //                setTimeout(() => { // TODO fix ios和Android 动画时间相反问题
-     //                    this.pulling = false;
-     //                }, 500);
-     //            }, 2000);
-     //        },
-            // onpullingdown(e) {
-            //     var tab = this.newsList[this.tabIndex];
-            //     if (tab.refreshing || this.pulling) {
-            //         return;
-            //     }
-            //     if (Math.abs(e.pullingDistance) > Math.abs(e.viewHeight)) {
-            //         tab.refreshFlag = true;
-            //         tab.refreshText = "释放立即刷新";
-            //     } else {
-            //         tab.refreshFlag = false;
-            //         tab.refreshText = "下拉可以刷新";
-            //     }
-            // },
-            // newGuid() {
-            //     let s4 = function() {
-            //         return (65536 * (1 + Math.random()) | 0).toString(16).substring(1);
-            //     }
-            //     return (s4() + s4() + "-" + s4() + "-4" + s4().substr(0, 3) + "-" + s4() + "-" + s4() + s4() + s4()).toUpperCase();
-            // }
         }
     }
 </script>

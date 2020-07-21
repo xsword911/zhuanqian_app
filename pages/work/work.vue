@@ -96,13 +96,13 @@
 				<view class="activity_column" v-for="(item, index) in hotActivity" :key="index">
 					<view class="activity_left">
 						<view class="activity_img">
-							<image :src="item.imgUrl == ' '? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
+							<image :src="item.imgUrl == ''? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
 						</view>
 						<view class="activity_test">
 							<view class="">
 								<text>{{item.title}}</text>
-								<view class="activity_tag" v-if="item.tip == 0">NEW <text></text></view>
-								<view class="activity_tag" v-if="item.tip == 1">HOT <text></text></view>
+									<view class="activity_tag" v-if="item.tip == 0">NEW <text></text></view>
+									<view class="activity_tag" v-if="item.tip == 1">HOT <text></text></view>
 							</view>
 							<view class="activity_test1">{{item.explain}}</view>
 						</view>
@@ -126,7 +126,7 @@
 				<view class="activity_column"  v-for="(item, index) in recommend" :key="index">
 					<view class="activity_left">
 						<view class="activity_img">
-							<image :src="item.imgUrl == ' '? '/static/img/work_img1.png' : item.imgUrl" mode="widthFix"></image>
+							<image :src="item.imgUrl == ''? '/static/img/work_img1.png' : item.imgUrl" mode="widthFix"></image>
 						</view>
 						<view class="activity_test">
 							<view class="">

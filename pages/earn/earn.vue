@@ -35,7 +35,7 @@
 				<view class="activity_column" v-for="(item, index) in earn" :key="index">
 					<view class="activity_left">
 						<view class="activity_img">
-							<image :src="item.imgUrl == ' '? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
+							<image :src="item.imgUrl == ''? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
 						</view>
 						<view class="activity_test">
 							<view class="">

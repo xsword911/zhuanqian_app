@@ -50,7 +50,7 @@
 					<button type="default" class="coin_query">去获取金币</button>
 				</view>
 			</view>
-			
+
 		</view>
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
@@ -78,6 +78,11 @@
 				</view>
 			</view>
 		 </tui-drawer>
+		 
+		 <!--加载loadding-->
+		 <tui-loadmore v-if="loadding" :index="3" type="primary"></tui-loadmore>
+		 <tui-nomore v-if="!pullUpOn"></tui-nomore>
+		 <!--加载loadding-->
     </view>
 </template>
 
@@ -87,13 +92,19 @@ import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import tuiDatetime from "@/components/tui-datetime/tui-datetime.vue";
 import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
+import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
+import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 export default {
 	components:{
 		tuiDatetime,
-		tuiDrawer
+		tuiDrawer,
+		tuiLoadmore,
+		tuiNomore
 	},
     data() {
         return {
+			loadding: false, //加载数据提示
+			pullUpOn: true,  //上拉加载数据
 			rightDrawer: false,//抽屉开关
 			
 			userEn: [],  //我的信息
@@ -121,6 +132,23 @@ export default {
 		this.getTaskDetails();  //获取金币收入明细表		
 	},
 	methods:{
+		//上拉刷新
+		onPullDownRefresh: function() {
+			//延时为了看效果
+			setTimeout(() => {
+				this.getTaskDetails();
+				this.pullUpOn = true;
+				this.loadding = false;
+				uni.stopPullDownRefresh();
+				uni.showToast({
+					title: '刷新成功',
+					icon: "none",
+					duration: 1000
+				});
+			}, 200)
+		},
+		
+
 		//关闭抽屉
 		closeDrawer(e) {
 			this.rightDrawer = false;
@@ -214,7 +242,10 @@ export default {
 	},
 	//上拉获取更多金币收益明细数据
 	onReachBottom(){
+		if (!this.pullUpOn) return;
+		this.loadding = true;
 		this.page = this.page + 1;
+		
 		api.getTaskDetails({
 			account: this.userEn.account,
 			state: 1,
@@ -222,10 +253,15 @@ export default {
 			count: 10
 		}, (res)=>{
 			let data = api.getData(res).data;
-			if(util.isEmpty(data)) return;
-			data.forEach((item) =>{
-				this.incomeList.push(item);
-			});
+			if(util.isEmpty(data)){
+				this.loadding = false;
+				this.pullUpOn = false;
+			}else{
+				this.loadding = false;
+				data.forEach((item) =>{
+					this.incomeList.push(item);
+				});
+			}
 		});
 	},
 };
@@ -334,7 +370,7 @@ export default {
 		width:120rpx;
 	}
 	.d-container{
-		padding:80rpx;
+		padding:50rpx;
 		font-size:15px;
 	}
 	.search_time{
