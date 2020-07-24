@@ -109,5 +109,17 @@ module.exports = {
 		}
 		
 		return data;
-	}
+	},
+	
+	//获取设备号
+	getUuid(){
+		// #ifdef APP-PLUS
+		let uuid = plus.device.uuid;  //App平台获取设备唯一标识号
+		// #endif
+		
+		// #ifdef H5
+		let uuid = "00813494be90";  //H5平台设置设备唯一标识号
+		// #endif
+		return uuid;
+	},
 }

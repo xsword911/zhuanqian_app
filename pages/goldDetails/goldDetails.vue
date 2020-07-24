@@ -125,9 +125,11 @@ export default {
 			color: "#5677fc",
 			setDateTime: "",
 			num: null,    //区分开始时间和结束时间的标识
+			uid: "",  //uid
         };
     },
     onShow(){
+		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息		
 		this.getTaskDetails();  //获取金币收入明细表		
 	},
@@ -198,7 +200,7 @@ export default {
 		getTaskDetails(){
 			this.page = 1;
 			let data = {
-				account: this.userEn.account,
+				uid: this.uid,
 				page: this.page,
 				count: 10
 			};
@@ -247,7 +249,7 @@ export default {
 		this.page = this.page + 1;
 		
 		api.getTaskDetails({
-			account: this.userEn.account,
+			uid: this.uid,
 			state: 1,
 			page: this.page,
 			count: 10

@@ -53,6 +53,7 @@ import util from "@/common/util.js";
 					range: true,
 					insert: false,
 					selected: [],
+					uid: "",  //uid
 				},
 			}
 		},
@@ -84,13 +85,14 @@ import util from "@/common/util.js";
 			// }, 2000);
 		},
 		onShow() {
+			this.uid = storage.getUid();  //获取uid
 			this.getMonthSignDetails();  //获取月签到详情
 		},
 		methods: {
 			//获取月签到详情
 			getMonthSignDetails(){
 				let data = {
-					account: storage.getMyInfo().account,
+					uid: this.uid,
 					time: getDate(new Date()).fullDate
 				};
 				api.getMonthSignDetails(data, (res)=>{

@@ -43,13 +43,32 @@ export default{
 			bankBranch: null,  //开户支行名称
 			bankCode: null,  //银行卡号（只显示最后四位数）
 			isBankShow: true,  //显示银行卡信息
+			loginType: null, //登录方式
+			uid: "",  //uid
 		}
 	},
 	onShow() {
 		this.userEn = storage.getMyInfo();
-		this.getUserBank();
+		this.uid = storage.getUid();  //获取uid
+		this.loginType = storage.getLoginType();  //获取登录方式
+		this.isDeviceId();   //是否是游客登录
 	},
 	methods:{
+		//登录方式为设备号时强制跳转到登录页
+		isDeviceId(){
+			if(this.loginType == 0){
+				uni.switchTab({
+					url: '/pages/my/my'
+				});
+				uni.navigateTo({
+					url: '/pages/my/setting/setting'
+				});
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
+				return;
+			}else this.getUserBank();  //获取银行卡信息
+		},
 		//跳转到添加银行卡页
 		toAddBank(){
 			uni.navigateTo({
@@ -58,7 +77,7 @@ export default{
 		},
 		//查询用户绑定银行卡
 		getUserBank(){
-			api.getUserBank({account: this.userEn.account}, (res) => {
+			api.getUserBank({uid: this.uid}, (res) => {
 				let data = api.getData(res).data;
 				if(!util.isEmpty(data)) {
 					data.forEach((item, index) => {

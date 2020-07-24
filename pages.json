@@ -46,6 +46,12 @@
 			"navigationBarTitleText": "幸运大转盘"
 		}
 	},{
+		"path": "pages/work/luckDraw2/luckDraw2",
+		"style": {
+			"navigationBarTitleText": "幸运大转盘",
+			 "app-plus": {"titleNView": false} 
+		}
+	},{
 		"path": "pages/receiveAward/receiveAward",
 		"style": {
 			"navigationBarTitleText": "签到"

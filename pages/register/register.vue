@@ -54,7 +54,12 @@ export default{
 			passWordAgain: null, //确认密码
 			code: null,  //邀请码
 			isPwd: true, //密码输入框类型切换
+			uid: "", //uid
+			
 		}
+	},
+	onShow() {
+		this.uid = storage.getUid();  //获取uid
 	},
 	methods:{
 		//查看密码
@@ -83,10 +88,11 @@ export default{
 				    title: '二次密码输入不一致'
 				});
 			}
-			return;
 		    let data = {
 		        account: this.userName,
-		        pwd: this.passWord
+		        pwd: this.passWord,
+				uid: this.uid,
+				type: 0   //普通用户注册
 		    };
 			if(!util.isEmpty(this.code)) data.upperCode = this.code;
 			this.register(data);
@@ -104,8 +110,9 @@ export default{
 						duration: 1500,
 						success() {
 							setTimeout(function(){
-								api.getUserByAccount({account: _this.userName}, (res)=>{
+								api.getUserByUid({uid: _this.uid}, (res)=>{
 									storage.setMyInfo(api.getData(res));
+									storage.setLoginType(1);
 									uni.reLaunch({
 										url: "/pages/game/game"
 									});

@@ -51,6 +51,8 @@ export default{
 			selectSumIndex: null  ,//选中的提现金额值索引
 			userBankName: null,  //绑定银行卡名称
 			userBankCode: null, //绑定银行卡号
+			loginType: null, //登录方式
+			uid: "",  //uid			
 		}
 	},
 	onLoad() {
@@ -58,13 +60,30 @@ export default{
 	},
 	onShow(){
 		this.userEn = storage.getMyInfo();  //获取我的信息
-		this.getMyInfo();  //刷新我的信息
-		this.getMyBankInfo();  //获取我的绑定银行卡信息
+		this.uid = storage.getUid();  //获取uid
+		this.loginType = storage.getLoginType();  //获取登录方式
+		this.isDeviceId();   //是否是游客登录
 	},
 	methods:{
+		//登录方式为设备号时强制跳转到登录页
+		isDeviceId(){
+			if(this.loginType == 0){
+				uni.switchTab({
+					url: '/pages/my/my'
+				});
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
+				return;
+			}else{
+				this.getMyBankInfo(); //获取我的绑定银行卡信息
+				this.getMyInfo();  //刷新我的信息
+			} 
+		},
+		
 		//刷新我的信息
 		getMyInfo(){
-			api.getUserByAccount({account: this.userEn.account}, (res)=>{
+			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.userName = this.userEn.account;
@@ -75,7 +94,7 @@ export default{
 		//获取用户绑定银行卡信息
 		getMyBankInfo(){
 			let postData = {
-				account: this.userEn.account,
+				uid: this.uid,
 				page: 1,
 				count:5,
 			}
@@ -133,7 +152,7 @@ export default{
 		//提交提现申请
 		submitExtractMoney(){
 			api.addMoneyDraw({
-				account: this.userEn.account, 
+				uid: this.uid, 
 				money: this.selectSumMoney
 			}, (res)=>{
 				let code = api.getCode(res);

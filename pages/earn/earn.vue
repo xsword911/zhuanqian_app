@@ -235,6 +235,7 @@ export default{
 			signSecond: null, //距离下次签到多少秒
 			intervalID: null,  //定时器id
 			timeRoundProgress: 0,//倒计时进度条
+			uid: "",  //uid
 		}
 	},
 	onLoad() {
@@ -244,122 +245,19 @@ export default{
 		// this.getTaskList();  //获取任务列表
 	},
 	onShow(){
+		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
 		this.getTaskList();  //获取赚赚列表
-		this.getSignProgress();  //查询奖励信息
-		this.timeAuto();  //开启计时器
 	},
 	methods:{
-		//计算圆形进度条长度
-		computeLength(){
-			if(this.unit == '小时') this.timeRoundProgress = parseFloat(100 - [(this.range / 24) * 100]);
-			else if(this.unit == '分钟' || this.unit == '秒') this.timeRoundProgress = parseFloat(100 - [(this.range / 60) * 100]);
-			else if(this.unit == '天') this.timeRoundProgress = parseFloat(100 - [(this.range / 30) * 100]);
-		},
 		//刷新我的信息
 		getMyInfo(){
-			api.getUserByAccount({account: storage.getMyInfo().account}, (res)=>{
+			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.myCoin = this.userEn.gold;
 				this.getGoldAdd();   //查询今日金币
-			});
-		},
-		//开启定时器
-		timeAuto(){
-			clearInterval(this.intervalID);
-			this.intervalID = setInterval(this.getShowTimeBySecond, 1000);
-		},
-		//查询奖励信息
-		getSignProgress(){
-			api.getSignProgress({account: this.userEn.account}, (res)=>{
-				let data = api.getData(res);
-				//sign为空时表示没有可领取的奖励
-				if(util.isEmpty(data.sign)){
-					this.timeOut = true;
-					this.awardType = data.nextSign.awardType;
-					this.award = data.nextSign.award;
-					this.signSecond = data.nextSecond;
-					
-					//this.getShowTimeBySecond();
-
-				}else{
-					this.signSecond = null;
-					this.timeOut = false;
-					this.awardType = data.sign.awardType;
-					this.award = data.sign.award;
-					this.day = data.sign.day;
-				}
-			});
-		},
-		//把秒转换为对应显示格式
-		getShowTimeBySecond(){			
-			if(this.signSecond == null) return;
-			let sp = this.signSecond;
-			// console.log(sp);
-			//大于一小时转换为最小单位 分
-			if(sp > 3600){
-				let hour = parseInt(sp / 3600);  //获取小时
-				let min = parseInt([sp - (hour * 3600)] / 60); //获取分钟
-				if(hour > 100){
-					let day = parseInt(sp / 86400);  //获取天数
-					this.range = day;  //显示倒计时的天数
-					this.unit = "天";
-					this.time = `${day}天`;
-					return;
-				};
-				this.range = hour;  //显示倒计时的小时
-				this.unit = "小时";
-				this.time = `${hour}:${min}`;
-			}else if(sp >= 0){
-				let min = parseInt(sp / 60); //获取分钟
-				let second = parseInt(sp - (min * 60)); //获取秒
-				// console.log(second);
-				this.range = min;  //显示倒计时的分钟
-				this.unit = "分钟";
-				this.time = `${min}:${second}`;
-				
-				if(this.range == 0){
-					this.range = second;  //显示倒计时的秒
-					this.unit = "秒";
-					this.time = `${second}`;
-				}
-			}else{
-				this.getSignProgress();  //再次请求数据
-			}
-		    this.signSecond += -1;  //每秒减一
-			this.computeLength();
-		},
-		//领取奖励
-		receive(type){
-			this.show8(type);
-			api.sign({
-				account: this.userEn.account, 
-				day: this.day
-			}, (res)=>{
-				let code = api.getCode(res);
-				let msg = api.getMsg(res);
-				if(code == 0){
-					this.getSignProgress();  //再次查询数据
-					uni.showModal({
-						content: "领取奖励成功",
-						showCancel: false,
-						success(res) {
-							if (res.confirm) {
-								uni.navigateTo({
-									url: "/pages/receiveAward/receiveAward"
-								})
-							};
-						}
-					});
-				}else{
-					uni.showToast({
-						title: msg,
-						image: "/static/img/fail-circle.png",
-						duration: 2000
-					})
-				}
 			});
 		},
 		//跳转查看签到页
@@ -404,7 +302,7 @@ export default{
 		},
 		//获取今日金币
 		getGoldAdd(){
-			api.getStatisticsToday({account: this.userEn.account}, (res) =>{
+			api.getStatisticsToday({uid: this.uid}, (res) =>{
 				let data = api.getData(res);
 				if(util.isEmpty(data)) return;
 				else this.todayCoin = data.goldAdd;
@@ -442,7 +340,7 @@ export default{
 		taskDo(){
 			let _this = this;
 			api.taskDo({
-				account: this.userEn.account, 
+				uid: this.uid, 
 				taskId: this.id,
 			}, (res)=>{
 				let code = api.getCode(res);

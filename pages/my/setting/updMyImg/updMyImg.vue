@@ -19,11 +19,11 @@ import util from '@/common/util.js';
 				url: "", //本地获取到的文件路径
 				path: "", //经过图片裁剪后的本地路径
 				serverUrl: '' ,//文件在服务器上的地址
-				userEn: null
+				uid: "",  //uid
 			}
 		},
 		onShow() {
-			this.userEn = storage.getMyInfo();
+			this.uid = storage.getUid();  //获取uid
 			util.setBarTitle('修改头像');
 			uni.chooseImage({
 				success: (res) => {
@@ -43,7 +43,7 @@ import util from '@/common/util.js';
 							_this.serverUrl = res.data.url;
 							console.log(_this.serverUrl);
 							api.setUser({
-								account: _this.userEn.account,
+								uid: _this.uid,
 								headUrl: _this.serverUrl
 							}, res => {
 								let code = api.getCode(res);

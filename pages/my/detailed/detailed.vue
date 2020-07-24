@@ -307,10 +307,12 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				color: "#5677fc",
 				setDateTime: "",
 				num: null,    //区分开始时间和结束时间的标识
+				uid: "",  //uid
             }
         },
         onLoad(res) {
 			if(res.type) this.current = parseInt(res.type);
+			this.uid = storage.getUid();  //获取uid
         },
         methods: {
 			//上拉刷新
@@ -459,7 +461,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 					page = this.moneyPage;
 				}else page = 1;
 				let data = {
-					account: this.userEn.account,
+					uid: this.uid,
 					page: page, 
 					count: 10,
 				};
@@ -533,7 +535,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 					page = this.moneyDrawPage;
 				}else page = 1;
 				let data = {
-					account: this.userEn.account,
+					uid: this.uid,
 					page: page, 
 					count: 10,
 				};
@@ -606,7 +608,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 					page = this.moneyTranPage;
 				}else page = 1;
 				let data = {
-					account: this.userEn.account,
+					uid: this.uid,
 					page: page, 
 					count: 10,
 				};

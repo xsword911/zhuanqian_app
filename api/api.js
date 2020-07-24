@@ -11,6 +11,9 @@ module.exports = {
 	//取返回数据内,data数据
 	getData: function(res) {return res.data.data},
 	
+	//取返回数据内,token数据
+	getToken: function(res) {return res.data.token},
+	
 	//获取图片路径
 	getFileUrl(postData){
 		let url = config.baseUrl + "/File/FetchFile?pc=" + postData.pc + "&openId=" +postData.openId;
@@ -26,6 +29,9 @@ module.exports = {
 	//上传文件
 	uploadFileToCache: function(path, funSuccess) {httpUtil.upload('external/uploadFileToCache', path, 'file', funSuccess);},
 	
+	//第三方登录
+	loginByOth: function(path, funSuccess) {httpUtil.post('user/loginByOth', path, funSuccess);},
+	
 	//登录
 	login: function(path, funSuccess) {httpUtil.post('user/login', path, funSuccess);},
 	
@@ -33,7 +39,7 @@ module.exports = {
 	register: function(path, funSuccess) {httpUtil.post('user/register', path, funSuccess);},
 	
 	//查询用户详细信息
-	getUserByAccount: function(path, funSuccess) {httpUtil.post('user/getUserByAccount', path, funSuccess);},
+	getUserByUid: function(path, funSuccess) {httpUtil.post('user/getUserByUid', path, funSuccess);},
 	
 	//修改用户信息
 	setUser: function(path, funSuccess) {httpUtil.post('user/setUser', path, funSuccess);},

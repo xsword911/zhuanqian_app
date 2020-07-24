@@ -21,7 +21,7 @@
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{userEn.account}}</view>
+					<text class="name">{{userName}}</text>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</view>
@@ -111,17 +111,35 @@ export default{
 	data() {
 		return {
 			userEn: [],  //我的信息
+			uid: "",  //uid
+			loginType: null, //登录方式
+			wxId: '',  //微信id
+			userName: '',  //用户账号
 		}
 	},
 	onShow() {
+		this.uid = storage.getUid();  //获取uid
+		this.loginType = storage.getLoginType();  //获取登录方式
 		this.userEn = storage.getMyInfo();
-		api.getUserByAccount({account: this.userEn.account}, (res)=>{
+		api.getUserByUid({uid: this.uid}, (res)=>{
 			let data = api.getData(res);
 			this.userEn = data;
 			storage.setMyInfo(this.userEn);
+			this.getName();  //获取用户名
 		});
 	},
 	methods:{
+		//获取用户名
+		getName(){
+			//游客登录
+			if(this.loginType == 0) this.userName = this.uid;
+			//账号密码登录or微信登录
+			else{
+				//优先显示微信id
+				if(!util.isEmpty(this.userEn.wxId)) this.userName = this.userEn.wxId;
+				else this.userName = this.userEn.account;
+			}
+		},
 		//查看头像
 		revise(){
 			uni.previewImage({

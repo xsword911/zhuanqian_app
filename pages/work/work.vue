@@ -327,6 +327,7 @@ export default{
 			signSecond: null, //距离下次签到多少秒
 			intervalID: null,  //定时器id
 			timeRoundProgress: 0,//倒计时进度条
+			uid: "",  //uid
 		}
 	},
 	onLoad() {
@@ -334,8 +335,10 @@ export default{
 		// this.myCoin = this.userEn.gold;
 		// this.getGoldAdd();   //查询今日金币
 		// this.getTaskList();  //获取任务列表
+		//this.uid = storage.getUid();
 	},
 	onShow(){
+		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
 		this.getTaskList();  //获取任务列表
@@ -351,7 +354,7 @@ export default{
 		},
 		//刷新我的信息
 		getMyInfo(){
-			api.getUserByAccount({account: storage.getMyInfo().account}, (res)=>{
+			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.myCoin = this.userEn.gold;
@@ -365,7 +368,7 @@ export default{
 		},
 		//查询奖励信息
 		getSignProgress(){
-			api.getSignProgress({account: this.userEn.account}, (res)=>{
+			api.getSignProgress({uid: this.uid}, (res)=>{
 				let data = api.getData(res);
 				//sign为空时表示没有可领取的奖励
 				if(util.isEmpty(data.sign)){
@@ -427,7 +430,7 @@ export default{
 		receive(type){
 			this.show8(type);
 			api.sign({
-				account: this.userEn.account, 
+				uid: this.uid, 
 				day: this.day
 			}, (res)=>{
 				let code = api.getCode(res);
@@ -463,7 +466,8 @@ export default{
 		//跳转到幸运转盘页
 		toLuckDraw(){
 			uni.navigateTo({
-				url: '/pages/work/luckDraw/luckDraw'
+				// url: '/pages/work/luckDraw/luckDraw'
+				url: '/pages/work/luckDraw2/luckDraw2'
 			})
 		},
 		//复制内容并跳转到微信
@@ -496,7 +500,7 @@ export default{
 		},
 		//获取今日金币
 		getGoldAdd(){
-			api.getStatisticsToday({account: this.userEn.account}, (res) =>{
+			api.getStatisticsToday({uid: this.uid}, (res) =>{
 				let data = api.getData(res);
 				if(util.isEmpty(data)) return;
 				else this.todayCoin = data.goldAdd;
@@ -547,7 +551,7 @@ export default{
 		taskDo(){
 			let _this = this;
 			api.taskDo({
-				account: this.userEn.account, 
+				uid: this.uid, 
 				taskId: this.id,
 			}, (res)=>{
 				let code = api.getCode(res);

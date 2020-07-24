@@ -90,9 +90,11 @@ export default{
 			bankCode: null, //银行卡号
 			pwd: null, //提现密码
 			pwdAgain: null, //确认提现密码
+			uid: "",  //uid
 		}
 	},
 	onLoad(res) {
+		this.uid = storage.getUid();  //获取uid
 		this.type = res.type;
 		this.account = res.account;
 		if(this.type == '0'){
@@ -114,7 +116,7 @@ export default{
 		updSubmit(){
 			let data = {
 				id: this.userBankEn.id,
-				account: this.account,
+				uid: this.uid,
 				bank: this.userBank,
 				bankBranch: this.bankBranch,
 				bankCode: this.bankCode,
@@ -163,7 +165,7 @@ export default{
 				})
 			}else{
 				let data = {
-					account: this.account,
+					uid: this.uid,
 					bank: this.userBank,
 					bankBranch: this.bankBranch,
 					bankCode: this.bankCode,

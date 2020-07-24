@@ -101,8 +101,7 @@
 		
 		<!-- 退出/登录按钮 -->
 		<view class="btn">
-			<button type="default" class="exit_btn" v-show="isLogin" @tap="exit">退出登录</button>
-			<button type="default" class="login_btn" v-show="!isLogin">前往登录</button>
+			<button type="default" class="login_btn" @tap="toLogin">其他方式登录</button>
 		</view>
 	</view>
 </template>
@@ -112,6 +111,7 @@ import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
+import utilCore from "@/api/utilCore.js";
 export default{
 	comments:{
 		// icon
@@ -131,42 +131,56 @@ export default{
 	data() {
 		return {
 			userEn: [],  //我的信息
-			userName: '',  //用户昵称
+			userName: '',  //用户账号
 			yqm: '',  //邀请码
 			todayCoin: null,   //今日金币
 			currentCoin: 0,  //当前金币
 			profit: ''  ,//现金收益
 			modal8: false,  //控制金币换现金弹窗显示
-			isLogin: true,  //是否已登录
+			uid: "",  //uid
+			loginType: null, //登录方式
 		}
 	},
 	onLoad() {
+		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息
-		this.userName = this.userEn.account;
+		this.loginType = storage.getLoginType();  //获取登录方式
 		this.yqm = this.userEn.code;
 		this.currentCoin = this.userEn.gold;
 		this.profit = this.userEn.money;
 		this.getGoldAdd();  //获取今日金币
 	},
 	onShow(){
+		this.uid = storage.getUid();  //获取uid
 		this.getMyInfo();  //刷新我的信息
 		this.getGoldAdd(); //获取今日金币
 	},
 	methods:{
+		//获取用户名
+		getName(){
+			//游客登录
+			if(this.loginType == 0) this.userName = this.uid;
+			//账号密码登录or微信登录
+			else{
+				//优先显示微信id
+				if(!util.isEmpty(this.userEn.wxId)) this.userName = this.userEn.wxId;
+				else this.userName = this.userEn.account;
+			}
+		},
 		//刷新我的信息
 		getMyInfo(){
-			api.getUserByAccount({account: this.userEn.account}, (res)=>{
+			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
-				this.userName = this.userEn.account;
 				this.yqm = this.userEn.code;
 				this.currentCoin = this.userEn.gold;
 				this.profit = this.userEn.money;
+				this.getName();  //获取用户名
 			});
 		},
 		//获取今日金币
 		getGoldAdd(){
-			api.getStatisticsToday({account: this.userEn.account}, (res) =>{
+			api.getStatisticsToday({uid: this.uid}, (res) =>{
 				let data = api.getData(res);
 				if(util.isEmpty(data)) this.todayCoin = 0;
 				else this.todayCoin = data.goldAdd;
@@ -214,10 +228,15 @@ export default{
 				url: '/pages/extractMoney/extractMoney'
 			});
 		},
-		//退出登录
-		exit(){
-			storage.outLogin();  //清空我的信息
-			uni.reLaunch({
+		// //退出登录
+		// exit(){
+		// 	storage.outLogin();  //清空我的信息
+		// 	uni.reLaunch({
+		// 		url: "/pages/login/login"
+		// 	})
+		// },
+		toLogin(){
+			uni.navigateTo({
 				url: "/pages/login/login"
 			})
 		},
@@ -287,6 +306,7 @@ export default{
 	}
 	.my_name{
 		margin-left:20rpx;
+		font-size:16px;
 	}
 	.name{
 		color:#000;

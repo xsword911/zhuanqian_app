@@ -49,9 +49,11 @@ export default{
 			userEn: [],  //我的信息
 			isOldPwd: true,  //旧密码栏类型
 			isPwd: true,  //新密码栏类型
+			uid: "",  //uid
 		}
 	},
 	onShow(){
+		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();
 	},
 	onLoad(res){
@@ -127,7 +129,7 @@ export default{
 		//提交修改
 		submit(){
 			let data = {};
-			data["account"] = this.userEn.account;
+			data["uid"] = this.uid;
 			if(this.type === 'pwd'){
 				data[this.type] = this.pwd;
 				data.pwdOld = this.pwdOld;

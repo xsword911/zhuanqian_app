@@ -1,17 +1,35 @@
 import config from '@/static/app/config.js';
 import util from '@/common/util.js';
 import tran from '@/common/tran.js';
+import storage from "@/api/storage.js";
+import api from "@/api/api.js";
 //http操作工具类
 module.exports = {
 	
+	//取返回数据内,token数据
+	getToken: function(res) {return res.data.token},
+	
 	//进行http的post请求
 	post: function(url, postData, funSuccess) {
+		let token = storage.getToken();
 		uni.request({
 			url: config.baseUrl + "/api/" + url,
 			method: 'post',
 			dataType: 'json',
 			data: postData,
+			header: {
+			  'token': token  //上传token
+			},
 			success: (res) => {
+				let token = this.getToken(res);
+				//判断是否有token
+				if(!util.isEmpty(token) && token.length == 17)
+				{
+					let oldToken = storage.getToken();
+					//token不同时保存新token
+					console.log(token);
+					if(token != oldToken) storage.setToken(token);
+				}
 				funSuccess(res);
 			}
 		});
@@ -34,11 +52,15 @@ module.exports = {
 	
 	//上传文件  url:服务器地址 path:本地文件路径 name:上传文件名称 funSuccess:成功时的回调函数
 	upload: function(url, path, name, funSuccess) {
+		let token = storage.getToken();
 		uni.uploadFile({
 			url: config.baseUrl + '/api/' + url, //文件上传地址
 			filePath: path,
 			name: name,
-			success: (res) => {
+			header: {
+			  'token': token  //上传token
+			},
+			success: (res) => {			
 				let data = tran.json2Obj(res.data);
 				funSuccess(data);
 			}
