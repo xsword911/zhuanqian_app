@@ -41,7 +41,7 @@
 		
 		<!-- 登录按钮 -->
 		<view class="login">
-			<button type="default" class="login_btn" @tap="bindLogin">登录</button>
+			<button type="default" class="login_btn" @tap="bindLogin" hover-class="btn_hover">登录</button>
 		</view>
 		
 		<view class="loginByOth">

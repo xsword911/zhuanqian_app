@@ -1,4 +1,5 @@
 <script>
+import audio from "@/common/audio.js";
 export default {
 	onLaunch: function() {
 		console.log('App Launch');
@@ -9,7 +10,10 @@ export default {
 	},
 	onHide: function() {
 		console.log('App Hide');
-	}
+	},
+	onLoad(){
+		//audio.createAudio();
+	},
 };
 </script>
 
@@ -32,5 +36,8 @@ export default {
 	}
 	button::after{
 		border:none;
+	}
+	.btn_hover{
+		transform:scale(0.9)
 	}
 </style>

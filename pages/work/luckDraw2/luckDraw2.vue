@@ -1,19 +1,19 @@
 <template>
-	<view class="content">
+	<view class="content" style="height:100%;">
 		<!-- 背景图片 -->
 		<image src="/static/img/luck/6764fbf06a78763f6b2162e6d4bd731c.png" mode="" class="bg-set"></image>
 		<!-- 左上更多图标 -->
-		<view class="gz">
+<!-- 		<view class="gz">
 			<image src="/static/img/luck/gz.c859c3e0.png" mode="widthFix"></image>
-		</view>
+		</view> -->
 		<!-- 右上奖品图标 -->
-		<view class="jp">
+<!-- 		<view class="jp">
 			<image src="/static/img/luck/jp.f4cc450a.png" mode="widthFix"></image>
-		</view>
+		</view> -->
 		<!-- 顶部文字 -->
-		<view class="active_test">
+<!-- 		<view class="active_test">
 			幸运用户专享活动
-		</view>
+		</view> -->
 		<!-- 红包领奖进度条 -->
 		<view class="list">
 			<!-- 外部进度条 -->
@@ -49,54 +49,49 @@
 				'open_rotate5' : rotateId == 5,
 				'open_rotate6' : rotateId == 6,
 				
-				'position1': positonId ==1,
-				'position2': positonId ==2,
-				'position3': positonId ==3,
-				'position4': positonId ==4,
-				'position5': positonId ==5,
-				'position6': positonId ==6,
-				
-			}">
+			}" style="animation-fill-mode: forwards;">
 				<image src="/static/img/luck/58ea510e1129b8b4287e32e2f3b064ed.png" mode="widthFix"></image>
-				<view class="award award_r">
-					<text>任天堂游戏机</text>
-					<view class="award_img">
-						<image src="/static/img/luck/6a823b1a9f4b244436e9e7376b049edc.png" mode=""></image>
+				<view class="">
+					<view class="award award_r">
+						<text>{{LuckyList[0].title}}</text>
+						<view class="award_img">
+							<image :src="LuckyList[0].imgUrl" mode=""></image>
+						</view>
 					</view>
-				</view>
-				
-				<view class="award award_p">
-					<text>苹果手机</text>
-					<view class="award_img">
-						<image src="/static/img/luck/e406717b3f419326668850fb2e97b65b.png" mode=""></image>
+					
+					<view class="award award_p">
+						<text>{{LuckyList[1].title}}</text>
+						<view class="award_img">
+							<image :src="LuckyList[1].imgUrl" mode=""></image>
+						</view>
 					</view>
-				</view>
-				
-				<view class="award award_j">
-					<text>黄金</text>
-					<view class="award_img">
-						<image src="/static/img/luck/a08a2e7a9002de1284345492b07e2678.png" mode=""></image>
+					
+					<view class="award award_j">
+						<text>{{LuckyList[2].title}}</text>
+						<view class="award_img">
+							<image :src="LuckyList[2].imgUrl" mode=""></image>
+						</view>
 					</view>
-				</view>
-				
-				<view class="award award_h">
-					<text>200元红包</text>
-					<view class="award_img">
-						<image src="/static/img/luck/6a6e30c4b997f653404f956d00660200.png" mode=""></image>
+					
+					<view class="award award_h">
+						<text>{{LuckyList[3].title}}</text>
+						<view class="award_img">
+							<image :src="LuckyList[3].imgUrl" mode=""></image>
+						</view>
 					</view>
-				</view>
-				
-				<view class="award award_x">
-					<text>幸运奖</text>
-					<view class="award_img">
-						<image src="/static/img/luck/6b409b67de90070099dfbf74556f12bc.png" mode=""></image>
+					
+					<view class="award award_x">
+						<text>{{LuckyList[4].title}}</text>
+						<view class="award_img">
+							<image :src="LuckyList[4].imgUrl" mode=""></image>
+						</view>
 					</view>
-				</view>
-				
-				<view class="award award_s">
-					<text>谢谢参与</text>
-					<view class="award_img">
-						<image src="/static/img/luck/b3f549df59ac0c05fa3894f6adef9c11.png" mode=""></image>
+					
+					<view class="award award_s">
+						<text>{{LuckyList[5].title}}</text>
+						<view class="award_img">
+							<image :src="LuckyList[5].imgUrl" mode=""></image>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -116,30 +111,29 @@
 		<!-- 遮罩层 -->
 		<view class="shadow" v-show="shadow">
 			<view class="main" @tap="openUrl">
-				<!-- 领奖标题头图片 -->
-				<view class="card card_header">
-					<image src="/static/img/luck/rewardBag.png" mode="widthFix"></image>
-				</view>
+				<image src="/static/img/luck/rewardBag.png" mode="widthFix"></image>
 				<!-- 遮罩层背景 -->
 <!-- 				<view class="card card_content1">
 					<image src="/static/img/rewardBag.png" mode=""></image>
 				</view> -->
 			
 				<!-- 遮罩层活动 -->
-				<view class="active1">
+				<!-- <view class="active1"> -->
 					<!-- 活动背景图 -->
-					<image src="/static/img/luck/lotteryend2.ba11eeb8.png" mode=""></image>
+					<!-- <image src="/static/img/luck/lotteryend2.ba11eeb8.png" mode=""></image> -->
 					<!-- 活动内容 -->
-					<view class="active1_img">
+<!-- 					<view class="active1_img">
+					</view>
+				</view> -->
+				<view class="award_box">
+					<text>{{getAwardTitle}}</text>
+					<view class="getaward_img">
+						<image :src="getAwardImg" mode=""></image>
 					</view>
 				</view>
 				
-				<view class="reward_btn pointer" @click.stop="openUrl">
+				<view class="reward_btn pointer" @click.stop="closeShadow">
 					<image src="/static/img/luck/reward.png" mode=""></image>
-				</view>
-				
-				<view class="close" @click.stop="openUrl">
-					<image src="/static/img/luck/close.png" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -150,6 +144,7 @@
 // import config from "@/static/config/config.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import audio from "@/common/audio.js";
 export default {
 	data() {
 		return {
@@ -169,11 +164,17 @@ export default {
 			rotateId: null, //旋转id
 			positonId: null,  //旋转后的位置id
 			uid: "",  //uid
+			shadow: false,  //遮罩层控制
+			LuckyList: [],  //转盘信息列表
+			getAwardImg: 'http://localhost:8010/storage/official/202007251634497676074018.png',  //获得奖品的图片
+			getAwardTitle: '任天堂游戏机',  //获得奖品的标题
 		}
 	},
 	onShow() {
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();
+		this.getLucky();  //获取转盘信息
+		audio.createAudio();
 	},
 	onLoad() {
 		this.openEffectAnimation();  //打开转盘外部动画
@@ -187,6 +188,33 @@ export default {
 		//return true
 	}, 
 	methods: {
+		//获取转盘信息
+		getLucky(){
+			api.getOpenLucky({}, (res)=>{
+				let code = api.getCode(res);
+				if(code != 0){
+					let msg = api.getMsg(res);
+					uni.showModal({
+						content: msg,
+						showCancel: false,
+						success(res) {
+							if(res.confirm){
+								uni.navigateBack({
+									delta: 1
+								});
+							}
+						}
+					});
+				}else{
+					let data = api.getData(res).data;
+					this.LuckyList = data;
+				}
+			});
+		},
+		// 遮罩层控制
+		closeShadow(){
+			this.shadow =  false;
+		},
 		//打开转盘外部动画
 		openEffectAnimation(){
 			setInterval(this.effectAnimation, 1000);
@@ -194,10 +222,6 @@ export default {
 		//转盘外部动画
 		effectAnimation(){
 			this.effect  = this.effect ? false : true;
-		},
-		//打开外部网站
-		openUrl(){
-			 location.href = config.baseUrl;
 		},
 		//开启抽奖
 		openLucky(){
@@ -208,31 +232,47 @@ export default {
 			   if(this.animation[key]) return;  //有正在进行的抽奖动画
 			}
 			//this.openRotate = true;  //开启抽奖动画
+			audio.playAudio();
 			this.getOpenLucky();
 		},
 		//请求抽奖数据
 		getOpenLucky(){
-			api.openLucky({uid: this.uid}, (res)=>{
-				let code = api.getCode(res);
-				let data = api.getData(res);
-				if(code == 0) {
-					let data = api.getData(res);
-					console.log(data);
-					if(data.id > 6){
-						this.getOpenLucky();
-						return;
-					};
-					this.openId = data.id;    //得到抽中奖品的id
-					this.rotateId = data.id;    //得到抽中奖品的id
-					this.positonId = 0;
-					setTimeout(()=> { this.closeLucky(); }, 3500);
+			let _this = this;
+			uni.showModal({
+				title: "幸运抽奖",
+				content: "确定消耗10金币进行一次抽奖？",
+				success(res) {
+					if(res.confirm){
+						api.openLucky({uid: _this.uid}, (res)=>{
+							let code = api.getCode(res);
+							let data = api.getData(res);
+							if(code == 0) {
+								let data = api.getData(res);
+								console.log(data);
+								_this.openId = data.order;    //得到抽中奖品的id
+								_this.rotateId = data.order;    //得到抽中奖品的id
+								_this.positonId = 0;
+								_this.getAwardTitle = data.title;
+								setTimeout(()=> { _this.closeLucky(); }, 3200);
+							}else{
+								let msg = api.getMsg(res);
+								uni.showModal({
+									content: msg,
+									showCancel: false,
+								});
+							}
+						});
+					}
 				}
 			});
 		},
 		//关闭抽奖
 		closeLucky(){
+			let _this = this;
 			this.rotateId = 0;  //关闭旋转动画
 			this.positonId = this.openId;  //定位到奖品
+			//提示奖品
+			this.shadow = true;
 		},
 		//关闭遮罩层
 		close(){
@@ -265,7 +305,15 @@ export default {
 	    left: 0;
 	    z-index: -1;
 	}
-	.gz, .jp{
+	.main{
+		width:86%;
+		height:900rpx;
+		position:absolute;
+		left:50%;
+		transform: translateX(-50%);
+		top:20vh;
+	}
+/* 	.gz, .jp{
 		width:90rpx;
 		height:90rpx;
 		position: absolute;
@@ -277,16 +325,16 @@ export default {
 	.jp{
 		right: 10rpx;
 		top: 10rpx;
-	}
+	} */
 	.active_test{
 		color:#ffdf81;
 		position:absolute;
-		top:15vh;
+		top:9vh;
 		font-size:17px;
 	}
 	.list{
 		position:absolute;
-		top:23vh;
+		top:16vh;
 		z-index:5;
 	}
 	.botline{
@@ -341,7 +389,7 @@ export default {
 		width:750rpx;
 		height:750rpx;
 		position:absolute;
-		top:450rpx;
+		top:25vh;
 	}
 	.rotate{
 		width:750rpx;
@@ -468,11 +516,11 @@ export default {
 	}
 	.award_r{
 		top:10%;
-		left:37%;
+		left:41%;
 	}
 	.award_p{
-		top:28%;
-		left:67%;
+		top:27%;
+		left:62%;
 		transform:rotate(70deg);
 	}
 	.award_j{
@@ -482,7 +530,7 @@ export default {
 	}
 	.award_h{
 		top:67%;
-		left:40%;
+		left:42%;
 		transform:rotate(180deg);
 	}
 	.award_x{
@@ -556,7 +604,7 @@ export default {
 		width:300rpx;
 		height:300rpx;
 		position:absolute;
-		top:1140rpx;
+		top:700rpx;
 		left:50%;
 		transform: translateX(-50%);
 		z-index: 10;
@@ -568,5 +616,18 @@ export default {
 		top:300rpx;
 		left:80%;
 		transform: translateX(-50%);
+	}
+	.award_box{
+		position:absolute;
+		top:180rpx;
+		left:50%;
+		transform: translateX(-50%);
+		text-align:center;
+		color:#FF0000;
+	}
+	.getaward_img{
+		width:220rpx;
+		height:220rpx;
+		margin-top:20rpx;
 	}
 </style>

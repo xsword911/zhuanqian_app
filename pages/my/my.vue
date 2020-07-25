@@ -2,12 +2,12 @@
 	<view class="container">
 		<!-- 我的信息 -->
 		<view class="my_info">
-			<view class="gold_details" @tap="toGoldDetails">
+			<button class="gold_details" @tap="toGoldDetails" hover-class="btn_hover gold_btn">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
 				</view>
 				<text>金币明细</text>
-			</view>
+			</button>
 			
 			<view class="info_left">
 				<view class="my_headImg" @tap="revise">
@@ -37,7 +37,7 @@
 				</view>
 				
 				<view class="exchange">
-					<button type="default" class="exchange_btn" @tap="toMoneyChange">兑换现金</button>
+					<button type="default" class="exchange_btn" @tap="toMoneyChange" hover-class="btn_hover">兑换现金</button>
 				</view>
 			</view>
 		</view>
@@ -48,12 +48,12 @@
 				<text>现金收益</text>
 				<view class="profit_info">
 					<view>￥<text class="profit_num">{{profit}}</text></view>
-					<view class="detailed" @tap="toDetailed">明细</view>
+					<button class="detailed" @tap="toDetailed" hover-class="btn_hover">明细</button>
 				</view>
 			</view>
 			
 			<view class="extract_money">
-				<button type="default" class="extract_btn" @tap="toExtractMoney">提现</button>
+				<button type="default" class="extract_btn" @tap="toExtractMoney" hover-class="btn_hover">提现</button>
 			</view>
 		</view>
 		
@@ -101,7 +101,7 @@
 		
 		<!-- 退出/登录按钮 -->
 		<view class="btn">
-			<button type="default" class="login_btn" @tap="toLogin">其他方式登录</button>
+			<button type="default" class="login_btn" @tap="toLogin" hover-class="btn_hover">其他方式登录</button>
 		</view>
 	</view>
 </template>
@@ -278,6 +278,9 @@ export default{
 		padding-left:20rpx;
 		box-sizing:border-box;
 	}
+	.gold_btn{
+
+	}
 	.gole_img{
 		width:60rpx;
 		height:60rpx;
@@ -376,13 +379,13 @@ export default{
 		justify-content:space-between;
 	}
 	.detailed{
-		font-size:13px;
+		font-size:12px;
 		border:1px solid #879299;
 		width:100rpx;
 		text-align:center;
 		border-radius:20rpx;
 		margin-left:20rpx;
-		padding:6rpx 0;
+		padding:0;
 		box-sizing:border-box;
 	}
 	.profit_info{

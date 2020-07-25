@@ -29,7 +29,7 @@
 		</view>
 		
 		<view class="apply_friend">
-			<button type="primary" @tap="apply">提交</button>
+			<button type="primary" @tap="apply" hover-class="btn_hover">提交</button>
 		</view>
 	</view>
 </template>

@@ -48,12 +48,12 @@
 					</view>
 					
 					<view class="activity_right" @tap="show8(item)">
-						<view class="activity_btn">
+						<button class="activity_btn" hover-class="btn_hover">
 							<view class="activity_btnImg">
 								<image src="/static/img/work_btn.png" mode="widthFix"></image>
 							</view>
 							<text>+{{item.award}}</text>
-						</view>
+						</button>
 					</view>
 				</view>
 			</view>
@@ -494,7 +494,7 @@ export default{
 	}
 	.activity_btn{
 		width:200rpx;
-		padding:10rpx;
+		padding:0 10rpx;
 		box-sizing:border-box;
 		/* background-color:#ff471f; */
 		background-image:linear-gradient(to right, rgb(255, 71, 31) , rgb(255, 120, 3));

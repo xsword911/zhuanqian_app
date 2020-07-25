@@ -51,7 +51,7 @@
 			<view class="info_tips">
 				<view class="num tips">1元=100金币</view>
 				<view class="goldToMoeney_btn">
-					<button type="default" :class="money != '' ? 'btn_active' : '' " @tap="MoeneyToGold">兑换金币</button>
+					<button type="default" :class="money != '' ? 'btn_active' : '' " @tap="MoeneyToGold" hover-class="btn_hover">兑换金币</button>
 				</view>
 				<view class="tips_test">现金必须是整数</view>
 			</view>
@@ -84,12 +84,31 @@ export default{
 			radio: 1,  //单选框控制
 			money: "", //输入现金数
 			gold: "", //输入金币数
+			loginType: null, //登录方式
+			uid: "",  //uid	
 		}
 	},
 	onShow() {
-		this.userEn = storage.getMyInfo();
+		this.uid = storage.getUid();  //获取uid
+		this.loginType = storage.getLoginType();  //获取登录方式
+		this.isDeviceId();   //是否是游客登录
 	},
 	methods:{
+		//登录方式为设备号时强制跳转到登录页
+		isDeviceId(){
+			if(this.loginType == 0){
+				uni.switchTab({
+					url: '/pages/my/my'
+				});
+				uni.navigateTo({
+					url: '/pages/login/login'
+				})
+				return;
+			}else{
+				this.userEn = storage.getMyInfo();
+			} 
+		},
+		
 		//radio单选框切换
 		radioChange(val){
 			this.radio = parseInt(val.detail.value);

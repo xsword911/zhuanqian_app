@@ -37,7 +37,7 @@
 		
 		<!-- 登录按钮 -->
 		<view class="login">
-			<button type="default" class="login_btn" @tap="bindReg">注册</button>
+			<button type="default" class="login_btn" @tap="bindReg" hover-class="btn_hover">注册</button>
 		</view>
 	</view>
 </template>

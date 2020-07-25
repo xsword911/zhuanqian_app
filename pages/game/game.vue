@@ -20,6 +20,9 @@ export default {
 			utilCore.loginByDevice();
 		}
 	},
+	onShow() {
+		console.log(storage.getUid());
+	},
 	methods:{
 
 	}

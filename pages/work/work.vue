@@ -109,12 +109,12 @@
 					</view>
 					
 					<view class="activity_right" @tap="show8(item)">
-						<view class="activity_btn">
+						<button class="activity_btn" hover-class="btn_hover">
 							<view class="activity_btnImg">
 								<image src="/static/img/work_btn.png" mode="widthFix"></image>
 							</view>
 							<text>+{{item.award}}</text>
-						</view>
+						</button>
 					</view>
 				</view>
 			</view>
@@ -139,12 +139,12 @@
 					</view>
 					
 					<view class="activity_right" @tap="show8(item)">
-						<view class="activity_btn">
+						<button class="activity_btn" hover-class="btn_hover">
 							<view class="activity_btnImg">
 								<image src="/static/img/work_btn.png" mode="widthFix"></image>
 							</view>
 								<text>+{{item.award}}</text>
-						</view>
+						</button>
 					</view>
 				</view>
 			</view>
@@ -289,6 +289,7 @@ import api from "@/api/api.js";
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
+import audio from "@/common/audio.js";
 export default{
 	comments:{
 		tuiModal,
@@ -428,6 +429,7 @@ export default{
 		},
 		//领取奖励
 		receive(type){
+			audio.playAudio();
 			this.show8(type);
 			api.sign({
 				uid: this.uid, 
@@ -459,12 +461,14 @@ export default{
 		},
 		//跳转查看签到页
 		toSign(){
+			audio.playAudio();
 			uni.navigateTo({
 				url: '/pages/receiveAward/receiveAward'
 			})
 		},
 		//跳转到幸运转盘页
 		toLuckDraw(){
+			audio.playAudio();
 			uni.navigateTo({
 				// url: '/pages/work/luckDraw/luckDraw'
 				url: '/pages/work/luckDraw2/luckDraw2'
@@ -472,6 +476,7 @@ export default{
 		},
 		//复制内容并跳转到微信
 		toWx(){
+			audio.playAudio();
 			let test = '';
 			test = this.text;
 			if(this.type == 0) test = '我的邀请码是' + this.userEn.code + "下载链接是" + this.text;
@@ -532,10 +537,12 @@ export default{
 		},
 		//关闭弹窗
 		hide8() {
+			audio.playAudio();
 			this.modal8 = false;
 		},
 		//打开弹窗
 		show8(item) {
+			audio.playAudio();
 			if(item.type == 4) return;
 			this.modal8 = true;
 			if(item == -2){
@@ -578,6 +585,7 @@ export default{
 		},
 		//跳转到任务金币明细页
 		toGoldDetails(){
+			audio.playAudio();
 			uni.navigateTo({
 				url: "/pages/workDetails/workDetails"
 			})
@@ -769,7 +777,7 @@ export default{
 	}
 	.activity_btn{
 		width:200rpx;
-		padding:10rpx;
+		padding:0 10rpx;
 		box-sizing:border-box;
 		/* background-color:#ff471f; */
 		background-image:linear-gradient(to right, rgb(255, 71, 31) , rgb(255, 120, 3));

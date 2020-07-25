@@ -8,7 +8,7 @@
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
 			</view>
 			<view class="sea_btn">
-				<button type="default" @tap="getTaskDetails">查询</button>
+				<button type="default" @tap="getTaskDetails" hover-class="btn_hover">查询</button>
 			</view>
 		</view>
 		<!-- 金币收入明细 -->
@@ -47,7 +47,7 @@
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
-					<button type="default" class="coin_query">去获取金币</button>
+					<button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button>
 				</view>
 			</view>
 
@@ -74,7 +74,7 @@
 					</view>
 				</view>
 				<view class="search_btn">
-					<button type="default" @tap="closeDrawer">确定</button>
+					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
 		 </tui-drawer>

@@ -68,8 +68,8 @@
 		</view>
 		
 		<view class="submit">
-			<button type="default" v-if="type == '0'" @tap="updSubmit">提交修改</button>
-			<button type="default" v-if="type == '1'" @tap="addSubmit">提交添加</button>
+			<button type="default" v-if="type == '0'" @tap="updSubmit" hover-class="btn_hover">提交修改</button>
+			<button type="default" v-if="type == '1'" @tap="addSubmit" hover-class="btn_hover">提交添加</button>
 		</view>
 	</view>
 </template>

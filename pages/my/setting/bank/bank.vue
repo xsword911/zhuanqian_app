@@ -24,7 +24,7 @@
 			<view class="lack_box">
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还未绑定银行卡</text>
-				<button type="default" class="coin_query" @tap="toAddBank">去绑定银行卡</button>
+				<button type="default" class="coin_query" @tap="toAddBank" hover-class="btn_hover">去绑定银行卡</button>
 			</view>
 		</view>
 	</view>
