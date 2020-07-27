@@ -51,43 +51,43 @@
 				
 			}" style="animation-fill-mode: forwards;">
 				<image src="/static/img/luck/58ea510e1129b8b4287e32e2f3b064ed.png" mode="widthFix"></image>
-				<view class="">
-					<view class="award award_r">
+				<view class="" v-if="LuckyList.length > 1">
+					<view class="award award_1">
 						<text>{{LuckyList[0].title}}</text>
 						<view class="award_img">
 							<image :src="LuckyList[0].imgUrl" mode=""></image>
 						</view>
 					</view>
 					
-					<view class="award award_p">
+					<view class="award award_2">
 						<text>{{LuckyList[1].title}}</text>
 						<view class="award_img">
 							<image :src="LuckyList[1].imgUrl" mode=""></image>
 						</view>
 					</view>
 					
-					<view class="award award_j">
+					<view class="award award_3">
 						<text>{{LuckyList[2].title}}</text>
 						<view class="award_img">
 							<image :src="LuckyList[2].imgUrl" mode=""></image>
 						</view>
 					</view>
 					
-					<view class="award award_h">
+					<view class="award award_4">
 						<text>{{LuckyList[3].title}}</text>
 						<view class="award_img">
 							<image :src="LuckyList[3].imgUrl" mode=""></image>
 						</view>
 					</view>
 					
-					<view class="award award_x">
+					<view class="award award_5">
 						<text>{{LuckyList[4].title}}</text>
 						<view class="award_img">
 							<image :src="LuckyList[4].imgUrl" mode=""></image>
 						</view>
 					</view>
 					
-					<view class="award award_s">
+					<view class="award award_6">
 						<text>{{LuckyList[5].title}}</text>
 						<view class="award_img">
 							<image :src="LuckyList[5].imgUrl" mode=""></image>
@@ -99,9 +99,9 @@
 				<image src="/static/img/luck/lamp1.40547699.png" mode="widthFix" v-show="effect"></image>
 				<image src="/static/img/luck/lamp2.062c14d4.png" mode="widthFix" v-show="!effect"></image>
 			</view>
-			<view class="pointer" @tap="openLucky">
-				<image src="/static/img/luck/ef5b234566bdb5d9f3d261c814fe44b0.png" mode=""></image>
-			</view>
+			<button class="pointer" @tap="openLucky" hover-class="pointer_hover" style="background-color:transparent;">
+				<!-- <image src="/static/img/luck/ef5b234566bdb5d9f3d261c814fe44b0.png" mode=""></image> -->
+			</button>
 		</view>
 		
 		
@@ -132,7 +132,7 @@
 					</view>
 				</view>
 				
-				<view class="reward_btn pointer" @click.stop="closeShadow">
+				<view class="reward_btn" @click.stop="closeShadow">
 					<image src="/static/img/luck/reward.png" mode=""></image>
 				</view>
 			</view>
@@ -166,8 +166,8 @@ export default {
 			uid: "",  //uid
 			shadow: false,  //遮罩层控制
 			LuckyList: [],  //转盘信息列表
-			getAwardImg: 'http://localhost:8010/storage/official/202007251634497676074018.png',  //获得奖品的图片
-			getAwardTitle: '任天堂游戏机',  //获得奖品的标题
+			getAwardImg: '',  //获得奖品的图片
+			getAwardTitle: '',  //获得奖品的标题
 		}
 	},
 	onShow() {
@@ -250,9 +250,13 @@ export default {
 								let data = api.getData(res);
 								console.log(data);
 								_this.openId = data.order;    //得到抽中奖品的id
+								_this.rotateId = 0;   //动画复位
 								_this.rotateId = data.order;    //得到抽中奖品的id
 								_this.positonId = 0;
-								_this.getAwardTitle = data.title;
+								_this.getAwardTitle = data.title;  //获得抽中奖品的标题
+								_this.LuckyList.forEach((item, index) =>{
+									if(item.order == _this.rotateId) _this.getAwardImg = item.imgUrl; //获得抽中奖品的图片
+								});
 								setTimeout(()=> { _this.closeLucky(); }, 3200);
 							}else{
 								let msg = api.getMsg(res);
@@ -269,7 +273,7 @@ export default {
 		//关闭抽奖
 		closeLucky(){
 			let _this = this;
-			this.rotateId = 0;  //关闭旋转动画
+			//this.rotateId = 0;  //关闭旋转动画
 			this.positonId = this.openId;  //定位到奖品
 			//提示奖品
 			this.shadow = true;
@@ -421,51 +425,58 @@ export default {
 	
 	
 	.open_rotate1{
-		animation:rotate1 3s linear 1;
+		animation:rotate1 3s ease 1;
+		animation-fill-mode: forwards;
+		/* animation-iteration-count: 1; */
 	}
 	.open_rotate2{
-		animation:rotate2 3s linear 1;
+		animation:rotate2 3s ease 1;
+		animation-fill-mode: forwards;
 	}
 	.open_rotate3{
-		animation:rotate3 3s linear 1;
+		animation:rotate3 3s ease 1;
+		animation-fill-mode: forwards;
 	}
 	.open_rotate4{
-		animation:rotate4 3s linear 1;
+		animation:rotate4 3s ease 1;
+		animation-fill-mode: forwards;
 	}
 	.open_rotate5{
-		animation:rotate5 3s linear 1;
+		animation:rotate5 3s ease 1;
+		animation-fill-mode: forwards;
 	}
 	.open_rotate6{
-		animation:rotate6 3s linear 1;
+		animation:rotate6 3s ease 1;
+		animation-fill-mode: forwards;
 	}
 	@keyframes rotate1 {
 		0%{transform:rotate(0deg);}
-		75%{transform:rotate(1440deg);}
+		/* 75%{transform:rotate(1440deg);} */
 		100%{transform:rotate(1800deg);}
 	}
 	@keyframes rotate2 {
 		0%{transform:rotate(0deg);}
-		75%{transform:rotate(1440deg);}
+		/* 75%{transform:rotate(1440deg);} */
 		100%{transform:rotate(1860deg);}
 	}
 	@keyframes rotate3 {
 		0%{transform:rotate(0deg);}
-		75%{transform:rotate(1440deg);}
+		/* 75%{transform:rotate(1440deg);} */
 		100%{transform:rotate(1920deg);}
 	}
 	@keyframes rotate4 {
 		0%{transform:rotate(0deg);}
-		75%{transform:rotate(1440deg);}
+		/* 75%{transform:rotate(1440deg);} */
 		100%{transform:rotate(1980deg);}
 	}
 	@keyframes rotate5 {
 		0%{transform:rotate(0deg);}
-		75%{transform:rotate(1440deg);}
+		/* 75%{transform:rotate(1440deg);} */
 		100%{transform:rotate(2040deg);}
 	}
 	@keyframes rotate6 {
 		0%{transform:rotate(0deg);}
-		75%{transform:rotate(1440deg);}
+		/* 75%{transform:rotate(1440deg);} */
 		100%{transform:rotate(2100deg);}
 	}
 	.luck_draw{
@@ -477,14 +488,19 @@ export default {
 	}
 	.pointer{
 		width:280rpx;
-		height:300rpx;
+		height:290rpx;
 		position:absolute;
 		top:50%;
 		left:50%;
 		z-index: 10;
 		transform: translate(-50%, -50%);
-		animation: spin 1s infinite;
+		/* animation: spin 1s infinite; */
 		transform-origin: 0 0;
+		background-image: url(/static/img/luck/ef5b234566bdb5d9f3d261c814fe44b0.png);
+		background-size: 100%;
+	}
+	.pointer_hover{
+		transform:scale(0.9) translate(-50%, -50%);
 	}
 	@keyframes spin {	  
 	  0%   {
@@ -514,33 +530,33 @@ export default {
 		width:120rpx;
 		height:120rpx;
 	}
-	.award_r{
+	.award_1{
 		top:10%;
-		left:41%;
+		left:42%;
 	}
-	.award_p{
-		top:27%;
-		left:62%;
-		transform:rotate(70deg);
+	.award_6{
+		top:25%;
+		left:68%;
+		transform:rotate(60deg);
 	}
-	.award_j{
+	.award_5{
 		top:54%;
 		left:67%;
 		transform:rotate(120deg);
 	}
-	.award_h{
-		top:67%;
+	.award_4{
+		top:69%;
 		left:42%;
 		transform:rotate(180deg);
 	}
-	.award_x{
-		top:54%;
-		left:18%;
+	.award_3{
+		top:53%;
+		left:17%;
 		transform:rotate(240deg);
 	}
-	.award_s{
+	.award_2{
 		top:25%;
-		left:16%;
+		left:14%;
 		transform:rotate(300deg);
 	}
 	
@@ -604,7 +620,7 @@ export default {
 		width:300rpx;
 		height:300rpx;
 		position:absolute;
-		top:700rpx;
+		top:60%;
 		left:50%;
 		transform: translateX(-50%);
 		z-index: 10;

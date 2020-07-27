@@ -2,7 +2,7 @@
 	<view class="container">
 		<!-- 我的信息 -->
 		<view class="my_info">
-			<button class="gold_details" @tap="toGoldDetails" hover-class="btn_hover gold_btn">
+			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
 				</view>
@@ -279,7 +279,7 @@ export default{
 		box-sizing:border-box;
 	}
 	.gold_btn{
-
+		opacity:0.7;
 	}
 	.gole_img{
 		width:60rpx;

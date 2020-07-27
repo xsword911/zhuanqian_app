@@ -162,7 +162,7 @@ export default{
 				return;
 			}
 			let data = {
-				account: this.userEn.account,
+				uid: this.uid,
 				gold: this.gold,
 				type: 0
 			};
@@ -180,7 +180,7 @@ export default{
 				return;
 			}
 			let data = {
-				account: this.userEn.account,
+				uid: this.uid,
 				money: this.money,
 				type: 1
 			};
