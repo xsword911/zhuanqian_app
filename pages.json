@@ -108,6 +108,12 @@
 			"enablePullDownRefresh": true
 		}
 	},{
+		"path": "pages/work/luckDraw2/LuckDrawDetails/LuckDrawDetails",
+		"style": {
+			"navigationBarTitleText": "转盘抽奖记录",
+			"enablePullDownRefresh": true
+		}
+	},{
 		"path": "pages/my/detailed/detailed",
 		"style": {
 			"navigationBarTitleText": "明细",

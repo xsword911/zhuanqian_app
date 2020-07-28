@@ -2,7 +2,7 @@
 	<view class="container">
 		<!-- 我的信息 -->
 		<view class="my_info">
-			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn">
+			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn" style="padding:0 0 0 15rpx;">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
 				</view>

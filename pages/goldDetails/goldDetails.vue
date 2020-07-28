@@ -8,7 +8,7 @@
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
 			</view>
 			<view class="sea_btn">
-				<button type="default" @tap="getTaskDetails" hover-class="btn_hover">查询</button>
+				<button type="default" @tap="getTaskDetails" hover-class="btn_hover" style="padding: 0;">查询</button>
 			</view>
 		</view>
 		<!-- 金币收入明细 -->

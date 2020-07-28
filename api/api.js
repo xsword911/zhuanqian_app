@@ -104,4 +104,7 @@ module.exports = {
 	//进行幸运抽奖
 	openLucky: function(path, funSuccess) {httpUtil.post('activity/openLucky', path, funSuccess);},
 	
+	//查看抽奖历史记录
+	getLuckyDetails: function(path, funSuccess) {httpUtil.post('activity/getLuckyDetails', path, funSuccess);},
+	
 }

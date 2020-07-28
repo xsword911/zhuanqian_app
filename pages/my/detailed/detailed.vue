@@ -17,7 +17,7 @@
 								<input type="text" value="" v-model="moneyTranEndTime" :disabled="true" @tap="openDrawer(0)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn">
-								<button type="default" @tap="getMoneyTran(0)" hover-class="btn_hover">查询</button>
+								<button type="default" @tap="getMoneyTran(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
 							</view>
 						</view>
 						<view class="income" v-for="(item,index) in moneyTranList" :key='index' @tap="moneyTranOpen(item.id)">
@@ -78,7 +78,7 @@
 								<input type="text" value="" v-model="extractMoneyEndTime" :disabled="true" @tap="openDrawer(1)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn">
-								<button type="default" @tap="getMoneyDraw(0)" hover-class="btn_hover">查询</button>
+								<button type="default" @tap="getMoneyDraw(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
 							</view>
 						</view>
 						<view class="income" v-for="(item,index) in extractMoneyList" :key='index' @tap="moneyDrawopen(item.id)">
@@ -144,7 +144,7 @@
 								<input type="text" value="" v-model="moneyEndTime" :disabled="true" @tap="openDrawer(2)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn">
-								<button type="default" @tap="getMoney(0)" hover-class="btn_hover">查询</button>
+								<button type="default" @tap="getMoney(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
 							</view>
 						</view>
 						<view class="income" v-for="(item,index) in moneyList" :key='index' @tap="moneyOpen(item.id)">

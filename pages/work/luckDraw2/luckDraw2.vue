@@ -39,6 +39,9 @@
 			</view>
 		</view>
 		
+		<!-- 历史记录 -->
+		<button class="record" @tap="toLuckDrawDetails" hover-class="gold_btn" style="padding: 0;">历史记录</button>
+		
 		<!-- 转盘 -->
 		<view class="luckdraw_box">
 			<view class="rotate" :class="{
@@ -282,6 +285,12 @@ export default {
 		close(){
 			this.shadow = false;
 		},
+		//跳转到查看抽奖历史记录界面
+		toLuckDrawDetails(){
+			uni.navigateTo({
+				url: '/pages/work/luckDraw2/LuckDrawDetails/LuckDrawDetails'
+			})
+		},
 	}
 }
 </script>
@@ -300,6 +309,7 @@ export default {
 		justify-content: center;
 		padding-top:44px;
 		box-sizing:border-box;
+		position:relative;
 	}
 	.bg-set, .shadow{
 	    position: fixed;
@@ -645,5 +655,22 @@ export default {
 		width:220rpx;
 		height:220rpx;
 		margin-top:20rpx;
+	}
+	.record{
+		position:absolute;
+		right: 0;
+		top:25%;
+		background-color: #F8F8F8;
+		width:180rpx;
+		height:70rpx;
+		text-align:center;
+		font-size:15px;
+		line-height:70rpx;
+		color:#FBB742;
+		border-radius:40rpx 0 0 40rpx;
+		z-index: 99;
+	}
+	.gold_btn{
+		opacity:0.8;
 	}
 </style>

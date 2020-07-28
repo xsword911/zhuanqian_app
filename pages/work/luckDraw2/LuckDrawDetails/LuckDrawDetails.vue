@@ -20,10 +20,7 @@
 				</view>
 
 				<view class="incomeNum">
-					<text class="num">+ {{item.award}}</text>
-					<view class="gold_img">
-						<image src="/static/img/gold2.png" mode="widthFix"></image>
-					</view>
+					<text class="num">{{item.award}}</text>
 					<view class="open">
 						<tui-icon name="arrowdown" :size="20" v-show="!item.openTag"></tui-icon>
 						<tui-icon name="arrowup" :size="20" v-show="item.openTag"></tui-icon>
@@ -32,7 +29,11 @@
 
 				<view class="open_box" v-show="item.id == openId">
 					<view class="">
-						内容：<text class="income_data">{{item.explain}}</text>
+						订单号：<text class="income_data">{{item.sn}}</text>
+					</view>
+					<view class="">
+						状态：<text class="income_data" v-if="item.state == 1">已兑奖</text>
+							 <text class="income_data" v-if="item.state == 2">为兑奖</text>
 					</view>
 				</view>
 			</view>
@@ -193,9 +194,8 @@
 			//获取金币收入明细表
 			getTaskDetails() {
 				this.page = 1;
-				let data = {
+				let data = { 
 					uid: this.uid,
-					state: 1,
 					page: this.page,
 					count: 10
 				};
@@ -207,7 +207,7 @@
 					let time = this.endTime + " 23:59:59";
 					data.endFinishTime = time;
 				};
-				api.getTaskDetails(data, (res) => {
+				api.getLuckyDetails(data, (res) => {
 					let data = api.getData(res).data;
 					if (util.isEmpty(data)) this.showIncome = false;
 					//this.isShowIncome();  //控制金币收入明细表显示
@@ -239,9 +239,8 @@
 		//上拉获取更多金币收益明细数据
 		onReachBottom() {
 			this.page = this.page + 1;
-			api.getTaskDetails({
+			api.getLuckyDetails({
 				uid: this.uid,
-				state: 1,
 				page: this.page,
 				count: 10
 			}, (res) => {
