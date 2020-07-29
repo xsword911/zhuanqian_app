@@ -131,11 +131,17 @@ export default{
 		    };
 			this.login(data);
 		},
+		//保存用户uid
+		setUid(uid){
+			this.uid = uid;
+			storage.setUid(this.uid);
+		},
 		//登录提交
 		login(data){
 			api.login(data, (res)=>{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
+				let uid = api.getData(res);
 				if(code == 0){
 					if(this.shadow){
 						let userInfo = {
@@ -147,7 +153,8 @@ export default{
 					}else{
 						storage.delUserPwd(); 
 					}
-					this.toGame();
+					this.setUid(uid); //保存新uid
+					this.toGame();	  //跳转
 				}else{
 					uni.showToast({
 						title: msg,
