@@ -113,7 +113,7 @@
 		
 		<!-- 遮罩层 -->
 		<view class="shadow" v-show="shadow">
-			<view class="main" @tap="openUrl">
+			<view class="main">
 				<image src="/static/img/luck/rewardBag.png" mode="widthFix"></image>
 				<!-- 遮罩层背景 -->
 <!-- 				<view class="card card_content1">
@@ -135,9 +135,9 @@
 					</view>
 				</view>
 				
-				<view class="reward_btn" @click.stop="closeShadow">
-					<image src="/static/img/luck/reward.png" mode=""></image>
-				</view>
+				<button class="reward_btn" @click.stop="closeShadow" hover-class="rewardBtn_hover" style="background-color:transparent;">
+					<!-- <image src="/static/img/luck/reward.png" mode=""></image> -->
+				</button>
 			</view>
 		</view>
 	</view>
@@ -163,9 +163,8 @@ export default {
 				openRotate5: false,  //转盘动画5
 				openRotate6: false,  //转盘动画6
 			},
-			openId: null, //抽中奖品的id
-			rotateId: null, //旋转id
-			positonId: null,  //旋转后的位置id
+			awardEnable: true, //抽奖按钮是否可按
+			rotateId: null, //旋转id,抽到的奖品id
 			uid: "",  //uid
 			shadow: false,  //遮罩层控制
 			LuckyList: [],  //转盘信息列表
@@ -177,7 +176,7 @@ export default {
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();
 		this.getLucky();  //获取转盘信息
-		audio.createAudio();
+		this.rotateId = 0;
 	},
 	onLoad() {
 		this.openEffectAnimation();  //打开转盘外部动画
@@ -186,6 +185,7 @@ export default {
 	},
 	onBackPress(e) {  
 	// 这里可以自定义返回逻辑，比如下面跳转其他页面
+		
 		//this.openLucky();
 		// return true 表示禁止默认返回
 		//return true
@@ -228,13 +228,8 @@ export default {
 		},
 		//开启抽奖
 		openLucky(){
-			// this.shadow = true;
-			
-			//遍历是否有正在开启中的抽奖动画
-			for(var key in this.animation){
-			   if(this.animation[key]) return;  //有正在进行的抽奖动画
-			}
-			//this.openRotate = true;  //开启抽奖动画
+			//抽奖按钮不可按
+			if(!this.awardEnable) return;
 			audio.playAudio();
 			this.getOpenLucky();
 		},
@@ -246,21 +241,20 @@ export default {
 				content: "确定消耗10金币进行一次抽奖？",
 				success(res) {
 					if(res.confirm){
+						_this.rotateId = 0;
 						api.openLucky({uid: _this.uid}, (res)=>{
 							let code = api.getCode(res);
 							let data = api.getData(res);
 							if(code == 0) {
+								_this.awardEnable = false;  //抽奖按钮不可按
 								let data = api.getData(res);
 								console.log(data);
-								_this.openId = data.order;    //得到抽中奖品的id
-								_this.rotateId = 0;   //动画复位
 								_this.rotateId = data.order;    //得到抽中奖品的id
-								_this.positonId = 0;
 								_this.getAwardTitle = data.title;  //获得抽中奖品的标题
 								_this.LuckyList.forEach((item, index) =>{
 									if(item.order == _this.rotateId) _this.getAwardImg = item.imgUrl; //获得抽中奖品的图片
 								});
-								setTimeout(()=> { _this.closeLucky(); }, 3200);
+								setTimeout(()=> { _this.showAward(); }, 3500);
 							}else{
 								let msg = api.getMsg(res);
 								uni.showModal({
@@ -273,11 +267,11 @@ export default {
 				}
 			});
 		},
-		//关闭抽奖
-		closeLucky(){
+		//显示奖品
+		showAward(){
+			this.awardEnable = true;  //可继续抽奖
 			let _this = this;
 			//this.rotateId = 0;  //关闭旋转动画
-			this.positonId = this.openId;  //定位到奖品
 			//提示奖品
 			this.shadow = true;
 		},
@@ -287,6 +281,7 @@ export default {
 		},
 		//跳转到查看抽奖历史记录界面
 		toLuckDrawDetails(){
+			if(!this.awardEnable) return;  //抽奖状态时不可跳转
 			uni.navigateTo({
 				url: '/pages/work/luckDraw2/LuckDrawDetails/LuckDrawDetails'
 			})
@@ -634,6 +629,12 @@ export default {
 		left:50%;
 		transform: translateX(-50%);
 		z-index: 10;
+		background-image: url(/static/img/luck/reward.png);
+		background-size: 100%;
+		transform-origin: 0 50%;
+	}
+	.rewardBtn_hover{
+		transform:scale(0.9) translate(-50%, 0);
 	}
 	.close{
 		width:80rpx;

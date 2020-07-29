@@ -733,7 +733,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 
     .swiper-box {
         flex: 1;
-		margin-top:40px;
+		margin-top:30px;
     }
 
     /* 指定h5高度样式, app样式高度为组件内定义 */

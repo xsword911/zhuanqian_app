@@ -33,7 +33,7 @@
 					</view>
 					<view class="">
 						状态：<text class="income_data" v-if="item.state == 1">已兑奖</text>
-							 <text class="income_data" v-if="item.state == 2">为兑奖</text>
+							  <text class="income_data" v-if="item.state == 2">为兑奖</text>
 					</view>
 				</view>
 			</view>

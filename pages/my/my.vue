@@ -379,7 +379,7 @@ export default{
 		justify-content:space-between;
 	}
 	.detailed{
-		font-size:12px;
+		font-size:24rpx;
 		border:1px solid #879299;
 		width:100rpx;
 		text-align:center;
@@ -392,10 +392,10 @@ export default{
 		display:flex;
 		align-items:center;
 		font-size:14px;
-		margin-top:10rpx;
+		margin-top:5rpx;
 	}
 	.profit_num{
-		font-size:22px;
+		font-size:20px;
 		font-weight:bold;
 	}
 	.profit_box{
