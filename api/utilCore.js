@@ -19,6 +19,7 @@ module.exports = {
 	
 	//设备号登录（游客登录）
 	loginByDevice(){
+		//取设备号
 		let device = util.getUuid();
 		api.loginByOth({deviceId: device}, (res)=>{
 			let uid = api.getData(res);
