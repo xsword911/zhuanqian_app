@@ -21,7 +21,7 @@ export default {
 		}
 	},
 	onShow() {
-		console.log(storage.getUid());
+		console.log(storage.getToken());
 	},
 	methods:{
 
