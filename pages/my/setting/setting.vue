@@ -2,7 +2,7 @@
 	<view class="content">
 		<!-- 功能栏 -->
 		<view class="content func">
-			<view class="setting" @tap="toUpdMyImg">
+			<button class="setting" @tap="toUpdMyImg" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">头像</text>
 				</view>
@@ -13,9 +13,9 @@
 					</view>
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting">
+			<button class="setting" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">账号</text>
 				</view>
@@ -24,9 +24,9 @@
 					<text class="name">{{userName}}</text>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting">
+			<button class="setting" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">邀请码</text>
 				</view>
@@ -35,9 +35,9 @@
 					<view class="">{{userEn.code}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting" @tap="toUpdInfo('nick', '昵称', userEn.nick)">
+			<button class="setting" @tap="toUpdInfo('nick', '昵称', userEn.nick)" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">昵称</text>
 				</view>
@@ -46,9 +46,9 @@
 					<view class="">{{userEn.nick}}</view>
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting" @tap="toUpdInfo('tel', '手机号',userEn.tel)">
+			<button class="setting" @tap="toUpdInfo('tel', '手机号',userEn.tel)" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">手机号</text>
 				</view>
@@ -57,9 +57,9 @@
 					<view class="">{{userEn.tel}}</view>
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)">
+			<button class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">修改密码</text>
 				</view>
@@ -67,9 +67,9 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting">
+			<button class="setting" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">注册时间</text>
 				</view>
@@ -78,9 +78,9 @@
 					<view class="">{{userEn.regTime}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting">
+			<button class="setting" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">最后一次登录时间</text>
 				</view>
@@ -89,9 +89,9 @@
 					<view class="">{{userEn.loginTime}}</view>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="setting" @tap="toBank">
+			<button class="setting" @tap="toBank" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">银行卡</text>
 				</view>
@@ -99,7 +99,7 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</view>
+			</button>
 		</view>
 	</view>
 </template>
@@ -170,6 +170,10 @@ export default{
 </script>
 
 <style>
+	.func>button{
+		background-color:#fff;
+		padding:0;
+	}
 	.func_left{
 		font-size:15px;
 		display:flex;
@@ -187,9 +191,12 @@ export default{
 	.setting{
 		display:flex;
 		justify-content:space-between;
-		margin-top:20rpx;
+		/* margin-top:20rpx; */
 		border-bottom:1px solid #f9f9f9;
-		padding:10rpx 0;
+		/* padding:10rpx 0; */
+	}
+	.setting_hover[type = default]{
+		background-color:#EEEEEE;
 	}
 	.header_img {
 		width: 100rpx;

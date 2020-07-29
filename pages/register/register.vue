@@ -165,9 +165,10 @@ export default{
 	}
 	.login_btn{
 		border-radius:60rpx;
-		color:#999999;
+		color:#000;
 		font-size:15px;
-		padding:10rpx 0;
+		/* padding:10rpx 0; */
+		background-color:#fcd030;
 	}
 	.pwd_ipt{
 		position:relative;

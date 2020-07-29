@@ -89,9 +89,16 @@ export default{
 	methods:{
 		//设备号登录
 		loginByDevice(){
-			utilCore.loginByDevice();
-			uni.reLaunch({
-				url: "/pages/game/game"
+			uni.showModal({
+				content: '确定使用设备号登录？',
+				success: function (res) {
+					if (res.confirm) {
+						utilCore.loginByDevice();
+						uni.reLaunch({
+							url: "/pages/game/game"
+						});
+					}
+				}
 			});
 		},
 		//控制勾选按钮
@@ -224,9 +231,10 @@ export default{
 	}
 	.login_btn{
 		border-radius:60rpx;
-		color:#999999;
+		color:#000;
 		font-size:15px;
-		padding:10rpx 0;
+		/* padding:10rpx 0; */
+		background-color:#fcd030;
 	}
 	.savePwdGroup{
 		margin-top:10rpx;
