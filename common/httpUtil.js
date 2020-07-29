@@ -3,11 +3,13 @@ import util from '@/common/util.js';
 import tran from '@/common/tran.js';
 import storage from "@/api/storage.js";
 import api from "@/api/api.js";
+import utilCore from "@/api/utilCore.js";
 //http操作工具类
 module.exports = {
 	
 	//取返回数据内,token数据
 	getToken: function(res) {return res.data.token},
+	getCode: function(res) {return res.data.code},
 	
 	//进行http的post请求
 	post: function(url, postData, funSuccess) {
@@ -29,6 +31,18 @@ module.exports = {
 					//token不同时保存新token
 					console.log(token);
 					if(token != oldToken) storage.setToken(token);
+				}
+				
+				//验证token是否失效
+				let code = this.getCode(res);
+				if(code == 10000)
+				{
+					//清理旧数据
+					storage.setToken("");
+					storage.setUid("");
+					//使用设备号登录
+					utilCore.loginByDevice();
+					return;
 				}
 				funSuccess(res);
 			}
