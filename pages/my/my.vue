@@ -310,10 +310,17 @@ export default{
 		align-items:center;
 	}
 	.my_headImg{
-		width:150rpx;
+		/* width:150rpx;
 		height:150rpx;
+		border-radius:10px;
+		overflow: hidden; */
+		width: 150rpx;
+		height: 150rpx;
 		border-radius:50%;
-		overflow:hidden;
+		overflow: hidden;
+		display:flex;
+		align-items:center;
+		margin-right:10rpx;
 	}
 	.my_name{
 		margin-left:20rpx;

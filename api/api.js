@@ -69,7 +69,7 @@ const api = {
 	getTaskDetails: function(path, funSuccess) {httpUtil.post('activity/getTaskDetails', path, funSuccess);},
 	
 	//查询今天统计金额
-	getStatisticsToday: function(path, funSuccess) {httpUtil.post('money/getStatisticsToday', path, funSuccess);},
+	getStatisticsToday: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsToday', path, funSuccess);},
 	
 	//发起提现申请
 	addMoneyDraw: function(path, funSuccess) {httpUtil.post('money/addMoneyDraw', path, funSuccess);},
