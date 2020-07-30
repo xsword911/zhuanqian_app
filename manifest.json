@@ -48,7 +48,7 @@
         "nvueLaunchMode" : "",
         "splashscreen" : {
             "waiting" : false,
-            "alwaysShowBeforeRender" : true
+            "alwaysShowBeforeRender" : false
         }
     },
     "quickapp" : {},
