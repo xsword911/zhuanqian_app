@@ -115,19 +115,6 @@
 		<view class="shadow" v-show="shadow">
 			<view class="main">
 				<image src="/static/img/luck/rewardBag.png" mode="widthFix"></image>
-				<!-- 遮罩层背景 -->
-<!-- 				<view class="card card_content1">
-					<image src="/static/img/rewardBag.png" mode=""></image>
-				</view> -->
-			
-				<!-- 遮罩层活动 -->
-				<!-- <view class="active1"> -->
-					<!-- 活动背景图 -->
-					<!-- <image src="/static/img/luck/lotteryend2.ba11eeb8.png" mode=""></image> -->
-					<!-- 活动内容 -->
-<!-- 					<view class="active1_img">
-					</view>
-				</view> -->
 				<view class="award_box">
 					<text>{{getAwardTitle}}</text>
 					<view class="getaward_img">
@@ -588,17 +575,6 @@ export default {
 		width:630rpx;
 		top:900rpx;
 		transform: translate(-50%, -50%);
-	}
-	.active1{
-		width:720rpx;
-		height:380rpx;
-		position:absolute;
-		left:50%;
-		top:770rpx;
-		z-index: 10;
-		transform: translate(-50%, -50%);
-		background-image: url(/static/img/lotteryend2.ba11eeb8.png) repeat;
-		background-size:100% 100%;
 	}
 	.active1_img{
 		position:absolute;
