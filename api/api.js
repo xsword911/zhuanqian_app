@@ -1,7 +1,7 @@
 import httpUtil from '@/common/httpUtil.js';
 import config from '@/static/app/config.js';
 //网络操作封装
-module.exports = {
+const api = {
 	//取返回数据内,code数据
 	getCode: function(res) {return res.data.code},
 	
@@ -107,4 +107,6 @@ module.exports = {
 	//查看抽奖历史记录
 	getLuckyDetails: function(path, funSuccess) {httpUtil.post('activity/getLuckyDetails', path, funSuccess);},
 	
-}
+};
+
+export default api;

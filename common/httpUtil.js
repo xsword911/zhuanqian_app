@@ -5,7 +5,7 @@ import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import utilCore from "@/api/utilCore.js";
 //http操作工具类
-module.exports = {
+const httpUtil = {
 	
 	//取返回数据内,token数据
 	getToken: function(res) {return res.data.token},
@@ -80,4 +80,6 @@ module.exports = {
 			}
 		});
 	}
-}
+};
+
+export default httpUtil;

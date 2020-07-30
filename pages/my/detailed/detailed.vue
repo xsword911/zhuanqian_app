@@ -7,7 +7,9 @@
         <swiper :current="current" class="swiper-box" style="flex: 1;" :duration="200" @change="ontabchange">
 			
 			<swiper-item class="swiper-item" style="flex: 1;">
-				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow" @scrolltolower="getMoneyTran(1)" lower-threshold="40">
+				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow" 
+				@scrolltolower="getMoneyTran(1)" lower-threshold="40" :refresher-enabled="true"
+				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
 					<view class="item0" >
 						<!-- 筛选时间 -->
 						<view class="search_column">
@@ -68,7 +70,9 @@
 			
 			<!-- 提现明细 -->
 			<swiper-item class="swiper-item"  style="flex: 1;">
-				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow" @scrolltolower="getMoneyDraw(1)" lower-threshold="40">
+				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow" 
+				@scrolltolower="getMoneyDraw(1)" lower-threshold="40" :refresher-enabled="true"
+				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
 					<view class="item1" >
 						<!-- 筛选时间 -->
 						<view class="search_column" >
@@ -134,7 +138,9 @@
 			
 			<!-- 账变明细 -->
 			<swiper-item class="swiper-item"  style="flex: 1;">
-				<scroll-view scroll-y="true" id="swiper"  :show-scrollbar="true"  style="flex: 1;" v-show="moneyShow" @scrolltolower="getMoney(1)" lower-threshold="40">
+				<scroll-view scroll-y="true" id="swiper"  :show-scrollbar="true"  style="flex: 1;" v-show="moneyShow" 
+				@scrolltolower="getMoney(1)" lower-threshold="40":refresher-enabled="true"
+				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
 					<view class="item2" >
 						<!-- 筛选时间 -->
 						<view class="search_column" >
@@ -225,6 +231,7 @@
 </template>
 <script>
 import tabControl from '@/components/tabControl-tag/tabControl-tag.vue';
+import utilCore from "@/api/utilCore.js";
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
@@ -307,6 +314,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				setDateTime: "",
 				num: null,    //区分开始时间和结束时间的标识
 				uid: "",  //uid
+				triggered: false  //当前下拉刷新状态
             }
         },
         onLoad(res) {
@@ -314,7 +322,49 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.uid = storage.getUid();  //获取uid
         },
         methods: {
-			//上拉刷新
+			//scroll-view开始上拉刷新
+			onRefresh(){
+				if(this.triggered) return;
+				this.triggered = true;
+				if(this.current == 0){
+					//延时为了看效果
+					setTimeout(() => {
+						this.moneyTranPage = 1;
+						this.getMoneyTran(0);
+						this.moneyTranPullUpOn = true;
+						this.moneyTranLoadding = false;
+					}, 200)
+				}else if(this.current == 1){
+					setTimeout(() => {
+						this.moneyDrawPage = 1;
+						this.getMoneyDraw(0);
+						this.moneyDrawPullUpOn = true;
+						this.moneyDrawLoadding = false;
+					}, 200)
+				}else if(this.current == 2){
+					setTimeout(() => {
+						this.moneyPage = 1;
+						this.getMoney(0);
+						this.moneyPullUpOn = true;
+						this.moneyLoadding = false;
+					}, 200)
+				}
+			},
+			
+			//scroll-view结束上拉刷新 type 0:普通获取数据 1:上拉刷新获取数据
+			onRestore(type){
+				//是否是上拉刷新获取数据
+				if(type == 1){
+					uni.showToast({
+						title: '刷新成功',
+						icon: "none",
+						duration: 1000
+					});
+					this.triggered = false;
+				}else return;
+			},
+			
+			//普通上拉刷新
 			onPullDownRefresh: function() {
 				if(this.current == 0){
 					//延时为了看效果
@@ -484,6 +534,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 							});
 							this.moneyList = data;
 							this.moneyShow = true;
+							if(this.triggered) this.onRestore(1);
 						}
 					}else if(type == 1){
 						if(util.isEmpty(data)){
@@ -558,6 +609,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 								this.extractMoneyList = data;
 							});
 							this.moneyDrawShow = true;
+							if(this.triggered) this.onRestore(1);
 						}
 					}else if(type == 1){
 						if(util.isEmpty(data)){
@@ -631,6 +683,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 							});
 							this.moneyTranList = data;
 							this.moneyTranShow = true;
+							if(this.triggered) this.onRestore(1);
 						}
 					}else if(type == 1){
 						if(util.isEmpty(data)){
@@ -676,15 +729,23 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
             },
 			//跳转到兑换现金页
 			toMoneyChange(){
-				uni.navigateTo({
-					url: "/pages/moneyChange/moneyChange"
-				})
+				if(utilCore.isLoginByDeviceId()) {
+					utilCore.toLoginUiCanBack();
+				}else{
+					uni.navigateTo({
+						url: "/pages/moneyChange/moneyChange"
+					})
+				}
 			},
 			//跳转到提现页
 			toExtractMoney(){
-				uni.navigateTo({
-					url: '/pages/extractMoney/extractMoney'
-				});
+				if(utilCore.isLoginByDeviceId()) {
+					utilCore.toLoginUiCanBack();
+				}else{
+					uni.navigateTo({
+						url: '/pages/extractMoney/extractMoney'
+					});
+				}
 			},
         }
     }
@@ -773,6 +834,16 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
         /* #endif */
         width: 750rpx;
     }
+	
+	.item0, .item1, .item2{
+		overflow:auto;
+		margin:auto;
+		position:relative;
+		top:0;
+		bottom:0;
+		left:0;
+		right:0;
+	}
 
     .update-tips {
         position: absolute;

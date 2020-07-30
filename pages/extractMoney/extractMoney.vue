@@ -62,7 +62,7 @@ export default{
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.uid = storage.getUid();  //获取uid
 		this.loginType = storage.getLoginType();  //获取登录方式
-		this.isDeviceId();   //是否是游客登录
+		//this.isDeviceId();   //是否是游客登录
 	},
 	methods:{
 		//登录方式为设备号时强制跳转到登录页

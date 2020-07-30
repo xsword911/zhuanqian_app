@@ -194,9 +194,13 @@ export default{
 		},
 		//跳转到兑换现金页
 		toMoneyChange(){
-			uni.navigateTo({
-				url: "/pages/moneyChange/moneyChange"
-			})
+			if(utilCore.isLoginByDeviceId()) {
+				utilCore.toLoginUiCanBack();
+			}else{
+				uni.navigateTo({
+					url: "/pages/moneyChange/moneyChange"
+				})
+			}
 		},
 		//跳转到金币明细页
 		toGoldDetails(){
@@ -224,9 +228,13 @@ export default{
 		},
 		//跳转到提现页
 		toExtractMoney(){
-			uni.navigateTo({
-				url: '/pages/extractMoney/extractMoney'
-			});
+			if(utilCore.isLoginByDeviceId()) {
+				utilCore.toLoginUiCanBack();
+			}else{
+				uni.navigateTo({
+					url: '/pages/extractMoney/extractMoney'
+				});
+			}
 		},
 		// //退出登录
 		// exit(){
