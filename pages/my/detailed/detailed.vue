@@ -61,7 +61,7 @@
 					<view class="lack_box">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
-						<button type="default" class="coin_query" hover-class="btn_hover">去提现</button>
+						<button type="default" class="coin_query" hover-class="btn_hover" @tap="toMoneyChange">去转换</button>
 					</view>
 				</view>
 			</swiper-item>
@@ -126,7 +126,7 @@
 					<view class="lack_box">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
-						<button type="default" class="coin_query" hover-class="btn_hover">去提现</button>
+						<button type="default" class="coin_query" hover-class="btn_hover" @tap="toExtractMoney">去提现</button>
 					</view>
 				</view>
 			</swiper-item>
@@ -187,7 +187,6 @@
 					<view class="lack_box">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
-						<button type="default" class="coin_query" hover-class="btn_hover">去提现</button>
 					</view>
 				</view>
 			</swiper-item>
@@ -675,6 +674,18 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
             ontabchange(e) {
 				this.current = e.target.current;
             },
+			//跳转到兑换现金页
+			toMoneyChange(){
+				uni.navigateTo({
+					url: "/pages/moneyChange/moneyChange"
+				})
+			},
+			//跳转到提现页
+			toExtractMoney(){
+				uni.navigateTo({
+					url: '/pages/extractMoney/extractMoney'
+				});
+			},
         }
     }
 </script>
@@ -857,17 +868,20 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 		align-items:center;
 		flex-direction:column;
 	}
+	.lack_box>button{
+		margin-top:40rpx;
+		background-color:#fcd030;
+		font-size:16px;
+		border-radius:40rpx;
+		width:400rpx;
+	}
 	.lack_test{
 		font-size:16px;
 		margin-top:20rpx;
 		display:inline-block;
 	}
 	.coin_query{
-		margin-top:40rpx;
-		background-color:#fcd030;
-		font-size:16px;
-		border-radius:40rpx;
-		width:400rpx;
+
 	}
 	.coin_query::after{
 		border:none;

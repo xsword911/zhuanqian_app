@@ -1,7 +1,7 @@
 <template>
-	<view class="content">
+	<view class="">
 		<!-- 功能栏 -->
-		<view class="content func">
+		<view class=" func">
 			<button class="setting" @tap="toUpdMyImg" hover-class="setting_hover" type="default">
 				<view class="func_left">
 					<text class="func_test">头像</text>
@@ -15,7 +15,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" hover-class="setting_hover" type="default">
+			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">账号</text>
 				</view>
@@ -26,7 +26,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" hover-class="setting_hover" type="default">
+			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">邀请码</text>
 				</view>
@@ -37,7 +37,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" @tap="toUpdInfo('nick', '昵称', userEn.nick)" hover-class="setting_hover" type="default">
+			<button class="setting" @tap="toUpdInfo('nick', '昵称', userEn.nick)" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">昵称</text>
 				</view>
@@ -48,7 +48,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" @tap="toUpdInfo('tel', '手机号',userEn.tel)" hover-class="setting_hover" type="default">
+			<button class="setting" @tap="toUpdInfo('tel', '手机号',userEn.tel)" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">手机号</text>
 				</view>
@@ -59,7 +59,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)" hover-class="setting_hover" type="default">
+			<button class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">修改密码</text>
 				</view>
@@ -69,18 +69,18 @@
 				</view>
 			</button>
 			
-			<button class="setting" hover-class="setting_hover" type="default">
+			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">注册时间</text>
 				</view>
 				
 				<view class="func_right">
-					<view class="">{{userEn.regTime}}</view>
+					<text class="">{{userEn.regTime}}</text>
 					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
 				</view>
 			</button>
 			
-			<button class="setting" hover-class="setting_hover" type="default">
+			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">最后一次登录时间</text>
 				</view>
@@ -91,7 +91,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" @tap="toBank" hover-class="setting_hover" type="default">
+			<button class="setting" @tap="toBank" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">银行卡</text>
 				</view>
@@ -172,7 +172,9 @@ export default{
 <style>
 	.func>button{
 		background-color:#fff;
-		padding:0;
+		padding:0 40rpx;
+		box-sizing:border-box;
+		border-radius:0;
 	}
 	.func_left{
 		font-size:15px;
@@ -193,7 +195,7 @@ export default{
 		justify-content:space-between;
 		/* margin-top:20rpx; */
 		border-bottom:1px solid #f9f9f9;
-		/* padding:10rpx 0; */
+		padding:10rpx 0;
 	}
 	.setting_hover[type = default]{
 		background-color:#EEEEEE;

@@ -216,6 +216,7 @@ export default {
 		},
 		// 遮罩层控制
 		closeShadow(){
+			audio.playAudio();
 			this.shadow =  false;
 		},
 		//打开转盘外部动画

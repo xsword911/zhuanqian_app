@@ -58,11 +58,11 @@
 		</view>
 		
 		<!-- 功能栏 -->
-		<view class="content func">
-			<view class="setting" @tap="toSetting">
+		<view class="func">
+			<button class="setting" @tap="toSetting" hover-class="func_hover" type="default">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/more.png" mode="widthFix"></image>
+						<image src="/static/img/more2.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">个人信息</text>
 				</view>
@@ -70,12 +70,12 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="30"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="share">
+			<button class="share" hover-class="func_hover" type="default">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/share1.png" mode="widthFix"></image>
+						<image src="/static/img/share2.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">分享给好友</text>
 				</view>
@@ -83,12 +83,12 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="30"></tui-icon>
 				</view>
-			</view>
+			</button>
 			
-			<view class="more" @tap="toMore">
+			<button class="more" @tap="toMore" hover-class="func_hover" type="default">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/setting1.png" mode="widthFix"></image>
+						<image src="/static/img/setting2.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">更多</text>
 				</view>
@@ -96,7 +96,7 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="30"></tui-icon>
 				</view>
-			</view>
+			</button>
 		</view>
 		
 		<!-- 退出/登录按钮 -->
@@ -427,10 +427,18 @@ export default{
 	.func_test{
 		margin-left:12rpx;
 	}
+	.func>button{
+		padding:0 20rpx;
+		box-sizing: border-box;
+		border-radius:0;
+		line-height:1;
+		background-color: #fff;
+	}
 	.setting, .share, .more{
 		display:flex;
 		justify-content:space-between;
 		margin-top:20rpx;
+		align-items: center;
 	}
 	.btn{
 		margin-top:40rpx;
@@ -443,5 +451,8 @@ export default{
 	}
 	.btn>button:after{
 		border:none;
+	}
+	.func_hover[type = default]{
+		background-color: #EEEEEE;
 	}
 </style>

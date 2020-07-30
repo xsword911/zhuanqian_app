@@ -229,7 +229,7 @@ export default{
 	.login{
 		margin-top:100rpx;
 	}
-	.login_btn{
+	.login>button{
 		border-radius:60rpx;
 		color:#000;
 		font-size:15px;
