@@ -1,7 +1,6 @@
 <template>
 	<view class="">
-		<view class="head_box">
-			<!-- 金币信息 -->
+<!-- 		<view class="head_box">
 			<view class="coin">
 				<view class="">
 					<view class="coin_num">
@@ -26,7 +25,23 @@
 				</view>
 				
 			</view>
+	</view> -->
+	
+	<view class="uni-margin-wrap">
+		<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" 
+		:interval="interval" :duration="duration">
+			<swiper-item>
+				<view class="swiper-item "><image src="/static/img/banner1.png" mode=""></image></view>
+			</swiper-item>
+			<swiper-item>
+				<view class="swiper-item "><image src="/static/img/banner2.png" mode=""></image></view>
+			</swiper-item>
+			<swiper-item>
+				<view class="swiper-item "><image src="/static/img/banner3.png" mode=""></image></view>
+			</swiper-item>
+		</swiper>
 	</view>
+	
 		<view class="content main">
 			<!-- 热门活动 -->
 			<view class="hot_activity">
@@ -236,6 +251,13 @@ export default{
 			intervalID: null,  //定时器id
 			timeRoundProgress: 0,//倒计时进度条
 			uid: "",  //uid
+			
+			
+			background: ['color1', 'color2', 'color3'],
+			indicatorDots: true,
+			autoplay: true,
+			interval: 3000,
+			duration: 500
 		}
 	},
 	onLoad() {
@@ -594,5 +616,30 @@ export default{
 		background-color:#FCD030;
 		color:#000;
 		font-size:14px;
+	}
+	
+	
+	.uni-margin-wrap {
+/* 		width:690rpx;
+		margin:0 30rpx; */
+		width:100%;
+	}
+	.swiper {
+		height: 300rpx;
+	}
+	.swiper-item {
+		display: block;
+		height: 300rpx;
+		line-height: 300rpx;
+		text-align: center;
+	}
+	.uni-bg-red{
+		background:#F76260; color:#FFF;
+	}
+	.uni-bg-green{
+		background:#09BB07; color:#FFF;
+	}
+	.uni-bg-blue{
+		background:#007AFF; color:#FFF;
 	}
 </style>

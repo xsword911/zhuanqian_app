@@ -88,6 +88,10 @@
 			</view>
 		</view>
 		
+		<view class="example-body">
+			<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" text="uni-app 1.6版正式发布，开发一次，同时发布iOS、Android、H5、微信小程序、支付宝小程序、百度小程序、头条小程序等7大平台。" />
+		</view>
+		
 		<view class="content main">
 			<!-- 热门活动 -->
 			<view class="hot_activity">
@@ -290,10 +294,12 @@ import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
 import audio from "@/common/audio.js";
+import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 export default{
 	comments:{
 		tuiModal,
-		tuiRoundProgress
+		tuiRoundProgress,
+		uniNoticeBar
 	},
 	filters:{
 		//金币转换现金计算
@@ -696,7 +702,7 @@ export default{
 		right:-6rpx;
 	}
 	.main{
-		margin-top:160rpx;
+		/* margin-top:160rpx; */
 	}
 	.hot_activity{
 		margin-top:20rpx;
@@ -877,5 +883,17 @@ export default{
 		background-color:#FCD030;
 		color:#000;
 		font-size:14px;
+	}
+	.example-body {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		font-size: 14px;
+		background-color: #ffffff;
+		margin-top:160rpx;
 	}
 </style>
