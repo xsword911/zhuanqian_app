@@ -30,6 +30,14 @@ export default {
 		box-sizing:border-box;
 		font-size:16px;
 	}
+	.container{
+		padding:20rpx;
+		box-sizing:border-box;
+		font-size:16px;
+		background-color: #fbf9fe;
+		width:100%;
+		height:100vh;
+	}
 	image{
 		width:100%;
 		height:100%;
@@ -39,5 +47,11 @@ export default {
 	}
 	.btn_hover{
 		transform:scale(0.9)
+	}
+	.background_style{
+		background-color:#fcd030;
+	}
+	.btn_style>button{
+		background-color:#fcd030;
 	}
 </style>

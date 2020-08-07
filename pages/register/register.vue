@@ -36,7 +36,7 @@
 		</view>
 		
 		<!-- 登录按钮 -->
-		<view class="login">
+		<view class="login btn_style">
 			<button type="default" class="login_btn" @tap="bindReg" hover-class="btn_hover">注册</button>
 		</view>
 	</view>
@@ -167,8 +167,6 @@ export default{
 		border-radius:60rpx;
 		color:#000;
 		font-size:15px;
-		/* padding:10rpx 0; */
-		background-color:#fcd030;
 	}
 	.pwd_ipt{
 		position:relative;

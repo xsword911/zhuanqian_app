@@ -28,7 +28,7 @@
 			请修改信息
 		</view>
 		
-		<view class="apply_friend">
+		<view class="apply_friend btn_style">
 			<button type="primary" @tap="apply" hover-class="btn_hover">提交</button>
 		</view>
 	</view>
@@ -186,7 +186,6 @@ export default{
 		margin-top:100rpx;
 	}
 	.apply_friend button{
-		background-color: #fcd030;
 		font-size:14px;
 		width:60%;
 		border-radius:40rpx;

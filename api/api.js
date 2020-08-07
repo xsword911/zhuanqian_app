@@ -107,6 +107,12 @@ const api = {
 	//查看抽奖历史记录
 	getLuckyDetails: function(path, funSuccess) {httpUtil.post('activity/getLuckyDetails', path, funSuccess);},
 	
+	//查询通知设置列表
+	getNotice: function(path, funSuccess) {httpUtil.post('message/getNotice', path, funSuccess);},
+	
+	//查询消息列表
+	getMsg: function(path, funSuccess) {httpUtil.post('message/getMsg', path, funSuccess);},
+	
 };
 
 export default api;

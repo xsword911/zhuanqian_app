@@ -1,7 +1,7 @@
 <template>
-	<view class="container">
+	<view class="">
 		<!-- 我的信息 -->
-		<view class="my_info">
+		<view class="my_info background_style">
 			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn" style="padding:0 0 0 15rpx;">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
@@ -44,16 +44,18 @@
 		
 		<!-- 现金收益 -->
 		<view class="content profit">
-			<view class="profit_box">
-				<text>现金收益</text>
-				<view class="profit_info">
+			<view class="lay_cash">
+				<view class="cap_cash">现金收益</view>
+				<view class="lay_cap_btn">
 					<view>￥<text class="profit_num">{{profit}}</text></view>
 					<button class="detailed" @tap="toDetailed" hover-class="btn_hover">明细</button>
 				</view>
 			</view>
 			
-			<view class="extract_money">
-				<button type="default" class="extract_btn" @tap="toExtractMoney" hover-class="btn_hover">提现</button>
+			<view class="lay_draw_charge btn_style">
+				<button type="default" class="btn_draw" @tap="toExtractMoney" hover-class="btn_hover">提现</button>
+				
+				<button type="default" class="btn_recharge" @tap="toRacharge" hover-class="btn_hover">充值</button>
 			</view>
 		</view>
 		
@@ -72,12 +74,25 @@
 				</view>
 			</button>
 			
-			<button class="share" hover-class="func_hover" type="default">
+			<button class="share" hover-class="func_hover" type="default" @tap="toNotice">
 				<view class="func_left">
 					<view class="func_img">
 						<image src="/static/img/share2.png" mode="widthFix"></image>
 					</view>
-					<text class="func_test">分享给好友</text>
+					<text class="func_test">公告</text>
+				</view>
+				
+				<view class="func_right">
+					<tui-icon name="arrowright" :size="30"></tui-icon>
+				</view>
+			</button>
+			
+			<button class="share" hover-class="func_hover" type="default" @tap="toMessage">
+				<view class="func_left">
+					<view class="func_img">
+						<image src="/static/img/share2.png" mode="widthFix"></image>
+					</view>
+					<text class="func_test">站内信</text>
 				</view>
 				
 				<view class="func_right">
@@ -100,7 +115,7 @@
 		</view>
 		
 		<!-- 退出/登录按钮 -->
-		<view class="btn">
+		<view class="btn btn_style">
 			<button type="default" class="login_btn" @tap="toLogin" hover-class="btn_hover">其他方式登录</button>
 		</view>
 	</view>
@@ -226,13 +241,36 @@ export default{
 				url: '/pages/my/detailed/detailed'
 			})			
 		},
+		//跳转到公告页
+		toNotice(){
+			uni.navigateTo({
+				url: "/pages/notice/notice"
+			})
+		},
+		//跳转到站内信界面
+		toMessage(){
+			uni.navigateTo({
+				url: "/pages/message/message"
+			})
+		},
 		//跳转到提现页
 		toExtractMoney(){
 			if(utilCore.isLoginByDeviceId()) {
 				utilCore.toLoginUiCanBack();
 			}else{
 				uni.navigateTo({
-					url: '/pages/extractMoney/extractMoney'
+					// url: '/pages/extractMoney/extractMoney'
+					url: "/pages/extractMoney/extractMoney1/extractMoney1"
+				});
+			}
+		},
+		//跳转到充值页
+		toRacharge(){
+			if(utilCore.isLoginByDeviceId()) {
+				utilCore.toLoginUiCanBack();
+			}else{
+				uni.navigateTo({
+					url: '/pages/recharge/recharge'
 				});
 			}
 		},
@@ -253,10 +291,6 @@ export default{
 </script>
 
 <style>
-	.content{
-		padding:0 20rpx;
-		box-sizing:border-box;
-	}
 	image{
 		width:100%;
 		height:100%;
@@ -264,7 +298,6 @@ export default{
 	.my_info{
 		width:100%;
 		height:320rpx;
-		background-color:#fcd030;
 		padding:20rpx;
 		box-sizing:border-box;
 		display:flex;
@@ -389,7 +422,7 @@ export default{
 		margin-top:200rpx;
 		margin:200rpx auto 0;
 		border-radius:10rpx;
-		padding:40rpx;
+		padding:0 40rpx;
 		display:flex;
 		justify-content:space-between;
 	}
@@ -403,32 +436,52 @@ export default{
 		padding:0;
 		box-sizing:border-box;
 	}
-	.profit_info{
+	.lay_cash{
+		position: relative;
+		font-size:14px;
+		/* margin-top:30rpx; */
+	}
+	.lay_cap_btn{
 		display:flex;
 		align-items:center;
 		font-size:14px;
 		margin-top:5rpx;
+		position: absolute;
+		bottom: 16rpx;
+		left:0;
+	}
+	.cap_cash{
+		position: absolute;
+		top: 16rpx;
+		left:0;
+		display: inline-block;
+		width:200rpx;
 	}
 	.profit_num{
 		font-size:20px;
 		font-weight:bold;
 	}
-	.profit_box{
-		font-size:14px;
+	.lay_draw_charge{
+		position:relative;
 	}
-	.extract_money>button{
-		background-color:#fcd030;
+	.lay_draw_charge>button{
 		border-radius:30rpx;
 		width:180rpx;
 		height:60rpx;
 		font-size:14px;
 		line-height:60rpx;
 	}
-	.extract_btn{
-
+	.btn_draw{
+		/* margin-top:10rpx; */
+		position: absolute;
+		top: 12rpx;
+		right:0;
 	}
-	.extract_btn::after{
-		border:none;		
+	.btn_recharge{
+		/* margin-bottom:10rpx; */
+		position: absolute;
+		bottom: 12rpx;
+		right: 0;
 	}
 	.func_img{
 		width:55rpx;
@@ -462,7 +515,6 @@ export default{
 		width:90%;
 		border-radius:60rpx;
 		font-size:15px;
-		background-color:#fcd030;
 	}
 	.btn>button:after{
 		border:none;

@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="head_box">
+		<view class="head_box background_style">
 			<!-- 金币信息 -->
 			<view class="coin">
 				<view class="">
@@ -88,9 +88,7 @@
 			</view>
 		</view>
 		
-		<view class="example-body">
-			<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" text="uni-app 1.6版正式发布，开发一次，同时发布iOS、Android、H5、微信小程序、支付宝小程序、百度小程序、头条小程序等7大平台。" />
-		</view>
+
 		
 		<view class="content main">
 			<!-- 热门活动 -->
@@ -294,12 +292,10 @@ import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
 import audio from "@/common/audio.js";
-import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 export default{
 	comments:{
 		tuiModal,
 		tuiRoundProgress,
-		uniNoticeBar
 	},
 	filters:{
 		//金币转换现金计算
@@ -602,7 +598,6 @@ export default{
 
 <style>
 	.head_box{
-		background-color:#fcd030;/* FFCA00 */
 		width:100%;
 		height:400rpx;
 		color: #fff;
@@ -702,7 +697,7 @@ export default{
 		right:-6rpx;
 	}
 	.main{
-		/* margin-top:160rpx; */
+		margin-top:160rpx;
 	}
 	.hot_activity{
 		margin-top:20rpx;
@@ -884,16 +879,5 @@ export default{
 		color:#000;
 		font-size:14px;
 	}
-	.example-body {
-		/* #ifndef APP-NVUE */
-		display: flex;
-		/* #endif */
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: center;
-		padding: 0;
-		font-size: 14px;
-		background-color: #ffffff;
-		margin-top:160rpx;
-	}
+
 </style>

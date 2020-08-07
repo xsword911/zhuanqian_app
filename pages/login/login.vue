@@ -40,7 +40,7 @@
 		</view>
 		
 		<!-- 登录按钮 -->
-		<view class="login">
+		<view class="login btn_style">
 			<button type="default" class="login_btn" @tap="bindLogin" hover-class="btn_hover">登录</button>
 		</view>
 		
@@ -234,7 +234,6 @@ export default{
 		color:#000;
 		font-size:15px;
 		/* padding:10rpx 0; */
-		background-color:#fcd030;
 	}
 	.savePwdGroup{
 		margin-top:10rpx;

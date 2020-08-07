@@ -37,7 +37,6 @@
 import storage from "@/api/storage.js";
 import util from "@/common/util.js";
 import api from "@/api/api.js";
-import utilCore from "@/api/utilCore.js";
 export default{
 	data() {
 		return {
@@ -56,30 +55,31 @@ export default{
 		}
 	},
 	onLoad() {
-		this.userEn = storage.getMyInfo();  //获取我的信息
+		//this.userEn = storage.getMyInfo();  //获取我的信息
 	},
 	onShow(){
-		this.userEn = storage.getMyInfo();  //获取我的信息
+		//this.userEn = storage.getMyInfo();  //获取我的信息
 		this.uid = storage.getUid();  //获取uid
-		this.loginType = storage.getLoginType();  //获取登录方式
+		this.getMyInfo();
+		//this.loginType = storage.getLoginType();  //获取登录方式
 		//this.isDeviceId();   //是否是游客登录
 	},
 	methods:{
-		//登录方式为设备号时强制跳转到登录页
-		isDeviceId(){
-			if(this.loginType == 0){
-				uni.switchTab({
-					url: '/pages/my/my'
-				});
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
-				return;
-			}else{
-				this.getMyBankInfo(); //获取我的绑定银行卡信息
-				this.getMyInfo();  //刷新我的信息
-			} 
-		},
+		// //登录方式为设备号时强制跳转到登录页
+		// isDeviceId(){
+		// 	if(this.loginType == 0){
+		// 		uni.switchTab({
+		// 			url: '/pages/my/my'
+		// 		});
+		// 		uni.navigateTo({
+		// 			url: '/pages/login/login'
+		// 		})
+		// 		return;
+		// 	}else{
+		// 		this.getMyBankInfo(); //获取我的绑定银行卡信息
+		// 		this.getMyInfo();  //刷新我的信息
+		// 	} 
+		// },
 		
 		//刷新我的信息
 		getMyInfo(){

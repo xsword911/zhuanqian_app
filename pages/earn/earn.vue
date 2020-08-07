@@ -30,16 +30,20 @@
 	<view class="uni-margin-wrap">
 		<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" 
 		:interval="interval" :duration="duration">
-			<swiper-item>
-				<view class="swiper-item "><image src="/static/img/banner1.png" mode=""></image></view>
+			<swiper-item v-for="(item, index) in run" :key="index" @tap="toUrl(item.toUrl)">
+				<view class="swiper-item "><image :src="item.imgUrl" mode=""></image></view>
 			</swiper-item>
-			<swiper-item>
+<!-- 			<swiper-item>
 				<view class="swiper-item "><image src="/static/img/banner2.png" mode=""></image></view>
 			</swiper-item>
 			<swiper-item>
 				<view class="swiper-item "><image src="/static/img/banner3.png" mode=""></image></view>
-			</swiper-item>
+			</swiper-item> -->
 		</swiper>
+	</view>
+	
+	<view class="example-body">
+		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :text="runHorseEn.content" @tap="toUrl"/>
 	</view>
 	
 		<view class="content main">
@@ -75,9 +79,11 @@
 		</view>
 		
 		<!-- 任务提示弹窗 -->
-		<tui-modal :show="modal8" @cancel="hide8" :custom="true" style="position:relative;">
+		<tui-modal :show="modal8" @cancel="hide8" :custom="true" 
+		style="position:relative;" 
+		:padding="noticePadding">	
 			<view class="tui-modal-custom">
-				<view class="close" @tap="hide8"><tui-icon name="shut" :size="16"></tui-icon></view>
+				<view class="close" @tap="hide8"><tui-icon name="shut" :size="16"></tui-icon></view>	
 				<view class="info">
 					<view class="box" v-show="type == 0">
 						<text class="mar_b info_title">{{title}}</text>
@@ -200,6 +206,25 @@
 						</view>
 					</view>
 					
+					<view class="lay_notice" v-show="type == 100">
+						<view class="lay_notice_title">
+							{{noticeEn.title}}
+						</view>
+						<view class="lay_notice_time">
+							{{noticeEn.updTime}}
+						</view>
+						<scroll-view scroll-y="true" class="lay_scroll">
+							<view class="lay_main">
+								<view class="lay_img">
+									<image :src="noticeEn.imgUrl" mode=""></image>
+								</view>
+								<view class="lay_test">
+									{{noticeEn.content}}
+								</view>
+							</view>
+						</scroll-view>
+					</view>
+					
 				</view>
 			</view>
 		</tui-modal>
@@ -213,10 +238,12 @@ import api from "@/api/api.js";
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
+import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 export default{
 	comments:{
 		tuiModal,
-		tuiRoundProgress
+		tuiRoundProgress,
+		uniNoticeBar
 	},
 	filters:{
 		//金币转换现金计算
@@ -235,6 +262,7 @@ export default{
 			myCoin: 0,  //我的金币
 			todayCoin: 0,  //今日金币
 			earn: [],  //赚赚活动列表
+			noticePadding: "0",  //弹窗的padding属性
 			modal8: false,  //控制金币换现金弹窗显示
 			text: null, //弹窗的文字内容
 			type: 0, //弹窗类型
@@ -251,13 +279,17 @@ export default{
 			intervalID: null,  //定时器id
 			timeRoundProgress: 0,//倒计时进度条
 			uid: "",  //uid
-			
+			runHorseEn: "", //跑马灯文字
+			noticeId: 0,  //最新公告id
+			isShowNotice: true,   //是否显示公告
+			noticeEn: [],    //公告信息
 			
 			background: ['color1', 'color2', 'color3'],
 			indicatorDots: true,
 			autoplay: true,
 			interval: 3000,
-			duration: 500
+			duration: 500,
+			run: [],  //轮播图列表
 		}
 	},
 	onLoad() {
@@ -271,8 +303,46 @@ export default{
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
 		this.getTaskList();  //获取赚赚列表
+		this.getRun();//获取轮播图列表
+		this.getRunHorse();   //获取跑马灯内容
+		this.getNotice();    //获取公告
+		this.noticePadding = "0";  //重置公告弹窗
 	},
 	methods:{
+		//获取公告
+		getNotice(){
+			api.getNotice({type: 2, state: 1}, (res)=>{
+				let data = api.getData(res).data;
+				this.noticeEn = data[0];
+				if(this.noticeId < this.noticeEn.id){
+					this.noticeId = this.noticeEn.id;
+					this.show8(100);  //公告弹窗
+				}
+			});
+		},
+		//跑马灯点击跳转外部链接
+		toUrl(){
+			window.location.href = 'https://' + this.runHorseEn.toUrl;
+		},
+		//获取跑马灯文字内容
+		getRunHorse(){
+			api.getNotice({type: 1, state: 1}, (res)=>{
+				let data = api.getData(res).data;
+				this.runHorseEn = data[0];
+			});
+		},
+		//轮播图点击跳转到外部链接
+		toUrl(url){
+			window.location.href = 'https://' + url;
+		},
+		//获取轮播图列表
+		getRun(){
+			api.getNotice({type: 0, state: 1}, (res)=>{
+				let data = api.getData(res).data;
+				data = data.slice(0, 5);
+				this.run = data;
+			});
+		},
 		//刷新我的信息
 		getMyInfo(){
 			api.getUserByUid({uid: this.uid}, (res)=>{
@@ -352,7 +422,11 @@ export default{
 			if(item == -2){
 				this.type = item;
 				return;
-			};
+			}else if(item == 100){
+				this.type = item;
+				return;
+			}
+			this.noticePadding = "40rpx 64rpx";
 			this.type = item.type;
 			this.text = item.rule;
 			this.title = item.title;
@@ -641,5 +715,50 @@ export default{
 	}
 	.uni-bg-blue{
 		background:#007AFF; color:#FFF;
+	}
+	.example-body {
+		/* #ifndef APP-NVUE */
+		display: flex;
+		/* #endif */
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		font-size: 14px;
+		background-color: #ffffff;
+		margin-top:10rpx;
+	}
+	
+	
+	.lay_notice{
+		width:100%;
+		background-image: linear-gradient(#FCD030, #fff);
+		border-radius:20rpx;
+		padding:60rpx 20rpx 20rpx;
+		box-sizing:border-box;
+	}
+	.lay_notice_title{
+		width:100%;
+		font-size:18px;
+		text-align:center;
+		margin-bottom:20rpx;
+		font-weight:bold;
+	}
+	.lay_notice_time{
+		width:100%;
+		font-size:14px;
+		text-align:center;
+		margin-bottom:40rpx;
+	}
+	.lay_scroll{
+		height:200px; 
+		background-color: #fff; 
+		border-radius:20rpx; 
+		padding:20rpx; 
+		box-sizing:border-box;
+	}
+	.lay_img{
+		width:100%;
+		height:auto;
 	}
 </style>

@@ -61,6 +61,26 @@
 			"navigationBarTitleText": "提现"
 		}
 	},{
+		"path": "pages/extractMoney/extractMoney1/extractMoney1",
+		"style": {
+			"navigationBarTitleText": "提现"
+		}
+	},{
+		"path": "pages/recharge/recharge",
+		"style": {
+			"navigationBarTitleText": "充值"
+		}
+	},{
+		"path": "pages/recharge/pay/pay",
+		"style": {
+			"navigationBarTitleText": "支付"
+		}
+	},{
+		"path": "pages/recharge/payConfirm/payConfirm",
+		"style": {
+			"navigationBarTitleText": "确认支付"
+		}
+	},{
 		"path": "pages/my/more/more",
 		"style": {
 			"navigationBarTitleText": "更多"
@@ -69,6 +89,21 @@
 		"path": "pages/my/setting/setting",
 		"style": {
 			"navigationBarTitleText": "设置"
+		}
+	},{
+		"path": "pages/message/message",
+		"style": {
+			"navigationBarTitleText": "站内信"
+		}
+	},{
+		"path": "pages/notice/notice",
+		"style": {
+			"navigationBarTitleText": "公告"
+		}
+	},{
+		"path": "pages/notice/noticeDetails/noticeDetails",
+		"style": {
+			"navigationBarTitleText": "公告详情"
 		}
 	},{
 		"path": "pages/my/setting/updMyInfo/updMyInfo",

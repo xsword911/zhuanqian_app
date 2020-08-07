@@ -67,7 +67,7 @@
 			</view>
 		</view>
 		
-		<view class="submit">
+		<view class="submit btn_style">
 			<button type="default" v-if="type == '0'" @tap="updSubmit" hover-class="btn_hover">提交修改</button>
 			<button type="default" v-if="type == '1'" @tap="addSubmit" hover-class="btn_hover">提交添加</button>
 		</view>
@@ -234,7 +234,6 @@ export default{
 		margin-top:100rpx;
 	}
 	.submit button{
-		background-color:#FCD030;
 		border-radius:40rpx;
 		font-size:15px;
 	}

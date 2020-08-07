@@ -21,7 +21,7 @@
 		</view>
 		
 		<view class="data_lack" v-show="!isBankShow">
-			<view class="lack_box">
+			<view class="lack_box btn_style">
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还未绑定银行卡</text>
 				<button type="default" class="coin_query" @tap="toAddBank" hover-class="btn_hover">去绑定银行卡</button>
@@ -161,7 +161,6 @@ export default{
 	}
 	.coin_query{
 		margin-top:80rpx;
-		background-color:#fcd030;
 		font-size:16px;
 		border-radius:40rpx;
 		width:400rpx;
