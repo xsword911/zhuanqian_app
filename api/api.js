@@ -113,6 +113,11 @@ const api = {
 	//查询消息列表
 	getMsg: function(path, funSuccess) {httpUtil.post('message/getMsg', path, funSuccess);},
 	
+	//查询未读消息数
+	getNotReadMsgSum: function(path, funSuccess) {httpUtil.post('message/getNotReadMsgSum', path, funSuccess);},
+	
+	//设置消息已读
+	readMsg: function(path, funSuccess) {httpUtil.post('message/readMsg', path, funSuccess);},
 };
 
 export default api;

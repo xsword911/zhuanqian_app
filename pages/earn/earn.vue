@@ -283,6 +283,7 @@ export default{
 			noticeId: 0,  //最新公告id
 			isShowNotice: true,   //是否显示公告
 			noticeEn: [],    //公告信息
+			notReadMsgSum: null,  //未读消息数
 			
 			background: ['color1', 'color2', 'color3'],
 			indicatorDots: true,
@@ -307,8 +308,22 @@ export default{
 		this.getRunHorse();   //获取跑马灯内容
 		this.getNotice();    //获取公告
 		this.noticePadding = "0";  //重置公告弹窗
+		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//查询未读消息数
+		getNotReadMsgSum(){
+			api.getNotReadMsgSum({uid: this.uid}, (res)=>{
+				this.notReadMsgSum = api.getData(res);
+				//有未读消息时tabbar显示红点提示
+				if(this.notReadMsgSum > 0){
+					uni.setTabBarBadge({
+					  index: 3,
+					  text: this.notReadMsgSum + ''
+					})
+				}else uni.hideTabBarRedDot({index:3})  //没有未读消息时tabba移除红点提示
+			});
+		},
 		//获取公告
 		getNotice(){
 			api.getNotice({type: 2, state: 1}, (res)=>{
@@ -742,7 +757,6 @@ export default{
 		font-size:18px;
 		text-align:center;
 		margin-bottom:20rpx;
-		font-weight:bold;
 	}
 	.lay_notice_time{
 		width:100%;

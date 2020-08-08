@@ -90,12 +90,15 @@
 			<button class="share" hover-class="func_hover" type="default" @tap="toMessage">
 				<view class="func_left">
 					<view class="func_img">
-						<image src="/static/img/share2.png" mode="widthFix"></image>
+						<image src="/static/img/msg.png" mode="widthFix"></image>
 					</view>
 					<text class="func_test">站内信</text>
 				</view>
 				
-				<view class="func_right">
+				<view class="func_right lay_badge">
+					<view class="tui-badge-box" v-show="notReadMsgSum == 0 ? false : true">
+						<tui-badge type="danger">{{notReadMsgSum}}</tui-badge>
+					</view>
 					<tui-icon name="arrowright" :size="30"></tui-icon>
 				</view>
 			</button>
@@ -154,6 +157,7 @@ export default{
 			modal8: false,  //控制金币换现金弹窗显示
 			uid: "",  //uid
 			loginType: null, //登录方式
+			notReadMsgSum: 0,  //未读消息数
 		}
 	},
 	onLoad() {
@@ -169,8 +173,22 @@ export default{
 		this.uid = storage.getUid();  //获取uid
 		this.getMyInfo();  //刷新我的信息
 		this.getGoldAdd(); //获取今日金币
+		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//查询未读消息数
+		getNotReadMsgSum(){
+			api.getNotReadMsgSum({uid: this.uid}, (res)=>{
+				this.notReadMsgSum = api.getData(res);
+				//有未读消息时tabbar显示红点提示
+				if(this.notReadMsgSum > 0){
+					uni.setTabBarBadge({
+					  index: 3,
+					  text: this.notReadMsgSum + ''
+					})
+				}else uni.hideTabBarRedDot({index:3})  //没有未读消息时tabba移除红点提示
+			});
+		},
 		//获取用户名
 		getName(){
 			//游客登录
@@ -521,5 +539,9 @@ export default{
 	}
 	.func_hover[type = default]{
 		background-color: #EEEEEE;
+	}
+	.lay_badge{
+		display:flex;
+		align-items:center;
 	}
 </style>

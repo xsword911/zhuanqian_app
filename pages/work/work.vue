@@ -331,6 +331,7 @@ export default{
 			intervalID: null,  //定时器id
 			timeRoundProgress: 0,//倒计时进度条
 			uid: "",  //uid
+			notReadMsgSum: null,  //未读消息数
 		}
 	},
 	onLoad() {
@@ -347,8 +348,22 @@ export default{
 		this.getTaskList();  //获取任务列表
 		this.getSignProgress();  //查询奖励信息
 		this.timeAuto();  //开启计时器
+		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//查询未读消息数
+		getNotReadMsgSum(){
+			api.getNotReadMsgSum({uid: this.uid}, (res)=>{
+				this.notReadMsgSum = api.getData(res);
+				//有未读消息时tabbar显示红点提示
+				if(this.notReadMsgSum > 0){
+					uni.setTabBarBadge({
+					  index: 3,
+					  text: this.notReadMsgSum + ''
+					})
+				}else uni.hideTabBarRedDot({index:3})  //没有未读消息时tabba移除红点提示
+			});
+		},
 		//计算圆形进度条长度
 		computeLength(){
 			if(this.unit == '小时') this.timeRoundProgress = parseFloat(100 - [(this.range / 24) * 100]);
