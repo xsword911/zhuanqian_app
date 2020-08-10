@@ -19,5 +19,15 @@ module.exports = {
 	//字符串转数组
 	str2Arr: function(arr, sp){
 		return arr.split(sp);
-	}
+	},
+	
+	//对象转webUrl字符串
+	obj2Url: function(obj){
+		return encodeURIComponent(JSON.stringify(obj));
+	},
+	
+	//webUrl字符串转对象
+	url2Obj: function(obj){
+		return JSON.parse(decodeURIComponent(obj));
+	},
 } 

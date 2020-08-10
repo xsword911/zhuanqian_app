@@ -1,29 +1,29 @@
 <template>
-	<view class="container" style="padding:20rpx 0;">
+	<view class="container" style="padding:20rpx 0; height:100vh;">
 		<view class="lay_group">
 			<view class="lay_row">
 				<view class="lay_row_test">收款平台</view>
-				<view class="lay_row_info">12121</view>
+				<view class="lay_row_info">{{rechargeAccountEn.platform}}</view>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款金额</view>
-				<view class="lay_row_info">12121</view>
+				<view class="lay_row_info">{{money}}</view>
 			</view>
 			
-			<view class="lay_row">
+<!-- 			<view class="lay_row">
 				<view class="lay_row_test">订单号</view>
 				<view class="lay_row_info">12121</view>
-			</view>
+			</view> -->
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款人</view>
-				<view class="lay_row_info">12121</view>
+				<view class="lay_row_info">{{rechargeAccountEn.owner}}</view>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款账号</view>
-				<view class="lay_row_info">12121</view>
+				<view class="lay_row_info">{{rechargeAccountEn.account}}</view>
 			</view>
 		</view>
 		
@@ -35,14 +35,23 @@
 		<view class="lay_btn btn_style">
 			<button type="default" @tap="payConfirm">确认支付</button>
 		</view>
+		
+		
+		<view class="lay_qrCode" v-if="rechargeAccountEn.imgUrl">
+			<image :src="rechargeAccountEn.imgUrl" mode=""></image>
+		</view>
 	</view>
 </template>
 
 <script>
+import tran from "@/common/tran.js";
+import api from "@/api/api.js";
+import util from "@/common/util.js";
 export default{
 	data() {
 		return {
-			key: value
+			rechargeAccountEn: "", //收款账户
+			money: null,  //存入金额
 		}
 	},
 	methods:{
@@ -54,6 +63,11 @@ export default{
 			})
 		},
 	},
+	onLoad(res) {
+		this.rechargeAccountEn = tran.url2Obj(res.rechargeAccountEn);
+		console.log(this.rechargeAccountEn);
+		this.money = res.money;
+	}
 }
 </script>
 
@@ -100,5 +114,10 @@ export default{
 	.lay_btn>button{
 		font-size:14px;
 		width:80%;
+	}
+	.lay_qrCode{
+		width:200rpx;
+		height:200rpx;
+		margin:100rpx auto 0;
 	}
 </style>

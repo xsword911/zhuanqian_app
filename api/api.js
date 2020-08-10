@@ -118,6 +118,12 @@ const api = {
 	
 	//设置消息已读
 	readMsg: function(path, funSuccess) {httpUtil.post('message/readMsg', path, funSuccess);},
+	
+	//查询可用的充值渠道(包括渠道大类)
+	getRechargeWayEnable: function(path, funSuccess) {httpUtil.post('money/rechargeWay/getRechargeWayEnable', path, funSuccess);},
+	
+	//查询可用收款账户
+	getRechargeAccountEnable: function(path, funSuccess) {httpUtil.post('money/rechargeWay/getRechargeAccountEnable', path, funSuccess);},
 };
 
 export default api;

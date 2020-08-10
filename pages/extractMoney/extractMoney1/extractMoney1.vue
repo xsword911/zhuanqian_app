@@ -1,5 +1,5 @@
 <template>
-	<view class="container" style="padding:0;">
+	<view class="container" style="padding:0; height:100vh;">
 		<view class="lay_head">
 			<view class="lay_money background_style">
 				<view class="lay_test">

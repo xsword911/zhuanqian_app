@@ -9,105 +9,17 @@
 			</view>
 		</view>
 		
-		<view class="lay_group">
+		<view class="lay_group" v-for="(item, index) in rechargeType" :key="index">
 			<view class="lay_head">
-				网银存款
+				{{item.key}}
 			</view>
 			<view class="lay_row">
-				<view class="lay_box" @tap="toPay">
+				<view class="lay_box" @tap="toPay(item1)" v-for="(item1, index1) in item.val" :key="index1">
 					<view class="lay_box_img">
 						<image src="/static/img/recharge_img.png" mode=""></image>
 					</view>
 					<view class="lay_box_test">
-						建设银行
-					</view>
-				</view>
-				<view class="lay_box" @tap="toPay">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						建设银行
-					</view>
-				</view>
-				<view class="lay_box" @tap="toPay">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						在线(微信、支付宝、云闪付)
-					</view>
-				</view>
-				<view class="lay_box" @tap="toPay">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						网银
-					</view>
-				</view>
-			</view>
-		</view>
-		
-		<view class="lay_group">
-			<view class="lay_head">
-				微信
-			</view>
-			<view class="lay_row">
-				<view class="lay_box" @tap="toPay">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						建设银行
-					</view>
-				</view>
-				<view class="lay_box" @tap="toPay">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						在线(微信、支付宝、云闪付)
-					</view>
-				</view>
-				<view class="lay_box" @tap="toPay">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						网银
-					</view>
-				</view>
-			</view>
-		</view>
-		
-		<view class="lay_group">
-			<view class="lay_head">
-				支付宝
-			</view>
-			<view class="lay_row">
-				<view class="lay_box">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						建设银行
-					</view>
-				</view>
-				<view class="lay_box">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						在线(微信、支付宝、云闪付)
-					</view>
-				</view>
-				<view class="lay_box">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						网银
+						{{item1.wayName}}
 					</view>
 				</view>
 			</view>
@@ -119,17 +31,20 @@
 <script>
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import tran from "@/common/tran.js";
 export default{
 	data() {
 		return {
 			money: "",    //余额
 			userEn: [],  //用户信息
 			uid: "",  //uid
+			rechargeType: [],  //充值渠道大类列表
 		}
 	},
 	onShow() {
 		this.uid = storage.getUid();  //获取用户id
 		this.getUserInfo();  //获取用户信息
+		this.getRechargeType();  //获取充值渠道大类列表
 	},
 	methods:{
 		//获取用户信息
@@ -140,10 +55,18 @@ export default{
 			});
 		},
 		//跳转到支付页面
-		toPay(){
+		toPay(data){
 			uni.navigateTo({
-				url:"/pages/recharge/pay/pay"
+				// url:"/pages/recharge/pay/pay?data=" + encodeURIComponent(JSON.stringify(data1))
+				url:"/pages/recharge/pay/pay?data=" + tran.obj2Url(data)
 			})
+		},
+		//获取充值渠道大类列表
+		getRechargeType(){
+			api.getRechargeWayEnable({}, (res)=>{
+				let data = api.getData(res);
+				this.rechargeType = data;
+			});
 		},
 	}
 }

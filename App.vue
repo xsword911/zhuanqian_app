@@ -62,7 +62,7 @@ export default {
 		font-size:16px;
 		background-color: #fbf9fe;
 		width:100%;
-		height:100vh;
+		height:100%;
 	}
 	image{
 		width:100%;
