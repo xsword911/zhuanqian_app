@@ -59,7 +59,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)" hover-class="setting_hover" type="default" style="line-height: 1.8;">
+<!-- 			<button class="setting" @tap="toUpdInfo('pwd', '密码', userEn.pwd)" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">修改密码</text>
 				</view>
@@ -67,7 +67,7 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</button>
+			</button> -->
 			
 			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
@@ -91,7 +91,7 @@
 				</view>
 			</button>
 			
-			<button class="setting" @tap="toBank" hover-class="setting_hover" type="default" style="line-height: 1.8;">
+<!-- 			<button class="setting" @tap="toBank" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
 					<text class="func_test">银行卡</text>
 				</view>
@@ -99,7 +99,7 @@
 				<view class="func_right">
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
-			</button>
+			</button> -->
 		</view>
 	</view>
 </template>

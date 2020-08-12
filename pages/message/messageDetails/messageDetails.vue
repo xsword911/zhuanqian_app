@@ -44,7 +44,7 @@ export default{
 				count: 10,
 				title: this.title
 			};
-			api.getMsg(data, (res)=>{
+			api.getMssage(data, (res)=>{
 				let data = api.getData(res).data;
 				this.msgEn = data[0];
 				this.userUid = this.msgEn.to;

@@ -68,18 +68,91 @@
 				</view>
 			</swiper-item>
 			
-			<!-- 提现明细 -->
+			
+			
+			<!-- 充值明细 -->
 			<swiper-item class="swiper-item"  style="flex: 1;">
-				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow" 
-				@scrolltolower="getMoneyDraw(1)" lower-threshold="40" :refresher-enabled="true"
+				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyRechargeShow" 
+				@scrolltolower="getMoneyRecharge(1)" lower-threshold="40" :refresher-enabled="true"
 				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
 					<view class="item1" >
 						<!-- 筛选时间 -->
 						<view class="search_column" >
 							<view class="" style="display:flex; align-items:center;">
-								<input type="text" value="" v-model="extractMoneyBegTime" :disabled="true" @tap="openDrawer(1)" placeholder="开始时间"/>
+								<input type="text" value="" v-model="moneyRechargeBegTime" :disabled="true" @tap="openDrawer(1)" placeholder="开始时间"/>
 								<text>至</text>
-								<input type="text" value="" v-model="extractMoneyEndTime" :disabled="true" @tap="openDrawer(1)" placeholder="结束时间"/>
+								<input type="text" value="" v-model="moneyRechargeEndTime" :disabled="true" @tap="openDrawer(1)" placeholder="结束时间"/>
+							</view>
+							<view class="sea_btn btn_style">
+								<button type="default" @tap="getMoneyRecharge(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
+							</view>
+						</view>
+						<view class="income" v-for="(item,index) in moneyRechargeList" :key='index' @tap="moneyRechargeOpen(item.id)">
+							<view class="incomeTime">
+								<view class="">
+									<text v-show="item.state == -1">未提交</text>
+									<text v-show="item.state == 0">充值申请</text>
+									<text v-show="item.state == 1">充值成功</text>
+									<text v-show="item.state == 2">充值失败</text>
+								</view>
+								<view class="moneyTran_time">
+									<!-- <text v-show="item.state == 0">{{item.addTime}}</text> -->
+									<text>{{item.addTime}}</text>
+								</view>
+							</view>
+							
+							<view class="incomeNum">
+								<text>{{item.money}} 元</text>
+								<view class="open">
+									<tui-icon name="arrowdown" :size="20" v-show="!item.openMoneyRechargeTag"></tui-icon>
+									<tui-icon name="arrowup" :size="20" v-show="item.openMoneyRechargeTag"></tui-icon>
+								</view>
+							</view>
+							
+							<view class="open_box" v-show="item.id == openMoneyRechargeId">
+								<view class="open_column">
+									<view class="open_test">账单号：</view>
+									<text class="income_data" selectable="true">{{item.sn}}</text>
+								</view>
+<!-- 								<view class="open_column">
+									<view class="open_test">状态：</view>
+									<text class="income_data" v-show="item.state == 0">未审核</text>
+									<text class="income_data" v-show="item.state == 1">审核通过</text>
+									<text class="income_data" v-show="item.state == 2">审核未通过</text>
+								</view> -->
+							</view>
+						</view>
+					</view>
+					
+					<!--加载loadding-->
+					<tui-loadmore v-if="moneyRechargeLoadding" :index="3" type="primary"></tui-loadmore>
+					<tui-nomore v-if="!moneyRechargePullUpOn"></tui-nomore>
+					<!--加载loadding-->
+				</scroll-view>
+				
+				<view class="data_lack" v-show="!moneyRechargeShow">
+					<view class="lack_box">
+						<tui-icon name="nodata" :size="120"></tui-icon>
+						<text class="lack_test">暂无数据</text>
+						<button type="default" class="coin_query" hover-class="btn_hover" @tap="toExtractMoney">去充值</button>
+					</view>
+				</view>
+			</swiper-item>
+			
+			
+			
+			<!-- 提现明细 -->
+			<swiper-item class="swiper-item"  style="flex: 1;">
+				<scroll-view scroll-y="true" id="swiper" :show-scrollbar="true"  style="flex: 1;" v-show="moneyDrawShow" 
+				@scrolltolower="getMoneyDraw(1)" lower-threshold="40" :refresher-enabled="true"
+				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
+					<view class="item2" >
+						<!-- 筛选时间 -->
+						<view class="search_column" >
+							<view class="" style="display:flex; align-items:center;">
+								<input type="text" value="" v-model="extractMoneyBegTime" :disabled="true" @tap="openDrawer(2)" placeholder="开始时间"/>
+								<text>至</text>
+								<input type="text" value="" v-model="extractMoneyEndTime" :disabled="true" @tap="openDrawer(2)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn btn_style">
 								<button type="default" @tap="getMoneyDraw(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
@@ -141,13 +214,13 @@
 				<scroll-view scroll-y="true" id="swiper"  :show-scrollbar="true"  style="flex: 1;" v-show="moneyShow" 
 				@scrolltolower="getMoney(1)" lower-threshold="40":refresher-enabled="true"
 				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
-					<view class="item2" >
+					<view class="item3" >
 						<!-- 筛选时间 -->
 						<view class="search_column" >
 							<view class="" style="display:flex; align-items:center;">
-								<input type="text" value="" v-model="moneyBegTime" :disabled="true" @tap="openDrawer(2)" placeholder="开始时间"/>
+								<input type="text" value="" v-model="moneyBegTime" :disabled="true" @tap="openDrawer(3)" placeholder="开始时间"/>
 								<text>至</text>
-								<input type="text" value="" v-model="moneyEndTime" :disabled="true" @tap="openDrawer(2)" placeholder="结束时间"/>
+								<input type="text" value="" v-model="moneyEndTime" :disabled="true" @tap="openDrawer(3)" placeholder="结束时间"/>
 							</view>
 							<view class="sea_btn btn_style">
 								<button type="default" @tap="getMoney(0)" hover-class="btn_hover" style="padding: 0;">查询</button>
@@ -204,8 +277,9 @@
 		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer">
 		 	<view class="d-container">
 				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 0"><text>转换明细</text></view>
-				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 1"><text>提现明细</text></view>
-				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 2"><text>账变明细</text></view>
+				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 1"><text>充值明细</text></view>
+				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 2"><text>提现明细</text></view>
+				<view class="" style="width:100%; text-align: center; color:#F57341;" v-show="drawerType == 3"><text>账变明细</text></view>
 				<view class="search_time">
 					<view class="search_test">
 						<text>开始时间</text>
@@ -252,6 +326,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.getMoneyTran(0);  //获取金额转换记录
 			this.getMoneyDraw(0);  //获取提现记录
 			this.getMoney(0);  //获取账变记录
+			this.getMoneyRecharge(0); //获取充值明细
 		},
         data() {
             return {
@@ -264,6 +339,16 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				openMoneyTranId: null,  //展开内容盒子的id
 				moneyTranLoadding: false, //金额转换加载数据提示
 				moneyTranPullUpOn: true,  //金额转换上拉加载数据
+				
+				moneyRechargeBegTime: "", //充值转换开始时间
+				moneyRechargeEndTime: "", //充值转换结束时间
+				moneyRechargeList:[],   //充值转换列表
+				moneyRechargeShow: true,  //充值转换列表是否显示
+				moneyRechargePage: 1,  //充值转换记录查询页数
+				openMoneyRechargeTag: false,  //展开图表控制
+				openMoneyRechargeId: null,  //展开内容盒子的id
+				moneyRechargeLoadding: false, //充值转换加载数据提示
+				moneyRechargePullUpOn: true,  //充值转换上拉加载数据
 				
 				extractMoneyBegTime: "", //提现明细开始时间
 				extractMoneyEndTime: "", //提现明细结束时间
@@ -286,7 +371,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				moneyPullUpOn: true,  //提现明细上拉加载数据
 				
 				userEn: [], //我的信息
-				items: ['转换明细', '提现明细', '账变流水'],
+				items: ['转换明细', '充值明细', '提现明细', '账变流水'],
 				current: 0,
                 newsList: [],
                 cacheTab: [],
@@ -295,16 +380,6 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				drawerBegTime: '', //抽屉开始时间 
 				drawerEndTime: '', //抽屉结束时间 
                 tabIndex: 0,
-                tabBars: [{
-                    name: '关注',
-                    id: 'guanzhu'
-                }, {
-                    name: '推荐',
-                    id: 'tuijian'
-                }, {
-                    name: '体育',
-                    id: 'tiyu',
-				}],
 				
 				type: 0,
 				startYear: 1980,
@@ -336,12 +411,20 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 					}, 200)
 				}else if(this.current == 1){
 					setTimeout(() => {
+						this.moneyRechargePage = 1;
+						this.getMoneyDraw(0);
+						this.moneyRechargePullUpOn = true;
+						this.moneyRechargeLoadding = false;
+					}, 200)
+				}
+				else if(this.current == 2){
+					setTimeout(() => {
 						this.moneyDrawPage = 1;
 						this.getMoneyDraw(0);
 						this.moneyDrawPullUpOn = true;
 						this.moneyDrawLoadding = false;
 					}, 200)
-				}else if(this.current == 2){
+				}else if(this.current == 3){
 					setTimeout(() => {
 						this.moneyPage = 1;
 						this.getMoney(0);
@@ -382,6 +465,19 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 					}, 200)
 				}else if(this.current == 1){
 					setTimeout(() => {
+						this.moneyRechargePage = 1;
+						this.getMoneyDraw(0);
+						this.moneyRechargePullUpOn = true;
+						this.moneyRechargeLoadding = false;
+						uni.stopPullDownRefresh();
+						uni.showToast({
+							title: '刷新成功',
+							icon: "none",
+							duration: 1000
+						});
+					}, 200)
+				}else if(this.current == 2){
+					setTimeout(() => {
 						this.moneyDrawPage = 1;
 						this.getMoneyDraw(0);
 						this.moneyDrawPullUpOn = true;
@@ -393,7 +489,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 							duration: 1000
 						});
 					}, 200)
-				}else if(this.current == 2){
+				}else if(this.current == 3){
 					setTimeout(() => {
 						this.moneyPage = 1;
 						this.getMoney(0);
@@ -447,6 +543,19 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				}else if(this.drawerType == 1){
 					switch (this.num){
 						case 1:
+							this.moneyRechargeBegTime = e.result;
+							this.drawerBegTime = e.result;
+							break;
+						case 2:
+							this.moneyRechargeEndTime = e.result;
+							this.drawerEndTime = e.result;
+							break;
+						default:
+							break;
+					}
+				}else if(this.drawerType == 2){
+					switch (this.num){
+						case 1:
 							this.extractMoneyBegTime = e.result;
 							this.drawerBegTime = e.result;
 							break;
@@ -457,7 +566,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 						default:
 							break;
 					}
-				}else if(this.drawerType == 2){
+				}else if(this.drawerType == 3){
 					switch (this.num){
 						case 1:
 							this.moneyBegTime = e.result;
@@ -488,10 +597,15 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 						break;
 					case 1:
 						this.drawerType =  type;
+						this.drawerEndTime = this.moneyRechargeEndTime;
+						this.drawerBegTime = this.moneyRechargeBegTime;
+						break;
+					case 2:
+						this.drawerType =  type;
 						this.drawerEndTime = this.extractMoneyEndTime;
 						this.drawerBegTime = this.extractMoneyBegTime;
 						break;
-					case 2:
+					case 3:
 						this.drawerType =  type;
 						this.drawerEndTime = this.moneyEndTime;
 						this.drawerBegTime = this.moneyBegTime;
@@ -500,6 +614,84 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 						break;
 				}
 			},
+			//获取充值明细   0:普通查询 1：加载更多数据
+			getMoneyRecharge(type){
+				let page = null;
+				if(type == 1){
+					if (!this.moneyRechargePullUpOn) return;
+					this.moneyRechargeLoadding = true;
+					this.moneyRechargePage = this.moneyRechargePage + 1;
+					page = this.moneyRechargePage;
+				}else page = 1;
+				let data = {
+					uid: this.uid,
+					page: page, 
+					count: 10,
+				};
+				if(!util.isEmpty(this.moneyRechargeBegTime)){
+					let time = this.moneyRechargeBegTime + " 00:00:00";
+					data.begAddTime = time;
+				};		
+				if(!util.isEmpty(this.moneyRechargeEndTime)){
+					let time = this.moneyRechargeEndTime + " 23:59:59";
+					data.endAddTime = time;
+				};
+				api.getMoneyRecharge(data, (res)=>{
+					let data = api.getData(res).data;
+					if(type == 0){
+						if(util.isEmpty(data))
+							this.moneyRechargeShow = false;
+							//this.isMoneyRechargeShow();  //控制转换收入明细表显示;
+						else{
+							data.forEach((item) =>{
+								item.openMoneyTag = false;
+							});
+							this.moneyRechargeList = data;
+							this.moneyRechargeShow = true;
+							if(this.triggered) this.onRestore(1);
+						}
+					}else if(type == 1){
+						if(util.isEmpty(data)){
+							this.moneyRechargeLoadding = false;
+							this.moneyRechargePullUpOn = false;
+						}else{
+							this.moneyRechargeLoadding = false;
+							data.forEach((item) =>{
+								item.openMoneyRechargeTag = false;
+								this.moneyRechargeList.push(item);
+							});
+							this.moneyRechargeShow = true;
+						}
+					}
+				});
+			},
+			// 判断充值记录列表是否有数据
+			isMoneyRechargeShow(){
+				if(util.isEmpty(this.moneyRechargeList)) this.moneyRechargeShow = false;
+				else this.moneyRechargeShow = true;
+			},
+			//充值记录列表展开内容			
+			moneyRechargeOpen(id){
+				if(this.openMoneyRechargeId == id){
+					this.openMoneyRechargeId = -1;				
+				} 
+				else
+				 this.openMoneyRechargeId = id;
+				
+				this.moneyRechargeList.forEach((item) =>{
+					if(item.id == this.openMoneyRechargeId){
+						item.openMoneyRechargeTag = true;
+					}else{
+						item.openMoneyRechargeTag = false;
+					}
+				});
+			},
+			
+			
+			
+			
+			
+			
 			//获取账变记录   0:普通查询 1：加载更多数据
 			getMoney(type){
 				let page = null;
@@ -835,7 +1027,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
         width: 750rpx;
     }
 	
-	.item0, .item1, .item2{
+	.item0, .item1, .item2, .item3{
 		overflow:auto;
 		margin:auto;
 		position:relative;
@@ -994,7 +1186,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 		text-align:center;
 	}
 	.sea_btn button{
-		font-size:14px;
+		font-size:12px;
 		color:#fff;
 		width:120rpx;
 	}

@@ -88,12 +88,12 @@
 	},{
 		"path": "pages/my/setting/setting",
 		"style": {
-			"navigationBarTitleText": "设置"
+			"navigationBarTitleText": "用户资料"
 		}
 	},{
 		"path": "pages/message/message",
 		"style": {
-			"navigationBarTitleText": "站内信"
+			"navigationBarTitleText": "站内短信"
 		}
 	},{
 		"path": "pages/notice/notice",
@@ -108,12 +108,17 @@
 	},{
 		"path": "pages/message/messageDetails/messageDetails",
 		"style": {
-			"navigationBarTitleText": "站内信详情"
+			"navigationBarTitleText": "站内短信详情"
 		}
 	},{
 		"path": "pages/my/setting/updMyInfo/updMyInfo",
 		"style": {
 			"navigationBarTitleText": "修改信息"
+		}
+	},{
+		"path": "pages/my/updPwd/updPwd",
+		"style": {
+			"navigationBarTitleText": "修改密码"
 		}
 	},{
 		"path": "pages/my/setting/updMyImg/updMyImg",
@@ -157,6 +162,41 @@
 		"path": "pages/my/detailed/detailed",
 		"style": {
 			"navigationBarTitleText": "明细",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/my/userStatisticsMonth/userStatisticsMonth",
+		"style": {
+			"navigationBarTitleText": "个人总览",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/my/userStatisticsDay/userStatisticsDay",
+		"style": {
+			"navigationBarTitleText": "个人报表",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/agent/agentExplain/agentExplain",
+		"style": {
+			"navigationBarTitleText": "代理说明"
+		}
+	},{
+		"path": "pages/agent/teamOverview/teamOverview",
+		"style": {
+			"navigationBarTitleText": "团队总览",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/agent/teamTable/teamTable",
+		"style": {
+			"navigationBarTitleText": "团队报表",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/agent/userTable/userTable",
+		"style": {
+			"navigationBarTitleText": "用户列表",
 			"enablePullDownRefresh": true
 		}
 	}],

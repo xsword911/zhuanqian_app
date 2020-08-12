@@ -16,14 +16,14 @@
 		</view>
 		
 		<view class="lay_test">
-			温馨提示:最小金额：<text>100</text>；最大金额：<text>10000</text>
+			温馨提示:最小金额：<text>{{moneyMin}}</text>；最大金额：<text>{{moneyMax}}</text>
 		</view>
 		<view class="lay_test" style="color: #dc3b40;">
 			请备份订单号，并填写进您的汇款备注栏！
 		</view>
 		
 		<view class="lay_btn btn_style">
-			<button type="default" @tap="getRechargeAccountEnable">下一步</button>
+			<button type="default" @tap="getRechargeAccountEnable" hover-class="btn_hover">下一步</button>
 		</view>
 	</view>
 </template>
@@ -32,6 +32,7 @@
 import tran from "@/common/tran.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
@@ -39,6 +40,9 @@ export default{
 			desc: "",  //备注
 			rechargeData: '',  //上级页面传过来的充值信息
 			rechargeAccountEn: "", //收款账户
+			uid: "",  //用户id
+			moneyMin: 50, //充值最小金额
+			moneyMax: 10000, //充值最大金额
 		}
 	},
 	methods:{
@@ -50,23 +54,45 @@ export default{
 				    title: '存入金额不能为空'
 				});
 				return;
+			}else if(this.money > this.moneyMax || this.money < this.moneyMin){
+				uni.showToast({
+				    icon: 'none',
+				    title: '存入金额错误'
+				});
+				return;
 			}
-			api.getRechargeAccountEnable({wayId: this.rechargeData.wayId, lv: 0}, (res)=>{
-				let data = api.getData(res).data;
-				this.rechargeAccountEn = data[0];
-				this.toPayConfirm();
+			api.recharge({
+				wayId: this.rechargeData.wayId, 
+				money: this.money,
+				uid: this.uid
+				}, (res)=>{
+					let code = api.getCode(res);
+					if(code == 0){
+						let data = api.getData(res);
+						this.rechargeAccountEn = data;
+						this.toPayConfirm();
+					}else{
+						let msg = api.getMsg(res);
+						uni.showToast({
+						    icon: 'none',
+						    title: msg
+						});
+						return;
+					}
+
 			});
 		},
 		//跳转到确认支付界面  
 		toPayConfirm(){
 			uni.navigateTo({
 				url: "/pages/recharge/payConfirm/payConfirm?rechargeAccountEn=" + tran.obj2Url(this.rechargeAccountEn)
-				+ "&money=" + this.money + "&desc" + this.desc
+				+ "&desc=" + this.desc + "&wayId=" + this.rechargeData.wayId
 			})
 		},
 	},
 	onLoad(res) {
 		this.rechargeData = tran.url2Obj(res.data);
+		this.uid = storage.getUid();  //获取uid
 	}
 }
 </script>

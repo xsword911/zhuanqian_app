@@ -13,15 +13,16 @@
 			<view class="lay_head">
 				{{item.key}}
 			</view>
-			<view class="lay_row">
-				<view class="lay_box" @tap="toPay(item1)" v-for="(item1, index1) in item.val" :key="index1">
+			<view class="lay_row" style="text-align: left;">
+				<button class="lay_box" @tap="toPay(item1)" v-for="(item1, index1) in item.val" :key="index1" 
+				type="default" hover-class="lay_hover">
 					<view class="lay_box_img">
 						<image src="/static/img/recharge_img.png" mode=""></image>
 					</view>
 					<view class="lay_box_test">
 						{{item1.wayName}}
 					</view>
-				</view>
+				</button>
 			</view>
 		</view>
 		
@@ -121,6 +122,10 @@ export default{
 		flex-direction: column;
 		justify-content:center;
 		align-items: center;
+		background-color:#fff;
+		padding:0; 
+		margin:0;
+		border-radius:0; 
 	}
 	.lay_box_img{
 		width:70rpx;
@@ -129,5 +134,8 @@ export default{
 	.lay_box_test{
 		font-size:14px;
 		margin-top:10rpx;
+	}
+	.lay_hover[type = default]{
+		background-color:#F8F8F8;
 	}
 </style>

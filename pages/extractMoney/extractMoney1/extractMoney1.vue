@@ -53,6 +53,7 @@
 import storage from "@/api/storage.js";
 import util from "@/common/util.js";
 import api from "@/api/api.js";
+import md5 from "@/common/md5.js";
 export default{
 	data() {
 		return {
@@ -151,7 +152,7 @@ export default{
 			api.addMoneyDraw({
 				uid: this.uid, 
 				money: this.money,
-				pwdCash: this.pwdCash
+				pwdCash: md5(this.pwdCash)
 			}, (res)=>{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);

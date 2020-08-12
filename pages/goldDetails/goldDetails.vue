@@ -363,7 +363,7 @@ export default {
 		text-align:center;
 	}
 	.sea_btn button{
-		font-size:14px;
+		font-size:12px;
 		color:#fff;
 		width:120rpx;
 	}

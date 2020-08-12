@@ -373,7 +373,7 @@
 	.sea_btn {}
 
 	.sea_btn button {
-		font-size: 14px;
+		font-size: 12px;
 		background-color: #FCD030;
 		color: #fff;
 		width: 120rpx;

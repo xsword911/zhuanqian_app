@@ -3,27 +3,27 @@
 		<view class="lay_group">
 			<view class="lay_row">
 				<view class="lay_row_test">收款平台</view>
-				<view class="lay_row_info">{{rechargeAccountEn.platform}}</view>
+				<view class="lay_row_info">{{recharge.platform}}</view>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款金额</view>
-				<view class="lay_row_info">{{money}}</view>
+				<view class="lay_row_info">{{recharge.money}}</view>
 			</view>
 			
-<!-- 			<view class="lay_row">
+			<view class="lay_row">
 				<view class="lay_row_test">订单号</view>
-				<view class="lay_row_info">12121</view>
-			</view> -->
+				<view class="lay_row_info">{{recharge.sn}}</view>
+			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款人</view>
-				<view class="lay_row_info">{{rechargeAccountEn.owner}}</view>
+				<view class="lay_row_info">{{recharge.owner}}</view>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款账号</view>
-				<view class="lay_row_info">{{rechargeAccountEn.account}}</view>
+				<view class="lay_row_info">{{recharge.account}}</view>
 			</view>
 		</view>
 		
@@ -33,12 +33,12 @@
 		</view> -->
 		
 		<view class="lay_btn btn_style">
-			<button type="default" @tap="payConfirm">确认支付</button>
+			<button type="default" @tap="payConfirm" hover-class="btn_hover">确认支付</button>
 		</view>
 		
 		
-		<view class="lay_qrCode" v-if="rechargeAccountEn.imgUrl">
-			<image :src="rechargeAccountEn.imgUrl" mode=""></image>
+		<view class="lay_qrCode" v-if="recharge.imgUrl">
+			<image :src="recharge.imgUrl" mode=""></image>
 		</view>
 	</view>
 </template>
@@ -47,26 +47,60 @@
 import tran from "@/common/tran.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
-			rechargeAccountEn: "", //收款账户
-			money: null,  //存入金额
+			recharge: "", //申请充值返回信息
+			wayId: null,  //渠道id
+			uid: "",  //用户id
 		}
 	},
 	methods:{
 		//提交
 		payConfirm(){
+			let _this = this;
 			uni.showModal({
-				content: "您的充值申请已提交！将尽快为您确认到账",
-				showCancel: false
+				content: "确认支付",
+				success: function (res) {
+				    if (res.confirm) {
+				        api.rechargePut({
+							id: _this.recharge.id,
+							uid: _this.uid
+						}, (res)=>{
+							let code = api.getCode(res);
+							if(code == 0){
+								uni.showModal({
+									content: "您的充值申请已提交！将尽快为您确认到账",
+									showCancel: false,
+									success(res) {
+										if(res.confirm){
+											uni.reLaunch({
+											    url: '/pages/my/my'
+											});
+										}
+									}
+								});
+							}else {
+								let msg = api.getMsg(res);
+								uni.showModal({
+									content: msg,
+									showCancel: false
+								});
+							}
+						});
+				    } else if (res.cancel) {
+				        console.log('用户点击取消');
+				    }
+				}
 			})
 		},
 	},
 	onLoad(res) {
-		this.rechargeAccountEn = tran.url2Obj(res.rechargeAccountEn);
-		console.log(this.rechargeAccountEn);
-		this.money = res.money;
+		this.recharge = tran.url2Obj(res.rechargeAccountEn);  //获取充值信息
+		console.log(this.recharge);
+		this.wayId = parseInt(res.wayId);  //获取渠道id
+		this.uid = storage.getUid();  //获取uid
 	}
 }
 </script>

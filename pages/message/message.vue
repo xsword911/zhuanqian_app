@@ -47,7 +47,7 @@ export default{
 				count: 10,
 				uid: this.uid
 			};
-			api.getMsg(data, (res)=>{
+			api.getMssage(data, (res)=>{
 				let data = api.getData(res).data;
 				this.msgList = data;
 			});

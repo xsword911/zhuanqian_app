@@ -48,7 +48,7 @@
 				<view class="cap_cash">现金收益</view>
 				<view class="lay_cap_btn">
 					<view>￥<text class="profit_num">{{profit}}</text></view>
-					<button class="detailed" @tap="toDetailed" hover-class="btn_hover">明细</button>
+					<!-- <button class="detailed" @tap="toDetailed" hover-class="btn_hover">明细</button> -->
 				</view>
 			</view>
 			
@@ -60,7 +60,33 @@
 		</view>
 		
 		<!-- 功能栏 -->
-		<view class="func">
+		<view style="margin-top:20rpx;">
+			<block v-for="(item,index) in dataList" :key="index">
+				<tui-collapse :index="index" :current="current" :disabled="item.disabled" @click="change3">
+					<template v-slot:title>
+						<tui-list-cell :hover="!item.disabled" 
+						style="font-weight:bold; display: flex; align-items: center; padding:20rpx; box-sizing: border-box;">
+							<view class="func_img" style="margin-right:10rpx;">
+								<image :src="item.imgUrl" mode="widthFix"></image>
+							</view>
+							<text>{{item.name}}</text>
+						</tui-list-cell>
+					</template>
+					<template v-slot:content>
+						<tui-list-cell v-for="(item1,index1) in item.arrSub" :key="index1" :arrow="true"
+						style="display: flex; align-items: center; padding:20rpx 40rpx 20rpx 80rpx; box-sizing: border-box;"
+						@tap="toUrl(item1.toUrl)">
+							<text>{{item1.name}}</text>
+						</tui-list-cell>
+					</template>
+				</tui-collapse>
+			</block>
+		</view>
+		
+		
+		
+		
+<!-- 		<view class="func">
 			<button class="setting" @tap="toSetting" hover-class="func_hover" type="default">
 				<view class="func_left">
 					<view class="func_img">
@@ -70,7 +96,7 @@
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</button>
 			
@@ -83,7 +109,7 @@
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</button>
 			
@@ -99,7 +125,7 @@
 					<view class="tui-badge-box" v-show="notReadMsgSum == 0 ? false : true">
 						<tui-badge type="danger">{{notReadMsgSum}}</tui-badge>
 					</view>
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</button>
 			
@@ -112,10 +138,10 @@
 				</view>
 				
 				<view class="func_right">
-					<tui-icon name="arrowright" :size="30"></tui-icon>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</button>
-		</view>
+		</view> -->
 		
 		<!-- 退出/登录按钮 -->
 		<view class="btn btn_style">
@@ -126,6 +152,8 @@
 
 <script>
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
+import tuiCollapse from "@/components/tui-collapse/tui-collapse.vue";
+import tuiListCell from "@/components/tui-list-cell/tui-list-cell.vue";
 import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
@@ -133,7 +161,9 @@ import utilCore from "@/api/utilCore.js";
 export default{
 	comments:{
 		// icon
-		tuiModal
+		tuiModal,
+		tuiCollapse,
+		tuiListCell
 	},	
 	filters:{
 		//金币转换现金计算
@@ -148,6 +178,82 @@ export default{
 	},
 	data() {
 		return {
+			//手风琴效果
+			current: -1,
+			current2: -1,
+			dataList: [{
+					name: "账户管理",
+					current: 0,
+					disabled: false,
+					imgUrl:"/static/img/more2.png",
+					arrSub: [{
+						name: "用户资料",
+						toUrl:"/pages/my/setting/setting"
+					},{
+						name: "修改密码",
+						// toUrl:"/pages/my/setting/updMyInfo/updMyInfo?type=pwd&title=密码"
+						toUrl: "/pages/my/updPwd/updPwd"
+					},{
+						name: "银行卡",
+						toUrl:"/pages/my/setting/bank/bank"
+					}]
+					//用户资料 密码修改 资金密码 银行卡
+				},
+				{
+					name: "资金管理",
+					current: -1,
+					disabled: false,
+					imgUrl:"/static/img/share2.png",
+					arrSub: [{
+						name: "个人总览",
+						toUrl:"/pages/my/userStatisticsMonth/userStatisticsMonth"
+					},{
+						name: "个人报表",
+						toUrl:"/pages/my/userStatisticsDay/userStatisticsDay"
+					},{
+						name: "账变明细",
+						toUrl:"/pages/my/detailed/detailed"
+					}]
+					//个人总览(月报表) 个人报表(日报表) 账变明细
+				},
+				{
+					name: "代理管理",
+					current: -1,
+					disabled: false,
+					imgUrl:"/static/img/setting2.png",
+					arrSub: [{
+						name: "代理说明",
+						toUrl:"/pages/agent/agentExplain/agentExplain"
+					},{
+						name: "团队总览",
+						toUrl:"/pages/agent/teamOverview/teamOverview"
+					},{
+						name: "团队报表",
+						toUrl:"/pages/agent/teamTable/teamTable"
+					},{
+						name: "用户列表",
+						toUrl:"/pages/agent/userTable/userTable"
+					},{
+						name: "注册管理",
+						toUrl:"/static/img/more2.png"
+					}]
+					//代理说明 团队总览 团队报表 用户列表 注册管理
+				},
+				{
+					name: "短信公告",
+					current: -1,
+					disabled: false,
+					imgUrl:"/static/img/msg.png",
+					arrSub: [{
+						name: "站内短信",
+						toUrl:"/pages/message/message"
+					},{
+						name: "网站公告",
+						toUrl:"/pages/notice/notice"
+					}]
+					//站内短信 网站公告
+				}
+			],
 			userEn: [],  //我的信息
 			userName: '',  //用户账号
 			yqm: '',  //邀请码
@@ -176,6 +282,17 @@ export default{
 		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//折叠面板
+		change3(e) {
+			//可关闭自身
+			this.current = this.current == e.index ? -1 : e.index
+		},
+		//界面跳转
+		toUrl(url){
+			uni.navigateTo({
+				url: url
+			})
+		},
 		//查询未读消息数
 		getNotReadMsgSum(){
 			api.getNotReadMsgSum({uid: this.uid}, (res)=>{
@@ -315,7 +432,7 @@ export default{
 	}
 	.my_info{
 		width:100%;
-		height:320rpx;
+		height:260rpx;
 		padding:20rpx;
 		box-sizing:border-box;
 		display:flex;
@@ -394,6 +511,7 @@ export default{
 		border-radius:30rpx;
 		width:200rpx;
 		font-size:13px;
+		margin-top:40rpx;
 	}
 	.invite_btn{
 
@@ -404,7 +522,7 @@ export default{
 		background-color:#fff;
 		border-radius:10rpx;
 		position:absolute;
-		bottom:-140rpx;
+		bottom:-160rpx;
 		left:50%;
 		transform:translateX(-50%);
 		box-shadow: 5px 7px 10px rgb(247, 247, 247), -5px 7px 10px rgb(247, 247, 247);
@@ -465,12 +583,12 @@ export default{
 		font-size:14px;
 		margin-top:5rpx;
 		position: absolute;
-		bottom: 16rpx;
+		bottom: 26rpx;
 		left:0;
 	}
 	.cap_cash{
 		position: absolute;
-		top: 16rpx;
+		top: 26rpx;
 		left:0;
 		display: inline-block;
 		width:200rpx;
@@ -512,6 +630,7 @@ export default{
 	}
 	.func_test{
 		margin-left:12rpx;
+		font-weight:bold;
 	}
 	.func>button{
 		padding:0 20rpx;

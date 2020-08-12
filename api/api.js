@@ -44,6 +44,12 @@ const api = {
 	//修改用户信息
 	setUser: function(path, funSuccess) {httpUtil.post('user/setUser', path, funSuccess);},
 	
+	//用户修改密码
+	updPwd: function(path, funSuccess) {httpUtil.post('user/updPwd', path, funSuccess);},
+	
+	//用户修改资金密码
+	updCashPwd: function(path, funSuccess) {httpUtil.post('user/updCashPwd', path, funSuccess);},
+	
 	//查询用户绑定银行卡
 	getUserBank: function(path, funSuccess) {httpUtil.post('user/getUserBank', path, funSuccess);},
 	
@@ -111,7 +117,7 @@ const api = {
 	getNotice: function(path, funSuccess) {httpUtil.post('message/getNotice', path, funSuccess);},
 	
 	//查询消息列表
-	getMsg: function(path, funSuccess) {httpUtil.post('message/getMsg', path, funSuccess);},
+	getMssage: function(path, funSuccess) {httpUtil.post('message/getMsg', path, funSuccess);},
 	
 	//查询未读消息数
 	getNotReadMsgSum: function(path, funSuccess) {httpUtil.post('message/getNotReadMsgSum', path, funSuccess);},
@@ -122,8 +128,26 @@ const api = {
 	//查询可用的充值渠道(包括渠道大类)
 	getRechargeWayEnable: function(path, funSuccess) {httpUtil.post('money/rechargeWay/getRechargeWayEnable', path, funSuccess);},
 	
-	//查询可用收款账户
-	getRechargeAccountEnable: function(path, funSuccess) {httpUtil.post('money/rechargeWay/getRechargeAccountEnable', path, funSuccess);},
+	//申请充值
+	recharge: function(data, funSuccess) {httpUtil.post('money/rechargeWay/recharge', data, funSuccess);},
+	
+	//申请充值提交
+	rechargePut: function(path, funSuccess) {httpUtil.post('money/rechargeWay/rechargePut', path, funSuccess);},
+	
+	//查询充值记录
+	getMoneyRecharge: function(path, funSuccess) {httpUtil.post('money/getMoneyRecharge', path, funSuccess);},
+	
+	//查询用户月报表
+	getStatisticsMonth: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsMonth', path, funSuccess);},
+	
+	//查询日报表
+	getStatisticsDay: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsDay', path, funSuccess);},
+	
+	//查询团队总览
+	getStatisticsMonthGroup: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsMonthGroup', path, funSuccess);},
+	
+	//查询团队报表
+	getStatisticsDayGroup: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsDayGroup', path, funSuccess);},
 };
 
 export default api;
