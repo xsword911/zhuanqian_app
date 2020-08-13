@@ -8,75 +8,105 @@
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
 			</view>
 			<view class="sea_btn btn_style">
-				<button type="default" @tap="getStatisticsDay" hover-class="btn_hover" style="padding: 0;">查询</button>
+				<button type="default" @tap="getUserByClick" hover-class="btn_hover" style="padding: 0;">查询</button>
 			</view>
 		</view>
 		
-		<view class="lay_info" v-show="statisticsDayShow">
-			<view class="lay_box" style="width:100%;">
-				<view class="">日期：</view>
-				<view class="style_Numtest">{{statisticsDayEn.addTime}}</view>
-			</view>
-			<view class="lay_box">
-				<view class="lay_title">前一天余额：</view>
-				<view class="style_Numtest">￥{{statisticsDayEn.moneyOld}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">增加金额：</view>
-				<view class="style_Numtest">￥{{statisticsDayEn.moneyAdd}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">代理佣金：</view>
-				<view class="style_Numtest">￥{{statisticsDayEn.moneyAgency}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">减少金额：</view>
-				<view class="style_Numtest">{{statisticsDayEn.moneyLose}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">充值次数：</view>
-				<view class="style_Numtest">{{statisticsDayEn.rechargeSum}}</view>
-			</view>
-			
-			
-			<view class="lay_box">
-				<view class="lay_title">提现次数：</view>
-				<view class="style_Numtest">{{statisticsDayEn.drawSum}}</view>
-			</view>
-			
-			
-			<view class="lay_box">
-				<view class="lay_title">前一天金币：</view>
-				<view class="style_Numtest">{{statisticsDayEn.goldOld}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">得到金币：</view>
-				<view class="style_Numtest">{{statisticsDayEn.goldAdd}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title" style="width:58%;">代理奖励金币：</view>
-				<view class="style_Numtest">{{statisticsDayEn.goldAgency}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">消耗金币：</view>
-				<view class="style_Numtest">{{statisticsDayEn.goldLose}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">任务次数：</view>
-				<view class="style_Numtest">{{statisticsDayEn.taskSum}}</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="lay_title">备注：</view>
-				<view class="style_Numtest">{{statisticsDayEn.desc}}</view>
+		<view class="lay_table" v-show="statisticsDayShow">			
+			<view class="lay_row">
+				<block v-for="(item,index) in statisticsDayEn" :key="index">
+					<tui-collapse :index="index" :current="current" :disabled="item.disabled" @click="change3">
+						<template v-slot:title>
+							<tui-list-cell :hover="!item.disabled" 
+							style="display: flex; flex-direction: column; padding:20rpx; box-sizing: border-box;">
+									<view class="lay_group" style="margin-bottom:10rpx;">
+										<view class="" style="width:100%; font-weight:bold;">
+											交易日期：<text class="lay_group_title" style="font-weight:normal;">{{item.addTime}}</text>
+										</view>
+									</view>
+									<view class="lay_group">
+										<view class="" style="width:100%; font-weight:bold;">
+											用户：<text class="lay_group_title" style="font-weight:normal;">{{item.uid}}</text>
+										</view>
+									</view>
+			<!-- 					<view class="lay_group">
+									<view class="" style="width:50%;">
+										用户账号：<text>user10</text>
+									</view>
+									<view class="">
+										类型：<text>代理</text>
+									</view>
+								</view> -->
+								
+			<!-- 					<view class="lay_group">
+									<view class="" style="width:50%;">
+										盈亏：<text class="style_Numtest">0.00</text>
+									</view>
+									<view class="">
+										盈亏：<text class="style_Numtest">0.00</text>
+									</view>
+								</view> -->
+							</tui-list-cell>
+						</template>
+						<template v-slot:content>
+							<view class="lay_info">
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										前一天余额：<text class="style_Numtest">￥{{item.moneyOld}}</text>
+									</view>
+									<view class="">
+										增加金额：<text class="style_Numtest">￥{{item.moneyAdd}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										代理佣金：<text class="style_Numtest">￥{{item.moneyAgency}}</text>
+									</view>
+									<view class="">
+										减少金额：<text class="style_Numtest">￥{{item.moneyLose}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										充值次数：<text class="style_Numtest">{{item.rechargeSum}}</text>
+									</view>
+									<view class="">
+										提现次数：<text class="style_Numtest">{{item.drawSum}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										前一天金币：<text class="style_Numtest">{{item.goldOld}}</text>
+									</view>
+									<view class="">
+										得到金币：<text class="style_Numtest">{{item.goldAdd}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										代理奖励金币：<text class="style_Numtest">{{item.goldAgency}}</text>
+									</view>
+									<view class="">
+										消耗金币：<text class="style_Numtest">{{item.goldLose}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										任务次数：<text class="style_Numtest">{{item.taskSum}}</text>
+									</view>
+									<view class="">
+										备注：<text class="style_Numtest">{{item.desc}}</text>
+									</view>
+								</view>
+							</view>
+						</template>
+					</tui-collapse>
+				</block>
 			</view>
 		</view>
 		
@@ -109,8 +139,16 @@
 						<input type="text" value="" @tap="show(2)" v-model="endTime" :disabled="true" />
 					</view>
 				</view>
+				<view class="search_time">
+					<view class="search_test">
+						<text>用户名</text>
+					</view>
+					<view class="">
+						<input type="text" value="" v-model="userName" />
+					</view>
+				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getUserByClick" hover-class="btn_hover">查询</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -142,10 +180,12 @@ export default{
 			loadding: false, //加载数据提示
 			pullUpOn: true,  //上拉加载数据
 			rightDrawer: false,//抽屉开关
+			page: 1,
 			
 			statisticsDayEn: [],  //个人总览信息
 			statisticsDayShow: true,  //是否显示数据
 			
+			current: -1,
 			begTime: "", //开始时间
 			endTime: "", //结束时间
 			type: 0,
@@ -156,19 +196,37 @@ export default{
 			setDateTime: "",
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
+			userName: "",  //输入的用户id
 	    };
 	},
+	onLoad(res) {
+		if(res.userName){
+			this.uid = res.userName;
+			this.userName = res.userName;
+		} 
+	},
 	onShow() {
-		this.uid = storage.getUid();  //获取uid
-		this.getStatisticsDay();   //获取个人总览信息
+		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
+		this.getStatisticsDay(this.uid);   //获取个人总览信息
 	},
 	methods:{
+		//点击查询按钮
+		getUserByClick(){
+			if(util.isEmpty(this.userName)){
+				this.uid = storage.getUid();				 
+			} 
+			else{
+				this.uid = this.userName;				
+			}
+			this.getStatisticsDay(this.uid);  //获取个人总览信息
+		},
 		//获取个人总览信息
-		getStatisticsDay(){
+		getStatisticsDay(uid){
+			this.page = 1;
 			let data = {
-				uid: this.uid,
-				page: 1,
-				count: 5
+				uid: uid,
+				page: this.page,
+				count: 10
 			};
 			if(!util.isEmpty(this.begTime)){
 				let time = this.begTime + " 00:00:00";
@@ -182,16 +240,27 @@ export default{
 				let data = api.getData(res).data;
 				if(util.isEmpty(data)) this.statisticsDayShow = false;
 				else {
-					this.statisticsDayEn = data[0];
+					data.forEach((item, index) =>{
+						item.current = -1;
+						item.disabled = false;
+						if(index == 0) item.current = 0;
+					});
+					this.statisticsDayEn = data;
 					this.statisticsDayShow = true;
 				}
 			});
+			this.closeDrawer();  //关闭抽屉
+		},
+		//折叠面板
+		change3(e) {
+			//可关闭自身
+			this.current = this.current == e.index ? -1 : e.index
 		},
 		//上拉刷新
 		onPullDownRefresh: function() {
 			//延时为了看效果
 			setTimeout(() => {
-				this.getStatisticsDay();
+				this.getStatisticsDay(this.uid);
 				this.pullUpOn = true;
 				this.loadding = false;
 				uni.stopPullDownRefresh();
@@ -242,6 +311,30 @@ export default{
 				default:
 					break;
 			}
+		},
+		//上拉获取更多数据
+		onReachBottom(){
+			if (!this.pullUpOn) return;
+			this.loadding = true;
+			this.page = this.page + 1;
+			
+			api.getStatisticsDay({
+				uid: this.uid,
+				state: 1,
+				page: this.page,
+				count: 10
+			}, (res)=>{
+				let data = api.getData(res).data;
+				if(util.isEmpty(data)){
+					this.loadding = false;
+					this.pullUpOn = false;
+				}else{
+					this.loadding = false;
+					data.forEach((item) =>{
+						this.statisticsDayEn.push(item);
+					});
+				}
+			});
 		},
 	}
 }
@@ -321,30 +414,26 @@ export default{
 	
 	
 	
-	.lay_info{
-		width:100%;
-		display:flex;
-		flex-wrap: wrap;
-		font-size:14px;
-		padding:0 20rpx;
-		box-sizing:border-box;
-		margin-top:20rpx;
-	}
-	.lay_box{
-		width:50%;
-		display:flex;
-		padding:10rpx 0;
-		box-sizing:border-box;
-/* 		background-color:#fff;
-		padding:0; 
-		margin:0;
-		border-radius:0; */
+	.lay_group{
+		display: flex; 
+		flex-direction: row;
 	}
 	.style_Numtest{
 		color: #dc3b40;
 	}
-	.lay_title{
-		width:48%;
+	.lay_info{
+		display: flex; 
+		flex-direction: column; 
+		padding:20rpx;
+		box-sizing: border-box;
+		font-size:14px;
+	}
+	.lay_group_title{
+		color:#808080;
+		font-size:13px;
+	}
+	.lay_info>.lay_group{
+		margin-bottom:16rpx;
 	}
 </style>
 

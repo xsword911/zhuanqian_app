@@ -8,7 +8,7 @@
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
 			</view>
 			<view class="sea_btn btn_style">
-				<button type="default" @tap="getTeamTableEn" hover-class="btn_hover" style="padding: 0;">查询</button>
+				<button type="default" @tap="getUserByClick" hover-class="btn_hover" style="padding: 0;">查询</button>
 			</view>
 		</view>
 		
@@ -139,17 +139,14 @@
 						<input type="text" value="" @tap="show(2)" v-model="endTime" :disabled="true" />
 					</view>
 				</view>
-				
-<!-- 				<view class="search_time">
+				<view class="search_time">
 					<view class="search_test">
 						<text>用户名</text>
 					</view>
 					<view class="">
 						<input type="text" value="" v-model="userName" />
 					</view>
-				</view> -->
-				
-				
+				</view>
 				<view class="search_time">
 <!-- 					<view class="search_test">
 						<text>选择</text>
@@ -167,7 +164,7 @@
 				</view>
 								
 				<view class="search_btn btn_style">
-					<button type="default" @tap="getTeamTableEn" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getUserByClick" hover-class="btn_hover">查询</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -223,9 +220,15 @@ export default{
 			uid: "",  //uid
 	    };
 	},
+	onLoad(res) {
+		if(res.userName){
+			this.uid = res.userName;
+			this.userName = res.userName;
+		}
+	},
 	onShow() {
-		this.uid = storage.getUid();  //获取uid
-		this.getTeamTableEn();   //获取团队报表
+		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
+		this.getTeamTableEn(this.uid);   //获取团队报表
 	},
 	methods:{
 		//单选框操作
@@ -234,18 +237,27 @@ export default{
 			if(radio == 0) this.isSubAll = true;
 			if(radio == 1) this.isSubAll = false;
 		},
-		
+		//点击查询按钮
+		getUserByClick(){
+			if(util.isEmpty(this.userName)){
+				this.uid = storage.getUid();	
+			} 
+			else{
+				this.uid = this.userName;				
+			}
+			this.getTeamTableEn(this.uid);  //获取个人总览信息
+		},
 		//折叠面板
 		change3(e) {
 			//可关闭自身
 			this.current = this.current == e.index ? -1 : e.index
 		},
-		
 		//获取个人总览信息
-		getTeamTableEn(){
+		getTeamTableEn(uid){
+			this.page = 1;
 			this.closeDrawer();  //关闭抽屉
 			let data = {
-				uid: this.uid,
+				uid: uid,
 				page: this.page,
 				count: 10,
 				isSubAll: this.isSubAll
@@ -276,7 +288,7 @@ export default{
 		onPullDownRefresh: function() {
 			//延时为了看效果
 			setTimeout(() => {
-				//this.getTeamTableEn();
+				this.getTeamTableEn(this.uid);
 				this.pullUpOn = true;
 				this.loadding = false;
 				uni.stopPullDownRefresh();

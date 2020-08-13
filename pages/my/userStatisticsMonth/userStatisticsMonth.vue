@@ -168,10 +168,13 @@ export default{
 	    };
 	},
 	onLoad(res) {
-		if(!util.isEmpty(res.userName)) this.uid = res.userName;
+		if(res.userName){
+			this.uid = res.userName;
+			this.userName = res.userName;
+		} 
 	},
 	onShow() {
-		this.uid = storage.getUid();  //获取uid
+		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
 		this.getStatisticsMonth(this.uid);   //获取个人总览信息
 	},
 	methods:{
@@ -188,7 +191,7 @@ export default{
 		//获取个人总览信息
 		getStatisticsMonth(uid){
 			let data = {
-				uid: this.uid,
+				uid: uid,
 				page: 1,
 				count: 5
 			};

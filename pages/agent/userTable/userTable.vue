@@ -74,6 +74,7 @@ export default{
 	onShow() {
 		this.uid = storage.getUid();  //获取uid
 		this.getUserTable(this.uid);  //获取用户列表
+		this.UpperList = [];  //清空上级列表
 	},
 	methods:{
 		//点击查询按钮
@@ -193,19 +194,27 @@ export default{
 					break;
 				case "个人总览":
 					console.log("个人总览");
-					console.log(this.userSelect.uid);
 					uni.navigateTo({
 						url: "/pages/my/userStatisticsMonth/userStatisticsMonth?userName=" + this.userSelect.uid
 					});
 					break;
 				case "个人报表":
 					console.log("个人报表");
+					uni.navigateTo({
+						url: "/pages/my/userStatisticsDay/userStatisticsDay?userName=" + this.userSelect.uid
+					})
 					break;
 				case "团队总览":
 					console.log("团队总览");
+					uni.navigateTo({
+						url: "/pages/agent/teamOverview/teamOverview?userName=" + this.userSelect.uid
+					})
 					break;
 				case "团队报表":
 					console.log("团队报表");
+					uni.navigateTo({
+						url: "/pages/agent/teamTable/teamTable?userName=" + this.userSelect.uid
+					})
 					break;
 				default:
 					break;
