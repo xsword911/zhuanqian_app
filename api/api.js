@@ -44,6 +44,9 @@ const api = {
 	//修改用户信息
 	setUser: function(path, funSuccess) {httpUtil.post('user/setUser', path, funSuccess);},
 	
+	//查询全部用户详细信息
+	getUser: function(path, funSuccess) {httpUtil.post('user/getUser', path, funSuccess);},
+	
 	//用户修改密码
 	updPwd: function(path, funSuccess) {httpUtil.post('user/updPwd', path, funSuccess);},
 	

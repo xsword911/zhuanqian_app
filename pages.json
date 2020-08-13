@@ -199,7 +199,7 @@
 			"navigationBarTitleText": "用户列表",
 			"enablePullDownRefresh": true
 		}
-	}],
+	}],  //推广注册
 	
 	"tabBar": {
 	    "color": "#7A7E83",

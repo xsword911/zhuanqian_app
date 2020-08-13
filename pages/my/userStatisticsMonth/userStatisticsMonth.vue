@@ -8,7 +8,7 @@
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
 			</view>
 			<view class="sea_btn btn_style">
-				<button type="default" @tap="getStatisticsMonth" hover-class="btn_hover" style="padding: 0;">查询</button>
+				<button type="default" @tap="getUserByClick" hover-class="btn_hover" style="padding: 0;">查询</button>
 			</view>
 		</view>
 		
@@ -107,8 +107,16 @@
 						<input type="text" value="" @tap="show(2)" v-model="endTime" :disabled="true" />
 					</view>
 				</view>
+				<view class="search_time">
+					<view class="search_test">
+						<text>用户名</text>
+					</view>
+					<view class="">
+						<input type="text" value="" v-model="userName" />
+					</view>
+				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getUserByClick" hover-class="btn_hover">查询</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -156,15 +164,29 @@ export default{
 			setDateTime: "",
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
+			userName: "",  //输入的用户id
 	    };
+	},
+	onLoad(res) {
+		if(!util.isEmpty(res.userName)) this.uid = res.userName;
 	},
 	onShow() {
 		this.uid = storage.getUid();  //获取uid
-		this.getStatisticsMonth();   //获取个人总览信息
+		this.getStatisticsMonth(this.uid);   //获取个人总览信息
 	},
 	methods:{
+		//点击查询按钮
+		getUserByClick(){
+			if(util.isEmpty(this.userName)){
+				this.uid = storage.getUid();				 
+			} 
+			else{
+				this.uid = this.userName;				
+			}
+			this.getStatisticsMonth(this.uid);  //获取个人总览信息
+		},
 		//获取个人总览信息
-		getStatisticsMonth(){
+		getStatisticsMonth(uid){
 			let data = {
 				uid: this.uid,
 				page: 1,
@@ -193,12 +215,13 @@ export default{
 					this.statisticsMonthShow = true;
 				}
 			});
+			this.closeDrawer();  //关闭抽屉
 		},
 		//上拉刷新
 		onPullDownRefresh: function() {
 			//延时为了看效果
 			setTimeout(() => {
-				this.getStatisticsMonth();
+				this.getStatisticsMonth(this.uid);
 				this.pullUpOn = true;
 				this.loadding = false;
 				uni.stopPullDownRefresh();

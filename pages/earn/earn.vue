@@ -429,7 +429,6 @@ export default{
 		//关闭弹窗
 		hide8() {
 			this.modal8 = false;
-			console.log(1);
 		},
 		//打开弹窗
 		show8(item) {
