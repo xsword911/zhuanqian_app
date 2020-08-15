@@ -20,23 +20,21 @@
 							<tui-list-cell :hover="!item.disabled" 
 							style="display: flex; flex-direction: column; padding:20rpx; box-sizing: border-box;">
 									<view class="lay_group" style="margin-bottom:10rpx;">
-										<view class="" style="width:100%; font-weight:bold;">
-											交易日期：<text class="lay_group_title" style="font-weight:normal;">{{item.addTime}}</text>
+										<view class="" style="width:50%; font-weight:bold;">
+											日期：<text class="lay_group_title" style="font-weight:normal;">{{item.addTime}}</text>
+										</view>
+										<view class="" style="width:50%; font-weight:bold;">
+											收入：<text class="lay_group_title" style="font-weight:normal;">￥{{item.moneyAdd}}</text>
 										</view>
 									</view>
-									<view class="lay_group">
-										<view class="" style="width:100%; font-weight:bold;">
+									<view class="lay_group" style="margin-bottom:10rpx;">
+										<view class="" style="width:50%; font-weight:bold;">
 											用户：<text class="lay_group_title" style="font-weight:normal;">{{item.uid}}</text>
 										</view>
+										<view class="" style="font-weight:bold;">
+											得到金币：<text class="lay_group_title" style="font-weight:normal;">{{item.goldAdd}}</text>
+										</view>
 									</view>
-<!-- 								<view class="lay_group">
-									<view class="" style="width:50%;">
-										用户账号：<text>user10</text>
-									</view>
-									<view class="">
-										类型：<text>代理</text>
-									</view>
-								</view> -->
 								
 <!-- 								<view class="lay_group">
 									<view class="" style="width:50%;">
@@ -55,7 +53,7 @@
 										前一天余额：<text class="style_Numtest">￥{{item.moneyOld}}</text>
 									</view>
 									<view class="">
-										增加金额：<text class="style_Numtest">￥{{item.moneyAdd}}</text>
+										收入：<text class="style_Numtest">￥{{item.moneyAdd}}</text>
 									</view>
 								</view>
 								
@@ -64,7 +62,7 @@
 										代理佣金：<text class="style_Numtest">￥{{item.moneyAgency}}</text>
 									</view>
 									<view class="">
-										减少金额：<text class="style_Numtest">￥{{item.moneyLose}}</text>
+										支出：<text class="style_Numtest">￥{{item.moneyLose}}</text>
 									</view>
 								</view>
 								
@@ -203,7 +201,7 @@ export default{
 			
 			current: -1,
 			teamTableEn: [],
-			teamTableShow: true,  //是否显示数据
+			teamTableShow: false,  //是否显示数据
 			page: 1,  //查询页数
 			
 			begTime: "", //开始时间

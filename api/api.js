@@ -16,7 +16,7 @@ const api = {
 	
 	//获取图片路径
 	getFileUrl(postData){
-		let url = config.baseUrl + "/File/FetchFile?pc=" + postData.pc + "&openId=" +postData.openId;
+		let url = config.baseUrl + "/api/external/uploadFileToCache";
 		return url;
 	},
 	
@@ -151,6 +151,18 @@ const api = {
 	
 	//查询团队报表
 	getStatisticsDayGroup: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsDayGroup', path, funSuccess);},
+	
+	//查询系统配置
+	getConfig: function(path, funSuccess) {httpUtil.post('system/getConfig', path, funSuccess);},
+	
+	//查询任务类型
+	getTaskType: function(path, funSuccess) {httpUtil.post('activity/getTaskType', path, funSuccess);},
+	
+	//添加任务
+	addTask: function(path, funSuccess) {httpUtil.post('activity/addTask', path, funSuccess);},
+	
+	//查询我发布的任务
+	getTaskInfo: function(path, funSuccess) {httpUtil.post('activity/getTaskInfo', path, funSuccess);},
 };
 
 export default api;

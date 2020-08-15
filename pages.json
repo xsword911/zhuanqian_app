@@ -36,6 +36,11 @@
 			"navigationBarTitleText": "打工"
 		}
 	},{
+		"path": "pages/workExplain/workExplain",
+		"style": {
+			"navigationBarTitleText": "任务详情"
+		}
+	},{
 		"path": "pages/earn/earn",
 		"style": {
 			"navigationBarTitleText": "赚赚"
@@ -199,7 +204,34 @@
 			"navigationBarTitleText": "用户列表",
 			"enablePullDownRefresh": true
 		}
-	}],  //推广注册
+	},{
+		"path": "pages/agent/agentExtend/agentExtend",
+		"style": {
+			"navigationBarTitleText": "推广注册"
+		}
+	},{
+		"path": "pages/workList/workPublishList/workPublishList",
+		"style": {
+			"navigationBarTitleText": "我发布的任务",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/workList/workAcceptList/workAcceptList",
+		"style": {
+			"navigationBarTitleText": "我接受的任务",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/workList/workPublish/workPublish",
+		"style": {
+			"navigationBarTitleText": "发布任务"
+		}
+	},{
+		"path": "pages/workList/workUpd/workUpd",
+		"style": {
+			"navigationBarTitleText": "修改任务"
+		}
+	}],
 	
 	"tabBar": {
 	    "color": "#7A7E83",

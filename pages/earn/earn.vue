@@ -239,6 +239,7 @@ import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
 import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
+import tran from "@/common/tran.js";
 export default{
 	comments:{
 		tuiModal,
@@ -432,12 +433,17 @@ export default{
 		},
 		//打开弹窗
 		show8(item) {
+			if(item == 100){
+				this.type = item;
+				return;
+			}
+			uni.navigateTo({
+				url: "/pages/workExplain/workExplain?data=" + tran.obj2Url(item)
+			});
+			return;
 			if(item.type == 4) return;
 			this.modal8 = true;
 			if(item == -2){
-				this.type = item;
-				return;
-			}else if(item == 100){
 				this.type = item;
 				return;
 			}

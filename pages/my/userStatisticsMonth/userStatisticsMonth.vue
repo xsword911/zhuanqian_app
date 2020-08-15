@@ -150,7 +150,7 @@ export default{
 			rightDrawer: false,//抽屉开关
 			
 			StatisticsMonthEn: [],  //个人总览信息
-			statisticsMonthShow: true,  //是否显示数据
+			statisticsMonthShow: false,  //是否显示数据
 			money: 0,  //盈利金额
 			gold: 0,  //盈利金币
 			

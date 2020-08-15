@@ -20,7 +20,7 @@
 			</view>
 			
 			<view class="lay_table_data lay_data" v-for="(item,index) in userTableEn" :key="index" @tap="actionsheet(item)">
-				<view :class="{'lay_upper': item.subSum > 0}" style="width:20%;">{{item.uid}}</view>
+				<view :class="{'lay_upper': item.subSum > 0}" style="width:20%;"><text selectable="true">{{item.uid}}</text></view>
 				<view class="style_money" style="width:30%;">{{item.money}}</view>
 				<view class="" style="width:30%;">{{item.loginTime}}</view>
 				<view class="" style="width:20%;">

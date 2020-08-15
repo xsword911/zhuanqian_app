@@ -200,6 +200,19 @@ export default{
 					//用户资料 密码修改 资金密码 银行卡
 				},
 				{
+					name: "任务管理",
+					current: -1,
+					disabled: false,
+					imgUrl:"/static/img/share2.png",
+					arrSub: [{
+						name: "我发布的任务",
+						toUrl:"/pages/workList/workPublishList/workPublishList"
+					},{
+						name: "我接受的任务",
+						toUrl:"/pages/workList/workAcceptList/workAcceptList"
+					}]
+				},
+				{
 					name: "资金管理",
 					current: -1,
 					disabled: false,
@@ -234,10 +247,10 @@ export default{
 						name: "用户列表",
 						toUrl:"/pages/agent/userTable/userTable"
 					},{
-						name: "注册管理",
-						toUrl:"/static/img/more2.png"
+						name: "注册推广",
+						toUrl:"/pages/agent/agentExtend/agentExtend"
 					}]
-					//代理说明 团队总览 团队报表 用户列表 注册管理
+					//代理说明 团队总览 团队报表 用户列表 注册管理 注册推广
 				},
 				{
 					name: "短信公告",

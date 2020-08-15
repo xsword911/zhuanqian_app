@@ -42,7 +42,7 @@ export default{
 			bankName: null, //银行名称
 			bankBranch: null,  //开户支行名称
 			bankCode: null,  //银行卡号（只显示最后四位数）
-			isBankShow: true,  //显示银行卡信息
+			isBankShow: false,  //显示银行卡信息
 			loginType: null, //登录方式
 			uid: "",  //uid
 		}

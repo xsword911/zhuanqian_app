@@ -292,6 +292,7 @@ import tuiModal from "@/components/tui-modal/tui-modal.vue";
 import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
 import audio from "@/common/audio.js";
+import tran from "@/common/tran.js";
 export default{
 	comments:{
 		tuiModal,
@@ -559,6 +560,10 @@ export default{
 		},
 		//打开弹窗
 		show8(item) {
+			uni.navigateTo({
+				url: "/pages/workExplain/workExplain?data=" + tran.obj2Url(item)
+			});
+			return;
 			audio.playAudio();
 			if(item.type == 4) return;
 			this.modal8 = true;

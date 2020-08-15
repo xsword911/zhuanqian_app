@@ -101,9 +101,6 @@ export default{
 						url: '/pages/my/my'
 					});
 					uni.navigateTo({
-						url: '/pages/my/setting/setting'
-					});
-					uni.navigateTo({
 						url: '/pages/my/setting/bank/bank'
 					})
 				}
