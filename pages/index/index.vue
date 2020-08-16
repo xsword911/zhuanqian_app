@@ -1,82 +1,166 @@
 <template>
-	<view class="">
-<!-- 		<view class="head_box">
-			<view class="coin">
-				<view class="">
-					<view class="coin_num">
-						{{todayCoin}}
-					</view>
-					<view class="coin_test">
-						今日金币
-					</view>
-				</view>
-				
-				<view class="">
-					<view class="coin_num">
-						{{myCoin}}
-					</view>
-					<view class="coin_test">
-						我的金币
-					</view>
-				</view>		
-				
-				<view class="" @tap="toGoldDetails" class="extract_btn">
-					<button type="default" class="">收益明细 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
-				</view>
-				
-			</view>
-	</view> -->
-	
+	<view class="">	
+	<!-- 轮播图 -->
 	<view class="uni-margin-wrap">
 		<swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" 
 		:interval="interval" :duration="duration">
 			<swiper-item v-for="(item, index) in run" :key="index" @tap="toUrl(item.toUrl)">
 				<view class="swiper-item "><image :src="item.imgUrl" mode=""></image></view>
 			</swiper-item>
-<!-- 			<swiper-item>
-				<view class="swiper-item "><image src="/static/img/banner2.png" mode=""></image></view>
-			</swiper-item>
-			<swiper-item>
-				<view class="swiper-item "><image src="/static/img/banner3.png" mode=""></image></view>
-			</swiper-item> -->
 		</swiper>
 	</view>
 	
+	<!-- 菜单 -->
+	<view class="lay_bar">
+		<view class="menu_box menu_bottom">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/sy1.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					余额生金
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box menu_bottom" @tap="toRacharge">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/sy2.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					马上充值
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box menu_bottom" @tap="toExtractMoney">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/sy3.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					快速提现
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box menu_bottom" @tap="agentExtend">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/sy4.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					邀请好友
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/sy5.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					新手指南
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box">
+			<view class="">
+				<view class="menu_img" @tap="toPower">
+					<image src="/static/img/sy6.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					会员特权
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/sy7.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					App下载
+				</view>
+			</view>
+		</view>
+		
+		<view class="menu_box" @tap="toVip">
+			<view class="">
+				<view class="menu_img">
+					<image src="/static/img/m9.png" mode=""></image>
+				</view>
+				<view class="menu_test">
+					升级会员
+				</view>
+			</view>
+		</view>
+	</view>
+	
+	<!-- 跑马灯 -->
 	<view class="example-body">
 		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :text="runHorseEn.content" @tap="toUrl"/>
 	</view>
 	
-		<view class="content main">
-			<!-- 热门活动 -->
-			<view class="hot_activity">
-				<view class="activity_bar">赚赚</view>
-				
-				<view class="activity_column" v-for="(item, index) in earn" :key="index">
-					<view class="activity_left">
-						<view class="activity_img">
-							<image :src="item.imgUrl == ''? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
-						</view>
-						<view class="activity_test">
-							<view class="">
-								<text>{{item.title}}</text>
-								<view class="activity_tag" v-if="item.tip == 0">NEW <text></text></view>
-								<view class="activity_tag" v-if="item.tip == 1">HOT <text></text></view>
-							</view>
-							<view class="activity_test1">{{item.explain}}</view>
-						</view>
-					</view>
-					
-					<view class="activity_right" @tap="show8(item)">
-						<button class="activity_btn" hover-class="btn_hover">
-							<view class="activity_btnImg">
-								<image src="/static/img/work_btn.png" mode="widthFix"></image>
-							</view>
-							<text>+{{item.award}}</text>
-						</button>
-					</view>
+	<!-- 任务大厅 -->
+	<view class="lay_work">
+		<view class="">任务大厅</view>
+		<view class="work_list">
+			<view class="work" @tap="toWork">
+				<view class="work_num">任务数量3单/天</view>
+				<view class="work_text">新人任务专属通道</view>
+				<view class="work_img">
+					<image src="/static/img/member1.png" mode=""></image>
+				</view>
+			</view>
+			
+			<view class="work" @tap="toWork">
+				<view class="work_num">任务数量10单/天</view>
+				<view class="work_text">白银会员专属通道</view>
+				<view class="work_img">
+					<image src="/static/img/member2.png" mode=""></image>
+				</view>
+			</view>
+			
+			
+			<view class="work" @tap="toWork">
+				<view class="work_num">任务数量20单/天</view>
+				<view class="work_text">黄金会员专属通道</view>
+				<view class="work_img">
+					<image src="/static/img/member3.png" mode=""></image>
+				</view>
+			</view>
+			
+			
+			<view class="work" @tap="toWork">
+				<view class="work_num">任务数量35单/天</view>
+				<view class="work_text">铂金会员专属通道</view>
+				<view class="work_img">
+					<image src="/static/img/member4.png" mode=""></image>
+				</view>
+			</view>
+			
+			<view class="work" @tap="toWork">
+				<view class="work_num">任务数量50单/天</view>
+				<view class="work_text">钻石会员专属通道</view>
+				<view class="work_img">
+					<image src="/static/img/member5.png" mode=""></image>
+				</view>
+			</view>
+			
+			<view class="work" @tap="toWork">
+				<view class="work_num">任务数量70单/天</view>
+				<view class="work_text">至尊会员专属通道</view>
+				<view class="work_img">
+					<image src="/static/img/member6.png" mode=""></image>
 				</view>
 			</view>
 		</view>
+	</view>
 		
 		<!-- 任务提示弹窗 -->
 		<tui-modal :show="modal8" @cancel="hide8" :custom="true" 
@@ -84,129 +168,8 @@
 		:padding="noticePadding">	
 			<view class="tui-modal-custom">
 				<view class="close" @tap="hide8"><tui-icon name="shut" :size="16"></tui-icon></view>	
-				<view class="info">
-					<view class="box" v-show="type == 0">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>我的邀请码：</text>
-							<text selectable="true">{{userEn.code}}</text>
-						</view>
-						<view class="work_test mar_b">
-							<text>下载链接：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>复制邀请码与链接邀请好友即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == 1">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>复制内容到朋友圈：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>发送内容到朋友圈即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == 2">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>添加微信好友：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>添加微信好友即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == 3">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>下载链接：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>下载APP试玩即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == -1">
-						<view class="info">
-							<view class="info_test">
-								<view class="">
-									我的金币
-								</view>
-								<view class="num ">
-									{{myCoin}}
-								</view>
-								<view class="num tips">
-									100金币=1元
-								</view>
-							</view>
-							
-							<view class="info_test">
-								<view class="">
-									可兑换现金
-								</view>
-								<view class="num ">
-									￥{{myCoin | cashExchange}}
-								</view>
-							</view>
-						</view>
-						
-						<view class="">
-							<button type="default" class="exChange">立即兑换</button>
-						</view>
-						
-						<view class="exchange_tips">
-							金币只能兑换100的倍数
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == -2">
-						<view class="receive_btn">
-							<view class="receive_title receive_btnB">领取奖励</view>
-							
-							<view class="receive_btnB">
-								<view class="" v-show="awardType == 0">
-									恭喜你获得<text class="tips_text">{{award}}金币</text>
-								</view>
-								
-								<view class="" v-show="awardType == 1">
-									恭喜你获得：<text class="tips_text">{{award}}现金</text>
-								</view>
-							</view>
-							
-							<view class="receive_Mbtn">
-								<button type="default" @tap="hide8">确定</button>
-							</view>
-						</view>
-					</view>
-					
-					<view class="lay_notice" v-show="type == 100">
+				<view class="info">			
+					<view class="lay_notice">
 						<view class="lay_notice_title">
 							{{noticeEn.title}}
 						</view>
@@ -224,7 +187,6 @@
 							</view>
 						</scroll-view>
 					</view>
-					
 				</view>
 			</view>
 		</tui-modal>
@@ -240,6 +202,7 @@ import util from "@/common/util.js";
 import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress.vue';
 import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 import tran from "@/common/tran.js";
+import utilCore from "@/api/utilCore.js";
 export default{
 	comments:{
 		tuiModal,
@@ -266,7 +229,6 @@ export default{
 			noticePadding: "0",  //弹窗的padding属性
 			modal8: false,  //控制金币换现金弹窗显示
 			text: null, //弹窗的文字内容
-			type: 0, //弹窗类型
 			title: '', //弹窗标题
 			id: null ,//任务id
 			timeOut: true, //控制时间倒计时显示
@@ -304,7 +266,6 @@ export default{
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
-		this.getTaskList();  //获取赚赚列表
 		this.getRun();//获取轮播图列表
 		this.getRunHorse();   //获取跑马灯内容
 		this.getNotice();    //获取公告
@@ -312,6 +273,51 @@ export default{
 		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//跳转到VIP升级界面
+		toVip(){
+			uni.navigateTo({
+				url: "/pages/vip/vip"
+			})
+		},
+		//跳转到会员特权界面
+		toPower(){
+			uni.navigateTo({
+				url: "/pages/power/power"
+			})
+		},
+		//跳转到邀请好友界面
+		agentExtend(){
+			uni.navigateTo({
+				url: "/pages/agent/agentExtend/agentExtend"
+			})
+		},
+		//跳转到提现页
+		toExtractMoney(){
+			if(utilCore.isLoginByDeviceId()) {
+				utilCore.toLoginUiCanBack();
+			}else{
+				uni.navigateTo({
+					// url: '/pages/extractMoney/extractMoney'
+					url: "/pages/extractMoney/extractMoney1/extractMoney1"
+				});
+			}
+		},
+		//跳转到充值页
+		toRacharge(){
+			if(utilCore.isLoginByDeviceId()) {
+				utilCore.toLoginUiCanBack();
+			}else{
+				uni.navigateTo({
+					url: '/pages/recharge/recharge'
+				});
+			}
+		},
+		//跳转到任务界面
+		toWork(){
+			uni.switchTab({
+				url: "/pages/work/work"
+			})
+		},
 		//查询未读消息数
 		getNotReadMsgSum(){
 			api.getNotReadMsgSum({uid: this.uid}, (res)=>{
@@ -365,7 +371,6 @@ export default{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.myCoin = this.userEn.gold;
-				this.getGoldAdd();   //查询今日金币
 			});
 		},
 		//跳转查看签到页
@@ -380,75 +385,13 @@ export default{
 				url: '/pages/work/luckDraw/luckDraw'
 			})
 		},
-		//复制内容并跳转到微信
-		toWx(){
-			let test = '';
-			test = this.text;
-			if(this.type == 0) test = '我的邀请码是' + this.userEn.code + "下载链接是" + this.text;
-			this.taskDo();
-			// ifdef H5
-			return;
-			// endif
-			uni.setClipboardData({
-				data: test,
-				success() {
-					// if (plus.os.name == "iOS") {  
-					//     plus.runtime.openURL("weixin://")  
-					// } else if (plus.os.name == "andriod") {  
-					//     var Intent = plus.android.importClass("android.content.Intent");  
-					//     var ComponentName = plus.android.importClass('android.content.ComponentName')  
-					//     var intent = new Intent();  
-					//     intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));  
-					//     //intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);  
-					//     intent.setFlags(335544320);  
-					//     intent.setAction("android.intent.action.VIEW");  
-					//     var main = plus.android.runtimeMainActivity();  
-					//     main.startActivity(intent);  
-					// }  
-				}
-			});
-		},
-		//获取今日金币
-		getGoldAdd(){
-			api.getStatisticsToday({uid: this.uid}, (res) =>{
-				let data = api.getData(res);
-				if(util.isEmpty(data)) return;
-				else this.todayCoin = data.goldAdd;
-			});
-		},
-		//获取任务列表
-		getTaskList(){
-			api.getTask2({
-				state: 1,
-				page: 1,
-				count: 10
-			}, (res)=> {
-				let data = api.getData(res).data;
-				this.earn = data;
-			});
-		},
 		//关闭弹窗
 		hide8() {
 			this.modal8 = false;
 		},
 		//打开弹窗
 		show8(item) {
-			if(item == 100){
-				this.type = item;
-				return;
-			}
-			uni.navigateTo({
-				url: "/pages/workExplain/workExplain?data=" + tran.obj2Url(item) + "&type=1"
-			});
-			return;
-			if(item.type == 4) return;
 			this.modal8 = true;
-			if(item == -2){
-				this.type = item;
-				return;
-			}
-			this.noticePadding = "40rpx 64rpx";
-			this.type = item.type;
 			this.text = item.rule;
 			this.title = item.title;
 			this.id = item.id;
@@ -634,6 +577,7 @@ export default{
 	}
 	.info{
 		font-size:12px;
+		flex: 1;
 	}
 	.mar_b{
 		display:block;
@@ -781,4 +725,70 @@ export default{
 		width:100%;
 		height:auto;
 	}
+	
+	
+	
+	.lay_bar{
+		display:flex;
+		flex-wrap: wrap;
+		padding:20rpx 0;
+		box-sizing:border-box;
+	}
+	.menu_box{
+		width:25%;
+		display:flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.menu_img{
+		width:80rpx;
+		height:80rpx;
+		margin:auto;
+	}
+	.menu_test{
+		font-size:14px;
+		margin-top:10rpx;
+		color:#5E6265;
+	}
+	.menu_bottom{
+		margin-bottom:30rpx;
+	}
+	
+	
+	.lay_work{
+		padding:0 20rpx;
+		box-sizing:border-box;
+		font-size:16px;
+	}
+	.work_list{
+		width:100%;
+		display:flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		margin-top:20rpx;
+	}
+	.work{
+		width:48%;
+		height:300rpx;
+		background-color: #F1F2F2;
+		border-radius:20rpx;
+		padding:20rpx 10rpx 10rpx 10rpx;
+		box-sizing:border-box;
+		display:flex;
+		flex-direction: column;
+		margin-bottom:40rpx;
+	}
+	.work_num{
+		font-size:15px;
+		font-weight:bold;
+	}
+	.work_text{
+		font-size:13px;
+		color: #9E9E9E;
+		margin-bottom:6rpx;
+	}
+	.work_img{
+		flex: 1;
+	}
 </style>
+

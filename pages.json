@@ -1,16 +1,23 @@
 {
 	"pages": [{
-		"path": "pages/game/game",
+		"path": "pages/index/index",
 		"style": {
-			"navigationBarTitleText": "",
-			"navigationStyle": "custom",
-			"app-plus": {
-			"titleNView": false,
-			"animationType": "slide-in-bottom"
-			}
-			// "navigationBarTitleText": "疯狂消消乐"
+			"navigationBarTitleText": "首页"
 		}
-	},{
+	},
+	// {
+	// 	"path": "pages/game/game",
+	// 	"style": {
+	// 		"navigationBarTitleText": "",
+	// 		"navigationStyle": "custom",
+	// 		"app-plus": {
+	// 		"titleNView": false,
+	// 		"animationType": "slide-in-bottom"
+	// 		}
+	// 		// "navigationBarTitleText": "疯狂消消乐"
+	// 	}
+	// },
+	{
 		"path": "pages/my/my",
 		"style": {
 			"navigationBarTitleText": "我的"
@@ -222,6 +229,18 @@
 			"enablePullDownRefresh": true
 		}
 	},{
+		"path": "pages/workList/workExamineList/workExamineList",
+		"style": {
+			"navigationBarTitleText": "我审核的任务",
+			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/workList/workExamine/workExamine",
+		"style": {
+			"navigationBarTitleText": "审核任务",
+			"enablePullDownRefresh": true
+		}
+	},{
 		"path": "pages/workList/workPublish/workPublish",
 		"style": {
 			"navigationBarTitleText": "发布任务"
@@ -231,6 +250,16 @@
 		"style": {
 			"navigationBarTitleText": "修改任务"
 		}
+	},{
+		"path": "pages/vip/vip",
+		"style": {
+			"navigationBarTitleText": "VIP升级"
+		}
+	},{
+		"path": "pages/power/power",
+		"style": {
+			"navigationBarTitleText": "会员特权"
+		}
 	}],
 	
 	"tabBar": {
@@ -239,10 +268,14 @@
 	    "borderStyle": "black",
 	    "backgroundColor": "#ffffff",
 	    "list": [{
-	        "pagePath": "pages/game/game",
-	        "iconPath": "static/img/game.png",
-	        "selectedIconPath": "static/img/game_active.png",
-	        "text": "游戏"
+	        // "pagePath": "pages/game/game",
+	        // "iconPath": "static/img/game.png",
+	        // "selectedIconPath": "static/img/game_active.png",
+	        // "text": "游戏",
+			"pagePath": "pages/index/index",
+			"iconPath": "static/img/game.png",
+			"selectedIconPath": "static/img/game_active.png",
+			"text": "首页"
 	    },{
 	        "pagePath": "pages/work/work",
 	        "iconPath": "static/img/work.png",

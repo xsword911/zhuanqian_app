@@ -27,15 +27,8 @@
 						<text v-if="item.type == 4">签到任务</text>
 						<text v-if="item.type == 5">点赞任务</text>
 					</view>
+					<view class="">接受任务玩家：{{item.doneUid}}</view>
 					<view class="info_time">接受时间：{{item.receiveTime}}</view>
-					<view>
-						状态：
-						<text v-if="item.state == 0">进行中</text>
-						<text v-if="item.state == 1">未审核</text>
-						<text v-if="item.state == 2">已完成</text>
-						<text v-if="item.state == 3">失败</text>
-						<text v-if="item.state == 10">已放弃</text>
-					</view>
 				</view>
 				<view class="" style="padding-right:40rpx; box-sizing: border-box;">
 					<view class="info_right">
@@ -44,7 +37,7 @@
 						<view class="" v-if="item.awardType == 1">现金</view>
 					</view>
 					<view class="info_time info_num">
-						剩余任务量：{{item.sum - item.finishSum}}
+						任务数量：{{item.sum}}
 					</view>
 				</view>
 			</tui-list-cell>
@@ -215,7 +208,7 @@ export default {
 		getTaskDetails(){
 			this.page = 1;
 			let data = {
-				doneUid: this.uid,
+				uid: this.uid,
 				page: this.page,
 				count: 10
 			};
@@ -237,13 +230,13 @@ export default {
 			}
 		});
 		},
-		//跳转查看我接受的任务界面
+		//跳转查看我审核的任务界面
 		toUpdWork(item){
 			// uni.navigateTo({
 			// 	url: "/pages/workList/workUpd/workUpd?id=" + data.id
 			// })
 			uni.navigateTo({
-				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=2" 
+				url: "/pages/workList/workExamine/workExamine?id=" + item.id
 			});
 		},
 	},
@@ -255,7 +248,7 @@ export default {
 		this.page = this.page + 1;
 		
 		api.getTaskDetails({
-			doneUid: this.uid,
+			uid: this.uid,
 			page: this.page,
 			count: 10
 		}, (res)=>{

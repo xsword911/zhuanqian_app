@@ -14,13 +14,15 @@
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
 					<view class="tui-title">任务标题</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="title" placeholder="请输入任务标题" maxlength="50" type="text" />
+					<input placeholder-class="tui-phcolor" class="tui-input" name="title" placeholder="请输入任务标题" 
+					maxlength="50" type="text" v-model="title" />
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
 					<view class="tui-title">任务说明</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="explain" placeholder="请输入任务说明" maxlength="50" type="text" />
+					<input placeholder-class="tui-phcolor" class="tui-input" name="explain" placeholder="请输入任务说明" 
+					maxlength="50" type="text" v-model="explain"/>
 				</view>
 			</tui-list-cell>
 <!-- 			<tui-list-cell :hover="false">
@@ -42,13 +44,15 @@
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
 					<view class="tui-title">任务奖励</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" maxlength="50" type="number" />
+					<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" 
+					maxlength="50" type="number" v-model="award" />
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
 					<view class="tui-title">任务数量</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" maxlength="50" type="number" />
+					<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" 
+					maxlength="50" type="number" v-model="sum" />
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
@@ -94,12 +98,12 @@
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
 					<view class="tui-title">任务是否需要凭证</view>
-					<radio-group class="radio-group" name="isDoneProv">
+					<radio-group class="radio-group" name="isDoneProve">
 						<label class="tui-radio">
-							<radio value="1" color="#5677fc" />是
+							<radio value="1" color="#5677fc" :checked="isDoneProve == 1"/>是
 						</label>
 						<label class="tui-radio">
-							<radio value="0" color="#5677fc" />否
+							<radio value="0" color="#5677fc" :checked="isDoneProve == 0"/>否
 						</label>
 					</radio-group>
 				</view>
@@ -109,10 +113,10 @@
 					<view class="tui-title">任务是否需要截图</view>
 					<radio-group class="radio-group" name="isDoneImg">
 						<label class="tui-radio">
-							<radio value="1" color="#5677fc" />是
+							<radio value="1" color="#5677fc" :checked="isDoneImg == 1"/>是
 						</label>
 						<label class="tui-radio">
-							<radio value="0" color="#5677fc" />否
+							<radio value="0" color="#5677fc" :checked="isDoneImg == 0"/>否
 						</label>
 					</radio-group>
 				</view>
@@ -141,13 +145,13 @@
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
 					<view class="tui-title">备注</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="desc" placeholder="" maxlength="50" type="text" />
+					<input placeholder-class="tui-phcolor" class="tui-input" name="desc" placeholder="" 
+					maxlength="50" type="text" v-model="desc"/>
 				</view>
 			</tui-list-cell>
 					
 			<view class="tui-btn-box btn_style">
-				<button class="tui-button-primary tui-button-gray" hover-class="tui-button-hover" formType="submit" type="default">发布任务</button>
-				<button class="tui-button-primary tui-button-gray" hover-class="tui-button-gray_hover" formType="reset">重置</button>
+				<button class="tui-button-primary tui-button-gray" hover-class="tui-button-hover" formType="submit" type="default">修改任务</button>
 			</view>
 		</form>
 		
@@ -179,6 +183,13 @@ export default {
 			arrayCycle: [{"time": "只能完成一次", "key": 0},{"time": "每天只能完成一次", "key": 1}],   //任务刷新周期列表列表
 			arrayCycleIndex: 0,
 			
+			title: "",   //任务标题
+			explain: "",   //任务说明
+			award: "",   //任务奖励
+			sum: "",   //任务任务数量
+			isDoneImg: 0,  //是否需要截图
+			isDoneProve: 0,  //是否需要凭证
+			desc: "",   //任务备注
 			begTime: "",	//任务开始时间
 			endTime: "",	//任务结束时间
 			doneLongTime: "",   //任务限时时间
@@ -205,6 +216,7 @@ export default {
 	onLoad(res) {
 		this.uid = storage.getUid();  //获取uid
 		this.id = parseInt(res.id);
+		this.getTaskType();  //获取任务类型列表
 		this.getTaskInfo(); //查看任务信息
 	},
 	methods: {
@@ -212,7 +224,45 @@ export default {
 		getTaskInfo(){
 			api.getTaskInfo({id: this.id}, (res)=>{
 				let data = api.getData(res).data[0];
-				console.log(data);
+				this.taskInfo = data;
+				this.title = this.taskInfo.title;   	//任务标题
+				this.explain = this.taskInfo.explain;   //任务说明
+				this.award = this.taskInfo.award;   	//任务奖励
+				this.sum = this.taskInfo.sum;   		//任务数量
+				this.begTime = this.taskInfo.begTime;   //任务开始时间
+				this.endTime = this.taskInfo.endTime;   //任务结束时间
+				this.desc = this.taskInfo.desc;
+				
+				this.isDoneImg = this.taskInfo.isDoneImg;  //是否需要截图
+				this.isDoneProve =  this.taskInfo.isDoneProve;  //是否需要凭证
+				this.arrayTypeIndex = this.taskInfo.type;
+				this.arrayAwardIndex = this.taskInfo.awardType;
+				this.arrayStateIndex = this.taskInfo.state;
+				this.arraySortIndex = this.taskInfo.sort;
+				this.arrayCycleIndex = this.taskInfo.cycle;
+				
+				//任务限时时间
+				let doneLongSecond = this.taskInfo.doneLong;
+				let doneLongHour = parseInt(doneLongSecond / 3600);
+				let doneLongMin = parseInt([doneLongSecond - (doneLongHour * 3600)] / 60);
+				let doneLongSe = parseInt(doneLongSecond - [(doneLongHour * 3600) + (doneLongMin * 60)]);
+				let doneLongData = `${doneLongHour}小时${doneLongMin}分${doneLongSe}秒`
+				this.doneLongTime = doneLongData;
+				
+				//任务审核时间
+				let auditLongSecond = this.taskInfo.auditLong;
+				let auditLongHour = parseInt(auditLongSecond / 3600);
+				let auditLongMin = parseInt([auditLongSecond - (auditLongHour * 3600)] / 60);
+				let auditLongSe = parseInt(auditLongSecond - [(auditLongHour * 3600) + (auditLongMin * 60)]);
+				let auditLongData = `${auditLongHour}小时${auditLongMin}分${auditLongSe}秒`
+				this.auditLongTime = auditLongData;
+			});
+		},
+		//获取任务类型列表
+		getTaskType(){
+			api.getTaskType({}, (res)=>{
+				let data = api.getData(res);
+				this.arrayType = data;
 			});
 		},
 		//选择任务类型
@@ -222,7 +272,6 @@ export default {
 		//选择奖励任务类型
 		awardPickerChange(e){
 			this.arrayAwardIndex = e.detail.value;
-			console.log(this.arrayAward[this.arrayAwardIndex]);
 		},
 		//选择任务状态
 		statePickerChange(e){
@@ -343,7 +392,7 @@ export default {
 				rule: ["required"],
 				msg: ["请输入任务结束时间"]
 			}, {
-				name: "isDoneProv",
+				name: "isDoneProve",
 				rule: ["required"],
 				msg: ["请选择是否需要凭证"]
 			}, {
@@ -366,21 +415,27 @@ export default {
 			if (!checkRes) {
 				let data = e.detail.value;
 				//将数据转化为对应格式
+				data.id = this.id;
 				data.uid = this.uid;
 				data.doneLong = this.doneLongSecond;
 				data.auditLong = this.auditLongSecond;
 				data.award = parseInt(data.award);
 				data.sum = parseInt(data.sum);
-				data.isDoneProv = parseInt(data.isDoneProv);
+				data.isDoneProve = parseInt(data.isDoneProve);
 				data.isDoneImg = parseInt(data.isDoneImg);
 				data.imgUrl = "",
-				api.addTask(data, (res)=>{
-					let code = apa.getCode(res);
+				api.updTask(data, (res)=>{
+					let code = api.getCode(res);
 					if(code == 0){
 						uni.showToast({
-							title: "发布任务成功",
+							title: "修改任务成功",
 							icon: "none"
 						});
+						setTimeout(function(){
+							uni.navigateBack({
+								delta: 1
+							})
+						},1000)
 					}else{
 						let msg = api.getMsg(res);
 						uni.showToast({
@@ -470,7 +525,7 @@ export default {
 		align-items:center;
 	}
 	.tui-btn-box>button{
-		width:30%;
+		width:50%;
 		font-size:14px;
 	}
 	.tui-btn-box>button:nth-child(2){

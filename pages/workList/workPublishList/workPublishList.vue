@@ -14,7 +14,7 @@
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
 			<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
-			style="display: flex; align-items: center; justify-content: space-between;"
+			style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
 			@tap="toUpdWork(item)">
 				<view class="info_left">
 					<view class="info_title">{{item.title}}</view>

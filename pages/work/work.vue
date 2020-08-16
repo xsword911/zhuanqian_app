@@ -561,7 +561,7 @@ export default{
 		//打开弹窗
 		show8(item) {
 			uni.navigateTo({
-				url: "/pages/workExplain/workExplain?data=" + tran.obj2Url(item)
+				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=1" 
 			});
 			return;
 			audio.playAudio();

@@ -163,6 +163,21 @@ const api = {
 	
 	//查询我发布的任务
 	getTaskInfo: function(path, funSuccess) {httpUtil.post('activity/getTaskInfo', path, funSuccess);},
+	
+	//修改任务
+	updTask: function(path, funSuccess) {httpUtil.post('activity/updTask', path, funSuccess);},
+	
+	//用户接受一个任务
+	receiveTask: function(path, funSuccess) {httpUtil.post('activity/receiveTask', path, funSuccess);},
+	
+	//用户放弃一个任务
+	cancelTask: function(path, funSuccess) {httpUtil.post('activity/cancelTask', path, funSuccess);},
+	
+	//查询任务完成情况
+	getTaskDetails: function(path, funSuccess) {httpUtil.post('activity/getTaskDetails', path, funSuccess);},
+	
+	//审核任务记录
+	auditTaskDetails: function(path, funSuccess) {httpUtil.post('activity/auditTaskDetails', path, funSuccess);},
 };
 
 export default api;

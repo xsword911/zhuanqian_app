@@ -208,6 +208,9 @@ export default{
 						name: "我发布的任务",
 						toUrl:"/pages/workList/workPublishList/workPublishList"
 					},{
+						name: "我审核的任务",
+						toUrl:"/pages/workList/workExamineList/workExamineList"
+					},{
 						name: "我接受的任务",
 						toUrl:"/pages/workList/workAcceptList/workAcceptList"
 					}]
