@@ -282,10 +282,10 @@
 	        "selectedIconPath": "/static/img/work_active.png",
 	        "text": "打工"
 	    },{
-	        "pagePath": "pages/earn/earn",
+	        "pagePath": "pages/workList/workPublish/workPublish",
 	        "iconPath": "/static/img/extractMoney.png",
 	        "selectedIconPath": "static/img/extractMoney_active.png",
-	        "text": "赚赚"
+	        "text": "发布"
 	    },{
 	        "pagePath": "pages/my/my",
 	        "iconPath": "static/img/my.png",

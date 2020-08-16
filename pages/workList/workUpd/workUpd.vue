@@ -4,7 +4,7 @@
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
 					<view class="tui-title">任务类型</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
+					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
 						<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
 							<view class="uni-input">{{arrayType[arrayTypeIndex].val}}</view>
 						</picker>

@@ -114,7 +114,7 @@ export default{
 									storage.setMyInfo(api.getData(res));
 									storage.setLoginType(1);
 									uni.reLaunch({
-										url: "/pages/game/game"
+										url: "/pages/index/index"
 									});
 								});
 							}, 1600);

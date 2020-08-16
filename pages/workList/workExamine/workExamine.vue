@@ -33,11 +33,19 @@
 				<text v-if="workInfo.type == 4"  class="style_info">签到</text>
 			</view>
 			
+			<view class="">
+				任务状态：
+				<text v-if="workInfo.state == 0">进行中</text>
+				<text v-if="workInfo.state == 1">未审核</text>
+				<text v-if="workInfo.state == 2">已完成</text>
+				<text v-if="workInfo.state == 3">任务失败</text>
+				<text v-if="workInfo.state == 10">任务取消</text>
+			</view>
 			
 			<view class="">
 				结束时间：<text class="style_info">{{workInfo.endTime}}</text>
 			</view>
-			
+						
 			<view class="">
 				限时审核：<text class="style_info">{{auditLong}}</text>
 			</view>

@@ -4,7 +4,7 @@
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
 					<view class="tui-title">任务类型</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
+					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
 						<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
 							<view class="uni-input">{{arrayType[arrayTypeIndex].val}}</view>
 						</picker>
@@ -170,7 +170,7 @@ export default {
 			arrayAward: [{"award": "金币", "key": 0}, {"award": "现金", "key": 1}],   //任务奖励类型列表
 			arrayAwardIndex: 0,
 			
-			arrayState: [{"state": "开启", "key": 1}, {"state": "关闭", "key": 0}],   //任务状态列表
+			arrayState: [{"state": "关闭", "key": 0}, {"state": "开启", "key": 1}],   //任务状态列表
 			arrayStateIndex: 0,
 			
 			arraySort: [{"sort": "热门活动", "key": 0}, {"sort": "限时推荐", "key": 1}],   //任务分类列表

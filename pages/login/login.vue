@@ -95,7 +95,7 @@ export default{
 					if (res.confirm) {
 						utilCore.loginByDevice();
 						uni.reLaunch({
-							url: "/pages/game/game"
+							url: "/pages/index/index"
 						});
 					}
 				}
@@ -176,7 +176,7 @@ export default{
 			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				uni.reLaunch({
-					url: "/pages/game/game"
+					url: "/pages/index/index"
 				});
 			});
 		},

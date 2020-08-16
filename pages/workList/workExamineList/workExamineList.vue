@@ -32,12 +32,18 @@
 				</view>
 				<view class="" style="padding-right:40rpx; box-sizing: border-box;">
 					<view class="info_right">
-						<view class="" style="font-size:17px; margin-right:10rpx;">{{item.award}}</view>
+						<view class="" style="font-size:14px; margin-right:10rpx;">{{item.award}}</view>
 						<view class="" v-if="item.awardType == 0">金币</view>
 						<view class="" v-if="item.awardType == 1">现金</view>
 					</view>
-					<view class="info_time info_num">
-						任务数量：{{item.sum}}
+
+					<view class="">
+						状态：
+						<text v-if="item.state == 0">进行中</text>
+						<text v-if="item.state == 1">未审核</text>
+						<text v-if="item.state == 2">已完成</text>
+						<text v-if="item.state == 3">任务失败</text>
+						<text v-if="item.state == 10">任务取消</text>
 					</view>
 				</view>
 			</tui-list-cell>
