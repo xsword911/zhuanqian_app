@@ -1,11 +1,17 @@
 <template>
     <view class="page">
 		<!-- 筛选时间 -->
-		<view class="search_column" >
-			<view class="" style="display:flex; align-items:center;">
-				<input type="text" value="" v-model="begTime" :disabled="true" @tap="openDrawer" placeholder="开始时间"/>
+		<view class="search_column" style="display:flex; justify-content: space-between;">
+			<view class="" style="display:flex; align-items:center;" @tap="openDrawer">
+				<!-- <input type="text" value="" v-model="begTime" :disabled="true" @tap="openDrawer" placeholder="开始时间"/>
 				<text>至</text>
-				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
+				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/> -->
+				任务状态：
+				<text v-if="arrayStateIndex == 0">进行中</text>
+				<text v-if="arrayStateIndex == 1">未审核</text>
+				<text v-if="arrayStateIndex == 2">已完成</text>
+				<text v-if="arrayStateIndex == 3">任务失败</text>
+				<text v-if="arrayStateIndex == 10">任务取消</text>
 			</view>
 			<view class="sea_btn btn_style">
 				<button type="default" @tap="getTaskDetails" hover-class="btn_hover" style="padding: 0;">查询</button>
@@ -13,40 +19,42 @@
 		</view>
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
-			<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
-			style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
-			@tap="toUpdWork(item)">
-				<view class="info_left">
-					<view class="info_title">{{item.title}}</view>
-					<view>
-						任务类型：
-						<text v-if="item.type == 0">邀请好友</text>
-						<text v-if="item.type == 1">分享朋友圈</text>
-						<text v-if="item.type == 2">加好友</text>
-						<text v-if="item.type == 3">下载app</text>
-						<text v-if="item.type == 4">签到任务</text>
-						<text v-if="item.type == 5">点赞任务</text>
+			<view class="" v-show="showIncome">
+				<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
+				style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
+				@tap="toUpdWork(item)">
+					<view class="info_left">
+						<view class="info_title">{{item.title}}</view>
+						<view>
+							任务类型：
+							<text v-if="item.type == 0">邀请好友</text>
+							<text v-if="item.type == 1">分享朋友圈</text>
+							<text v-if="item.type == 2">加好友</text>
+							<text v-if="item.type == 3">下载app</text>
+							<text v-if="item.type == 4">签到任务</text>
+							<text v-if="item.type == 5">点赞任务</text>
+						</view>
+						<view class="">接受任务玩家：{{item.doneUid}}</view>
+						<view class="info_time">接受时间：{{item.receiveTime}}</view>
 					</view>
-					<view class="">接受任务玩家：{{item.doneUid}}</view>
-					<view class="info_time">接受时间：{{item.receiveTime}}</view>
-				</view>
-				<view class="" style="padding-right:40rpx; box-sizing: border-box;">
-					<view class="info_right">
-						<view class="" style="font-size:14px; margin-right:10rpx;">{{item.award}}</view>
-						<view class="" v-if="item.awardType == 0">金币</view>
-						<view class="" v-if="item.awardType == 1">现金</view>
+					<view class="" style="padding-right:40rpx; box-sizing: border-box;">
+						<view class="info_right">
+							<view class="" style="font-size:14px; margin-right:10rpx;">{{item.award}}</view>
+							<view class="" v-if="item.awardType == 0">金币</view>
+							<view class="" v-if="item.awardType == 1">现金</view>
+						</view>
+				
+						<view class="">
+							状态：
+							<text v-if="item.state == 0">进行中</text>
+							<text v-if="item.state == 1">未审核</text>
+							<text v-if="item.state == 2">已完成</text>
+							<text v-if="item.state == 3">任务失败</text>
+							<text v-if="item.state == 10">任务取消</text>
+						</view>
 					</view>
-
-					<view class="">
-						状态：
-						<text v-if="item.state == 0">进行中</text>
-						<text v-if="item.state == 1">未审核</text>
-						<text v-if="item.state == 2">已完成</text>
-						<text v-if="item.state == 3">任务失败</text>
-						<text v-if="item.state == 10">任务取消</text>
-					</view>
-				</view>
-			</tui-list-cell>
+				</tui-list-cell>
+			</view>
 			
 			<view class="data_lack" v-show="!showIncome">
 				<view class="lack_box">
@@ -60,8 +68,20 @@
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
 		 
-		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer">
+		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer" style="position:relative; z-index: 999;">
 		 	<view class="d-container">
+				<view class="search_time">
+					<view class="search_test">
+						<text>任务状态</text>
+					</view>
+					<view class="">
+					<view class="uni-list-cell-db" style="border-bottom:1px solid #000;">
+						<picker @change="statePickerChange" :value="arrayState[arrayStateIndex].key" :range="arrayState" range-key="state" name="state">
+							<view class="uni-input">{{arrayState[arrayStateIndex].state}}</view>
+						</picker>
+					</view>
+					</view>
+				</view>
 				<view class="search_time">
 					<view class="search_test">
 						<text>开始时间</text>
@@ -79,7 +99,7 @@
 					</view>
 				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getTaskDetails" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -114,12 +134,22 @@ export default {
 	},
     data() {
         return {
+			arrayState: [
+				{"state": "进行中", "key": 0}, 
+				{"state": "未审核", "key": 1},
+				{"state": "已完成", "key": 2},
+				{"state": "任务失败", "key": 3},
+				{"state": "任务取消", "key": 10},
+			],   //任务状态列表
+			arrayStateIndex: 1,
+			state: null,	//选中的任务状态码
+			
 			loadding: false, //加载数据提示
 			pullUpOn: true,  //上拉加载数据
 			rightDrawer: false,//抽屉开关
 			
 			userEn: [],  //我的信息
-			showIncome: true, // 收入明细列表是否显示
+			showIncome: false, // 收入明细列表是否显示
 			incomeList:[]   ,//提现明细列表
 			page: 1,  //查询页数
 			
@@ -143,6 +173,14 @@ export default {
 		this.getTaskDetails();  //获取金币收入明细表		
 	},
 	methods:{
+		//选择任务状态
+		statePickerChange(e){
+			this.arrayStateIndex = e.detail.value;
+			this.arrayState.forEach((item, index) =>{
+				 //获取选中的任务状态码
+				if(this.arrayStateIndex == index) this.state = item.key;
+			});
+		},
 		//折叠面板
 		change3(e) {
 			//可关闭自身
@@ -212,12 +250,14 @@ export default {
 		},
 		//获取金币明细表
 		getTaskDetails(){
+			this.closeDrawer();  //关闭抽屉
 			this.page = 1;
 			let data = {
 				uid: this.uid,
 				page: this.page,
 				count: 10
 			};
+		if(!util.isEmpty(this.state)) data.state = this.state;
 		if(!util.isEmpty(this.begTime)){
 			let time = this.begTime + " 00:00:00";
 			data.begAddTime = time
@@ -238,9 +278,6 @@ export default {
 		},
 		//跳转查看我审核的任务界面
 		toUpdWork(item){
-			// uni.navigateTo({
-			// 	url: "/pages/workList/workUpd/workUpd?id=" + data.id
-			// })
 			uni.navigateTo({
 				url: "/pages/workList/workExamine/workExamine?id=" + item.id
 			});
@@ -410,6 +447,10 @@ export default {
 	}
 	.info_num{
 		margin-top:10rpx;
+	}
+	.uni-list-cell-db,
+	.uni-list-cell-right {
+		flex: 1;
 	}
 </style>
 

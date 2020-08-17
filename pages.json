@@ -46,7 +46,8 @@
 	},{
 		"path": "pages/work/work",
 		"style": {
-			"navigationBarTitleText": "任务"
+			"navigationBarTitleText": "任务",
+			"app-plus": {"titleNView": false} 
 		}
 	},{
 		"path": "pages/workExplain/workExplain",
@@ -259,12 +260,22 @@
 	},{
 		"path": "pages/vip/vip",
 		"style": {
-			"navigationBarTitleText": "VIP升级"
+			"navigationBarTitleText": "升级会员"
 		}
 	},{
 		"path": "pages/power/power",
 		"style": {
 			"navigationBarTitleText": "会员特权"
+		}
+	},{
+		"path": "pages/guide/guide",
+		"style": {
+			"navigationBarTitleText": "新手指南"
+		}
+	},{
+		"path": "pages/money/money",
+		"style": {
+			"navigationBarTitleText": "余额生金"
 		}
 	}],
 	

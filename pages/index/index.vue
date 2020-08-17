@@ -12,7 +12,7 @@
 	
 	<!-- 菜单 -->
 	<view class="lay_bar">
-		<view class="menu_box menu_bottom">
+		<view class="menu_box menu_bottom" @tap="toMoney">
 			<view class="">
 				<view class="menu_img">
 					<image src="/static/img/sy1.png" mode=""></image>
@@ -45,7 +45,7 @@
 			</view>
 		</view>
 		
-		<view class="menu_box menu_bottom" @tap="agentExtend">
+		<view class="menu_box menu_bottom" @tap="toAgentExtend">
 			<view class="">
 				<view class="menu_img">
 					<image src="/static/img/sy4.png" mode=""></image>
@@ -56,7 +56,7 @@
 			</view>
 		</view>
 		
-		<view class="menu_box">
+		<view class="menu_box" @tap="toGuide">
 			<view class="">
 				<view class="menu_img">
 					<image src="/static/img/sy5.png" mode=""></image>
@@ -273,6 +273,18 @@ export default{
 		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//跳转到余额宝界面
+		toMoney(){
+			uni.navigateTo({
+				url: "/pages/money/money"
+			})
+		},
+		//跳转到新手指南界面
+		toGuide(){
+			uni.navigateTo({
+				url: "/pages/guide/guide"
+			})
+		},
 		//跳转到VIP升级界面
 		toVip(){
 			uni.navigateTo({
@@ -286,7 +298,7 @@ export default{
 			})
 		},
 		//跳转到邀请好友界面
-		agentExtend(){
+		toAgentExtend(){
 			uni.navigateTo({
 				url: "/pages/agent/agentExtend/agentExtend"
 			})

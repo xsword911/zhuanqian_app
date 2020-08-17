@@ -97,12 +97,20 @@ export default{
 					this.userBankCode = data[0].bankCode.substring(data[0].bankCode.length - 4);  //银行卡号截取最后四位数;
 					// storage.setMyBankInfo(data[0]);
 				}else{
-					uni.switchTab({
-						url: '/pages/my/my'
+					uni.showModal({
+						content: "请绑定银行卡",
+						showCancel: false,
+						success(res) {
+							if(res.confirm){
+								uni.switchTab({
+									url: '/pages/my/my'
+								});
+								uni.navigateTo({
+									url: '/pages/my/setting/bank/bank'
+								})
+							}
+						}
 					});
-					uni.navigateTo({
-						url: '/pages/my/setting/bank/bank'
-					})
 				}
 			});
 		},

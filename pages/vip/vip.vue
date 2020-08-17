@@ -74,80 +74,15 @@
 			</view>
 			
 			<view class="lay_level">
-				<view class="level_box level_test">
-					<view class="level_type">新人任务</view>
-					<view class="level_money">0.00元</view>
-					<view class="">任务数量:3/天</view>
-					<view class="">提现次数:1/次</view>
-					<view class="">任务佣金: 1元</view>
+				<view class="level_box level_test" v-for="(item,index) in userLevel" :key="index"
+				@tap="openPay(item)" :class="index == clickBox ? 'click_box' : ''">
+					<view class="level_type">{{item.levelName}}</view>
+					<view class="level_money">{{item.money}}元</view>
+					<view class="">任务数量:{{item.publishTaskSum}}/天</view>
+					<view class="">提现次数:{{item.drawSum}}/次</view>
 					<view class="">-</view>
 					<view class="">-</view>
 					<view class="">开通会员:365天</view>
-				</view>
-				
-				<view class="level_box level_box2" 
-				@tap="openPay(299.00)"
-				:class="{'click_box' : payNum == 299.00}">
-					<view class="level_type">白银会员</view>
-					<view class="level_money">299.00元</view>
-					<view class="">任务数量:10/天</view>
-					<view class="">提现次数:1/次</view>
-					<view class="">任务佣金: 2元</view>
-					<view class="">-</view>
-					<view class="">-</view>
-					<view class="level_test">开通会员:365天</view>
-				</view>
-				
-				<view class="level_box level_box2" 
-				@tap="openPay(999.00)"
-				:class="{'click_box' : payNum == 999.00}">
-					<view class="level_type">黄金会员</view>
-					<view class="level_money">999.00元</view>
-					<view class="">任务数量:20/天</view>
-					<view class="">提现次数:1/次</view>
-					<view class="">任务佣金: 3元</view>
-					<view class="">-</view>
-					<view class="">-</view>
-					<view class="level_test">开通会员:365天</view>
-				</view>
-				
-				<view class="level_box level_box2" 
-				@tap="openPay(2999.00)"
-				:class="{'click_box' : payNum == 2999.00}">
-					<view class="level_type">铂金会员</view>
-					<view class="level_money">2999.00元</view>
-					<view class="">任务数量:35/天</view>
-					<view class="">提现次数:3/次</view>
-					<view class="">任务佣金: 5元</view>
-					<view class="">-</view>
-					<view class="">-</view>
-					<view class="level_test">开通会员:365天</view>
-				</view>
-				
-				<view class="level_box level_box2" 
-				@tap="openPay(4999.00)"
-				:class="{'click_box' : payNum == 4999.00}">
-					<view class="level_type">钻石急单</view>
-					<view class="level_money">4999.00元</view>
-					<view class="">任务数量:50/天</view>
-					<view class="">提现次数:5/次</view>
-					<view class="">任务佣金: 6元</view>
-					<view class="">-</view>
-					<view class="">-</view>
-					<view class="level_test">开通会员:365天</view>
-				</view>
-				
-				<view class="level_box level_box2" 
-				@tap="openPay(8999.00)"
-				:class="{'click_box' : payNum == 8999.00}">
-					<view class="level_type">至尊会员</view>
-					<view class="level_money">8999.00元</view>
-					<view class="">任务数量:70/天</view>
-					<view class="">提现次数:10/次</view>
-					<view class="">任务佣金: 8元</view>
-					<view class="">-</view>
-					<view class="">-</view>
-					<view class="level_test">开通会员:365天</view>
 				</view>
 			</view>
 		</view>
@@ -155,17 +90,30 @@
 </template>
 
 <script>
+import api from "@/api/api.js";
 export default{
 	data() {
 		return {
 			isShowPay: false,  //是否显示支付盒子
 			payNum: 0,  //支付金额
+			userLevel: [],  //vip列表
+			clickBox: null,   //被选中的会员盒子
 		}
 	},
 	onShow() {
-		
+		this.getUserLevel();  //获取会员等级信息
 	},
 	methods:{
+		//获取会员等级信息
+		getUserLevel(){
+			api.getUserLevel({page: 1, count: 10}, (res)=>{
+				let data = api.getData(res).data;
+				data.forEach((item, index) =>{
+					item.money = item.money.toFixed(2);
+				});
+				this.userLevel = data;
+			});
+		},
 		//跳转到会员特权界面
 		toPower(){
 			uni.navigateTo({
@@ -173,9 +121,11 @@ export default{
 			})
 		},
 		//打开支付盒子
-		openPay(num){
-			this.payNum = num.toFixed(2);
+		openPay(data){
+			if(data.id == 1) return;
+			this.payNum = data.money;
 			this.isShowPay = true;
+			this.clickBox = data.id - 1;
 		}
 	}
 }

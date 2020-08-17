@@ -35,8 +35,6 @@ const utilCore = {
 		return (loginType == 0);
 	},
 	
-	//
-	
 	//设备号登录（游客登录）
 	loginByDevice(){
 		//取设备号

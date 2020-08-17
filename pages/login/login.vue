@@ -220,8 +220,9 @@ export default{
 	.reg{
 		width:100%;
 		text-align:right;
-		font-size:12px;
+		font-size:16px;
 		color:#999999;
+		margin-top:25rpx;
 	}
 	.reg_test{
 		color:#5677FC;

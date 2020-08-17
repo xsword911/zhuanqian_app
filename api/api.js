@@ -181,6 +181,11 @@ const api = {
 	
 	//用户提交一个任务
 	submitTask: function(path, funSuccess) {httpUtil.post('activity/submitTask', path, funSuccess);},
+	
+	//查询等级信息
+	getUserLevel: function (path, funSuccess) {
+	  httpUtil.post("user/getUserLevel", path, funSuccess);
+	},
 };
 
 export default api;

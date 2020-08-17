@@ -87,6 +87,7 @@ export default{
 				    icon: 'none',
 				    title: '二次密码输入不一致'
 				});
+				return;
 			}
 		    let data = {
 		        account: this.userName,
@@ -104,18 +105,17 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
+					let uid = api.getData(res);   //返回用户uid
 					uni.showToast({
 						title: msg,
 						image: "/static/img/check-circle.png",
 						duration: 1500,
 						success() {
 							setTimeout(function(){
-								api.getUserByUid({uid: _this.uid}, (res)=>{
-									storage.setMyInfo(api.getData(res));
-									storage.setLoginType(1);
-									uni.reLaunch({
-										url: "/pages/index/index"
-									});
+								storage.setUid(uid);  //保存用户新uid
+								storage.setLoginType(1);  //保存登录方式
+								uni.reLaunch({
+									url: "/pages/index/index"
 								});
 							}, 1600);
 						}
