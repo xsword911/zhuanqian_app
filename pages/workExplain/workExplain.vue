@@ -88,7 +88,7 @@
 			<view class="lay_button btn_style">
 				<button type="default" hover-class="btn_hover" v-if="taskType == 1" @tap="acceptTask">接受任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="giveUpTask">放弃任务</button>
-				<button type="default" hover-class="btn_hover" v-if="taskType == 2">提交</button>
+				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="submitTask">提交</button>
 			</view>
 		</view>
 	</view>
@@ -99,6 +99,7 @@ import tran from "@/common/tran.js";
 import tuiUpload from "@/components/tui-upload/tui-upload.vue";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import util from "@/common/util.js";
 export default{
 	components:{
 		tuiUpload
@@ -211,6 +212,42 @@ export default{
 							if(code == 0){
 								uni.showToast({
 									title: "放弃任务成功",
+									icon: "none"
+								});
+								setTimeout(function(){
+									uni.navigateBack({
+										delta: 1
+									})
+								},1000)
+							}else{
+								let msg = api.getMsg(res);
+								uni.showToast({
+									title: msg,
+									icon: "none"
+								});
+							}
+						});
+					}
+				}
+			})
+		},
+		//提交任务
+		submitTask(){
+			let _this = this;
+			uni.showModal({
+				content: "确定提交该任务?",
+				success(res) {
+					if(res.confirm){
+						let data = {
+							id: _this.id,
+							doneUid: _this.uid
+						};
+						if(!util.isEmpty(_this.userName)) data.doneProv = _this.userName;
+						api.submitTask(data, (res)=>{
+							let code = api.getCode(res);
+							if(code == 0){
+								uni.showToast({
+									title: "提交任务成功",
 									icon: "none"
 								});
 								setTimeout(function(){

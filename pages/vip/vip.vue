@@ -53,7 +53,7 @@
 				</view>
 			</view>
 			
-			<view class="lay_pay">
+			<view class="lay_pay" v-show="isShowPay">
 				<view class="pay_info">
 					<view class="" style="display: flex; align-items: center;">
 						<view class="pay_img">
@@ -69,7 +69,7 @@
 				</view>
 				
 				<view class="pay_btn btn_style">
-					<button type="default">立即升级需支付299.00元</button>
+					<button type="default" hover-class="btn_hover">立即升级需支付{{payNum}}元</button>
 				</view>
 			</view>
 			
@@ -85,7 +85,9 @@
 					<view class="">开通会员:365天</view>
 				</view>
 				
-				<view class="level_box level_box2">
+				<view class="level_box level_box2" 
+				@tap="openPay(299.00)"
+				:class="{'click_box' : payNum == 299.00}">
 					<view class="level_type">白银会员</view>
 					<view class="level_money">299.00元</view>
 					<view class="">任务数量:10/天</view>
@@ -96,7 +98,9 @@
 					<view class="level_test">开通会员:365天</view>
 				</view>
 				
-				<view class="level_box level_box2">
+				<view class="level_box level_box2" 
+				@tap="openPay(999.00)"
+				:class="{'click_box' : payNum == 999.00}">
 					<view class="level_type">黄金会员</view>
 					<view class="level_money">999.00元</view>
 					<view class="">任务数量:20/天</view>
@@ -107,7 +111,9 @@
 					<view class="level_test">开通会员:365天</view>
 				</view>
 				
-				<view class="level_box level_box2">
+				<view class="level_box level_box2" 
+				@tap="openPay(2999.00)"
+				:class="{'click_box' : payNum == 2999.00}">
 					<view class="level_type">铂金会员</view>
 					<view class="level_money">2999.00元</view>
 					<view class="">任务数量:35/天</view>
@@ -118,7 +124,9 @@
 					<view class="level_test">开通会员:365天</view>
 				</view>
 				
-				<view class="level_box level_box2">
+				<view class="level_box level_box2" 
+				@tap="openPay(4999.00)"
+				:class="{'click_box' : payNum == 4999.00}">
 					<view class="level_type">钻石急单</view>
 					<view class="level_money">4999.00元</view>
 					<view class="">任务数量:50/天</view>
@@ -129,7 +137,9 @@
 					<view class="level_test">开通会员:365天</view>
 				</view>
 				
-				<view class="level_box level_box2">
+				<view class="level_box level_box2" 
+				@tap="openPay(8999.00)"
+				:class="{'click_box' : payNum == 8999.00}">
 					<view class="level_type">至尊会员</view>
 					<view class="level_money">8999.00元</view>
 					<view class="">任务数量:70/天</view>
@@ -148,8 +158,12 @@
 export default{
 	data() {
 		return {
-			
+			isShowPay: false,  //是否显示支付盒子
+			payNum: 0,  //支付金额
 		}
+	},
+	onShow() {
+		
 	},
 	methods:{
 		//跳转到会员特权界面
@@ -158,6 +172,11 @@ export default{
 				url: "/pages/power/power"
 			})
 		},
+		//打开支付盒子
+		openPay(num){
+			this.payNum = num.toFixed(2);
+			this.isShowPay = true;
+		}
 	}
 }
 </script>
@@ -286,6 +305,13 @@ export default{
 		border-radius:40rpx;
 		box-sizing:border-box;
 		font-size:14px;
+		color:#fff;
+	}
+	.click_box{
+		background-color:#0A91FB;
+		color:#fff;
+	}
+	.click_box>view{
 		color:#fff;
 	}
 </style>

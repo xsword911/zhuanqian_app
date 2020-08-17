@@ -178,6 +178,9 @@ const api = {
 	
 	//审核任务记录
 	auditTaskDetails: function(path, funSuccess) {httpUtil.post('activity/auditTaskDetails', path, funSuccess);},
+	
+	//用户提交一个任务
+	submitTask: function(path, funSuccess) {httpUtil.post('activity/submitTask', path, funSuccess);},
 };
 
 export default api;

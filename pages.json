@@ -23,6 +23,12 @@
 			"navigationBarTitleText": "我的"
 		}
 	},{
+		"path": "pages/service/service",
+		"style": {
+			"navigationBarTitleText": "客服",
+			"app-plus": {"titleNView": false} 
+		}
+	},{
 		"path": "pages/my/my",
 		"style": {
 			"navigationBarTitleText": "我的"
@@ -286,6 +292,11 @@
 	        "iconPath": "/static/img/extractMoney.png",
 	        "selectedIconPath": "static/img/extractMoney_active.png",
 	        "text": "发布"
+	    },{
+	        "pagePath": "pages/service/service",
+	        "iconPath": "static/img/work.png",
+	        "selectedIconPath": "/static/img/work_active.png",
+	        "text": "客服"
 	    },{
 	        "pagePath": "pages/my/my",
 	        "iconPath": "static/img/my.png",
