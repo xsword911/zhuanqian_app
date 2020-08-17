@@ -65,7 +65,7 @@
 				<tui-collapse :index="index" :current="current" :disabled="item.disabled" @click="change3">
 					<template v-slot:title>
 						<tui-list-cell :hover="!item.disabled" 
-						style="font-weight:bold; display: flex; align-items: center; padding:20rpx; box-sizing: border-box;">
+						style="font-weight:bold; display: flex; align-items: center; padding:15rpx 20rpx; box-sizing: border-box;">
 							<view class="func_img" style="margin-right:10rpx;">
 								<image :src="item.imgUrl" mode="widthFix"></image>
 							</view>
@@ -74,7 +74,7 @@
 					</template>
 					<template v-slot:content>
 						<tui-list-cell v-for="(item1,index1) in item.arrSub" :key="index1" :arrow="true"
-						style="display: flex; align-items: center; padding:20rpx 40rpx 20rpx 80rpx; box-sizing: border-box;"
+						style="display: flex; align-items: center; padding:25rpx 40rpx 25rpx 80rpx; box-sizing: border-box;"
 						@tap="toUrl(item1.toUrl)">
 							<text>{{item1.name}}</text>
 						</tui-list-cell>
@@ -185,7 +185,7 @@ export default{
 					name: "账户管理",
 					current: 0,
 					disabled: false,
-					imgUrl:"/static/img/more2.png",
+					imgUrl:"/static/img/m1.png",
 					arrSub: [{
 						name: "用户资料",
 						toUrl:"/pages/my/setting/setting"
@@ -203,7 +203,7 @@ export default{
 					name: "任务管理",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/share2.png",
+					imgUrl:"/static/img/m2.png",
 					arrSub: [{
 						name: "我发布的任务",
 						toUrl:"/pages/workList/workPublishList/workPublishList"
@@ -219,7 +219,7 @@ export default{
 					name: "资金管理",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/share2.png",
+					imgUrl:"/static/img/m3.png",
 					arrSub: [{
 						name: "个人总览",
 						toUrl:"/pages/my/userStatisticsMonth/userStatisticsMonth"
@@ -236,7 +236,7 @@ export default{
 					name: "代理管理",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/setting2.png",
+					imgUrl:"/static/img/m8.png",
 					arrSub: [{
 						name: "代理说明",
 						toUrl:"/pages/agent/agentExplain/agentExplain"
@@ -259,7 +259,7 @@ export default{
 					name: "短信公告",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/msg.png",
+					imgUrl:"/static/img/m7.png",
 					arrSub: [{
 						name: "站内短信",
 						toUrl:"/pages/message/message"
@@ -636,8 +636,8 @@ export default{
 		right: 0;
 	}
 	.func_img{
-		width:55rpx;
-		height:55rpx;
+		width:60rpx;
+		height:60rpx;
 	}
 	.func_left{
 		font-size:14px;

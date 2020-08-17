@@ -46,7 +46,7 @@
 	},{
 		"path": "pages/work/work",
 		"style": {
-			"navigationBarTitleText": "打工"
+			"navigationBarTitleText": "任务"
 		}
 	},{
 		"path": "pages/workExplain/workExplain",
@@ -286,7 +286,7 @@
 	        "pagePath": "pages/work/work",
 	        "iconPath": "static/img/work.png",
 	        "selectedIconPath": "/static/img/work_active.png",
-	        "text": "打工"
+	        "text": "任务"
 	    },{
 	        "pagePath": "pages/workList/workPublish/workPublish",
 	        "iconPath": "/static/img/extractMoney.png",
@@ -294,8 +294,8 @@
 	        "text": "发布"
 	    },{
 	        "pagePath": "pages/service/service",
-	        "iconPath": "static/img/work.png",
-	        "selectedIconPath": "/static/img/work_active.png",
+	        "iconPath": "static/img/kefu1.png",
+	        "selectedIconPath": "/static/img/kefu_active.png",
 	        "text": "客服"
 	    },{
 	        "pagePath": "pages/my/my",
