@@ -7,6 +7,7 @@ const deviceId = "deviceId"; //设备号
 const token = "token"; //token
 const uid = "uid"; //用户uid
 const loginType = "loginType"; //登录方式0:设备号(游客)登录 1：账号密码登录 2：微信登录
+const levelList = "levelList"; //会员表
 //封装保存本地数据操作
 module.exports = {
 	//保存我的数据
@@ -102,5 +103,15 @@ module.exports = {
 		uni.removeStorage({
 			key: myBankInfo
 		});
+	},
+	
+	//保存会员表信息
+	setLevelList(data) {
+		uni.setStorageSync(levelList, data);
+	},
+	
+	//获取会员表信息
+	getLevelList() {
+		return uni.getStorageSync(levelList);
 	},
 }

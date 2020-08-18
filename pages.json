@@ -46,8 +46,7 @@
 	},{
 		"path": "pages/work/work",
 		"style": {
-			"navigationBarTitleText": "任务",
-			"app-plus": {"titleNView": false} 
+			"navigationBarTitleText": "任务"
 		}
 	},{
 		"path": "pages/workExplain/workExplain",
@@ -273,9 +272,15 @@
 			"navigationBarTitleText": "新手指南"
 		}
 	},{
-		"path": "pages/money/money",
+		"path": "pages/interest/interest",
 		"style": {
 			"navigationBarTitleText": "余额生金"
+		}
+	},{
+		"path": "pages/interest/interestList/interestList",
+		"style": {
+			"navigationBarTitleText": "余额生金存取记录",
+			"enablePullDownRefresh": true
 		}
 	}],
 	

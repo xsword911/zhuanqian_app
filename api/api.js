@@ -183,9 +183,16 @@ const api = {
 	submitTask: function(path, funSuccess) {httpUtil.post('activity/submitTask', path, funSuccess);},
 	
 	//查询等级信息
-	getUserLevel: function (path, funSuccess) {
-	  httpUtil.post("user/getUserLevel", path, funSuccess);
-	},
+	getUserLevel: function (path, funSuccess) {httpUtil.post("user/getUserLevel", path, funSuccess);},
+	
+	//返回会员等级下拉信息
+	getLevelDesc: function (path, funSuccess) {httpUtil.post("user/getLevelDesc", path, funSuccess);},
+	
+	//购买等级
+	buyLevel: function (path, funSuccess) {httpUtil.post("user/buyLevel", path, funSuccess);},
+	
+	//查询开放的所有等级
+	getLevelAll: function (funSuccess) {httpUtil.post("user/getLevelAll", {}, funSuccess);},
 };
 
 export default api;

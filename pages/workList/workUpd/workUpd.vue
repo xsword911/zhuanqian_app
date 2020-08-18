@@ -3,6 +3,16 @@
 		<form @submit="formSubmit" @reset="formReset">
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
+					<view class="tui-title">任务会员类型</view>
+					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="levelType.length > 0">
+						<picker @change="levelPickerChange" :value="levelTypeIndex" :range="levelType" range-key="val" name="level">
+							<view class="uni-input">{{levelType[levelTypeIndex].val}}</view>
+						</picker>
+					</view>
+				</view>
+			</tui-list-cell>
+			<tui-list-cell :hover="false">
+				<view class="tui-line-cell">
 					<view class="tui-title">任务类型</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
 						<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
@@ -168,6 +178,9 @@ import util from "@/common/util.js";
 export default {
 	data() {
 		return {
+			levelType: [],   //会员类型列表
+			levelTypeIndex: 0,
+			
 			arrayType: [],   //任务类型列表
 			arrayTypeIndex: 0,
 			
@@ -217,6 +230,7 @@ export default {
 		this.uid = storage.getUid();  //获取uid
 		this.id = parseInt(res.id);
 		this.getTaskType();  //获取任务类型列表
+		this.getLevelType();  //获取会员类型列表
 		this.getTaskInfo(); //查看任务信息
 	},
 	methods: {
@@ -258,12 +272,23 @@ export default {
 				this.auditLongTime = auditLongData;
 			});
 		},
+		//获取会员类型列表
+		getLevelType(){
+			api.getLevelDesc({}, (res)=>{
+				let data = api.getData(res);
+				this.levelType = data;
+			});
+		},
 		//获取任务类型列表
 		getTaskType(){
 			api.getTaskType({}, (res)=>{
 				let data = api.getData(res);
 				this.arrayType = data;
 			});
+		},
+		//选择会员类型
+		levelPickerChange(e){
+			this.levelTypeIndex = e.detail.value;
 		},
 		//选择任务类型
 		typePickerChange(e){

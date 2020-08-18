@@ -13,43 +13,46 @@
 		</view>
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
-			<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
-			style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
-			@tap="toUpdWork(item)">
-				<view class="info_left">
-					<view class="info_title">{{item.title}}</view>
-					<view>
-						任务类型：
-						<text v-if="item.type == 0">邀请好友</text>
-						<text v-if="item.type == 1">分享朋友圈</text>
-						<text v-if="item.type == 2">加好友</text>
-						<text v-if="item.type == 3">下载app</text>
-						<text v-if="item.type == 4">签到任务</text>
-						<text v-if="item.type == 5">点赞任务</text>
+			<view class="income" v-for="(item,index) in incomeList" :key='index'  v-show="showIncome" @tap="open(item.id)">
+				<view class="incomeTime">
+					<view class="interest_type">
+						<text>转入利息宝</text>
+						<text>7天体验(7天)1%</text>
 					</view>
-					<view class="info_time">{{item.begTime}}</view>
+					
+					<text class="info_time">存入金额：{{item.gold}}</text>
+					<text class="info_time">存入时间：{{item.addTime}}</text>
 				</view>
-				<view class="" style="padding-right:40rpx; box-sizing: border-box;">
-					<view class="info_right">
-						<view class="" style="font-size:17px; margin-right:10rpx;">{{item.award}}</view>
-						<view class="" v-if="item.awardType == 0">金币</view>
-						<view class="" v-if="item.awardType == 1">现金</view>
+				
+				<view class="incomeNum takeOut">
+					<button type="default" hover-class="btn_hover">取出</button>
+<!-- 					<text class="num">{{item.gold}}</text>
+					<view class="gold_img">
+						<image src="/static/img/gold2.png" mode="widthFix"></image>
 					</view>
-					<view class="info_time info_num">
-						剩余任务量：{{item.sum - item.finishSum}}
-					</view>
+					<view class="open">
+						<tui-icon name="arrowdown" :size="20" v-show="!item.openTag"></tui-icon>
+						<tui-icon name="arrowup" :size="20" v-show="item.openTag"></tui-icon>
+					</view> -->
 				</view>
-			</tui-list-cell>
+				
+<!-- 				<view class="open_box" v-show="item.id == openId">
+					<view class="">
+						交易订单号：<text class="">{{item.sn}}</text>
+					</view>
+				</view> -->
+			</view>
 			
 			<view class="data_lack" v-show="!showIncome">
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
-					<!-- <button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button> -->
 				</view>
 			</view>
 
 		</view>
+		
+		
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
 		 
@@ -81,10 +84,6 @@
 		 <tui-loadmore v-if="loadding" :index="3" type="primary"></tui-loadmore>
 		 <tui-nomore v-if="!pullUpOn"></tui-nomore>
 		 <!--加载loadding-->
-		 
-		 <view class="btn_style taskPublish" @tap="toTaskPublish">
-		 	<button type="default" hover-class="click_btn">发布任务</button>
-		 </view>
     </view>
 </template>
 
@@ -92,21 +91,16 @@
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
-import tran from "@/common/tran.js";
 import tuiDatetime from "@/components/tui-datetime/tui-datetime.vue";
 import tuiDrawer from "@/components/tui-drawer/tui-drawer.vue";
 import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
 import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
-import tuiCollapse from "@/components/tui-collapse/tui-collapse.vue";
-import tuiListCell from "@/components/tui-list-cell/tui-list-cell.vue";
 export default {
 	components:{
 		tuiDatetime,
 		tuiDrawer,
 		tuiLoadmore,
-		tuiNomore,
-		tuiCollapse,
-		tuiListCell
+		tuiNomore
 	},
     data() {
         return {
@@ -115,8 +109,11 @@ export default {
 			rightDrawer: false,//抽屉开关
 			
 			userEn: [],  //我的信息
-			showIncome: true, // 收入明细列表是否显示
+			showIncome: false, // 收入明细列表是否显示
 			incomeList:[]   ,//提现明细列表
+			openTag: false,  //展开图表控制
+			// openBox: false,  //控制内容盒子是否打开
+			openId: null,  //展开内容盒子的id
 			page: 1,  //查询页数
 			
 			
@@ -130,7 +127,6 @@ export default {
 			setDateTime: "",
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
-			current: -1,
         };
     },
     onShow(){
@@ -139,11 +135,6 @@ export default {
 		this.getTaskDetails();  //获取金币收入明细表		
 	},
 	methods:{
-		//折叠面板
-		change3(e) {
-			//可关闭自身
-			this.current = this.current == e.index ? -1 : e.index
-		},
 		//上拉刷新
 		onPullDownRefresh: function() {
 			//延时为了看效果
@@ -222,37 +213,43 @@ export default {
 			let time = this.endTime + " 23:59:59";
 			data.endAddTime = time;
 		};
-		api.getTaskInfo(data, (res)=>{
+		api.getGold(data, (res)=>{
 			let data = api.getData(res).data;
 			if(util.isEmpty(data)) this.showIncome = false;
 				 //this.isShowIncome();  //控制金币收入明细表显示
 			else{
+				data.forEach((item) =>{
+					data.openTag = false;
+				});
 				this.incomeList = data;
 				this.showIncome = true;
 			}
 		});
 		},
-		//跳转到发布任务界面
-		toTaskPublish(){
-			uni.switchTab({
-				url: "/pages/workList/workPublish/workPublish"
-			})
-		},
-		//跳转到修改我发布的任务界面
-		toUpdWork(data){
-			uni.navigateTo({
-				url: "/pages/workList/workUpd/workUpd?id=" + data.id
-			})
+		//展开活动内容
+		open(id){
+			if(this.openId == id){
+				this.openId = -1;				
+			} 
+			else
+			 this.openId = id;
+			
+			this.incomeList.forEach((item) =>{
+				if(item.id == this.openId){
+					item.openTag = true;
+				}else{
+					item.openTag = false;
+				}
+			});
 		},
 	},
 	//上拉获取更多金币收益明细数据
 	onReachBottom(){
 		if (!this.pullUpOn) return;
-		if(!this.showIncome) return;
 		this.loadding = true;
 		this.page = this.page + 1;
 		
-		api.getTaskInfo({
+		api.getTaskDetails({
 			uid: this.uid,
 			state: 1,
 			page: this.page,
@@ -337,7 +334,7 @@ export default {
 		height:60rpx;
 	}
 	.num{
-		margin-right:10rpx;
+		margin-right:20rpx;
 		font-size:16px;
 	}
 	.open{
@@ -394,37 +391,26 @@ export default {
 		border-radius:40rpx;
 		padding:0 !important;
 	}
-	.taskPublish{
-		position:fixed;
-		bottom:0;
-		width:100%;
-		z-index:999;
+	
+	
+	
+	
+	.takeOut>button{
+		padding:0rpx 20rpx;
+		box-sizing:border-box;
+		font-size:12px;
+		border:1px solid #464646;
+		background-color:transparent;
+		line-height:2.3;
 	}
-	.taskPublish>button{
-		font-size:15px;
-		width:100%;
-		height:100rpx;
-		border-radius:0;
-		line-height:100rpx;
+	.interest_type{
+		
 	}
-	.click_btn{
-		opacity: .8;
-	}
-	.info_right{
-		display:flex; 
-		padding-right:40rpx; 
-		box-sizing:border-box; 
-		align-items: center;
-		color:#dc3b40;
-	}
-	.info_left>view{
-		margin-bottom:10rpx;
-	}
-	.info_title{
-		font-size:15px;
-		font-weight:bold;
-	}
-	.info_num{
-		margin-top:10rpx;
+	.interest_type>text:nth-child(1){
+		display:inline-block;
+		margin-right:30rpx;
+		font-size:14px;
+		color:#008000;
 	}
 </style>
+

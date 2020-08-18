@@ -333,9 +333,16 @@ export default{
 			timeRoundProgress: 0,//倒计时进度条
 			uid: "",  //uid
 			notReadMsgSum: null,  //未读消息数
+			level: [],  //会员表
 		}
 	},
-	onLoad() {
+	onLoad(res) {
+		this.level = storage.getLevelList();
+		if(res.name) 
+		util.setBarTitle(res.name + '任务');
+		else{
+			 util.setBarTitle(this.level[0].levelName + '任务')
+		}
 		// this.userEn = storage.getMyInfo();  //获取我的信息
 		// this.myCoin = this.userEn.gold;
 		// this.getGoldAdd();   //查询今日金币

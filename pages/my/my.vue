@@ -15,6 +15,9 @@
 				</view>
 				<view class="my_name">
 					<text class="name">{{userName}}</text>
+					<view class="level">
+						{{levelName}}
+					</view>
 					<view class="yqm">
 						邀请码：<text>{{yqm}}</text>
 					</view>
@@ -280,16 +283,20 @@ export default{
 			uid: "",  //uid
 			loginType: null, //登录方式
 			notReadMsgSum: 0,  //未读消息数
+			levelName: "1",  //我的会员等级名称
+			levelList: [],  //会员列表
 		}
 	},
 	onLoad() {
 		this.uid = storage.getUid();  //获取uid
+		this.levelList = storage.getLevelList();  //获取会员表
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.loginType = storage.getLoginType();  //获取登录方式
 		this.yqm = this.userEn.code;
 		this.currentCoin = this.userEn.gold;
 		this.profit = this.userEn.money;
 		this.getGoldAdd();  //获取今日金币
+		this.getMyLevelName();  //获取我的会员等级名称
 	},
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
@@ -298,6 +305,12 @@ export default{
 		this.getNotReadMsgSum(); //查询未读消息数
 	},
 	methods:{
+		//获取我的会员等级名称
+		getMyLevelName(){
+			this.levelList.forEach((item, index) =>{
+				if(item.id == this.userEn.level) this.levelName = item.levelName;
+			});
+		},
 		//折叠面板
 		change3(e) {
 			//可关闭自身
@@ -678,5 +691,8 @@ export default{
 	.lay_badge{
 		display:flex;
 		align-items:center;
+	}
+	.level{
+		font-size:14px;
 	}
 </style>

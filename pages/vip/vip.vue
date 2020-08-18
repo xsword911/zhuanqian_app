@@ -6,12 +6,12 @@
 					<image src="/static/img/head.png" mode=""></image>
 				</view>
 				<view class="">
-					会员等级：新人任务
+					会员等级：{{levelName}}
 				</view>
 			</view>
 			
 			<view class="">
-				每天可接：3(任务)
+				每天可接：<text>{{workNum}}</text>(任务)
 			</view>
 			
 			<view class="">
@@ -69,7 +69,7 @@
 				</view>
 				
 				<view class="pay_btn btn_style">
-					<button type="default" hover-class="btn_hover">立即升级需支付{{payNum}}元</button>
+					<button type="default" hover-class="btn_hover" @tap="pay">立即升级需支付{{payNum}}元</button>
 				</view>
 			</view>
 			
@@ -78,7 +78,7 @@
 				@tap="openPay(item)" :class="index == clickBox ? 'click_box' : ''">
 					<view class="level_type">{{item.levelName}}</view>
 					<view class="level_money">{{item.money}}元</view>
-					<view class="">任务数量:{{item.publishTaskSum}}/天</view>
+					<view class="">可接任务:{{item.receiveTaskSum}}/天</view>
 					<view class="">提现次数:{{item.drawSum}}/次</view>
 					<view class="">-</view>
 					<view class="">-</view>
@@ -91,27 +91,97 @@
 
 <script>
 import api from "@/api/api.js";
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
+			uid: "",  //uid
 			isShowPay: false,  //是否显示支付盒子
+			levelName: "",   //会员等级名称
+			workNum: null,  //当前每天可接任务数
 			payNum: 0,  //支付金额
 			userLevel: [],  //vip列表
-			clickBox: null,   //被选中的会员盒子
+			clickBox: null,   //被选中的会员盒子样式
+			myLevel: 0,   //我的会员等级 0新人 1白银会员 2黄金会员 3铂金会员 4钻石会员 5至尊会员
+			myLevelMoney: 0,  //当前等级对应金额
+			buyLevel: 0, //购买等级
 		}
 	},
 	onShow() {
-		this.getUserLevel();  //获取会员等级信息
+		this.init();  //初始化
+		this.uid = storage.getUid();  //获取uid
+		this.getUserLevel();  //获取会员等级信息		
 	},
 	methods:{
+		//初始化
+		init(){
+			this.isShowPay = false;
+			this.levelName = "";
+			this.workNum = null;
+			this.payNum = 0;
+			this.clickBox = null;
+			this.myLevel = 0;
+			this.myLevelMoney = 0;
+			this.buyLevel = 0;
+		},
+		//购买等级
+		pay(){
+			let _this = this;
+			uni.showModal({
+				content: "确认支付购买会员等级?",
+				success(res) {
+					if(res.confirm){
+						api.buyLevel({uid: _this.uid, level: _this.buyLevel}, (res)=>{
+							let code = api.getCode(res);
+							if(code == 0){
+								uni.showToast({
+									title: "购买成功",
+									icon: "none"
+								});
+								setTimeout(function(){
+									_this.init();  //初始化
+									_this.getMyInfo();  //刷新我的信息
+								},1000)
+							}else{
+								let msg = api.getMsg(res);
+								uni.showToast({
+									title: msg,
+									icon: "none"
+								});
+							}
+						});
+					}
+				}
+			})
+		},
 		//获取会员等级信息
 		getUserLevel(){
-			api.getUserLevel({page: 1, count: 10}, (res)=>{
+			api.getLevelAll((res)=>{
 				let data = api.getData(res).data;
-				data.forEach((item, index) =>{
-					item.money = item.money.toFixed(2);
-				});
 				this.userLevel = data;
+				this.getMyInfo(); //刷新我的信息			
+			});
+		},		
+		//获取我的信息
+		getMyInfo(){
+			api.getUserByUid({uid: this.uid}, (res)=>{
+				let data = api.getData(res)
+				this.myLevel = data.level;   //获取我的会员等级
+				storage.setMyInfo(data);	 //保存我的信息
+				
+				this.setUserLevel();  //设置我的等级信息
+			});
+		},
+		//设置自己的数据
+		setUserLevel(){
+			this.userLevel.forEach((item, index) =>{
+				let moneyNow = 0;  //当前会员等级金额
+				console.log("item" + item.level + "level" + this.myLevel);
+				if(item.level == this.myLevel){
+					this.workNum = item.receiveTaskSum;  //获取当前会员每日可接任务数
+					this.levelName = item.levelName;	//获取当前会员等级名称
+					this.myLevelMoney = item.money;     //获取当前等级金额
+				}
 			});
 		},
 		//跳转到会员特权界面
@@ -122,10 +192,12 @@ export default{
 		},
 		//打开支付盒子
 		openPay(data){
-			if(data.id == 1) return;
-			this.payNum = data.money;
-			this.isShowPay = true;
-			this.clickBox = data.id - 1;
+			//当前玩家会员等级大于点击会员盒子时return
+			if(data.id <= this.myLevel) return; 
+			this.payNum = data.money - this.myLevelMoney;  //显示购买金额
+			this.isShowPay = true;			//显示购买按钮
+			this.clickBox = data.id - 1;   //添加选中样式
+			this.buyLevel = data.level;   //设置购买等级
 		}
 	}
 }

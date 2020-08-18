@@ -28,6 +28,17 @@
 			
 			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
 				<view class="func_left">
+					<text class="func_test">等级</text>
+				</view>
+				
+				<view class="func_right">
+					<text class="name">{{levelName}}</text>
+					<tui-icon name="arrowright" :size="26" style="visibility: hidden;"></tui-icon>
+				</view>
+			</button>
+			
+			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
+				<view class="func_left">
 					<text class="func_test">邀请码</text>
 				</view>
 				
@@ -116,20 +127,31 @@ export default{
 			loginType: null, //登录方式
 			wxId: '',  //微信id
 			userName: '',  //用户账号
+			levelName: '',  //我的会员等级名称
+			levelList: [],  //会员列表
 		}
 	},
 	onShow() {
 		this.uid = storage.getUid();  //获取uid
 		this.loginType = storage.getLoginType();  //获取登录方式
-		this.userEn = storage.getMyInfo();
+		this.userEn = storage.getMyInfo();   //获取我的信息
+		this.levelList = storage.getLevelList();  //获取会员表
+		//刷新我的信息
 		api.getUserByUid({uid: this.uid}, (res)=>{
 			let data = api.getData(res);
 			this.userEn = data;
 			storage.setMyInfo(this.userEn);
 			this.getName();  //获取用户名
 		});
+		this.getMyLevelName();  //获取我的会员等级名称
 	},
 	methods:{
+		//获取我的会员等级名称
+		getMyLevelName(){
+			this.levelList.forEach((item, index) =>{
+				if(item.id == this.userEn.level) this.levelName = item.levelName;
+			});
+		},
 		//获取用户名
 		getName(){
 			//游客登录

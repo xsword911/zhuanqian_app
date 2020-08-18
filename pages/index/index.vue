@@ -12,7 +12,7 @@
 	
 	<!-- 菜单 -->
 	<view class="lay_bar">
-		<view class="menu_box menu_bottom" @tap="toMoney">
+		<view class="menu_box menu_bottom" @tap="toInterest">
 			<view class="">
 				<view class="menu_img">
 					<image src="/static/img/sy1.png" mode=""></image>
@@ -110,53 +110,11 @@
 	<view class="lay_work">
 		<view class="">任务大厅</view>
 		<view class="work_list">
-			<view class="work" @tap="toWork">
-				<view class="work_num">任务数量3单/天</view>
-				<view class="work_text">新人任务专属通道</view>
+			<view class="work" @tap="toWork(item.levelName)"  v-for="(item,index) in levelList" :key="index">
+				<view class="work_num">任务数量{{item.publishTaskSum}}单/天</view>
+				<view class="work_text">{{item.levelName}}任务专属通道</view>
 				<view class="work_img">
-					<image src="/static/img/member1.png" mode=""></image>
-				</view>
-			</view>
-			
-			<view class="work" @tap="toWork">
-				<view class="work_num">任务数量10单/天</view>
-				<view class="work_text">白银会员专属通道</view>
-				<view class="work_img">
-					<image src="/static/img/member2.png" mode=""></image>
-				</view>
-			</view>
-			
-			
-			<view class="work" @tap="toWork">
-				<view class="work_num">任务数量20单/天</view>
-				<view class="work_text">黄金会员专属通道</view>
-				<view class="work_img">
-					<image src="/static/img/member3.png" mode=""></image>
-				</view>
-			</view>
-			
-			
-			<view class="work" @tap="toWork">
-				<view class="work_num">任务数量35单/天</view>
-				<view class="work_text">铂金会员专属通道</view>
-				<view class="work_img">
-					<image src="/static/img/member4.png" mode=""></image>
-				</view>
-			</view>
-			
-			<view class="work" @tap="toWork">
-				<view class="work_num">任务数量50单/天</view>
-				<view class="work_text">钻石会员专属通道</view>
-				<view class="work_img">
-					<image src="/static/img/member5.png" mode=""></image>
-				</view>
-			</view>
-			
-			<view class="work" @tap="toWork">
-				<view class="work_num">任务数量70单/天</view>
-				<view class="work_text">至尊会员专属通道</view>
-				<view class="work_img">
-					<image src="/static/img/member6.png" mode=""></image>
+					<image :src="'/static/img/member' + item.id + '.png'" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -223,24 +181,8 @@ export default{
 	data() {
 		return {
 			userEn: [],  //我的信息
-			myCoin: 0,  //我的金币
-			todayCoin: 0,  //今日金币
-			earn: [],  //赚赚活动列表
-			noticePadding: "0",  //弹窗的padding属性
-			modal8: false,  //控制金币换现金弹窗显示
-			text: null, //弹窗的文字内容
-			title: '', //弹窗标题
-			id: null ,//任务id
-			timeOut: true, //控制时间倒计时显示
-			time: "",  //倒计时
-			range: "",  //距离下次领取奖励的大概时间
-			unit: '',   //距离下次领取奖励的时间单位
-			award: null,  //当前奖励
-			awardType: null, //奖励类型 0:金币 1:现金
-			day: null,  //签到天数
-			signSecond: null, //距离下次签到多少秒
-			intervalID: null,  //定时器id
-			timeRoundProgress: 0,//倒计时进度条
+			modal8: false,  //控制弹窗显示
+
 			uid: "",  //uid
 			runHorseEn: "", //跑马灯文字
 			noticeId: 0,  //最新公告id
@@ -254,13 +196,11 @@ export default{
 			interval: 3000,
 			duration: 500,
 			run: [],  //轮播图列表
+			levelList: [],  //会员等级信息
 		}
 	},
 	onLoad() {
 		// this.userEn = storage.getMyInfo();  //获取我的信息
-		// this.myCoin = this.userEn.gold;
-		// this.getGoldAdd();   //查询今日金币
-		// this.getTaskList();  //获取任务列表
 	},
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
@@ -271,12 +211,21 @@ export default{
 		this.getNotice();    //获取公告
 		this.noticePadding = "0";  //重置公告弹窗
 		this.getNotReadMsgSum(); //查询未读消息数
+		this.getUserLevel();   //获取会员等级信息
 	},
 	methods:{
+		//获取会员等级信息
+		getUserLevel(){
+			api.getLevelAll((res)=>{
+				let data = api.getData(res).data;
+				this.levelList = data;
+				storage.setLevelList(this.levelList);  //保存会员列表
+			});
+		},
 		//跳转到余额宝界面
-		toMoney(){
+		toInterest(){
 			uni.navigateTo({
-				url: "/pages/money/money"
+				url: "/pages/interest/interest"
 			})
 		},
 		//跳转到新手指南界面
@@ -325,9 +274,9 @@ export default{
 			}
 		},
 		//跳转到任务界面
-		toWork(){
-			uni.switchTab({
-				url: "/pages/work/work"
+		toWork(name){
+			uni.reLaunch({
+				url: "/pages/work/work?name=" + name
 			})
 		},
 		//查询未读消息数
@@ -382,20 +331,7 @@ export default{
 			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
-				this.myCoin = this.userEn.gold;
 			});
-		},
-		//跳转查看签到页
-		toSign(){
-			uni.navigateTo({
-				url: '/pages/receiveAward/receiveAward'
-			})
-		},
-		//跳转到幸运转盘页
-		toLuckDraw(){
-			uni.navigateTo({
-				url: '/pages/work/luckDraw/luckDraw'
-			})
 		},
 		//关闭弹窗
 		hide8() {
@@ -407,41 +343,6 @@ export default{
 			this.text = item.rule;
 			this.title = item.title;
 			this.id = item.id;
-		},
-		//做一个任务
-		taskDo(){
-			let _this = this;
-			api.taskDo({
-				uid: this.uid, 
-				taskId: this.id,
-			}, (res)=>{
-				let code = api.getCode(res);
-				let msg = api.getMsg(res);
-				this.hide8();
-				if(code == 0){
-					uni.showModal({
-						content: "任务" + msg,
-						showCancel: false,
-						success(res) {
-							if (res.confirm) {
-								_this.getMyInfo();  //刷新我的信息
-								_this.getGoldAdd();   //查询今日金币
-							};
-						}
-					});
-				}else{
-					uni.showModal({
-						content: msg,
-						showCancel: false
-					});
-				}
-			});
-		},
-		//跳转到任务金币明细页
-		toGoldDetails(){
-			uni.navigateTo({
-				url: "/pages/workDetails/workDetails"
-			})
 		},
 	}
 }
