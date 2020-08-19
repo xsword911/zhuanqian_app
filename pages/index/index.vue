@@ -108,9 +108,9 @@
 	
 	<!-- 任务大厅 -->
 	<view class="lay_work">
-		<view class="">任务大厅</view>
+		<view class="work_title">任务大厅</view>
 		<view class="work_list">
-			<view class="work" @tap="toWork(item.levelName)"  v-for="(item,index) in levelList" :key="index">
+			<view class="work" @tap="toWork(item.id)"  v-for="(item,index) in levelList" :key="index">
 				<view class="work_num">任务数量{{item.publishTaskSum}}单/天</view>
 				<view class="work_text">{{item.levelName}}任务专属通道</view>
 				<view class="work_img">
@@ -199,9 +199,6 @@ export default{
 			levelList: [],  //会员等级信息
 		}
 	},
-	onLoad() {
-		// this.userEn = storage.getMyInfo();  //获取我的信息
-	},
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息
@@ -212,8 +209,16 @@ export default{
 		this.noticePadding = "0";  //重置公告弹窗
 		this.getNotReadMsgSum(); //查询未读消息数
 		this.getUserLevel();   //获取会员等级信息
+		this.getLevelDesc();   //获取全部会员信息
 	},
 	methods:{
+		//获取全部会员信息
+		getLevelDesc(){
+			api.getLevelDesc({}, (res)=>{
+				let data = api.getData(res);
+				storage.setLevelDescList(data);
+			});
+		},
 		//获取会员等级信息
 		getUserLevel(){
 			api.getLevelAll((res)=>{
@@ -274,9 +279,9 @@ export default{
 			}
 		},
 		//跳转到任务界面
-		toWork(name){
+		toWork(id){
 			uni.reLaunch({
-				url: "/pages/work/work?name=" + name
+				url: "/pages/work/work?id=" + id
 			})
 		},
 		//查询未读消息数
@@ -702,6 +707,9 @@ export default{
 	}
 	.work_img{
 		flex: 1;
+	}
+	.work_title{
+		font-weight:bold;
 	}
 </style>
 

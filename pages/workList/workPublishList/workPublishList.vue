@@ -53,7 +53,7 @@
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
 		 
-		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer">
+		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer" style="position:relative; z-index: 999;">
 		 	<view class="d-container">
 				<view class="search_time">
 					<view class="search_test">
@@ -71,8 +71,18 @@
 						<input type="text" value="" @tap="show(2)" v-model="endTime" :disabled="true" />
 					</view>
 				</view>
+				<view class="search_time" v-if="arrayLevel.length > 0">
+					<view class="search_test">
+						<text>任务等级</text>
+					</view>
+					<view class="uni-list-cell-db" style="border-bottom:1px solid #808080;">
+						<picker @change="levelPickerChange" :value="arrayLevel[arrayLevelIndex].key" :range="arrayLevel" range-key="val" name="level">
+							<view class="uni-input">{{arrayLevel[arrayLevelIndex].val}}</view>
+						</picker>
+					</view>
+				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getTaskDetails" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -82,9 +92,9 @@
 		 <tui-nomore v-if="!pullUpOn"></tui-nomore>
 		 <!--加载loadding-->
 		 
-		 <view class="btn_style taskPublish" @tap="toTaskPublish">
+<!-- 		 <view class="btn_style taskPublish" @tap="toTaskPublish">
 		 	<button type="default" hover-class="click_btn">发布任务</button>
-		 </view>
+		 </view> -->
     </view>
 </template>
 
@@ -131,14 +141,31 @@ export default {
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
 			current: -1,
+			
+			arrayLevel: [],   //任务等级列表
+			arrayLevelIndex: 0,
+			level: 0,	//选中的任务等级码
         };
     },
     onShow(){
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息		
 		this.getTaskDetails();  //获取金币收入明细表		
+		this.getLevelDesc(); //获取会员等级列表
 	},
 	methods:{
+		//获取会员等级列表
+		getLevelDesc(){
+			this.arrayLevel = storage.getLevelDescList();
+		},
+		//选择任务等级
+		levelPickerChange(e){
+			this.arrayLevelIndex = e.detail.value;
+			this.arrayLevel.forEach((item, index) =>{
+				 //获取选中的任务状态码
+				if(this.arrayLevelIndex == index) this.level = item.key;
+			});
+		},
 		//折叠面板
 		change3(e) {
 			//可关闭自身
@@ -208,11 +235,13 @@ export default {
 		},
 		//获取金币明细表
 		getTaskDetails(){
+			this.closeDrawer();   //关闭抽屉
 			this.page = 1;
 			let data = {
 				uid: this.uid,
 				page: this.page,
-				count: 10
+				count: 20,
+				level: parseInt(this.level)
 			};
 		if(!util.isEmpty(this.begTime)){
 			let time = this.begTime + " 00:00:00";

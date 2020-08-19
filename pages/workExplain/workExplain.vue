@@ -57,27 +57,41 @@
 				<view class="lay_explain"><text>{{workInfo.explain}}</text></view>
 			</view>
 			
-			<view class="lay_title" v-if="workInfo.isDoneProve == 0 || workInfo.isDoneImg == 1">
-				<view class="">任务规则</view>
+			<view class="lay_title">
+				<view class="">提交任务是否需要凭证</view>
 				<view class="lay_explain">
 					<view class="" v-if="workInfo.isDoneProve == 0" style="margin-bottom:10rpx;">
-						<text class="lay_head_right">*</text><text>任务不需要凭证</text>
+						<text class="lay_head_right">*</text><text>提交任务不需要凭证</text>
 					</view>
+					
+					<view class="" v-if="workInfo.isDoneProve == 1" style="margin-bottom:10rpx;">
+						<text class="lay_head_right">*</text><text>提交任务需要凭证</text>
+					</view>
+				</view>
+			</view>
+			
+			<view class="lay_title">
+				<view class="">提交任务是否需要截图</view>
+				<view class="lay_explain">
 					<view class="" v-if="workInfo.isDoneImg == 0">
-						<text class="lay_head_right">*</text><text>任务不需要截图</text>
+						<text class="lay_head_right">*</text><text>提交任务不需要截图</text>
+					</view>
+					
+					<view class="" v-if="workInfo.isDoneImg == 1">
+						<text class="lay_head_right">*</text><text>提交任务需要截图</text>
 					</view>
 				</view>
 			</view>
 			
 			<view class="lay_title lay_userName" v-if="workInfo.isDoneProve == 1">
-				<view class="">个人账户：</view>
+				<view class="">完成凭证：</view>
 				<input type="text" value="12" v-model="userName"/>
 			</view>
 			
 			<view class="lay_title" v-if="workInfo.isDoneImg == 1">
-				<view class="">截图凭证：</view>
+				<view class="">完成截图：</view>
 				<view class="tui-box-upload">
-					<tui-upload :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
+					<tui-upload :serverUrl="serverUrl" @complete="result" @remove="remove" :limit="1"></tui-upload>
 				</view>
 			</view>
 			
@@ -100,6 +114,7 @@ import tuiUpload from "@/components/tui-upload/tui-upload.vue";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import util from "@/common/util.js";
+import time from "@/common/time.js";
 export default{
 	components:{
 		tuiUpload
@@ -111,7 +126,13 @@ export default{
 			id: null,  //任务id
 			uid: "",
 			taskType: null, 
+			
 			counDown: "",  //倒计时
+			timeNowStamp: null,//当前时间戳(倒计时用)
+			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
+			doneLongTimeStamp: null,//限时时间(秒)转时间戳(倒计时用)
+			setIntervalId: '',  //计时器id
+			
 			auditLong: null,  //限时审核时间
 			
 			imageData: [],
@@ -135,6 +156,7 @@ export default{
 				let data = api.getData(res).data[0];
 				this.workInfo = data;
 				this.getWorkInfo();  //处理任务数据
+				this.getCount();  //获取倒计时
 			});
 		},
 		// 查询任务完成情况
@@ -143,17 +165,31 @@ export default{
 				let data = api.getData(res).data[0];
 				this.workInfo = data;
 				this.getWorkInfo();  //处理任务数据
+				this.getCount();  //获取倒计时
 			});
 		},
-		//处理任务数据
-		getWorkInfo(){
+		//获取倒计时
+		getCount(){
 			//获取倒计时
-			let doneLongSecond = this.workInfo.doneLong;
-			let hour = parseInt(doneLongSecond / 3600);
-			let min = parseInt([doneLongSecond - (hour * 3600)] / 60);
-			let second = parseInt(doneLongSecond - [(hour * 3600) + (min * 60)]);
-			this.counDown = `${hour}小时${min}分${second}秒`;
-			
+			this.timeNowStamp = Date.parse(new Date());  //获取当前时间戳
+			if(this.taskType == 1) this.receiveTimeStamp = new Date(this.workInfo.begTime).getTime(); //获取开始任务时间戳
+			else this.receiveTimeStamp = new Date(this.workInfo.receiveTime).getTime();  //获取接受任务时间戳
+			this.doneLongTimeStamp = this.workInfo.doneLong*1000;   //限时时间(秒)转时间戳
+			this.setIntervalId = setInterval(this.counDownTimeOut, 1000);  //获取计时器id
+		},
+		//倒计时计时器
+		counDownTimeOut(){
+			this.timeNowStamp = this.timeNowStamp + 1000;  //每秒增大当前时间戳
+			let counDown = this.doneLongTimeStamp - (this.timeNowStamp - this.receiveTimeStamp);  //获取时间差
+			if(counDown < 0){
+				this.counDown = '任务超时';
+				clearInterval(this.setIntervalId);  //清除定时器
+				return;
+			}
+			this.counDown = time.toHHmmss(counDown);  //时间戳转换时分秒
+		},
+		//处理任务数据
+		getWorkInfo(){			
 			//获取限时审核时间
 			let auditLongSecond = this.workInfo.auditLong;
 			let auditLongHour = parseInt(auditLongSecond / 3600);

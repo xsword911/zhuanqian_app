@@ -25,7 +25,8 @@
 				</view>
 				
 				<view class="incomeNum takeOut">
-					<button type="default" hover-class="btn_hover">取出</button>
+					<button type="default" hover-class="btn_hover" v-if="item.type != 102">取出</button>
+					<text v-if="item.type == 102">已取出</text>
 <!-- 					<text class="num">{{item.gold}}</text>
 					<view class="gold_img">
 						<image src="/static/img/gold2.png" mode="widthFix"></image>

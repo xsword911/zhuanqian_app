@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import api from "@/api/api.js";
 import tran from "@/common/tran.js";
 	export default {
 		name: 'tuiUpload',
@@ -130,7 +131,7 @@ import tran from "@/common/tran.js";
 							if (_this.serverUrl) {
 								_this.uploadImage(index, imageArr[j]).then(() => {
 									_this.change()
-								}).catch((res) => {
+								}).catch(() => {
 									_this.change()
 								})
 							} else {
@@ -154,21 +155,22 @@ import tran from "@/common/tran.js";
 						formData: {},
 						filePath: url,
 						success: function(res) {
-							let res2 = tran.json2Obj(res.data);
-							console.log(res2);
-							if (res2.code == 0) {
-								console.log(1);
-								// //返回结果 此处需要按接口实际返回进行修改
-								// let d = JSON.parse(res.data.replace(/\ufeff/g, "") || "{}")
-								// //判断code，以实际接口规范判断
-								// if (d.code % 100 === 0) {
-								// 	// 上传成功 d.url 为上传后图片地址，以实际接口返回为准
-								// 	d.url && (_this.imageList[index] = d.url)
-								// 	_this.$set(_this.statusArr, index, d.url ? "1" : "3")
-								// } else {
-								// 	// 上传失败
-								// 	_this.$set(_this.statusArr, index, "3")
-								// }
+							console.log(res)
+							if (res.statusCode == 200) {
+								let data = res.data;
+								let data2 = tran.json2Obj(data);
+								console.log(data2);
+								console.log(data);
+								//判断code，以实际接口规范判断
+								if (data2.code == 0) {
+									let url = data2.data.url;
+									// 上传成功 d.url 为上传后图片地址，以实际接口返回为准
+									_this.imageList[index] = url;
+									_this.$set(_this.statusArr, index, url ? "1" : "3")
+								} else {
+									// 上传失败
+									_this.$set(_this.statusArr, index, "3")
+								}
 								resolve(index)
 							} else {
 								_this.$set(_this.statusArr, index, "3")

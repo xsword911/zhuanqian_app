@@ -187,7 +187,7 @@ export default {
 			arrayAward: [{"award": "金币", "key": 0}, {"award": "现金", "key": 1}],   //任务奖励类型列表
 			arrayAwardIndex: 0,
 			
-			arrayState: [{"state": "开启", "key": 1}, {"state": "关闭", "key": 0}],   //任务状态列表
+			arrayState: [{"state": "关闭", "key": 0}, {"state": "开启", "key": 1}],   //任务状态列表
 			arrayStateIndex: 0,
 			
 			arraySort: [{"sort": "热门活动", "key": 0}, {"sort": "限时推荐", "key": 1}],   //任务分类列表
@@ -302,14 +302,6 @@ export default {
 		statePickerChange(e){
 			this.arrayStateIndex = e.detail.value;
 		},
-		// //选择任务限时时间
-		// doneLongPickerChange(e){
-		// 	this.arrayDoneLongIndex = e.detail.value;
-		// },
-		// //选择任务审核时间
-		// auditLongPickerChange(e){
-		// 	this.arrayAuditLongIndex = e.detail.value;
-		// },
 		//选择任务分类类型
 		sortPickerChange(e){
 			this.arraySortIndex = e.detail.value;

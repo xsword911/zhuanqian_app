@@ -100,6 +100,7 @@ import tran from "@/common/tran.js";
 import tuiUpload from "@/components/tui-upload/tui-upload.vue";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import time from "@/common/time.js";
 export default{
 	components:{
 		tuiUpload
@@ -110,7 +111,13 @@ export default{
 			userName: "",  //输入的账号名
 			id: null,  //任务id
 			uid: "",
-			counDown: "",  //倒计时
+			
+			counDown: "",  //倒计时显示
+			timeNowStamp: null,//当前时间戳(倒计时用)
+			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
+			doneLongTimeStamp: null,//限时时间(秒)转时间戳(倒计时用)
+			setIntervalId: '',  //计时器id
+			
 			auditLong: null,  //限时审核时间
 			
 			imageData: [],
@@ -131,30 +138,36 @@ export default{
 				let data = api.getData(res).data[0];
 				this.workInfo = data;
 				this.getWorkInfo();  //处理任务数据
-				console.log(this.workInfo);
+				this.getCount();  //获取倒计时
 			});
+		},
+		//获取倒计时
+		getCount(){
+			//获取倒计时
+			this.timeNowStamp = Date.parse(new Date());  //获取当前时间戳
+			this.receiveTimeStamp = new Date(this.workInfo.receiveTime).getTime();  //获取接受任务时间戳
+			this.doneLongTimeStamp = this.workInfo.doneLong*1000;   //限时时间(秒)转时间戳
+			this.setIntervalId = setInterval(this.counDownTimeOut, 1000);  //获取计时器id
+		},
+		//倒计时计时器
+		counDownTimeOut(){
+			let counDown = this.doneLongTimeStamp - (this.timeNowStamp - this.receiveTimeStamp);  //获取时间差
+			if(counDown < 0){
+				this.counDown = '任务超时';
+				clearInterval(this.setIntervalId);  //清除定时器
+				return;
+			}
+			this.counDown = time.toHHmmss(counDown);  //时间戳转换时分秒
 		},
 		//处理任务数据
 		getWorkInfo(){
-			//获取倒计时
-			let doneLongSecond = this.workInfo.doneLong;
-			let hour = parseInt(doneLongSecond / 3600);
-			let min = parseInt([doneLongSecond - (hour * 3600)] / 60);
-			let second = parseInt(doneLongSecond - [(hour * 3600) + (min * 60)]);
-			this.counDown = `${hour}小时${min}分${second}秒`;
 			
 			//获取限时审核时间
 			let auditLongSecond = this.workInfo.auditLong;
-			let auditLongHour = parseInt(auditLongSecond / 3600);
-			
-			let auditLongMin = parseInt([auditLongSecond - (auditLongHour * 3600)] / 60);
-			
-			let auditLongSe = parseInt(auditLongSecond - [(auditLongHour * 3600) + (auditLongMin * 60)]);
-			
-			this.auditLong = `${auditLongHour}小时${auditLongMin}分${auditLongSe}秒`;
+			let auditLong = time.timeChange(auditLongSecond);
+			this.auditLong = auditLong;
 		},
 		result: function(e) {
-			console.log(e)
 			this.imageData = e.imgArr;
 		},
 		remove: function(e) {

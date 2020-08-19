@@ -1,6 +1,19 @@
 <template>
 	<view class="">
-		<view class="head_box background_style">
+		<view class="lay_navbar background_style">
+			<view class="uni-list-cell-db level_box" v-if="arrayLevel.length > 0">
+				<picker @change="levelPickerChange" :value="arrayLevel[arrayLevelIndex].id" 
+				:range="arrayLevel" range-key="levelName" name="level">
+					<view class="uni-input" style="display: inline-block;">
+						{{arrayLevel[arrayLevelIndex].levelName}}任务
+					</view>
+					<view class="icon_down" style="display: inline-block;vertical-align: sub;">
+						<tui-icon name="arrowdown" :size="30" color="#FF7207"></tui-icon>
+					</view>
+				</picker>
+			</view>
+		</view>
+		<view class="head_box">
 			<!-- 金币信息 -->
 			<view class="coin">
 				<view class="">
@@ -333,15 +346,16 @@ export default{
 			timeRoundProgress: 0,//倒计时进度条
 			uid: "",  //uid
 			notReadMsgSum: null,  //未读消息数
-			level: [],  //会员表
+			
+			arrayLevel: [],   //任务等级列表
+			arrayLevelIndex: 0,
+			level: 0,	//选中的任务等级码
 		}
 	},
 	onLoad(res) {
-		this.level = storage.getLevelList();
-		if(res.name) 
-		util.setBarTitle(res.name + '任务');
-		else{
-			 util.setBarTitle(this.level[0].levelName + '任务')
+		if(res.id){
+			this.arrayLevelIndex = parseInt(res.id) -1;  //获取标题栏显示内容id
+			this.level = parseInt(res.id);  //设置任务等级码
 		}
 		// this.userEn = storage.getMyInfo();  //获取我的信息
 		// this.myCoin = this.userEn.gold;
@@ -357,8 +371,27 @@ export default{
 		this.getSignProgress();  //查询奖励信息
 		this.timeAuto();  //开启计时器
 		this.getNotReadMsgSum(); //查询未读消息数
+		this.getLevelDesc(); //获取会员等级列表
 	},
 	methods:{
+		//获取会员等级列表
+		getLevelDesc(){
+			api.getLevelAll((res)=>{
+				let data = api.getData(res).data;
+				this.arrayLevel = data;
+			});
+		},
+		//选择任务等级
+		levelPickerChange(e){
+			this.arrayLevelIndex = e.detail.value;
+			this.arrayLevel.forEach((item, index) =>{
+				 //获取选中的任务状态码
+				if(this.arrayLevelIndex == index){
+					this.level = item.id;  //重新获取选中的任务状态码
+					this.getTaskList();  //重新获取任务列表
+				}
+			});
+		},
 		//查询未读消息数
 		getNotReadMsgSum(){
 			api.getNotReadMsgSum({uid: this.uid}, (res)=>{
@@ -541,7 +574,8 @@ export default{
 			api.getTask1({
 				state: 1,
 				page: 1,
-				count: 15,
+				count: 20,
+				level: parseInt(this.level)
 			}, (res)=> {
 				let data = api.getData(res).data;
 				let hotList = [];
@@ -632,6 +666,7 @@ export default{
 		box-sizing:border-box;
 		position:relative;
 		border-radius:0 0 20rpx 20rpx;
+		background-color:#FEC40B;
 	}
 	.coin{
 		width:100%;
@@ -907,4 +942,26 @@ export default{
 		font-size:14px;
 	}
 
+
+
+	.lay_navbar{
+		width:100%;
+		height:88rpx;
+		display:flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.level_box{
+		width:60%;
+		font-size:16px;
+		margin:auto;
+		color:#fff;
+		font-weight:bold;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+	}
+	.icon_down{
+		margin-left:10rpx;
+	}
 </style>

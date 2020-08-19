@@ -51,7 +51,7 @@
 							<view class="" v-if="item.awardType == 1">现金</view>
 						</view>
 						<view class="info_time info_num">
-							剩余任务量：{{item.sum - item.finishSum}}
+							任务限时：{{item.doneLong | doneLong}}
 						</view>
 					</view>
 				</tui-list-cell>
@@ -75,12 +75,20 @@
 					<view class="search_test">
 						<text>任务状态</text>
 					</view>
-					<view class="">
-					<view class="uni-list-cell-db" style="border-bottom:1px solid #000;">
+					<view class="uni-list-cell-db" style="border-bottom:1px solid #808080;">
 						<picker @change="statePickerChange" :value="arrayState[arrayStateIndex].key" :range="arrayState" range-key="state" name="state">
 							<view class="uni-input">{{arrayState[arrayStateIndex].state}}</view>
 						</picker>
 					</view>
+				</view>
+				<view class="search_time" v-if="arrayLevel.length > 0">
+					<view class="search_test">
+						<text>任务等级</text>
+					</view>
+					<view class="uni-list-cell-db" style="border-bottom:1px solid #808080;">
+						<picker @change="levelPickerChange" :value="arrayLevel[arrayLevelIndex].key" :range="arrayLevel" range-key="val" name="level">
+							<view class="uni-input">{{arrayLevel[arrayLevelIndex].val}}</view>
+						</picker>
 					</view>
 				</view>
 				<view class="search_time">
@@ -124,6 +132,7 @@ import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
 import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 import tuiCollapse from "@/components/tui-collapse/tui-collapse.vue";
 import tuiListCell from "@/components/tui-list-cell/tui-list-cell.vue";
+import time from "@/common/time.js";
 export default {
 	components:{
 		tuiDatetime,
@@ -132,6 +141,11 @@ export default {
 		tuiNomore,
 		tuiCollapse,
 		tuiListCell
+	},
+	filters:{
+		doneLong(data){
+			return time.timeChange(data);
+		}
 	},
     data() {
         return {
@@ -167,14 +181,32 @@ export default {
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
 			current: -1,
+			
+			arrayLevel: [],   //任务等级列表
+			arrayLevelIndex: 0,
+			level: 0,	//选中的任务等级码
         };
     },
     onShow(){
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息		
-		this.getTaskDetails();  //获取金币收入明细表		
+		this.getTaskDetails();  //获取金币收入明细表
+		this.getLevelDesc(); //获取会员等级列表
 	},
 	methods:{
+		//获取会员等级列表
+		getLevelDesc(){
+			this.arrayLevel = storage.getLevelDescList();
+		},
+		//选择任务等级
+		levelPickerChange(e){
+			this.arrayLevelIndex = e.detail.value;
+			this.arrayLevel.forEach((item, index) =>{
+				 //获取选中的任务状态码
+				if(this.arrayLevelIndex == index) this.level = item.key;
+			});
+		},
+		
 		//选择任务状态
 		statePickerChange(e){
 			this.arrayStateIndex = e.detail.value;
@@ -257,7 +289,8 @@ export default {
 			let data = {
 				doneUid: this.uid,
 				page: this.page,
-				count: 10
+				count: 10,
+				level: parseInt(this.level)
 			};
 		if(!util.isEmpty(this.state)) data.state = this.state;
 		if(!util.isEmpty(this.begTime)){

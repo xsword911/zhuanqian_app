@@ -7,7 +7,8 @@ const deviceId = "deviceId"; //设备号
 const token = "token"; //token
 const uid = "uid"; //用户uid
 const loginType = "loginType"; //登录方式0:设备号(游客)登录 1：账号密码登录 2：微信登录
-const levelList = "levelList"; //会员表
+const levelList = "levelList"; //会员列表
+const levelDesc = "levelDesc"; //全部会员列表
 //封装保存本地数据操作
 module.exports = {
 	//保存我的数据
@@ -113,5 +114,15 @@ module.exports = {
 	//获取会员表信息
 	getLevelList() {
 		return uni.getStorageSync(levelList);
+	},
+	
+	//保存全部会员表信息
+	setLevelDescList(data) {
+		uni.setStorageSync(levelDesc, data);
+	},
+	
+	//获取全部会员表信息
+	getLevelDescList() {
+		return uni.getStorageSync(levelDesc);
 	},
 }

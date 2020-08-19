@@ -11,7 +11,7 @@
 			</view>
 			
 			<view class="lay_sort">
-				<view class="sort_box">
+				<view class="sort_box" @tap="toService(service1.value)">
 					<view class="sort_title">在线客服</view>
 					<view class="sort_img">
 						<image src="/static/img/msg.d401713.png" mode=""></image>
@@ -26,7 +26,7 @@
 					</view>
 				</view>
 				
-				<view class="sort_box">
+				<view class="sort_box" @tap="toService(service2.value)">
 					<view class="sort_title">充值问题，提现问题</view>
 					<view class="sort_img">
 						<image src="/static/img/msg.d401713.png" mode=""></image>
@@ -43,16 +43,16 @@
 			</view>
 			
 			<view class="lay_introduce">
-				<view class="introduce_img">
+				<view class="introduce_img" @tap="toIntroduce">
 					<image src="/static/img/k1.png" mode=""></image>
 				</view>
-				<view class="introduce_img">
+				<view class="introduce_img" @tap="toRuleDescription">
 					<image src="/static/img/k2.png" mode=""></image>
 				</view>
-				<view class="introduce_img">
+				<view class="introduce_img" @tap="toCooperation">
 					<image src="/static/img/k3.png" mode=""></image>
 				</view>
-				<view class="introduce_img">
+				<view class="introduce_img" @tap="toCompany">
 					<image src="/static/img/k4.png" mode=""></image>
 				</view>
 			</view>
@@ -61,6 +61,63 @@
 </template>
 
 <script>
+import api from "@/api/api.js";
+export default{
+	data() {
+		return {
+			service1: "",  //在线客服信息
+			service2: "",  //充值提现客服信息
+		}
+	},
+	onShow() {
+		this.getCustomerServiceUrl();  //获取客服链接
+	},
+	methods:{
+		//跳转到联系客服界面
+		toService(val){
+			window.location.href = 'https://' + val;
+		},
+		//获取客服链接
+		getCustomerServiceUrl(){
+			let postData = {
+				page: 1,
+				count: 5,
+				key: "service1|service2"
+			};
+			api.getConfig(postData, (res)=>{
+				let data = api.getData(res).data;
+				data.forEach((item, index) =>{
+					if(item.key == 'kefu1') this.service1 = item;
+					if(item.key == 'kefu2') this.service2 = item;
+				});
+			});
+		},
+		//跳转到平台简介界面
+		toIntroduce(){
+			uni.navigateTo({
+				url: "/pages/introduce/introduce"
+			})
+		},
+		//跳转到规则说明界面
+		toRuleDescription(){
+			uni.navigateTo({
+				url: "/pages/ruleDescription/ruleDescription"
+			})
+		},
+		//跳转到代理合作界面
+		toCooperation(){
+			uni.navigateTo({
+				url: "/pages/cooperation/cooperation"
+			})
+		},
+		//跳转到公司资质界面
+		toCompany(){
+			uni.navigateTo({
+				url: "/pages/company/company"
+			})
+		},
+	}
+}
 </script>
 
 <style>
@@ -135,15 +192,17 @@
 		height:40rpx;
 	}
 	.lay_introduce{
-		width:100%;
+		width:90%;
 		padding:0 10rpx;
 		box-sizing:border-box;
-		margin-top:40rpx;
+		margin:40rpx auto 0;
 		display:flex;
 		justify-content:space-between;
+		flex-wrap: wrap;
 	}
 	.introduce_img{
-		width:164rpx;
-		height:90rpx;
+		margin-bottom:20rpx;
+		width:44%;
+		height:140rpx;
 	}
 </style>

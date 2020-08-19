@@ -315,6 +315,7 @@ export default {
 			api.getLevelDesc({}, (res)=>{
 				let data = api.getData(res);
 				this.levelType = data;
+				storage.setLevelDescList(data);
 			});
 		},
 		//获取任务类型列表
@@ -389,7 +390,7 @@ export default {
 				data.isDoneImg = parseInt(data.isDoneImg);
 				data.imgUrl = "",
 				api.addTask(data, (res)=>{
-					let code = apa.getCode(res);
+					let code = api.getCode(res);
 					if(code == 0){
 						uni.showToast({
 							title: "发布任务成功",

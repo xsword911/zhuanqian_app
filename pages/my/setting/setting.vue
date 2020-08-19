@@ -127,7 +127,7 @@ export default{
 			loginType: null, //登录方式
 			wxId: '',  //微信id
 			userName: '',  //用户账号
-			levelName: '',  //我的会员等级名称
+			levelName: '新人',  //我的会员等级名称
 			levelList: [],  //会员列表
 		}
 	},

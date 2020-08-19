@@ -283,7 +283,7 @@ export default{
 			uid: "",  //uid
 			loginType: null, //登录方式
 			notReadMsgSum: 0,  //未读消息数
-			levelName: "1",  //我的会员等级名称
+			levelName: "新人",  //我的会员等级名称
 			levelList: [],  //会员列表
 		}
 	},

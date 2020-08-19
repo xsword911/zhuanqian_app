@@ -46,7 +46,8 @@
 	},{
 		"path": "pages/work/work",
 		"style": {
-			"navigationBarTitleText": "任务"
+			"navigationBarTitleText": "任务",
+			"app-plus": {"titleNView": false}
 		}
 	},{
 		"path": "pages/workExplain/workExplain",
@@ -281,6 +282,26 @@
 		"style": {
 			"navigationBarTitleText": "余额生金存取记录",
 			"enablePullDownRefresh": true
+		}
+	},{
+		"path": "pages/introduce/introduce",
+		"style": {
+			"navigationBarTitleText": "平台简介"
+		}
+	},{
+		"path": "pages/ruleDescription/ruleDescription",
+		"style": {
+			"navigationBarTitleText": "规则说明"
+		}
+	},{
+		"path": "pages/cooperation/cooperation",
+		"style": {
+			"navigationBarTitleText": "代理合作"
+		}
+	},{
+		"path": "pages/company/company",
+		"style": {
+			"navigationBarTitleText": "公司资质"
 		}
 	}],
 	
