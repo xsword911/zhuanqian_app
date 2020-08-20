@@ -5,8 +5,8 @@
 				<view class="head_title">
 					总资产(元)
 				</view>
-				<view class="head_num">
-					1.00
+				<view class="head_num" style="font-size:14px;">
+					{{userEn.money}}
 				</view>
 			</view>
 			
@@ -15,25 +15,16 @@
 					余额宝(元)
 				</view>
 				<view class="head_num money_num">
-					+<text>1.00</text>
+					+<text>{{moneySum}}</text>
 				</view>
 			</view>
 			
 			<view class="">
 				<view class="head_title">
-					总收益(元)
+					预计收益(元)
 				</view>
 				<view class="head_num">
-					+<text>1</text>
-				</view>
-			</view>
-			
-			<view class="">
-				<view class="head_title">
-					昨日收益(元)
-				</view>
-				<view class="head_num">
-					+<text>1</text>
+					+<text>{{rateMoneySum}}</text>
 				</view>
 			</view>
 		</view>
@@ -50,7 +41,7 @@
 			<view class="">
 				<view class="lay_money">
 					<text class="" style="margin-right:60rpx;">预计收益</text>
-					<text>{{profit}}</text>
+					<input value="" type="number" v-model="profit" disabled="true" />
 				</view>
 			</view>
 			
@@ -58,32 +49,11 @@
 				<view class="head_title" style="margin-bottom:20rpx;">收益标准</view>
 				
 				<view class="lay_option">
-					<view class="option_box" :class="{'click_open' : option == 0}"
-					@tap="optionChange(0)">
-						<view class="option_test">7天体验</view>
-						<view class="option_test">+1 %</view>
-						<view class="">[定] 30天</view>
-					</view>
-					
-					<view class="option_box" :class="{'click_open' : option == 1}"
-					@tap="optionChange(1)">
-						<view class="option_test">白银理财计划</view>
-						<view class="option_test">+3 %</view>
-						<view class="">[定] 15天</view>
-					</view>
-					
-					<view class="option_box" :class="{'click_open' : option == 2}"
-					@tap="optionChange(2)">
-						<view class="option_test">黄金理财计划</view>
-						<view class="option_test">+4 %</view>
-						<view class="">[定] 30天</view>
-					</view>
-					
-					<view class="option_box" :class="{'click_open' : option == 3}"
-					@tap="optionChange(3)">
-						<view class="option_test">钻石理财计划</view>
-						<view class="option_test">+5 %</view>
-						<view class="">[定] 30天</view>
+					<view class="option_box" :class="{'click_open' : option == index}"
+					@tap="optionChange(item, index)" v-for="(item,index) in planRateList" :key="index">
+						<view class="option_test">{{item.planName}}</view>
+						<view class="option_test">+{{item.planRate / 100}} %</view>
+						<view class="">[定] {{item.planDays}}天</view>
 					</view>
 				</view>
 			</view>
@@ -91,46 +61,134 @@
 		
 		<view class="lay_btn">
 			<button type="default" hover-class="btn_hover" @tap="toInteresList">转出</button>
-			<button type="default" hover-class="btn_hover" @tap="toInteresList">转入</button>
+			<button type="default" hover-class="btn_hover" @tap="deposit">转入</button>
 		</view>
 	</view>
 </template>
 
 <script>
+import api from "@/api/api.js";
+import storage from "@/api/storage.js";
+import util from "@/common/util.js";
 export default{
 	data() {
 		return {
+			uid: "",  //用户id
 			option: 0,  	//选中的收益类型
-			profit: 70, 	//预计收益
+			optionPlanRate: "",  //选中的收益类型信息
+			profit: null, 	//预计收益
 			money: 1000,	//输入的余额
+			userEn: [],  //我的信息
+			
+			planRateList: [],  //存款利率列表
+			rateMoneySum: null, //预计收益
+			moneySum: null, //余额宝存款总额
 		}
 	},
+	watch:{
+		//计算预计收益
+		money(val){
+			if(util.isEmpty(val)) return;
+			this.money = parseFloat(val);
+			let num = parseFloat(this.money * (this.optionPlanRate.planRate / 10000));
+			this.profit = num.toFixed();
+		},
+	},
+	onShow() {
+		this.uid = storage.getUid();  //获取uid
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.getPlanRateOpen();   //获取开启的存款利率
+		this.getPlanMoneySum();  //获取余额宝存款总额和预计收益
+	},
 	methods:{
+		//获取余额宝存款总额和预计收益
+		getPlanMoneySum(){
+			api.getPlanMoneySumByUid({uid: this.uid}, (res)=>{
+				let data = api.getData(res);
+				this.rateMoneySum = data.rateMoneySum;
+				this.moneySum = data.moneySum;
+			});
+		},
+		//获取开启的存款利率
+		getPlanRateOpen(){
+			api.getPlanRateOpen((res)=>{
+				let data = api.getData(res).data;
+				this.planRateList = data;  //获取存款利率列表
+				this.optionPlanRate = this.planRateList[0];  //设置默认收益类型信息
+			});
+		},
 		//收益类型切换
-		optionChange(num){
-			if(this.option == num) return;
-			this.option = num;
-			switch (num){
-				case 0:
-				this.profit = 70;
-					break;
-				case 1:
-				this.profit = 450;
-					break;
-				case 2:
-				this.profit = 1200;
-					break;
-				case 3:
-				this.profit = 1500;
-					break;
-				default:
-					break;
-			}
+		optionChange(item, index){
+			this.optionPlanRate = item;
+			if(this.option == index) return;
+			this.option = index;  //添加点击样式
+			let planRate = item.planRate / 10000;  //获取存款利率(小数格式) 1% = 0.01
+			this.profit = this.money * planRate;  //计算收益
 		},
 		//跳转到余额生金存取记录界面
 		toInteresList(){
 			uni.navigateTo({
 				url: "/pages/interest/interestList/interestList"
+			})
+		},
+		//存入余额宝判断
+		deposit(){
+			if(util.isEmpty(this.money)){
+				uni.showToast({
+					title: "余额转入不能为空",
+					icon: "none"
+				});
+				return;
+			}else if(this.money < 300){
+				uni.showToast({
+					title: "该产品起投金额不能低于300",
+					icon: "none"
+				});
+				return;
+			}else if(this.money > this.userEn.money){
+				uni.showToast({
+					title: "余额不足",
+					icon: "none"
+				});
+				return;
+			}
+			let data = {
+				uid: this.uid,
+				planId: this.optionPlanRate.id,
+				addMoney: this.money
+			};
+			this.submitDeposit(data);
+		},
+		//存入余额宝
+		submitDeposit(data){
+			uni.showModal({
+				content: "确定购买该产品？",
+				success(res) {
+					if(res.confirm){
+						api.planMoneyIn(data, (res)=>{
+							let code = api.getCode(res);
+							if(code == 0){
+								uni.showModal({
+									content: "购买成功",
+									showCancel: false,
+									success(res) {
+										if(res.confirm){
+											uni.navigateTo({
+												url: "/pages/interest/interestList/interestList"
+											})
+										}
+									}
+								})
+							}else{
+								let msg = api.getMsg(res);
+								uni.showToast({
+									title: msg,
+									icon: "none"
+								});
+							}
+						});
+					}
+				}
 			})
 		},
 	}

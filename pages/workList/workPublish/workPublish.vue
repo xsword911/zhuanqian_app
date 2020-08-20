@@ -1,165 +1,178 @@
 <template>
 	<view class="container2">
-		<form @submit="formSubmit" @reset="formReset">
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务会员类型</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="levelType.length > 0">
-						<picker @change="levelPickerChange" :value="levelTypeIndex" :range="levelType" range-key="val" name="level">
-							<view class="uni-input">{{levelType[levelTypeIndex].val}}</view>
-						</picker>
-					</view>
+		<view class="" v-show="powerType == 1">
+			<form @submit="formSubmit" @reset="formReset"  >
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务会员类型</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="levelType.length > 0">
+									<picker @change="levelPickerChange" :value="levelTypeIndex" :range="levelType" range-key="val" name="level">
+										<view class="uni-input">{{levelType[levelTypeIndex].val}}</view>
+									</picker>
+								</view>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务类型</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
+									<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
+										<view class="uni-input">{{arrayType[arrayTypeIndex].val}}</view>
+									</picker>
+								</view>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务标题</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="title" placeholder="请输入任务标题" maxlength="50" type="text" />
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务说明</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="explain" placeholder="请输入任务说明" maxlength="50" type="text" />
+							</view>
+						</tui-list-cell>
+			<!-- 			<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务规则</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="rule" placeholder="请输入任务规则" maxlength="50" type="text" />
+							</view>
+						</tui-list-cell> -->
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">奖励类型</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;">
+									<picker @change="awardPickerChange" :value="arrayAwardIndex" :range="arrayAward" range-key="award" name="awardType">
+										<view class="uni-input">{{arrayAward[arrayAwardIndex].award}}</view>
+									</picker>
+								</view>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务奖励</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" maxlength="50" type="number" />
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false">
+							<view class="tui-line-cell">
+								<view class="tui-title">任务数量</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" maxlength="50" type="number" />
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务刷新周期</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;">
+									<picker @change="cyclePickerChange" :value="arrayCycleIndex" :range="arrayCycle" range-key="time" name="cycle">
+										<view class="uni-input">{{arrayCycle[arrayCycleIndex].time}}</view>
+									</picker>
+								</view>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务发布时间</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="begTime" 
+								placeholder="请输入任务开始时间" maxlength="50" type="text" @tap="show(2, 1)" v-model="begTime" disabled="true"/>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务结束时间</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="endTime" 
+								placeholder="请输入任务结束时间" maxlength="50" type="text" @tap="show(2,2)" v-model="endTime" disabled="true"/>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务限时</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="doneLong"
+								placeholder="请输入任务限时时间" maxlength="50" type="text" @tap="show(1,3)" v-model="doneLongTime" disabled="true"/>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">审核时长</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;">
+									<input placeholder-class="tui-phcolor" class="tui-input" name="auditLong"
+									placeholder="请输入任务限时时间" maxlength="50" type="text" @tap="show(1,4)" v-model="auditLongTime" disabled="true"/>
+								</view>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务是否需要凭证</view>
+								<radio-group class="radio-group" name="isDoneProv">
+									<label class="tui-radio">
+										<radio value="1" color="#5677fc" />是
+									</label>
+									<label class="tui-radio">
+										<radio value="0" color="#5677fc" />否
+									</label>
+								</radio-group>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务是否需要截图</view>
+								<radio-group class="radio-group" name="isDoneImg">
+									<label class="tui-radio">
+										<radio value="1" color="#5677fc" />是
+									</label>
+									<label class="tui-radio">
+										<radio value="0" color="#5677fc" />否
+									</label>
+								</radio-group>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务状态</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;">
+									<picker @change="statePickerChange" :value="arrayStateIndex" :range="arrayState" range-key="state" name="state">
+										<view class="uni-input">{{arrayState[arrayStateIndex].state}}</view>
+									</picker>
+								</view>
+							</view>
+						</tui-list-cell>
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">任务分类</view>
+								<view class="uni-list-cell-db" style="margin-left:20rpx;">
+									<picker @change="sortPickerChange" :value="arraySortIndex" :range="arraySort" range-key="sort" name="sort">
+										<view class="uni-input">{{arraySort[arraySortIndex].sort}}</view>
+									</picker>
+								</view>
+							</view>
+						</tui-list-cell>
+			
+						<tui-list-cell :hover="false" >
+							<view class="tui-line-cell">
+								<view class="tui-title">备注</view>
+								<input placeholder-class="tui-phcolor" class="tui-input" name="desc" placeholder="" maxlength="50" type="text" />
+							</view>
+						</tui-list-cell>
+								
+						<view class="tui-btn-box btn_style">
+							<button class="tui-button-primary tui-button-gray" hover-class="tui-button-hover" formType="submit" type="default">发布任务</button>
+							<button class="tui-button-primary tui-button-gray" hover-class="tui-button-gray_hover" formType="reset">重置</button>
+						</view>
+					</form>
+		</view>
+		
+		<view class="data_lack" v-show="powerType == 2">
+			<view class="lack_box">
+				<tui-icon name="nodata" :size="120"></tui-icon>
+				<text class="lack_test">您还没有发布的权限</text>
+				<view class="lack_test">
+					最低需要升级到<text style="color:#dc3b40;">{{powerName}}</text>才能发布任务
 				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务类型</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
-						<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
-							<view class="uni-input">{{arrayType[arrayTypeIndex].val}}</view>
-						</picker>
-					</view>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务标题</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="title" placeholder="请输入任务标题" maxlength="50" type="text" />
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务说明</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="explain" placeholder="请输入任务说明" maxlength="50" type="text" />
-				</view>
-			</tui-list-cell>
-<!-- 			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务规则</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="rule" placeholder="请输入任务规则" maxlength="50" type="text" />
-				</view>
-			</tui-list-cell> -->
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">奖励类型</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
-						<picker @change="awardPickerChange" :value="arrayAwardIndex" :range="arrayAward" range-key="award" name="awardType">
-							<view class="uni-input">{{arrayAward[arrayAwardIndex].award}}</view>
-						</picker>
-					</view>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务奖励</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" maxlength="50" type="number" />
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务数量</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" maxlength="50" type="number" />
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务刷新周期</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
-						<picker @change="cyclePickerChange" :value="arrayCycleIndex" :range="arrayCycle" range-key="time" name="cycle">
-							<view class="uni-input">{{arrayCycle[arrayCycleIndex].time}}</view>
-						</picker>
-					</view>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务发布时间</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="begTime" 
-					placeholder="请输入任务开始时间" maxlength="50" type="text" @tap="show(2, 1)" v-model="begTime" disabled="true"/>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务结束时间</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="endTime" 
-					placeholder="请输入任务结束时间" maxlength="50" type="text" @tap="show(2,2)" v-model="endTime" disabled="true"/>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务限时</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="doneLong"
-					placeholder="请输入任务限时时间" maxlength="50" type="text" @tap="show(1,3)" v-model="doneLongTime" disabled="true"/>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">审核时长</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
-						<input placeholder-class="tui-phcolor" class="tui-input" name="auditLong"
-						placeholder="请输入任务限时时间" maxlength="50" type="text" @tap="show(1,4)" v-model="auditLongTime" disabled="true"/>
-					</view>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务是否需要凭证</view>
-					<radio-group class="radio-group" name="isDoneProv">
-						<label class="tui-radio">
-							<radio value="1" color="#5677fc" />是
-						</label>
-						<label class="tui-radio">
-							<radio value="0" color="#5677fc" />否
-						</label>
-					</radio-group>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务是否需要截图</view>
-					<radio-group class="radio-group" name="isDoneImg">
-						<label class="tui-radio">
-							<radio value="1" color="#5677fc" />是
-						</label>
-						<label class="tui-radio">
-							<radio value="0" color="#5677fc" />否
-						</label>
-					</radio-group>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务状态</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
-						<picker @change="statePickerChange" :value="arrayStateIndex" :range="arrayState" range-key="state" name="state">
-							<view class="uni-input">{{arrayState[arrayStateIndex].state}}</view>
-						</picker>
-					</view>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">任务分类</view>
-					<view class="uni-list-cell-db" style="margin-left:20rpx;">
-						<picker @change="sortPickerChange" :value="arraySortIndex" :range="arraySort" range-key="sort" name="sort">
-							<view class="uni-input">{{arraySort[arraySortIndex].sort}}</view>
-						</picker>
-					</view>
-				</view>
-			</tui-list-cell>
-
-			<tui-list-cell :hover="false" >
-				<view class="tui-line-cell">
-					<view class="tui-title">备注</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="desc" placeholder="" maxlength="50" type="text" />
-				</view>
-			</tui-list-cell>
-					
-			<view class="tui-btn-box btn_style">
-				<button class="tui-button-primary tui-button-gray" hover-class="tui-button-hover" formType="submit" type="default">发布任务</button>
-				<button class="tui-button-primary tui-button-gray" hover-class="tui-button-gray_hover" formType="reset">重置</button>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toVip">获取发布任务权限</button>
 			</view>
-		</form>
+		</view>
 		
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" :unitTop="unitTop" :radius="radius" @confirm="change"></tui-datetime>
@@ -211,14 +224,41 @@ export default {
 			radius: false,
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //用户id
+			powerType: 0, //是否有发布任务的权限 0正在查询权限 1有权限 2没权限
+			powerName: "",
+			levelList: [],  //会员表信息
 		} 
 	},
 	onLoad(res) {
 		this.getTaskType();  //获取任务类型列表
 		this.getLevelType();  //获取会员类型列表
 		this.uid = storage.getUid();  //获取uid
+		this.getLevelList();//获取会员表信息
 	},
 	methods: {
+		//跳转到VIP升级界面
+		toVip(){
+			uni.navigateTo({
+				url: "/pages/vip/vip"
+			})
+		},
+		//获取会员表信息
+		getLevelList(){
+			this.levelList = storage.getLevelList();  //获取会员列表
+			let myLevel = storage.getMyInfo().level;  //获取当前用户会员等级
+			let powerLevel = null;
+			//查询最低能发布任务的会员等级
+			for(let i = 0; i < this.levelList.length; ++i){
+				let item = this.levelList[i];
+				if(item.publishTaskSum > 0){
+					powerLevel = item.level;  //获取最低能发布任务的等级
+					this.powerName = item.levelName;  //获取最低能发布任务的等级名称
+					break;
+				}
+			}
+			if(myLevel < powerLevel) this.powerType = 2;
+			else this.powerType = 1;
+		},
 		//选择会员类型
 		levelPickerChange(e){
 			this.levelTypeIndex = e.detail.value;
@@ -500,6 +540,31 @@ export default {
 		padding: 30rpx;
 		color: #999;
 		font-size: 24rpx;
+	}
+	
+	
+	.lack_box{
+		width:100%;
+		height:700rpx;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		flex-direction:column;
+	}
+	.lack_test{
+		font-size:16px;
+		margin-top:20rpx;
+		display:inline-block;
+	}
+	.coin_query{
+		margin-top:40rpx;
+		background-color:#fcd030;
+		font-size:16px;
+		border-radius:40rpx;
+		width:400rpx;
+	}
+	.coin_query::after{
+		border:none;
 	}
 </style>
 

@@ -13,35 +13,37 @@
 		</view>
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
-			<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
-			style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
-			@tap="toUpdWork(item)">
-				<view class="info_left">
-					<view class="info_title">{{item.title}}</view>
-					<view>
-						任务类型：
-						<text v-if="item.type == 0">邀请好友</text>
-						<text v-if="item.type == 1">分享朋友圈</text>
-						<text v-if="item.type == 2">加好友</text>
-						<text v-if="item.type == 3">下载app</text>
-						<text v-if="item.type == 4">签到任务</text>
-						<text v-if="item.type == 5">点赞任务</text>
+			<view class="" v-show="resultType == 1">
+				<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
+				style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
+				@tap="toUpdWork(item)">
+					<view class="info_left">
+						<view class="info_title">{{item.title}}</view>
+						<view>
+							任务类型：
+							<text v-if="item.type == 0">邀请好友</text>
+							<text v-if="item.type == 1">分享朋友圈</text>
+							<text v-if="item.type == 2">加好友</text>
+							<text v-if="item.type == 3">下载app</text>
+							<text v-if="item.type == 4">签到任务</text>
+							<text v-if="item.type == 5">点赞任务</text>
+						</view>
+						<view class="info_time">{{item.begTime}}</view>
 					</view>
-					<view class="info_time">{{item.begTime}}</view>
-				</view>
-				<view class="" style="padding-right:40rpx; box-sizing: border-box;">
-					<view class="info_right">
-						<view class="" style="font-size:17px; margin-right:10rpx;">{{item.award}}</view>
-						<view class="" v-if="item.awardType == 0">金币</view>
-						<view class="" v-if="item.awardType == 1">现金</view>
+					<view class="" style="padding-right:40rpx; box-sizing: border-box;">
+						<view class="info_right">
+							<view class="" style="font-size:17px; margin-right:10rpx;">{{item.award}}</view>
+							<view class="" v-if="item.awardType == 0">金币</view>
+							<view class="" v-if="item.awardType == 1">现金</view>
+						</view>
+						<view class="info_time info_num">
+							剩余任务量：{{item.sum - item.finishSum}}
+						</view>
 					</view>
-					<view class="info_time info_num">
-						剩余任务量：{{item.sum - item.finishSum}}
-					</view>
-				</view>
-			</tui-list-cell>
+				</tui-list-cell>
+			</view>
 			
-			<view class="data_lack" v-show="!showIncome">
+			<view class="data_lack" v-show="resultType == 2">
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
@@ -125,7 +127,7 @@ export default {
 			rightDrawer: false,//抽屉开关
 			
 			userEn: [],  //我的信息
-			showIncome: true, // 收入明细列表是否显示
+			resultType: 0, //结果状态 0未取到数据 1有数据 2没数据
 			incomeList:[]   ,//提现明细列表
 			page: 1,  //查询页数
 			
@@ -253,11 +255,11 @@ export default {
 		};
 		api.getTaskInfo(data, (res)=>{
 			let data = api.getData(res).data;
-			if(util.isEmpty(data)) this.showIncome = false;
+			if(util.isEmpty(data)) this.resultType = 2;
 				 //this.isShowIncome();  //控制金币收入明细表显示
 			else{
 				this.incomeList = data;
-				this.showIncome = true;
+				this.resultType = 1;
 			}
 		});
 		},
@@ -277,7 +279,7 @@ export default {
 	//上拉获取更多金币收益明细数据
 	onReachBottom(){
 		if (!this.pullUpOn) return;
-		if(!this.showIncome) return;
+		if(this.resultType != 1) return;
 		this.loadding = true;
 		this.page = this.page + 1;
 		

@@ -193,6 +193,21 @@ const api = {
 	
 	//查询开放的所有等级
 	getLevelAll: function (funSuccess) {httpUtil.post("user/getLevelAll", {}, funSuccess);},
+	
+	//查询开启的存款利率
+	getPlanRateOpen: function (funSuccess) {httpUtil.post("activity/planRate/getPlanRateOpen", {}, funSuccess);},
+	
+	//转入余额宝
+	planMoneyIn: function (path, funSuccess) {httpUtil.post("activity/planRate/planMoneyIn", path, funSuccess);},
+	
+	//查询余额宝存款记录
+	getPlanMoney: function (path, funSuccess) {httpUtil.post("activity/planRate/getPlanMoney", path, funSuccess);},
+	
+	//钱转出余额宝
+	planMoneyOut: function (path, funSuccess) {httpUtil.post("activity/planRate/planMoneyOut", path, funSuccess);},
+	
+	//查询用户利息宝总余额
+	getPlanMoneySumByUid: function (path, funSuccess) {httpUtil.post("activity/planRate/getPlanMoneySumByUid", path, funSuccess);},
 };
 
 export default api;

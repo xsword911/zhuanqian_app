@@ -155,12 +155,12 @@ import tran from "@/common/tran.js";
 						formData: {},
 						filePath: url,
 						success: function(res) {
-							console.log(res)
+							// console.log(res)
 							if (res.statusCode == 200) {
 								let data = res.data;
 								let data2 = tran.json2Obj(data);
-								console.log(data2);
-								console.log(data);
+								// console.log(data2);
+								// console.log(data);
 								//判断code，以实际接口规范判断
 								if (data2.code == 0) {
 									let url = data2.data.url;

@@ -193,6 +193,11 @@ export default{
 									title: "审核成功",
 									icon: "none"
 								});
+								setTimeout(()=>{
+									uni.navigateBack({
+										delta: 1
+									})
+								},1000)
 							}else{
 								let msg = api.getMsg(res);
 								uni.showToast({

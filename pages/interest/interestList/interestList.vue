@@ -1,11 +1,16 @@
 <template>
     <view class="page">
 		<!-- 筛选时间 -->
-		<view class="search_column" >
-			<view class="" style="display:flex; align-items:center;">
+		<view class="search_column"  style="display:flex; justify-content: space-between;">
+<!-- 			<view class="" style="display:flex; align-items:center;">
 				<input type="text" value="" v-model="begTime" :disabled="true" @tap="openDrawer" placeholder="开始时间"/>
 				<text>至</text>
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/>
+			</view> -->
+			<view class="" style="display:flex; align-items:center;" @tap="openDrawer">
+				存取状态：
+				<text v-if="arrayStateIndex == 0">在存</text>
+				<text v-if="arrayStateIndex == 1">已取出</text>
 			</view>
 			<view class="sea_btn btn_style">
 				<button type="default" @tap="getTaskDetails" hover-class="btn_hover" style="padding: 0;">查询</button>
@@ -15,50 +20,90 @@
 		<view class="gold_info">
 			<view class="income" v-for="(item,index) in incomeList" :key='index'  v-show="showIncome" @tap="open(item.id)">
 				<view class="incomeTime">
-					<view class="interest_type">
-						<text>转入利息宝</text>
-						<text>7天体验(7天)1%</text>
+					<view class="" style="display:flex;">
+						<text class="info_from takeout_title" v-show="item.state == 0">转入利息宝</text>
+						<text class="info_from store_title" v-show="item.state == 1">利息宝转出</text>
+						
+						<view class="" style="margin-left:20rpx;">
+							<text>{{item.planName}}</text>(<text>{{item.planDays}}天</text>)
+						</view>
 					</view>
 					
-					<text class="info_time">存入金额：{{item.gold}}</text>
-					<text class="info_time">存入时间：{{item.addTime}}</text>
+					<view class="">
+						<text class="info_time" style="display:inline-block; margin-right:40rpx;">存入金额：{{item.addMoney}}</text>
+						<text class="info_time" v-if="item.state == 1">取出金额：{{item.outMoney}}</text>
+					</view>
+					
+					<view class="">
+						<text class="info_time">存入时间：{{item.addTime}}</text>
+					</view>
+					
+					<view class="">
+						<text class="info_time" v-show="item.state == 1">取出时间：{{item.outTime}}</text>
+					</view>
 				</view>
 				
-				<view class="incomeNum takeOut">
-					<button type="default" hover-class="btn_hover" v-if="item.type != 102">取出</button>
-					<text v-if="item.type == 102">已取出</text>
-<!-- 					<text class="num">{{item.gold}}</text>
-					<view class="gold_img">
-						<image src="/static/img/gold2.png" mode="widthFix"></image>
+				<view class="incomeNum">
+					<view class="operation_box">
+						<text v-show="item.state == 1">已取出</text>
+						<button type="default" v-show="item.state == 0" hover-class="btn_hover" 
+						@click.stop="moneyFetch(item)">取出</button>
 					</view>
+					
 					<view class="open">
 						<tui-icon name="arrowdown" :size="20" v-show="!item.openTag"></tui-icon>
 						<tui-icon name="arrowup" :size="20" v-show="item.openTag"></tui-icon>
-					</view> -->
+					</view>
 				</view>
 				
-<!-- 				<view class="open_box" v-show="item.id == openId">
+				<view class="open_box" v-show="item.id == openId">
 					<view class="">
 						交易订单号：<text class="">{{item.sn}}</text>
 					</view>
-				</view> -->
+					<view class="" style="display:flex;">
+						<view class="" style="width:50%;">
+							存款利率：<text class="">{{item.planRate / 100}}%</text>
+						</view>
+						<view class="">
+							服务费利率：<text class="">{{item.planServe / 100}}%</text>
+						</view>
+					</view>
+					<view class="" style="display:flex;">
+						<view class="" v-if="item.state != 0" style="width:50%;">
+							手续费：<text class="">{{item.serveMoney}}</text>
+						</view>
+						
+						<view class="" v-if="item.state == 1">
+							利息：<text class="">{{item.rateMoney}}</text>
+						</view>
+					</view>
+				</view>
 			</view>
 			
 			<view class="data_lack" v-show="!showIncome">
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
+					<button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button>
 				</view>
 			</view>
 
 		</view>
-		
-		
 		<tui-datetime ref="dateTime" :type="type" :startYear="startYear" :endYear="endYear" :cancelColor="cancelColor" :color="color"
 		 :setDateTime="setDateTime" @confirm="change" style="z-index:100000;"></tui-datetime>
 		 
-		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer">
+		 <tui-drawer mode="right" :visible="rightDrawer" @close="closeDrawer" style="position:relative; z-index: 999;">
 		 	<view class="d-container">
+				<view class="search_time">
+					<view class="search_test">
+						<text>存取状态</text>
+					</view>
+					<view class="uni-list-cell-db" style="border-bottom:1px solid #808080;">
+						<picker @change="statePickerChange" :value="arrayState[arrayStateIndex].key" :range="arrayState" range-key="state" name="state">
+							<view class="uni-input">{{arrayState[arrayStateIndex].state}}</view>
+						</picker>
+					</view>
+				</view>
 				<view class="search_time">
 					<view class="search_test">
 						<text>开始时间</text>
@@ -76,7 +121,7 @@
 					</view>
 				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getTaskDetails" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -110,7 +155,7 @@ export default {
 			rightDrawer: false,//抽屉开关
 			
 			userEn: [],  //我的信息
-			showIncome: false, // 收入明细列表是否显示
+			showIncome: true, // 收入明细列表是否显示
 			incomeList:[]   ,//提现明细列表
 			openTag: false,  //展开图表控制
 			// openBox: false,  //控制内容盒子是否打开
@@ -128,6 +173,13 @@ export default {
 			setDateTime: "",
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
+			
+			arrayState: [
+				{"state": "在存", "key": 0}, 
+				{"state": "已取出", "key": 1},
+			],   //存取状态列表
+			arrayStateIndex: 0,
+			state: 0,	//选中的存取状态码
         };
     },
     onShow(){
@@ -136,6 +188,43 @@ export default {
 		this.getTaskDetails();  //获取金币收入明细表		
 	},
 	methods:{
+		//选择存取状态
+		statePickerChange(e){
+			this.arrayStateIndex = e.detail.value;
+			this.arrayState.forEach((item, index) =>{
+				 //获取选中的存取状态码
+				if(this.arrayStateIndex == index) this.state = item.key;
+			});
+		},
+		
+		//转出余额宝
+		moneyFetch(data){
+			let _this = this;
+			let serveMoney = util.isEmpty(data.serveMoney) ? 0 : data.serveMoney;  //计算手续费
+			uni.showModal({
+				content: "提前取出没有收益，并扣除手续费:" + serveMoney,
+				success(res) {
+					if(res.confirm){
+						api.planMoneyOut({id: data.id}, (res)=>{
+							let code = api.getCode(res);
+							if(code == 0){
+								uni.showToast({
+									title: "余额宝取出成功",
+									icon: "none"
+								});
+								_this.getTaskDetails();  //刷新余额宝存取列表
+							}else{
+								let msg = api.getMsg(res);
+								uni.showToast({
+									title: msg,
+									icon: "none"
+								});
+							}
+						});
+					}
+				}
+			})
+		},
 		//上拉刷新
 		onPullDownRefresh: function() {
 			//延时为了看效果
@@ -193,19 +282,22 @@ export default {
 					break;
 			}
 		},
-		// 判断金币收入明细表是否有数据
+		// 判断余额宝存取列表是否有数据
 		isShowIncome(){
 			if(util.isEmpty(this.incomeList)) this.showIncome = false;
 			else this.showIncome = true;
 		},
-		//获取金币明细表
+		//获取余额宝存取列表
 		getTaskDetails(){
+			this.closeDrawer();
 			this.page = 1;
 			let data = {
 				uid: this.uid,
 				page: this.page,
-				count: 10
+				count: 10,
+				state: this.state
 			};
+		// if(!util.isEmpty(this.state)) data.state = this.state;
 		if(!util.isEmpty(this.begTime)){
 			let time = this.begTime + " 00:00:00";
 			data.begAddTime = time
@@ -214,7 +306,7 @@ export default {
 			let time = this.endTime + " 23:59:59";
 			data.endAddTime = time;
 		};
-		api.getGold(data, (res)=>{
+		api.getPlanMoney(data, (res)=>{
 			let data = api.getData(res).data;
 			if(util.isEmpty(data)) this.showIncome = false;
 				 //this.isShowIncome();  //控制金币收入明细表显示
@@ -244,15 +336,14 @@ export default {
 			});
 		},
 	},
-	//上拉获取更多金币收益明细数据
+	//上拉获取更多余额宝存取列表数据
 	onReachBottom(){
 		if (!this.pullUpOn) return;
 		this.loadding = true;
 		this.page = this.page + 1;
 		
-		api.getTaskDetails({
+		api.getPlanMoney({
 			uid: this.uid,
-			state: 1,
 			page: this.page,
 			count: 10
 		}, (res)=>{
@@ -394,24 +485,18 @@ export default {
 	}
 	
 	
-	
-	
-	.takeOut>button{
-		padding:0rpx 20rpx;
-		box-sizing:border-box;
+	.takeout_title{
+		color:#2C962C;
+	}
+	.store_title{
+		color:#FF0000;
+	}
+	.operation_box>button{
 		font-size:12px;
-		border:1px solid #464646;
+		border: 1px solid #464646;
 		background-color:transparent;
-		line-height:2.3;
-	}
-	.interest_type{
-		
-	}
-	.interest_type>text:nth-child(1){
-		display:inline-block;
-		margin-right:30rpx;
-		font-size:14px;
-		color:#008000;
+		padding:0 16rpx;
+		box-sizing:border-box;
+		line-height:2;
 	}
 </style>
-

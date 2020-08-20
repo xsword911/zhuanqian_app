@@ -50,6 +50,13 @@
 			"app-plus": {"titleNView": false}
 		}
 	},{
+		"path": "pages/work/work1/work1",
+		"style": {
+			"navigationBarTitleText": "任务",
+			"enablePullDownRefresh": true,
+			"app-plus": {"titleNView": false}
+		}
+	},{
 		"path": "pages/workExplain/workExplain",
 		"style": {
 			"navigationBarTitleText": "任务详情"
@@ -320,7 +327,7 @@
 			"selectedIconPath": "static/img/game_active.png",
 			"text": "首页"
 	    },{
-	        "pagePath": "pages/work/work",
+	        "pagePath": "pages/work/work1/work1",
 	        "iconPath": "static/img/work.png",
 	        "selectedIconPath": "/static/img/work_active.png",
 	        "text": "任务"

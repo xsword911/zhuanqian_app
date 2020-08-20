@@ -135,7 +135,7 @@ export default{
 			
 			auditLong: null,  //限时审核时间
 			
-			imageData: [],
+			imageData: "",   //上传图片地址
 			//上传地址
 			serverUrl: ""
 		}
@@ -201,8 +201,7 @@ export default{
 			this.auditLong = `${auditLongHour}小时${auditLongMin}分${auditLongSe}秒`;
 		},
 		result: function(e) {
-			console.log(e)
-			this.imageData = e.imgArr;
+			this.imageData = e.imgArr[0];
 		},
 		remove: function(e) {
 			//移除图片
@@ -269,6 +268,22 @@ export default{
 		},
 		//提交任务
 		submitTask(){
+			//需要任务凭证时
+			if(this.workInfo.isDoneProve == 1 && util.isEmpty(this.userName)){
+				uni.showToast({
+					title: "任务凭证不能为空",
+					icon: "none"
+				});
+				return;
+			}
+			//需要任务截图时
+			else if(this.workInfo.isDoneImg == 1 && util.isEmpty(this.imageData)){
+				uni.showToast({
+					title: "任务截图不能为空",
+					icon: "none"
+				});
+				return;
+			}
 			let _this = this;
 			uni.showModal({
 				content: "确定提交该任务?",
@@ -279,6 +294,7 @@ export default{
 							doneUid: _this.uid
 						};
 						if(!util.isEmpty(_this.userName)) data.doneProv = _this.userName;
+						if(!util.isEmpty(_this.imageData)) data.doneImg = _this.imageData;
 						api.submitTask(data, (res)=>{
 							let code = api.getCode(res);
 							if(code == 0){

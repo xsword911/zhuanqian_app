@@ -281,7 +281,7 @@ export default{
 		//跳转到任务界面
 		toWork(id){
 			uni.reLaunch({
-				url: "/pages/work/work?id=" + id
+				url: "/pages/work/work1/work1?id=" + id
 			})
 		},
 		//查询未读消息数

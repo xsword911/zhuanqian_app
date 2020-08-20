@@ -2,7 +2,7 @@
     <view class="page">
 		<!-- 筛选时间 -->
 		<view class="search_column" style="display:flex; justify-content: space-between;">
-			<view class="" style="display:flex; align-items:center;" @tap="openDrawer">
+			<view class="" style="flex: 1; display:flex; align-items:center;" @tap="openDrawer">
 				<!-- <input type="text" value="" v-model="begTime" :disabled="true" @tap="openDrawer" placeholder="开始时间"/>
 				<text>至</text>
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/> -->
@@ -19,7 +19,7 @@
 		</view>
 		<!-- 金币收入明细 -->
 		<view class="gold_info">
-			<view class="" v-show="showIncome">
+			<view class="" v-show="resultType == 1">
 				<tui-list-cell v-for="(item,index1) in incomeList" :key="index1" :arrow="true"
 				style="display: flex; align-items: center; justify-content: space-between; padding:10rpx 30rpx;"
 				@tap="toUpdWork(item)">
@@ -56,7 +56,7 @@
 				</tui-list-cell>
 			</view>
 			
-			<view class="data_lack" v-show="!showIncome">
+			<view class="data_lack" v-show="resultType == 2">
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
@@ -157,7 +157,7 @@ export default {
 			rightDrawer: false,//抽屉开关
 			
 			userEn: [],  //我的信息
-			showIncome: false, // 收入明细列表是否显示
+			resultType: 0, //结果状态 0未取到数据 1有数据 2没数据
 			incomeList:[]   ,//提现明细列表
 			page: 1,  //查询页数
 			
@@ -269,11 +269,6 @@ export default {
 					break;
 			}
 		},
-		// 判断金币收入明细表是否有数据
-		isShowIncome(){
-			if(util.isEmpty(this.incomeList)) this.showIncome = false;
-			else this.showIncome = true;
-		},
 		//获取金币明细表
 		getTaskDetails(){
 			this.closeDrawer();  //关闭抽屉
@@ -295,11 +290,11 @@ export default {
 		};
 		api.getTaskDetails(data, (res)=>{
 			let data = api.getData(res).data;
-			if(util.isEmpty(data)) this.showIncome = false;
+			if(util.isEmpty(data)) this.resultType = 2;
 				 //this.isShowIncome();  //控制金币收入明细表显示
 			else{
 				this.incomeList = data;
-				this.showIncome = true;
+				this.resultType = 1;
 			}
 		});
 		},
@@ -313,7 +308,7 @@ export default {
 	//上拉获取更多金币收益明细数据
 	onReachBottom(){
 		if (!this.pullUpOn) return;
-		if(!this.showIncome) return;
+		if(this.resultType != 1) return;
 		this.loadding = true;
 		this.page = this.page + 1;
 		

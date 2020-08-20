@@ -14,18 +14,18 @@
 					<image :src="userEn.headUrl == '' ? '/static/img/headImg.jpg' : userEn.headUrl" mode="widthFix"></image>
 				</view>
 				<view class="my_name">
-					<text class="name">{{userName}}</text>
+					<text class="name" selectable="true">{{userName}}</text>
 					<view class="level">
 						{{levelName}}
 					</view>
 					<view class="yqm">
-						邀请码：<text>{{yqm}}</text>
+						邀请码：<text selectable="true">{{yqm}}</text>
 					</view>
 				</view>
 			</view>
 			
 			<view class="info_right">
-				<button type="default" class="invite_btn">邀请好友</button>
+				<button type="default" class="invite_btn" hover-class="btn_hover" @tap="toAgentExtend">邀请好友</button>
 			</view>
 			
 			<view class="gold_coin">
@@ -380,6 +380,12 @@ export default{
 					url: "/pages/moneyChange/moneyChange"
 				})
 			}
+		},
+		//跳转到邀请好友界面
+		toAgentExtend(){
+			uni.navigateTo({
+				url: "/pages/agent/agentExtend/agentExtend"
+			})
 		},
 		//跳转到金币明细页
 		toGoldDetails(){
