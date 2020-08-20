@@ -75,14 +75,14 @@ export default{
 	methods:{
 		//跳转到联系客服界面
 		toService(val){
-			window.location.href = 'https://' + val;
+			plus.runtime.openURL(val);
 		},
 		//获取客服链接
 		getCustomerServiceUrl(){
 			let postData = {
 				page: 1,
 				count: 5,
-				key: "service1|service2"
+				key: "kefu1|kefu2"
 			};
 			api.getConfig(postData, (res)=>{
 				let data = api.getData(res).data;

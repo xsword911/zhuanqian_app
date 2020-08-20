@@ -106,7 +106,7 @@
 		<view class="content main">
 			<!-- 活动 -->
 			<view class="hot_activity">
-				<view class="activity_bar">活动</view>
+				<view class="activity_bar">任务</view>
 				
 				<view class="activity_column" v-for="(item, index) in activityList" :key="index">
 					<view class="activity_left">

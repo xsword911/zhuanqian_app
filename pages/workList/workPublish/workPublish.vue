@@ -202,7 +202,7 @@ export default {
 			arraySort: [{"sort": "热门活动", "key": 0}, {"sort": "限时推荐", "key": 1}],   //任务分类列表
 			arraySortIndex: 0,
 			
-			arrayCycle: [{"time": "只能完成一次", "key": 0},{"time": "每天只能完成一次", "key": 1}],   //任务刷新周期列表列表
+			arrayCycle: [{"time": "每人只能完成一次", "key": 0},{"time": "每人每天只能完成一次", "key": 1}],   //任务刷新周期列表列表
 			arrayCycleIndex: 0,
 			
 			begTime: "",	//任务开始时间

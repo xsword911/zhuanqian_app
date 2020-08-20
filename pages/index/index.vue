@@ -108,7 +108,7 @@
 	
 	<!-- 任务大厅 -->
 	<view class="lay_work">
-		<view class="work_title">任务大厅</view>
+		<!-- <view class="work_title">任务大厅</view> -->
 		<view class="work_list">
 			<view class="work" @tap="toWork(item.id)"  v-for="(item,index) in levelList" :key="index">
 				<view class="work_num">任务数量{{item.publishTaskSum}}单/天</view>
@@ -683,7 +683,7 @@ export default{
 		display:flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
-		margin-top:20rpx;
+		margin-top:6rpx;
 	}
 	.work{
 		width:48%;
@@ -694,7 +694,7 @@ export default{
 		box-sizing:border-box;
 		display:flex;
 		flex-direction: column;
-		margin-bottom:40rpx;
+		margin-bottom:20rpx;
 	}
 	.work_num{
 		font-size:15px;
