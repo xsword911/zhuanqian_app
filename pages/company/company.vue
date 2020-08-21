@@ -2,7 +2,8 @@
 	<view class="container" style="background-color: #fff;font-size:14px;">
 		<view class="introduce">
 			<view class="" style="font-weight:bold;">简介：</view>
-			<view class="">APP是深圳市趣凡网络科技有限公司旗下产品。</view>
+			<!-- <view class="">APP是深圳市趣凡网络科技有限公司旗下产品。</view> -->
+			<view class="">APP是XXXX有限公司旗下产品。</view>
 			<view class="">主要特色：</view>
 			<view class="">1、真实靠谱：用户发布需求后广告费由平台托管，确保用户佣金安全有保障。</view>
 			<view class="">2、任务众多：每天更新几千上万条任务需求，确保满足于用户需求。</view>

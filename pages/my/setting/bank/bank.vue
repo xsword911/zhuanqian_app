@@ -56,16 +56,21 @@ export default{
 	methods:{
 		//登录方式为设备号时强制跳转到登录页
 		isDeviceId(){
-			if(this.loginType == 0){
-				uni.switchTab({
-					url: '/pages/my/my'
-				});
-				uni.navigateTo({
-					url: '/pages/my/setting/setting'
-				});
-				uni.navigateTo({
-					url: '/pages/login/login'
-				})
+			if(this.loginType == 0){				
+				uni.showModal({
+					content: "请登陆",
+					showCancel: false,
+					success(res) {
+						if(res.confirm){
+							uni.switchTab({
+								url: '/pages/my/my'
+							});
+							uni.navigateTo({
+								url: '/pages/login/login'
+							})
+						}
+					}
+				});				
 				return;
 			}else this.getUserBank();  //获取银行卡信息
 		},

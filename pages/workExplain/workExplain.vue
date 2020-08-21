@@ -83,7 +83,7 @@
 				</view>
 			</view>
 			
-			<view class="lay_title lay_userName" v-if="workInfo.isDoneProve == 1">
+			<!-- <view class="lay_title lay_userName" v-if="workInfo.isDoneProve == 1">
 				<view class="">完成凭证：</view>
 				<input type="text" value="12" v-model="userName"/>
 			</view>
@@ -97,7 +97,7 @@
 			
 			<view class="lay_title">
 				倒计时：<text class="lay_head_right">{{counDown}}</text>
-			</view>
+			</view> -->
 			
 			<view class="lay_button btn_style">
 				<button type="default" hover-class="btn_hover" v-if="taskType == 1" @tap="acceptTask">接受任务</button>

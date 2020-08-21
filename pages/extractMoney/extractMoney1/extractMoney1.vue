@@ -77,7 +77,7 @@ export default{
 			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
-				this.userName = this.userEn.account;
+				console.log(this.userEn);
 				this.sumMoney = this.userEn.money;
 				this.getMyBankInfo();  //获取我的绑定银行卡信息
 			});
@@ -104,10 +104,14 @@ export default{
 							if(res.confirm){
 								uni.switchTab({
 									url: '/pages/my/my'
-								});
-								uni.navigateTo({
-									url: '/pages/my/setting/bank/bank'
-								})
+								});	
+								console.log(this.userEn);
+								uni.navigateTo({									
+									url: '/pages/my/setting/bank/updBank/updBank?type=1&account=' + this.uid
+								});	
+								// uni.navigateTo({
+								// 	url: '/pages/my/setting/bank/bank'
+								// });
 							}
 						}
 					});

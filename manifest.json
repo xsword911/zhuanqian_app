@@ -8,9 +8,7 @@
     "app-plus" : {
         "nvueCompiler" : "uni-app",
         "compilerVersion" : 3,
-        "modules" : {
-            "VideoPlayer" : {}
-        },
+        "modules" : {},
         "distribute" : {
             "android" : {
                 "permissions" : [

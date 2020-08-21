@@ -170,7 +170,7 @@
 				<view class="lack_test">
 					最低需要升级到<text style="color:#dc3b40;">{{powerName}}</text>才能发布任务
 				</view>
-				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toVip">获取发布任务权限</button>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toVip" style="background-color:#fcd030;">去升级</button>
 			</view>
 		</view>
 		

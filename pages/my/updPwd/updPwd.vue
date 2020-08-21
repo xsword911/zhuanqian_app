@@ -73,7 +73,7 @@
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">您还没有绑定银行卡</text>
-					<button type="default" class="coin_query" hover-class="btn_hover" @tap="toMoneyChange">去绑定银行卡</button>
+					<button type="default" class="coin_query" hover-class="btn_hover" @tap="toBindBank">去绑定银行卡</button>
 				</view>
 			</view>
 			
@@ -117,12 +117,40 @@ export default{
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();
-		this.getUserBank();  //获取用户绑定银行卡信息
+		this.tryIsDeviceLoginDo();  //登录方式为设备号时强制跳转到登录页
 	},
 	onLoad(res){
 		util.setBarTitle('修改密码');
 	},
 	methods:{
+		//登录方式为设备号时强制跳转到登录页
+		tryIsDeviceLoginDo(){
+			let loginType = storage.getLoginType();  //获取登录方式
+			if(loginType == 0){				
+				uni.showModal({
+					content: "请登陆",
+					showCancel: false,
+					success(res) {
+						if(res.confirm){
+							uni.switchTab({
+								url: '/pages/my/my'
+							});
+							uni.navigateTo({
+								url: '/pages/login/login'
+							})
+						}
+					}
+				});				
+				return;
+			}else this.getUserBank();  //获取银行卡信息
+		},
+		//去绑定银行卡
+		toBindBank()
+		{			
+			uni.navigateTo({
+				url: '/pages/my/setting/bank/updBank/updBank?type=1&account=' + this.userEn.uid
+			});			
+		},
 		//获取用户绑定银行卡信息
 		getUserBank(){
 			api.getUserBank({uid: this.uid, page: 1, count: 5}, (res)=>{
