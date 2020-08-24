@@ -80,4 +80,16 @@ export default {
 	.btn_style>button{
 		background-color:#fcd030;
 	}
+	
+	
+	/* 任务列表状态文字 */
+	.state_sucess{
+		color: #09BB07;
+	}
+	.state_fail{
+		color: #959FA6;
+	}
+	.state_proceed{
+		color: #dc3b40;
+	}
 </style>

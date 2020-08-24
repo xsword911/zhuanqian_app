@@ -310,6 +310,11 @@
 		"style": {
 			"navigationBarTitleText": "公司资质"
 		}
+	},{
+		"path": "pages/webView/webView",
+		"style": {
+			"navigationBarTitleText": "打开链接"
+		}
 	}],
 	
 	"tabBar": {

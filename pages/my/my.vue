@@ -426,7 +426,12 @@ export default{
 		//跳转到提现页
 		toExtractMoney(){
 			if(utilCore.isLoginByDeviceId()) {
-				utilCore.toLoginUiCanBack();
+				// utilCore.toLoginUiCanBack();
+				//游客登录
+				uni.navigateTo({
+					// url: '/pages/extractMoney/extractMoney'
+					url: "/pages/extractMoney/extractMoney1/extractMoney1?loginType=1"
+				});
 			}else{
 				uni.navigateTo({
 					// url: '/pages/extractMoney/extractMoney'
@@ -437,7 +442,11 @@ export default{
 		//跳转到充值页
 		toRacharge(){
 			if(utilCore.isLoginByDeviceId()) {
-				utilCore.toLoginUiCanBack();
+				// utilCore.toLoginUiCanBack();
+				//游客登录
+				uni.navigateTo({
+					url: '/pages/recharge/recharge?loginType=1'
+				});
 			}else{
 				uni.navigateTo({
 					url: '/pages/recharge/recharge'

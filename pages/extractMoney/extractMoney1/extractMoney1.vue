@@ -1,51 +1,70 @@
 <template>
-	<view class="container" style="padding:0; height:100vh;">
-		<view class="lay_head">
-			<view class="lay_money background_style">
-				<view class="lay_test">
-					余额
+	<view class="container" style="padding:0; height:100vh; background-color: #fff;">
+		<view class="" v-if="isShowBank == 1" style="background-color: #fbf9fe;height:100vh;">
+			<view class="lay_head">
+				<view class="lay_money background_style">
+					<view class="lay_test">
+						余额
+					</view>
+					<view class="lay_money_num">
+						￥<text>{{sumMoney}}</text>
+					</view>
+					<view class="">
+						手续费：<text>0.00</text>
+					</view>
 				</view>
-				<view class="lay_money_num">
-					￥<text>{{sumMoney}}</text>
+			</view>
+			
+			<view class="lay_group">
+				<view class="lay_row">
+					<view class="lay_row_test">银行名称</view>
+					<view class="lay_row_info lay_bank">{{userBankName}}</view>
 				</view>
-				<view class="">
-					手续费：<text>0.00</text>
+				<view class="lay_row">
+					<view class="lay_row_test">银行卡号</view>
+					<view class="lay_row_info lay_bank">····    ····    ····    {{userBankCode}}</view>
 				</view>
+				
+				<view class="lay_row">
+					<view class="lay_row_test">提款金额</view>
+					<view class="lay_row_input">
+						<input type="text" value="" placeholder="请输入提款金额" v-model="money" />
+					</view>
+				</view>
+				
+				<view class="lay_row">
+					<view class="lay_row_test">提现密码</view>
+					<view class="lay_row_input">
+						<input type="text" value="" placeholder="请输入提现密码" v-model="pwdCash" />
+					</view>
+				</view>
+				
+				<view class="lay_row">
+					出款上限：<text>1000000.00</text>；出款下限：<text>50</text>
+				</view>
+			</view>
+			
+			<view class="lay_btn btn_style">
+				<button type="default" @tap="confirm">提交</button>
 			</view>
 		</view>
 		
-		<view class="lay_group">
-			<view class="lay_row">
-				<view class="lay_row_test">银行名称</view>
-				<view class="lay_row_info lay_bank">{{userBankName}}</view>
-			</view>
-			<view class="lay_row">
-				<view class="lay_row_test">银行卡号</view>
-				<view class="lay_row_info lay_bank">····    ····    ····    {{userBankCode}}</view>
-			</view>
-			
-			<view class="lay_row">
-				<view class="lay_row_test">提款金额</view>
-				<view class="lay_row_input">
-					<input type="text" value="" placeholder="请输入提款金额" v-model="money" />
-				</view>
-			</view>
-			
-			<view class="lay_row">
-				<view class="lay_row_test">提现密码</view>
-				<view class="lay_row_input">
-					<input type="text" value="" placeholder="请输入提现密码" v-model="pwdCash" />
-				</view>
-			</view>
-			
-			<view class="lay_row">
-				出款上限：<text>1000000.00</text>；出款下限：<text>50</text>
+		<view class="data_lack" v-if="isShowBank == 2" style="width:100%; height:100vh; background-color: #fff;">
+			<view class="lack_box">
+				<tui-icon name="nodata" :size="120"></tui-icon>
+				<text class="lack_test">您还没有绑定银行卡</text>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toAddBank" style="background-color:#fcd030;">去绑定</button>
 			</view>
 		</view>
 		
-		<view class="lay_btn btn_style">
-			<button type="default" @tap="confirm">提交</button>
+		<view class="data_lack" v-if="isShowBank == 3" style="width:100%; height:100vh; background-color: #fff;">
+			<view class="lack_box">
+				<tui-icon name="nodata" :size="120"></tui-icon>
+				<text class="lack_test">您还没有登录账号</text>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toLogin" style="background-color:#fcd030;">去登录</button>
+			</view>
 		</view>
+		
 	</view>
 </template>
 
@@ -65,19 +84,38 @@ export default{
 			uid: "",  //uid			
 			money: null,  //提现金额
 			pwdCash: "",  //提现密码
+			isShowBank: 0,  //是否显示银行卡信息 0正在查询 1显示 2不显示 3未登录
 		}
 	},
-	onShow(){
-		this.uid = storage.getUid();  //获取uid
-		this.getMyInfo();
+	onLoad(res) {
+		//游客登录
+		if(res.loginType){
+			this.isShowBank = 3;
+			return;
+		}else {
+			this.uid = storage.getUid();  //获取uid
+			this.getMyInfo();  //刷新我的信息
+			this.getMyBankInfo();//查询用户绑定银行卡信息
+		}
 	},
 	methods:{
+		//跳转到登录界面
+		toLogin(){
+			uni.navigateTo({
+				url: '/pages/login/login'
+			})
+		},
+		//跳转到添加银行卡页
+		toAddBank(){
+			uni.navigateTo({
+				url: '/pages/my/setting/bank/updBank/updBank?type=1&account=' + this.userEn.account
+			})
+		},
 		//刷新我的信息
 		getMyInfo(){
 			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
-				console.log(this.userEn);
 				this.sumMoney = this.userEn.money;
 				this.getMyBankInfo();  //获取我的绑定银行卡信息
 			});
@@ -96,25 +134,9 @@ export default{
 					this.userBankName = data[0].bank;
 					this.userBankCode = data[0].bankCode.substring(data[0].bankCode.length - 4);  //银行卡号截取最后四位数;
 					// storage.setMyBankInfo(data[0]);
+					this.isShowBank = 1;  //显示银行卡信息
 				}else{
-					uni.showModal({
-						content: "请绑定银行卡",
-						showCancel: false,
-						success(res) {
-							if(res.confirm){
-								uni.switchTab({
-									url: '/pages/my/my'
-								});	
-								console.log(this.userEn);
-								uni.navigateTo({									
-									url: '/pages/my/setting/bank/updBank/updBank?type=1&account=' + this.uid
-								});	
-								// uni.navigateTo({
-								// 	url: '/pages/my/setting/bank/bank'
-								// });
-							}
-						}
-					});
+					this.isShowBank = 2;  //不显示银行卡信息
 				}
 			});
 		},
@@ -269,5 +291,30 @@ export default{
 	.lay_row_input>input{
 		font-size:15px;
 		flex: 1;
+	}
+	
+	
+	.lack_box{
+		width:100%;
+		height:700rpx;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		flex-direction:column;
+	}
+	.lack_test{
+		font-size:16px;
+		margin-top:20rpx;
+		display:inline-block;
+	}
+	.coin_query{
+		margin-top:40rpx;
+		background-color:#fcd030;
+		font-size:16px;
+		border-radius:40rpx;
+		width:400rpx;
+	}
+	.coin_query::after{
+		border:none;
 	}
 </style>

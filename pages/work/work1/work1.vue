@@ -269,6 +269,8 @@
 		<tui-loadmore v-if="loadding" :index="3" type="primary"></tui-loadmore>
 		<tui-nomore v-if="!pullUpOn"></tui-nomore>
 		<!--加载loadding-->
+		
+		<!-- <tui-loading></tui-loading> -->
 	</view>
 </template>
 
@@ -282,12 +284,14 @@ import audio from "@/common/audio.js";
 import tran from "@/common/tran.js";
 import tuiLoadmore from "@/components/tui-loadmore/tui-loadmore.vue";
 import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
+// import tuiLoading from "@/components/tui-loading/tui-loading.vue";
 export default{
 	comments:{
 		tuiModal,
 		tuiRoundProgress,
 		tuiLoadmore,
-		tuiNomore
+		tuiNomore,
+		// tuiLoading
 	},
 	filters:{
 		//金币转换现金计算

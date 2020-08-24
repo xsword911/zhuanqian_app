@@ -25,23 +25,18 @@
 				@tap="toUpdWork(item)">
 					<view class="info_left">
 						<view class="info_title">{{item.title}}</view>
-						<view>
+						<view class="info_time">
 							任务类型：
-							<text v-if="item.type == 0">邀请好友</text>
+							<text>{{item.typeTest}}</text>
+<!-- 							<text v-if="item.type == 0">邀请好友</text>
 							<text v-if="item.type == 1">分享朋友圈</text>
 							<text v-if="item.type == 2">加好友</text>
 							<text v-if="item.type == 3">下载app</text>
-							<text v-if="item.type == 4">签到任务</text>
-							<text v-if="item.type == 5">点赞任务</text>
+							<text v-if="item.type == 4">点赞任务</text> -->
 						</view>
 						<view class="info_time">接受时间：{{item.receiveTime}}</view>
-						<view>
-							状态：
-							<text v-if="item.state == 0">进行中</text>
-							<text v-if="item.state == 1">未审核</text>
-							<text v-if="item.state == 2">已完成</text>
-							<text v-if="item.state == 3">失败</text>
-							<text v-if="item.state == 10">已放弃</text>
+						<view class="info_time info_num">
+							任务限时：{{item.doneLong | doneLong}}
 						</view>
 					</view>
 					<view class="" style="padding-right:40rpx; box-sizing: border-box;">
@@ -50,8 +45,14 @@
 							<view class="" v-if="item.awardType == 0">金币</view>
 							<view class="" v-if="item.awardType == 1">现金</view>
 						</view>
-						<view class="info_time info_num">
-							任务限时：{{item.doneLong | doneLong}}
+
+						<view class="" style="font-size:12px;">
+							状态：
+							<text v-if="item.state == 0"  class="state_proceed">进行中</text>
+							<text v-if="item.state == 1"  class="state_fail">未审核</text>
+							<text v-if="item.state == 2"  class="state_sucess">已完成</text>
+							<text v-if="item.state == 3"  class="state_fail">失败</text>
+							<text v-if="item.state == 10" class="state_fail">已放弃</text>
 						</view>
 					</view>
 				</tui-list-cell>
@@ -185,15 +186,25 @@ export default {
 			arrayLevel: [],   //任务等级列表
 			arrayLevelIndex: 0,
 			level: 0,	//选中的任务等级码
+			
+			workType: [],//任务类型列表
         };
     },
     onShow(){
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息		
-		this.getTaskDetails();  //获取金币收入明细表
 		this.getLevelDesc(); //获取会员等级列表
+		this.getWorkTypeList();  //获取任务类型列表
 	},
 	methods:{
+		//获取任务类型列表
+		getWorkTypeList(){
+			api.getTaskType({}, (res)=>{
+				let data = api.getData(res);
+				this.workType = data;
+				this.getTaskDetails();  //获取审核任务列表
+			});
+		},
 		//获取会员等级列表
 		getLevelDesc(){
 			this.arrayLevel = storage.getLevelDescList();
@@ -277,7 +288,7 @@ export default {
 					break;
 			}
 		},
-		//获取金币明细表
+		//获取审核任务列表
 		getTaskDetails(){
 			this.closeDrawer();  //关闭抽屉
 			this.page = 1;
@@ -300,6 +311,12 @@ export default {
 			let data = api.getData(res).data;
 			if(util.isEmpty(data)) this.resultType = 2;
 			else{
+				//获取任务类型名称
+				for(let i = 0; i < this.workType.length; ++i){
+					for(let j = 0; j < data.length; ++j){
+						if(data[j].type == parseInt(this.workType[i].key)) data[j].typeTest = this.workType[i].val;
+					}
+				}
 				this.incomeList = data;
 				this.resultType = 1;
 			}
@@ -307,9 +324,6 @@ export default {
 		},
 		//跳转查看我接受的任务界面
 		toUpdWork(item){
-			// uni.navigateTo({
-			// 	url: "/pages/workList/workUpd/workUpd?id=" + data.id
-			// })
 			uni.navigateTo({
 				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=2" 
 			});
@@ -333,6 +347,12 @@ export default {
 				this.pullUpOn = false;
 			}else{
 				this.loadding = false;
+				//获取任务类型名称
+				for(let i = 0; i < this.workType.length; ++i){
+					for(let j = 0; j < data.length; ++j){
+						if(data[j].type == parseInt(this.workType[i].key)) data[j].typeTest = this.workType[i].val;
+					}
+				}
 				data.forEach((item) =>{
 					this.incomeList.push(item);
 				});

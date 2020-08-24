@@ -3,15 +3,19 @@
 module.exports = {
 	//秒数转换时分秒
 	timeChange(auditLong){
-		if(auditLong == null) return;
+		if(auditLong == null) return "";
+		let res = "";
 		let sp = auditLong;
 		let hour = parseInt(auditLong / 3600);
+		if(hour > 0) res += `${hour}小时`;
 		let min = parseInt([auditLong - (hour * 3600)] / 60);
+		if(min > 0) res += `${min}分`;
 		let second = parseInt(auditLong - [(hour * 3600) + (min * 60)]);
-		let counDown = `${hour}小时${min}分${second}秒`;
-		return counDown;
+		if(second > 0) res += `${second}秒`;
+		
+		return res;
 	},
-	//时间戳转换时分秒
+	//倒计时转换时分秒
 	toHHmmss (data) {
 	   var time;
 	   var hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

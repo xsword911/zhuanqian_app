@@ -25,16 +25,16 @@
 				@tap="toUpdWork(item)">
 					<view class="info_left">
 						<view class="info_title">{{item.title}}</view>
-						<view>
+						<view class="info_time">
 							任务类型：
-							<text v-if="item.type == 0">邀请好友</text>
+							<text>{{item.typeTest}}</text>
+<!-- 							<text v-if="item.type == 0">邀请好友</text>
 							<text v-if="item.type == 1">分享朋友圈</text>
 							<text v-if="item.type == 2">加好友</text>
 							<text v-if="item.type == 3">下载app</text>
-							<text v-if="item.type == 4">签到任务</text>
-							<text v-if="item.type == 5">点赞任务</text>
+							<text v-if="item.type == 4">点赞任务</text> -->
 						</view>
-						<view class="">接受任务玩家：{{item.doneUid}}</view>
+						<view class="info_time">接受任务玩家：{{item.doneUid}}</view>
 						<view class="info_time">接受时间：{{item.receiveTime}}</view>
 					</view>
 					<view class="" style="padding-right:40rpx; box-sizing: border-box;">
@@ -44,13 +44,13 @@
 							<view class="" v-if="item.awardType == 1">现金</view>
 						</view>
 				
-						<view class="">
+						<view class="" style="font-size:12px;">
 							状态：
-							<text v-if="item.state == 0">进行中</text>
-							<text v-if="item.state == 1">未审核</text>
-							<text v-if="item.state == 2">已完成</text>
-							<text v-if="item.state == 3">任务失败</text>
-							<text v-if="item.state == 10">任务取消</text>
+							<text v-if="item.state == 0" class="state_fail">进行中</text>
+							<text v-if="item.state == 1" class="state_proceed">未审核</text>
+							<text v-if="item.state == 2" class="state_sucess">已完成</text>
+							<text v-if="item.state == 3" class="state_fail">任务失败</text>
+							<text v-if="item.state == 10" class="state_fail">任务取消</text>
 						</view>
 					</view>
 				</tui-list-cell>
@@ -177,15 +177,25 @@ export default {
 			arrayLevel: [],   //任务等级列表
 			arrayLevelIndex: 0,
 			level: 0,	//选中的任务等级码
+			
+			workType: [],//任务类型列表
         };
     },
     onShow(){
 		this.uid = storage.getUid();  //获取uid
-		this.userEn = storage.getMyInfo();  //获取我的信息		
-		this.getTaskDetails();  //获取金币收入明细表		
+		this.userEn = storage.getMyInfo();  //获取我的信息				
 		this.getLevelDesc(); //获取会员等级列表
+		this.getWorkTypeList();  //获取任务类型列表
 	},
 	methods:{
+		//获取任务类型列表
+		getWorkTypeList(){
+			api.getTaskType({}, (res)=>{
+				let data = api.getData(res);
+				this.workType = data;
+				this.getTaskDetails();  //获取接受任务列表
+			});
+		},
 		//获取会员等级列表
 		getLevelDesc(){
 			this.arrayLevel = storage.getLevelDescList();
@@ -269,7 +279,7 @@ export default {
 					break;
 			}
 		},
-		//获取金币明细表
+		//获取接受任务列表
 		getTaskDetails(){
 			this.closeDrawer();  //关闭抽屉
 			this.page = 1;
@@ -279,24 +289,30 @@ export default {
 				count: 10,
 				level: parseInt(this.level)
 			};
-		if(!util.isEmpty(this.state)) data.state = this.state;
-		if(!util.isEmpty(this.begTime)){
-			let time = this.begTime + " 00:00:00";
-			data.begAddTime = time
-		};		
-		if(!util.isEmpty(this.endTime)){
-			let time = this.endTime + " 23:59:59";
-			data.endAddTime = time;
-		};
-		api.getTaskDetails(data, (res)=>{
-			let data = api.getData(res).data;
-			if(util.isEmpty(data)) this.resultType = 2;
-				 //this.isShowIncome();  //控制金币收入明细表显示
-			else{
-				this.incomeList = data;
-				this.resultType = 1;
-			}
-		});
+			if(!util.isEmpty(this.state)) data.state = this.state;
+			if(!util.isEmpty(this.begTime)){
+				let time = this.begTime + " 00:00:00";
+				data.begAddTime = time
+			};		
+			if(!util.isEmpty(this.endTime)){
+				let time = this.endTime + " 23:59:59";
+				data.endAddTime = time;
+			};
+			api.getTaskDetails(data, (res)=>{
+				let data = api.getData(res).data;
+				if(util.isEmpty(data)) this.resultType = 2;
+					 //this.isShowIncome();  //控制金币收入明细表显示
+				else{
+					//获取任务类型名称
+					for(let i = 0; i < this.workType.length; ++i){
+						for(let j = 0; j < data.length; ++j){
+							if(data[j].type == parseInt(this.workType[i].key)) data[j].typeTest = this.workType[i].val;
+						}
+					}
+					this.incomeList = data;
+					this.resultType = 1;
+				}
+			});
 		},
 		//跳转查看我审核的任务界面
 		toUpdWork(item){
@@ -323,6 +339,11 @@ export default {
 				this.pullUpOn = false;
 			}else{
 				this.loadding = false;
+				for(let i = 0; i < this.workType.length; ++i){
+					for(let j = 0; j < data.length; ++j){
+						if(data[j].type == parseInt(this.workType[i].key)) data[j].typeTest = this.workType[i].val;
+					}
+				}
 				data.forEach((item) =>{
 					this.incomeList.push(item);
 				});

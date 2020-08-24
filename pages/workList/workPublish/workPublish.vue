@@ -105,7 +105,7 @@
 						<tui-list-cell :hover="false" >
 							<view class="tui-line-cell">
 								<view class="tui-title">任务是否需要凭证</view>
-								<radio-group class="radio-group" name="isDoneProv">
+								<radio-group class="radio-group" name="isDoneProve">
 									<label class="tui-radio">
 										<radio value="1" color="#5677fc" />是
 									</label>
@@ -398,7 +398,7 @@ export default {
 				rule: ["required"],
 				msg: ["请输入任务结束时间"]
 			}, {
-				name: "isDoneProv",
+				name: "isDoneProve",
 				rule: ["required"],
 				msg: ["请选择是否需要凭证"]
 			}, {
@@ -426,21 +426,23 @@ export default {
 				data.auditLong = this.auditLongSecond;
 				data.award = parseInt(data.award);
 				data.sum = parseInt(data.sum);
-				data.isDoneProv = parseInt(data.isDoneProv);
+				data.isDoneProve = parseInt(data.isDoneProve);
 				data.isDoneImg = parseInt(data.isDoneImg);
 				data.imgUrl = "",
 				api.addTask(data, (res)=>{
 					let code = api.getCode(res);
 					if(code == 0){
-						uni.showToast({
-							title: "发布任务成功",
-							icon: "none"
+						uni.showModal({
+							title: "成功",
+							content: "发布成功",
+							showCancel: false
 						});
 					}else{
 						let msg = api.getMsg(res);
-						uni.showToast({
-							title: msg,
-							icon: "none"
+						uni.showModal({
+							title: "失败",
+							content: msg,
+							showCancel: false
 						});
 					}
 				});

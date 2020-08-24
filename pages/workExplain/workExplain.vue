@@ -8,13 +8,15 @@
 					</view>
 					<view class="" style="line-height:1.5;">
 						<view class="">
-							发布者：<text>{{workInfo.uid}}</text>
+							发布者：<text class="style_info">{{workInfo.uid}}</text>
 						</view>
-						<view class="lay_time" v-if="taskType == 1">
-							开始时间：<text>{{workInfo.begTime}}</text>
-						</view>
-						<view class="lay_time" v-if="taskType == 2">
-							接受时间：<text>{{workInfo.receiveTime}}</text>
+						<view class="" v-if="taskType == 2" style="font-size:14px;">
+							状&nbsp;&nbsp;&nbsp;态：
+							<text  class="state_proceed" v-if="workInfo.state == 0">进行中</text>
+							<text  class="state_fail" v-if="workInfo.state == 1">未审核</text>
+							<text  class="state_sucess" v-if="workInfo.state == 2">已完成</text>
+							<text  class="state_fail" v-if="workInfo.state == 3">任务失败</text>
+							<text  class="state_fail" v-if="workInfo.state == 10">任务取消</text>
 						</view>
 					</view>
 				</view>
@@ -33,19 +35,35 @@
 				<text v-if="workInfo.type == 1"  class="style_info">分享朋友圈</text>
 				<text v-if="workInfo.type == 2"  class="style_info">加好友</text>
 				<text v-if="workInfo.type == 3"  class="style_info">下载app</text>
-				<text v-if="workInfo.type == 4"  class="style_info">签到</text>
+				<text v-if="workInfo.type == 4"  class="style_info">点赞</text>
 			</view>
 			
 			<view class="" v-if="taskType == 1">
 				任务完成剩余量：<text class="style_info">{{workInfo.sum}}</text>
 			</view>
 			
-			<view class="">
+			<view class="" v-if="taskType == 2">
+				接受时间：<text class="style_info">{{workInfo.receiveTime}}</text>
+			</view>
+			
+			<view class=""  v-if="taskType == 1">
+				开始时间：<text class="style_info">{{workInfo.begTime}}</text>
+			</view>
+			
+			<view class=""  v-if="taskType == 1">
 				结束时间：<text class="style_info">{{workInfo.endTime}}</text>
 			</view>
 			
 			<view class="">
-				限时审核：<text class="style_info">{{auditLong}}</text>
+				任务限时：<text class="style_info">{{doneLong}}</text>
+			</view>
+			
+			<view class="">
+				完成时间：<text class="style_info">{{workInfo.finishTime}}</text>
+			</view>
+			
+			<view class="">
+				审核限时：<text class="style_info">{{auditLong}}</text>
 			</view>
 		</view>
 		
@@ -57,7 +75,7 @@
 				<view class="lay_explain"><text>{{workInfo.explain}}</text></view>
 			</view>
 			
-			<view class="lay_title">
+			<view class="lay_title" v-if="taskType == 1">
 				<view class="">提交任务是否需要凭证</view>
 				<view class="lay_explain">
 					<view class="" v-if="workInfo.isDoneProve == 0" style="margin-bottom:10rpx;">
@@ -70,7 +88,7 @@
 				</view>
 			</view>
 			
-			<view class="lay_title">
+			<view class="lay_title"  v-if="taskType == 1">
 				<view class="">提交任务是否需要截图</view>
 				<view class="lay_explain">
 					<view class="" v-if="workInfo.isDoneImg == 0">
@@ -83,26 +101,30 @@
 				</view>
 			</view>
 			
-			<!-- <view class="lay_title lay_userName" v-if="workInfo.isDoneProve == 1">
+			<view class="lay_title lay_userName" v-if="workInfo.isDoneProve == 1 && taskType == 2">
 				<view class="">完成凭证：</view>
 				<input type="text" value="12" v-model="userName"/>
 			</view>
 			
-			<view class="lay_title" v-if="workInfo.isDoneImg == 1">
+			<view class="lay_title" v-if="workInfo.isDoneImg == 1 && taskType == 2">
 				<view class="">完成截图：</view>
-				<view class="tui-box-upload">
+				<view class="tui-box-upload" v-if="workInfo.state == 0">
 					<tui-upload :serverUrl="serverUrl" @complete="result" @remove="remove" :limit="1"></tui-upload>
+				</view>
+				<view class="lay_doneImg" v-if="workInfo.state != 0"  @tap="revise">
+					<image :src="workInfo.doneImg" mode=""></image>
 				</view>
 			</view>
 			
-			<view class="lay_title">
+			<view class="lay_title" v-if="taskType == 2 && workInfo.state == 0">
 				倒计时：<text class="lay_head_right">{{counDown}}</text>
-			</view> -->
+			</view>
 			
 			<view class="lay_button btn_style">
+				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.type == 4" @tap="openUrl">打开链接</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 1" @tap="acceptTask">接受任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="giveUpTask">放弃任务</button>
-				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="submitTask">提交</button>
+				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.state == 0" @tap="submitTask">提交</button>
 			</view>
 		</view>
 	</view>
@@ -128,16 +150,16 @@ export default{
 			taskType: null, 
 			
 			counDown: "",  //倒计时
-			timeNowStamp: null,//当前时间戳(倒计时用)
 			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
 			doneLongTimeStamp: null,//限时时间(秒)转时间戳(倒计时用)
 			setIntervalId: '',  //计时器id
 			
-			auditLong: null,  //限时审核时间
+			auditLong: null,  //审核限时时间
+			doneLong: null,  //任务限时时间
 			
 			imageData: "",   //上传图片地址
 			//上传地址
-			serverUrl: ""
+			serverUrl: "",
 		}
 	},
 	onLoad(res) {
@@ -150,6 +172,19 @@ export default{
 		this.serverUrl = api.getFileUrl();
 	},
 	methods:{
+		//打开链接
+		openUrl(){
+			// uni.navigateTo({
+			// 	url: "/pages/webView/webView?url=" + this.workInfo.rule
+			// })
+			plus.runtime.openURL(this.workInfo.rule);
+		},
+		//查看截图凭证
+		revise(){
+			uni.previewImage({
+				urls: [this.workInfo.doneImg],
+			});
+		},
 		//查询任务
 		getTask(){
 			api.getTaskInfo({page: 1, count: 5, id: this.id}, (res)=>{
@@ -171,7 +206,6 @@ export default{
 		//获取倒计时
 		getCount(){
 			//获取倒计时
-			this.timeNowStamp = Date.parse(new Date());  //获取当前时间戳
 			if(this.taskType == 1) this.receiveTimeStamp = new Date(this.workInfo.begTime).getTime(); //获取开始任务时间戳
 			else this.receiveTimeStamp = new Date(this.workInfo.receiveTime).getTime();  //获取接受任务时间戳
 			this.doneLongTimeStamp = this.workInfo.doneLong*1000;   //限时时间(秒)转时间戳
@@ -179,8 +213,7 @@ export default{
 		},
 		//倒计时计时器
 		counDownTimeOut(){
-			this.timeNowStamp = this.timeNowStamp + 1000;  //每秒增大当前时间戳
-			let counDown = this.doneLongTimeStamp - (this.timeNowStamp - this.receiveTimeStamp);  //获取时间差
+			let counDown = this.doneLongTimeStamp - (Date.parse(new Date()) - this.receiveTimeStamp);  //获取时间差
 			if(counDown < 0){
 				this.counDown = '任务超时';
 				clearInterval(this.setIntervalId);  //清除定时器
@@ -190,15 +223,12 @@ export default{
 		},
 		//处理任务数据
 		getWorkInfo(){			
-			//获取限时审核时间
+			//获取审核限时时间
 			let auditLongSecond = this.workInfo.auditLong;
-			let auditLongHour = parseInt(auditLongSecond / 3600);
-			
-			let auditLongMin = parseInt([auditLongSecond - (auditLongHour * 3600)] / 60);
-			
-			let auditLongSe = parseInt(auditLongSecond - [(auditLongHour * 3600) + (auditLongMin * 60)]);
-			
-			this.auditLong = `${auditLongHour}小时${auditLongMin}分${auditLongSe}秒`;
+			this.auditLong = time.timeChange(auditLongSecond);
+			//获取任务限时时间
+			let doneLongSecond = this.workInfo.doneLong;
+			this.doneLong = time.timeChange(doneLongSecond);
 		},
 		result: function(e) {
 			this.imageData = e.imgArr[0];
@@ -405,6 +435,12 @@ export default{
 	}
 	
 	.tui-box-upload {
+		margin-top:20rpx;
+	}
+	
+	.lay_doneImg{
+		width:120rpx;
+		height:120rpx;
 		margin-top:20rpx;
 	}
 </style>

@@ -165,10 +165,9 @@ export default{
 		//获取我的信息
 		getMyInfo(){
 			api.getUserByUid({uid: this.uid}, (res)=>{
-				let data = api.getData(res)
+				let data = api.getData(res);
 				this.myLevel = data.level;   //获取我的会员等级
 				storage.setMyInfo(data);	 //保存我的信息
-				
 				this.setUserLevel();  //设置我的等级信息
 			});
 		},
@@ -176,7 +175,6 @@ export default{
 		setUserLevel(){
 			this.userLevel.forEach((item, index) =>{
 				let moneyNow = 0;  //当前会员等级金额
-				console.log("item" + item.level + "level" + this.myLevel);
 				if(item.level == this.myLevel){
 					this.workNum = item.receiveTaskSum;  //获取当前会员每日可接任务数
 					this.levelName = item.levelName;	//获取当前会员等级名称

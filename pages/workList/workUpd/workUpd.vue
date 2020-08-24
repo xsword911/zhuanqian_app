@@ -175,6 +175,7 @@ import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import tran from "@/common/tran.js";
 import util from "@/common/util.js";
+import time from "@/common/time.js";
 export default {
 	data() {
 		return {
@@ -245,31 +246,19 @@ export default {
 				this.sum = this.taskInfo.sum;   		//任务数量
 				this.begTime = this.taskInfo.begTime;   //任务开始时间
 				this.endTime = this.taskInfo.endTime;   //任务结束时间
-				this.desc = this.taskInfo.desc;
+				this.desc = this.taskInfo.desc;         //备注
 				
-				this.isDoneImg = this.taskInfo.isDoneImg;  //是否需要截图
+				this.isDoneImg = this.taskInfo.isDoneImg;  		//是否需要截图
 				this.isDoneProve =  this.taskInfo.isDoneProve;  //是否需要凭证
-				this.arrayTypeIndex = this.taskInfo.type;
-				this.arrayAwardIndex = this.taskInfo.awardType;
-				this.arrayStateIndex = this.taskInfo.state;
-				this.arraySortIndex = this.taskInfo.sort;
-				this.arrayCycleIndex = this.taskInfo.cycle;
-				
+				this.arrayTypeIndex = this.taskInfo.type;		//任务类型
+				this.arrayAwardIndex = this.taskInfo.awardType; //奖励类型
+				this.arrayStateIndex = this.taskInfo.state; 	//状态
+				this.arraySortIndex = this.taskInfo.sort;		//任务分类
+				this.arrayCycleIndex = this.taskInfo.cycle;     //任务刷新周期
 				//任务限时时间
-				let doneLongSecond = this.taskInfo.doneLong;
-				let doneLongHour = parseInt(doneLongSecond / 3600);
-				let doneLongMin = parseInt([doneLongSecond - (doneLongHour * 3600)] / 60);
-				let doneLongSe = parseInt(doneLongSecond - [(doneLongHour * 3600) + (doneLongMin * 60)]);
-				let doneLongData = `${doneLongHour}小时${doneLongMin}分${doneLongSe}秒`
-				this.doneLongTime = doneLongData;
-				
+				this.doneLongTime = time.timeChange(this.taskInfo.doneLong);
 				//任务审核时间
-				let auditLongSecond = this.taskInfo.auditLong;
-				let auditLongHour = parseInt(auditLongSecond / 3600);
-				let auditLongMin = parseInt([auditLongSecond - (auditLongHour * 3600)] / 60);
-				let auditLongSe = parseInt(auditLongSecond - [(auditLongHour * 3600) + (auditLongMin * 60)]);
-				let auditLongData = `${auditLongHour}小时${auditLongMin}分${auditLongSe}秒`
-				this.auditLongTime = auditLongData;
+				this.auditLongTime = time.timeChange(this.taskInfo.auditLong);
 			});
 		},
 		//获取会员类型列表

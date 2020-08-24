@@ -8,10 +8,15 @@
 					</view>
 					<view class="" style="line-height:1.5;">
 						<view class="">
-							接受者：<text>{{workInfo.doneUid}}</text>
+							接受者：<text class="style_info">{{workInfo.doneUid}}</text>
 						</view>
-						<view class="lay_time">
-							接受时间：<text>{{workInfo.receiveTime}}</text>
+						<view class="" style="font-size:14px;">
+							状&nbsp;&nbsp;&nbsp;&nbsp;态：
+							<text  class="state_fail" v-if="workInfo.state == 0">进行中</text>
+							<text  class="state_proceed" v-if="workInfo.state == 1">未审核</text>
+							<text  class="state_sucess" v-if="workInfo.state == 2">已完成</text>
+							<text  class="state_fail" v-if="workInfo.state == 3">任务失败</text>
+							<text  class="state_fail" v-if="workInfo.state == 10">任务取消</text>
 						</view>
 					</view>
 				</view>
@@ -30,24 +35,19 @@
 				<text v-if="workInfo.type == 1"  class="style_info">分享朋友圈</text>
 				<text v-if="workInfo.type == 2"  class="style_info">加好友</text>
 				<text v-if="workInfo.type == 3"  class="style_info">下载app</text>
-				<text v-if="workInfo.type == 4"  class="style_info">签到</text>
+				<text v-if="workInfo.type == 4"  class="style_info">点赞</text>
 			</view>
 			
 			<view class="">
-				任务状态：
-				<text v-if="workInfo.state == 0">进行中</text>
-				<text v-if="workInfo.state == 1">未审核</text>
-				<text v-if="workInfo.state == 2">已完成</text>
-				<text v-if="workInfo.state == 3">任务失败</text>
-				<text v-if="workInfo.state == 10">任务取消</text>
+				接受时间：<text class="style_info">{{workInfo.receiveTime}}</text>
 			</view>
 			
 			<view class="">
-				结束时间：<text class="style_info">{{workInfo.endTime}}</text>
+				完成时间：<text class="style_info">{{workInfo.finishTime}}</text>
 			</view>
 						
 			<view class="">
-				限时审核：<text class="style_info">{{auditLong}}</text>
+				审核限时：<text class="style_info">{{auditLong}}</text>
 			</view>
 		</view>
 		
@@ -59,37 +59,52 @@
 				<view class="lay_explain"><text>{{workInfo.explain}}</text></view>
 			</view>
 			
-			<view class="lay_title" v-if="workInfo.isDoneProve == 0 || workInfo.isDoneImg == 1">
-				<view class="">任务规则</view>
+			<view class="lay_title">
+				<view class="">提交任务是否需要凭证</view>
 				<view class="lay_explain">
 					<view class="" v-if="workInfo.isDoneProve == 0" style="margin-bottom:10rpx;">
-						<text class="lay_head_right">*</text><text>任务不需要凭证</text>
+						<text class="lay_head_right">*</text><text>提交任务不需要凭证</text>
 					</view>
+					
+					<view class="" v-if="workInfo.isDoneProve == 1" style="margin-bottom:10rpx;">
+						<text class="lay_head_right">*</text><text>提交任务需要凭证</text>
+					</view>
+				</view>
+			</view>
+			
+			<view class="lay_title">
+				<view class="">提交任务是否需要截图</view>
+				<view class="lay_explain">
 					<view class="" v-if="workInfo.isDoneImg == 0">
-						<text class="lay_head_right">*</text><text>任务不需要截图</text>
+						<text class="lay_head_right">*</text><text>提交任务不需要截图</text>
+					</view>
+					
+					<view class="" v-if="workInfo.isDoneImg == 1">
+						<text class="lay_head_right">*</text><text>提交任务需要截图</text>
 					</view>
 				</view>
 			</view>
 			
 			<view class="lay_title lay_userName" v-if="workInfo.isDoneProve == 1">
-				<view class="">个人账户：</view>
-				<input type="text" value="12" v-model="userName"/>
+				<view class="">完成凭证：</view>
+				<text>{{workInfo.doneProve}}</text>
 			</view>
 			
 			<view class="lay_title" v-if="workInfo.isDoneImg == 1">
-				<view class="">截图凭证：</view>
-				<view class="tui-box-upload">
-					<tui-upload :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
+				<view class="">完成截图：</view>
+				<view class="lay_doneImg" @tap="revise">
+					<image :src="workInfo.doneImg" mode=""></image>
 				</view>
 			</view>
 			
-			<view class="lay_title">
+			<view class="lay_title" v-if="workInfo.state == 1">
 				倒计时：<text class="lay_head_right">{{counDown}}</text>
 			</view>
 			
 			<view class="lay_button btn_style">
-				<button type="default" hover-class="btn_hover" @tap="taskExamine(2)">任务成功</button>
-				<button type="default" hover-class="btn_hover" @tap="taskExamine(3)">任务失败</button>
+				<button type="default" hover-class="btn_hover" @tap="openUrl">打开链接</button>
+				<button type="default" hover-class="btn_hover" @tap="taskExamine(2)" v-if="workInfo.state == 1">任务成功</button>
+				<button type="default" hover-class="btn_hover" @tap="taskExamine(3)" v-if="workInfo.state == 1">任务失败</button>
 			</view>
 		</view>
 	</view>
@@ -113,7 +128,6 @@ export default{
 			uid: "",
 			
 			counDown: "",  //倒计时显示
-			timeNowStamp: null,//当前时间戳(倒计时用)
 			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
 			doneLongTimeStamp: null,//限时时间(秒)转时间戳(倒计时用)
 			setIntervalId: '',  //计时器id
@@ -122,7 +136,9 @@ export default{
 			
 			imageData: [],
 			//上传地址
-			serverUrl: ""
+			serverUrl: "",
+			
+			url: "",  //打开的外部链接
 		}
 	},
 	onLoad(res) {
@@ -132,6 +148,16 @@ export default{
 		this.serverUrl = api.getFileUrl();
 	},
 	methods:{
+		//打开链接
+		openUrl(){
+			plus.runtime.openURL(this.workInfo.rule);
+		},
+		//查看截图凭证
+		revise(){
+			uni.previewImage({
+				urls: [this.workInfo.doneImg],
+			});
+		},
 		// 查询任务完成情况
 		getTaskDetails(){
 			api.getTaskDetails({page: 1, count: 5, id: this.id}, (res)=>{
@@ -144,16 +170,16 @@ export default{
 		//获取倒计时
 		getCount(){
 			//获取倒计时
-			this.timeNowStamp = Date.parse(new Date());  //获取当前时间戳
-			this.receiveTimeStamp = new Date(this.workInfo.receiveTime).getTime();  //获取接受任务时间戳
+			this.receiveTimeStamp = Date.parse(new Date(this.workInfo.finishTime));  //获取接受任务时间戳
 			this.doneLongTimeStamp = this.workInfo.doneLong*1000;   //限时时间(秒)转时间戳
 			this.setIntervalId = setInterval(this.counDownTimeOut, 1000);  //获取计时器id
 		},
 		//倒计时计时器
 		counDownTimeOut(){
-			let counDown = this.doneLongTimeStamp - (this.timeNowStamp - this.receiveTimeStamp);  //获取时间差
+			let counDown = this.doneLongTimeStamp - (Date.parse(new Date()) - this.receiveTimeStamp);  //获取时间差
+
 			if(counDown < 0){
-				this.counDown = '任务超时';
+				this.counDown = '审核超时';
 				clearInterval(this.setIntervalId);  //清除定时器
 				return;
 			}
@@ -161,7 +187,6 @@ export default{
 		},
 		//处理任务数据
 		getWorkInfo(){
-			
 			//获取限时审核时间
 			let auditLongSecond = this.workInfo.auditLong;
 			let auditLong = time.timeChange(auditLongSecond);
@@ -296,6 +321,11 @@ export default{
 	}
 	
 	.tui-box-upload {
+		margin-top:20rpx;
+	}
+	.lay_doneImg{
+		width:120rpx;
+		height:120rpx;
 		margin-top:20rpx;
 	}
 </style>

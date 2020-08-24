@@ -1,28 +1,39 @@
 <template>
-	<view class="container">
-		<view class="lay_money background_style">
-			<view class="lay_test">
-				余额
+	<view class="container" style="padding:0; height:100vh; background-color: #fff;">
+		<view class="" style="background-color: #fbf9fe; height:100vh; padding:20rpx; box-sizing:border-box;" 
+		v-if="isShowRecharge == 1">
+			<view class="lay_money background_style">
+				<view class="lay_test">
+					余额
+				</view>
+				<view class="lay_money_num">
+					￥<text>{{money}}</text>
+				</view>
 			</view>
-			<view class="lay_money_num">
-				￥<text>{{money}}</text>
+			
+			<view class="lay_group" v-for="(item, index) in rechargeType" :key="index">
+				<view class="lay_head">
+					{{item.key}}
+				</view>
+				<view class="lay_row" style="text-align: left;">
+					<button class="lay_box" @tap="toPay(item1)" v-for="(item1, index1) in item.val" :key="index1" 
+					type="default" hover-class="lay_hover">
+						<view class="lay_box_img">
+							<image src="/static/img/recharge_img.png" mode=""></image>
+						</view>
+						<view class="lay_box_test">
+							{{item1.wayName}}
+						</view>
+					</button>
+				</view>
 			</view>
 		</view>
 		
-		<view class="lay_group" v-for="(item, index) in rechargeType" :key="index">
-			<view class="lay_head">
-				{{item.key}}
-			</view>
-			<view class="lay_row" style="text-align: left;">
-				<button class="lay_box" @tap="toPay(item1)" v-for="(item1, index1) in item.val" :key="index1" 
-				type="default" hover-class="lay_hover">
-					<view class="lay_box_img">
-						<image src="/static/img/recharge_img.png" mode=""></image>
-					</view>
-					<view class="lay_box_test">
-						{{item1.wayName}}
-					</view>
-				</button>
+		<view class="data_lack" v-if="isShowRecharge == 2" style="width:100%; height:100vh; background-color: #fff;">
+			<view class="lack_box">
+				<tui-icon name="nodata" :size="120"></tui-icon>
+				<text class="lack_test">您还没有登录账号</text>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toLogin" style="background-color:#fcd030;">去登录</button>
 			</view>
 		</view>
 		
@@ -40,14 +51,28 @@ export default{
 			userEn: [],  //用户信息
 			uid: "",  //uid
 			rechargeType: [],  //充值渠道大类列表
+			isShowRecharge: 0,  //是否显示充值 0正在查询 1显示 2未登录 
 		}
 	},
-	onShow() {
-		this.uid = storage.getUid();  //获取用户id
-		this.getUserInfo();  //获取用户信息
-		this.getRechargeType();  //获取充值渠道大类列表
+	onLoad(res) {
+		//游客登录
+		if(res.loginType){
+			this.isShowRecharge = 2;
+			return;
+		}else {
+			this.uid = storage.getUid();  //获取用户id
+			this.getUserInfo();  //获取用户信息
+			this.getRechargeType();  //获取充值渠道大类列表
+			this.isShowRecharge = 1;  //显示充值
+		}
 	},
 	methods:{
+		//跳转到登录界面
+		toLogin(){
+			uni.navigateTo({
+				url: '/pages/login/login'
+			})
+		},
 		//获取用户信息
 		getUserInfo(){
 			api.getUserByUid({uid: this.uid}, (res)=>{
@@ -137,5 +162,31 @@ export default{
 	}
 	.lay_hover[type = default]{
 		background-color:#F8F8F8;
+	}
+	
+	
+	
+	.lack_box{
+		width:100%;
+		height:700rpx;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		flex-direction:column;
+	}
+	.lack_test{
+		font-size:16px;
+		margin-top:20rpx;
+		display:inline-block;
+	}
+	.coin_query{
+		margin-top:40rpx;
+		background-color:#fcd030;
+		font-size:16px;
+		border-radius:40rpx;
+		width:400rpx;
+	}
+	.coin_query::after{
+		border:none;
 	}
 </style>
