@@ -143,7 +143,7 @@
 			</view>
 			
 			<view class="lay_button btn_style">
-				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.taskUrl != ''" @tap="openUrl">打开链接</button>
+				<button type="default" hover-class="btn_hover" v-if="workInfo.taskUrl != ''" @tap="openUrl">打开链接</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 1" @tap="acceptTask">接受任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="giveUpTask">放弃任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.state == 0" @tap="submitTask">提交</button>
