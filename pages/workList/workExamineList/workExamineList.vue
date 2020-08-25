@@ -486,7 +486,6 @@ export default {
 	}
 	.info_title{
 		font-size:15px;
-		font-weight:bold;
 	}
 	.info_num{
 		margin-top:10rpx;

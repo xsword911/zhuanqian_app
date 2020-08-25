@@ -122,4 +122,16 @@ module.exports = {
 		// #endif
 		return uuid;
 	},
+	
+	//打开外部网站
+	openUrl(url){
+		// #ifdef APP-PLUS
+			plus.runtime.openWeb(url);   //App平台使用内置浏览器打开外部网站
+		// plus.runtime.openURL(url); //App平台使用第三方浏览器打开外部网站
+		// #endif
+		
+		// #ifdef H5
+		  window.location.href = url;  //H5平台打开外部网站
+		// #endif
+	},
 }

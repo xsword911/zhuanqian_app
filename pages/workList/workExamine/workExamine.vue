@@ -59,6 +59,28 @@
 				<view class="lay_explain"><text>{{workInfo.explain}}</text></view>
 			</view>
 			
+			<view class="lay_title" v-if="workInfo.taskTxt != ''">
+				<view class="">复制文案</view>
+				<view class="lay_explain" style="display: flex; align-items: center;">
+					<text>{{workInfo.taskTxt}}</text>
+<!-- 					<view class="btn_style copy_btn">
+						<button type="default" hover-class="btn_hover" @tap="copy">复制</button>
+					</view> -->
+				</view>
+			</view>
+			
+			<view class="lay_title" v-if="workInfo.taskImg != ''">
+				<view class="">下载图片</view>
+				<view class="lay_explain" style="display: flex; align-items: center; text-indent: 0em;">
+					<view class="" @tap="imgCheck" style="width:120rpx; height:120rpx;">
+						<image :src="workInfo.taskImg" mode=""></image>
+					</view>
+<!-- 					<view class="btn_style copy_btn">
+						<button type="default" hover-class="btn_hover" @tap="imgDownload">下载图片</button>
+					</view> -->
+				</view>
+			</view>
+			
 			<view class="lay_title">
 				<view class="">提交任务是否需要凭证</view>
 				<view class="lay_explain">
@@ -102,7 +124,7 @@
 			</view>
 			
 			<view class="lay_button btn_style">
-				<button type="default" hover-class="btn_hover" @tap="openUrl">打开链接</button>
+				<button type="default" hover-class="btn_hover" @tap="openUrl" v-if="workInfo.taskUrl != ''">打开链接</button>
 				<button type="default" hover-class="btn_hover" @tap="taskExamine(2)" v-if="workInfo.state == 1">任务成功</button>
 				<button type="default" hover-class="btn_hover" @tap="taskExamine(3)" v-if="workInfo.state == 1">任务失败</button>
 			</view>
@@ -116,6 +138,7 @@ import tuiUpload from "@/components/tui-upload/tui-upload.vue";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import time from "@/common/time.js";
+import util from "@/common/util.js";
 export default{
 	components:{
 		tuiUpload
@@ -150,7 +173,13 @@ export default{
 	methods:{
 		//打开链接
 		openUrl(){
-			plus.runtime.openURL(this.workInfo.rule);
+			util.openUrl(this.workInfo.taskUrl);
+		},
+		//查看下载图片
+		imgCheck(){
+			uni.previewImage({
+				urls: [this.workInfo.taskImg],
+			});
 		},
 		//查看截图凭证
 		revise(){
@@ -163,6 +192,7 @@ export default{
 			api.getTaskDetails({page: 1, count: 5, id: this.id}, (res)=>{
 				let data = api.getData(res).data[0];
 				this.workInfo = data;
+				console.log(this.workInfo);
 				this.getWorkInfo();  //处理任务数据
 				this.getCount();  //获取倒计时
 			});
@@ -328,5 +358,19 @@ export default{
 		height:120rpx;
 		margin-top:20rpx;
 	}
+	
+	.copy_btn{
+			margin-left:40rpx;
+		}
+		.copy_btn>button{
+			padding:0 18rpx;
+			box-sizing:border-box;
+			font-size:12px;
+			line-height:2.2;
+			text-indent: 0em;
+			color:#fff;
+	/* 		background-color:transparent;
+			border: 1px solid #464646; */
+		}
 </style>
 

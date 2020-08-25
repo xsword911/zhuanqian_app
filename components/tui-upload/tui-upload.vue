@@ -236,8 +236,8 @@ import tran from "@/common/tran.js";
 	}
 
 	.tui-upload-add {
-		width: 220rpx;
-		height: 220rpx;
+		width: 180rpx;
+		height: 180rpx;
 		font-size: 68rpx;
 		font-weight: 100;
 		color: #888;
@@ -249,8 +249,8 @@ import tran from "@/common/tran.js";
 	}
 
 	.tui-image-item {
-		width: 220rpx;
-		height: 220rpx;
+		width: 180rpx;
+		height: 180rpx;
 		position: relative;
 		margin-right: 20rpx;
 		margin-bottom: 20rpx;
@@ -261,8 +261,8 @@ import tran from "@/common/tran.js";
 	}
 
 	.tui-item-img {
-		width: 220rpx;
-		height: 220rpx;
+		width: 180rpx;
+		height: 180rpx;
 		display: block;
 	}
 

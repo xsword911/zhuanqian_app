@@ -19,7 +19,7 @@
 				@tap="toUpdWork(item)">
 					<view class="info_left">
 						<view class="info_title">{{item.title}}</view>
-						<view>
+						<view class="info_time">
 							任务类型：
 							<text v-if="item.type == 0">邀请好友</text>
 							<text v-if="item.type == 1">分享朋友圈</text>
@@ -453,7 +453,6 @@ export default {
 	}
 	.info_title{
 		font-size:15px;
-		font-weight:bold;
 	}
 	.info_num{
 		margin-top:10rpx;

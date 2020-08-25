@@ -47,11 +47,11 @@
 			</view>
 			
 			<view class=""  v-if="taskType == 1">
-				开始时间：<text class="style_info">{{workInfo.begTime}}</text>
+				发布开始时间：<text class="style_info">{{workInfo.begTime}}</text>
 			</view>
 			
 			<view class=""  v-if="taskType == 1">
-				结束时间：<text class="style_info">{{workInfo.endTime}}</text>
+				发布结束时间：<text class="style_info">{{workInfo.endTime}}</text>
 			</view>
 			
 			<view class="">
@@ -73,6 +73,28 @@
 			<view class="lay_title">
 				<view class="">任务说明</view>
 				<view class="lay_explain"><text>{{workInfo.explain}}</text></view>
+			</view>
+			
+			<view class="lay_title" v-if="workInfo.taskTxt != ''">
+				<view class="">复制文案</view>
+				<view class="lay_explain" style="display: flex; align-items: center;">
+					<text>{{workInfo.taskTxt}}</text>
+					<view class="btn_style copy_btn">
+						<button type="default" hover-class="btn_hover" @tap="copy">复制</button>
+					</view>
+				</view>
+			</view>
+			
+			<view class="lay_title" v-if="workInfo.taskImg != ''">
+				<view class="">下载图片</view>
+				<view class="lay_explain" style="display: flex; align-items: center; text-indent: 0em;">
+					<view class="" @tap="imgCheck" style="width:120rpx; height:120rpx;">
+						<image :src="workInfo.taskImg" mode=""></image>
+					</view>
+					<view class="btn_style copy_btn">
+						<button type="default" hover-class="btn_hover" @tap="imgDownload">下载图片</button>
+					</view>
+				</view>
 			</view>
 			
 			<view class="lay_title" v-if="taskType == 1">
@@ -121,7 +143,7 @@
 			</view>
 			
 			<view class="lay_button btn_style">
-				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.type == 4" @tap="openUrl">打开链接</button>
+				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.taskUrl != ''" @tap="openUrl">打开链接</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 1" @tap="acceptTask">接受任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="giveUpTask">放弃任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.state == 0" @tap="submitTask">提交</button>
@@ -174,10 +196,55 @@ export default{
 	methods:{
 		//打开链接
 		openUrl(){
-			// uni.navigateTo({
-			// 	url: "/pages/webView/webView?url=" + this.workInfo.rule
-			// })
-			plus.runtime.openURL(this.workInfo.rule);
+			util.openUrl(this.workInfo.taskUrl);
+		},
+		//复制文案
+		copy(){
+			uni.setClipboardData({
+				data: this.workInfo.taskTxt
+			});
+		},
+		//下载图片
+		imgDownload(){
+			let _this = this;
+			uni.downloadFile({
+				url: 'http://120.78.217.149:8027/storage/cache/202008251609454195474913.jpg',
+				success(res) {
+					if (res.statusCode === 200) {
+					    console.log('下载成功');
+						let url = res.tempFilePath;   //获取图片本地路径
+						_this.imgSaveToPhotosAlbum(url);  //保存到本地
+					}
+				}
+			});
+		},
+		//保存下载图片到本地
+		imgSaveToPhotosAlbum(url){
+			let _this = this;
+			uni.saveImageToPhotosAlbum({
+			    filePath: url,
+			    success: () => {
+			        uni.showModal({
+			        	content: "保存图片成功",
+						showCancel: false
+			        });
+			    },
+			    fail: () => {
+			        uni.showModal({
+			        	content: "保存图片失败",
+			        	showCancel: false
+			        });
+			    },
+			    complete: () => {
+			    
+			    }
+			});
+		},
+		//查看下载图片
+		imgCheck(){
+			uni.previewImage({
+				urls: ['/static/img/headImg.jpg'],
+			});
 		},
 		//查看截图凭证
 		revise(){
@@ -190,6 +257,7 @@ export default{
 			api.getTaskInfo({page: 1, count: 5, id: this.id}, (res)=>{
 				let data = api.getData(res).data[0];
 				this.workInfo = data;
+				console.log(this.workInfo);
 				this.getWorkInfo();  //处理任务数据
 				this.getCount();  //获取倒计时
 			});
@@ -199,6 +267,7 @@ export default{
 			api.getTaskDetails({page: 1, count: 5, id: this.id}, (res)=>{
 				let data = api.getData(res).data[0];
 				this.workInfo = data;
+				console.log(this.workInfo);
 				this.getWorkInfo();  //处理任务数据
 				this.getCount();  //获取倒计时
 			});
@@ -442,5 +511,19 @@ export default{
 		width:120rpx;
 		height:120rpx;
 		margin-top:20rpx;
+	}
+	
+	.copy_btn{
+		margin-left:40rpx;
+	}
+	.copy_btn>button{
+		padding:0 18rpx;
+		box-sizing:border-box;
+		font-size:12px;
+		line-height:2.2;
+		text-indent: 0em;
+		color:#fff;
+/* 		background-color:transparent;
+		border: 1px solid #464646; */
 	}
 </style>

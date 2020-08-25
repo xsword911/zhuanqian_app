@@ -62,6 +62,7 @@
 
 <script>
 import api from "@/api/api.js";
+import util from "@/common/util.js";
 export default{
 	data() {
 		return {
@@ -75,7 +76,7 @@ export default{
 	methods:{
 		//跳转到联系客服界面
 		toService(val){
-			plus.runtime.openURL(val);
+			util.openUrl(val);
 		},
 		//获取客服链接
 		getCustomerServiceUrl(){

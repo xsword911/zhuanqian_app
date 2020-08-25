@@ -77,16 +77,16 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务发布时间</view>
+					<view class="tui-title">发布开始时间</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="begTime" 
-					placeholder="请输入任务开始时间" maxlength="50" type="text" @tap="show(2, 1)" v-model="begTime" disabled="true"/>
+					placeholder="请输入发布开始时间" maxlength="50" type="text" @tap="show(2, 1)" v-model="begTime" disabled="true"/>
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务结束时间</view>
+					<view class="tui-title">发布结束时间</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="endTime" 
-					placeholder="请输入任务结束时间" maxlength="50" type="text" @tap="show(2,2)" v-model="endTime" disabled="true"/>
+					placeholder="请输入发布结束时间" maxlength="50" type="text" @tap="show(2,2)" v-model="endTime" disabled="true"/>
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >

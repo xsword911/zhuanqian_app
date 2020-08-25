@@ -103,7 +103,7 @@
 	
 	<!-- 跑马灯 -->
 	<view class="example-body">
-		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :text="runHorseEn.content" @tap="toUrl"/>
+		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :text="runHorseEn.content" @tap="toRunHorseUrl"/>
 	</view>
 	
 	<!-- 任务大厅 -->
@@ -111,10 +111,23 @@
 		<!-- <view class="work_title">任务大厅</view> -->
 		<view class="work_list">
 			<view class="work" @tap="toWork(item.id)"  v-for="(item,index) in levelList" :key="index">
-				<view class="work_num">任务数量{{item.publishTaskSum}}单/天</view>
-				<view class="work_text">{{item.levelName}}任务专属通道</view>
-				<view class="work_img">
+				<view class="work_num">{{item.levelName}}</view>
+				<view class="work_text">任务数量{{item.publishTaskSum}}单/天</view>
+<!-- 				<view class="work_img">
 					<image :src="'/static/img/member' + item.id + '.png'" mode=""></image>
+				</view> -->
+				<view class="lay_sort" :class="'background_sort'+ item.id ">
+					<view class="">
+						<view class="">
+							{{arrSortName[item.id - 1]}}
+						</view>
+						<view class="">
+							悬赏
+						</view>
+						<view class="sort_img">
+							<image :src="'/static/img/sort' + item.id + '.png'" mode=""></image>
+						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -197,6 +210,8 @@ export default{
 			duration: 500,
 			run: [],  //轮播图列表
 			levelList: [],  //会员等级信息
+			
+			arrSortName: ["火山小视频", "抖音", "微信", "快手", "微视", "今日头条", ]
 		}
 	},
 	onShow(){
@@ -316,8 +331,8 @@ export default{
 			});
 		},
 		//跑马灯点击跳转外部链接
-		toUrl(){
-			window.location.href = 'https://' + this.runHorseEn.toUrl;
+		toRunHorseUrl(){
+			util.openUrl(this.runHorseEn.toUrl);
 		},
 		//获取跑马灯文字内容
 		getRunHorse(){
@@ -328,7 +343,7 @@ export default{
 		},
 		//轮播图点击跳转到外部链接
 		toUrl(url){
-			window.location.href = 'https://' + url;
+			util.openUrl(url);
 		},
 		//获取轮播图列表
 		getRun(){
@@ -694,29 +709,76 @@ export default{
 	}
 	.work{
 		width:48%;
-		height:300rpx;
-		background-color: #F1F2F2;
+		height:270rpx;
+		/* background-color: #F1F2F2; */
+		background-color: rgb(245,245,245);
 		border-radius:20rpx;
-		padding:20rpx 10rpx 10rpx 10rpx;
+		padding-top:20rpx;
 		box-sizing:border-box;
 		display:flex;
 		flex-direction: column;
 		margin-bottom:20rpx;
 	}
 	.work_num{
-		font-size:15px;
+		font-size:14px;
 		font-weight:bold;
+		margin-bottom:10rpx;
+		padding-left:20rpx;
+		box-sizing:border-box;
 	}
 	.work_text{
 		font-size:13px;
-		color: #9E9E9E;
-		margin-bottom:6rpx;
+		color: #808080;
+		margin-bottom:10rpx;
+		padding-left:20rpx;
+		box-sizing:border-box;
 	}
 	.work_img{
 		flex: 1;
 	}
 	.work_title{
 		font-weight:bold;
+	}
+	
+	
+	.lay_sort{
+		flex: 1;
+		border-radius:10rpx;
+		color:#fff;
+		font-size:14px;
+		font-weight:bold;
+		display:flex;
+		align-items:center;
+		padding-left:30rpx;
+		box-sizing:border-box;
+		position:relative;
+		overflow: hidden;
+	}
+	.sort_img{
+		width:100rpx;
+		height:100rpx;
+		position:absolute;
+		right:-4rpx;
+		bottom: -8rpx;
+		transform:rotate(-7deg);
+	}
+	.background_sort1{
+		background-image:linear-gradient(to right, rgb(242,113,22) , rgb(202,69,64));
+	}
+	.background_sort2{
+		background-image:linear-gradient(to right, rgb(51,47,160) , rgb(151,11,60));
+	}
+	.background_sort3{
+		background-image:linear-gradient(to right, rgb(34,162,101) , rgb(162,193,55));
+	}
+	.background_sort4{
+		background-image:linear-gradient(to right, rgb(238,43,41) , rgb(181,37,124));
+	}
+	.background_sort5{
+		background-image:linear-gradient(to right, rgb(116,16,192) , rgb(181,36,139));
+	}
+	.background_sort6{
+		background-image:linear-gradient(to right, rgb(255,142,48) , rgb(210,59,102));
 	}
 </style>
 
