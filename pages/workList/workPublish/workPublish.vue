@@ -357,14 +357,6 @@ export default {
 		statePickerChange(e){
 			this.arrayStateIndex = e.detail.value;
 		},
-		// //选择任务限时时间
-		// doneLongPickerChange(e){
-		// 	this.arrayDoneLongIndex = e.detail.value;
-		// },
-		// //选择任务审核时间
-		// auditLongPickerChange(e){
-		// 	this.arrayAuditLongIndex = e.detail.value;
-		// },
 		//选择任务分类类型
 		sortPickerChange(e){
 			this.arraySortIndex = e.detail.value;
@@ -474,11 +466,11 @@ export default {
 			}, {
 				name: "begTime",
 				rule: ["required"],
-				msg: ["请输入任务发布时间"]
+				msg: ["请输入发布开始时间"]
 			}, {
 				name: "endTime",
 				rule: ["required"],
-				msg: ["请输入任务结束时间"]
+				msg: ["请输入发布结束时间"]
 			}, {
 				name: "isDoneProve",
 				rule: ["required"],
@@ -494,7 +486,7 @@ export default {
 			}, {
 				name: "auditLong",
 				rule: ["required"],
-				msg: ["请输入任务审核时间"]
+				msg: ["请输入审核时长时间"]
 			}];
 			//进行表单检查
 			let formData = e.detail.value;
@@ -513,8 +505,10 @@ export default {
 				data.taskApp = parseInt(data.taskApp);
 				data.imgUrl = "";
 				data.taskImg = "";
-				if(!util.isEmpty(this.imageData) && this.imageData != undefined) data.imgUrl = this.imageData;
-				if(!util.isEmpty(this.taskimageData) && this.taskimageData != undefined) data.taskImg = this.taskimageData;
+				if(!util.isEmpty(this.imageData) && this.imageData != undefined) data.imgUrl = this.imageData;   //任务图片
+				if(!util.isEmpty(this.taskimageData) && this.taskimageData != undefined) data.taskImg = this.taskimageData;   //宣传图片
+				console.log(data);
+				return;
 				api.addTask(data, (res)=>{
 					let code = api.getCode(res);
 					if(code == 0){

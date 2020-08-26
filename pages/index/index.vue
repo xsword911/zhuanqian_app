@@ -108,24 +108,20 @@
 	
 	<!-- 任务大厅 -->
 	<view class="lay_work">
-		<!-- <view class="work_title">任务大厅</view> -->
-		<view class="work_list">
-			<view class="work" @tap="toWork(item.id)"  v-for="(item,index) in levelList" :key="index">
-				<view class="work_num">{{item.levelName}}</view>
-				<view class="work_text">任务数量{{item.publishTaskSum}}单/天</view>
-<!-- 				<view class="work_img">
-					<image :src="'/static/img/member' + item.id + '.png'" mode=""></image>
-				</view> -->
-				<view class="lay_sort" :class="'background_sort'+ item.id ">
-					<view class="">
+		<view class="" v-for="(item,index) in workTree" :key="index">
+			<view class="work_title">{{item.big.name}}</view>
+			<view class="work_list">
+				<view class="work" @tap="toWork(item2.id)"  v-for="(item2,index2) in item.list" :key="index2">
+					<view class="lay_sort" :class="'background_sort'+ item2.order" @tap.stop="toWorkClassify(item2)">
 						<view class="">
-							{{arrSortName[item.id - 1]}}
-						</view>
-						<view class="">
-							悬赏
-						</view>
-						<view class="sort_img">
-							<image :src="'/static/img/sort' + item.id + '.png'" mode=""></image>
+							<view class="">
+								{{item2.name}}
+							</view>
+							<view class="" v-if="item2.bigClassifyId == 1">悬赏</view>
+							<view class="" v-if="item2.bigClassifyId != 1">开发中...</view>
+							<view class="sort_img">
+								<image :src="item2.imgUrl" mode=""></image>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -209,8 +205,8 @@ export default{
 			interval: 3000,
 			duration: 500,
 			run: [],  //轮播图列表
-			levelList: [],  //会员等级信息
 			
+			workTree: [], //任务大类和子类列表
 			arrSortName: ["火山小视频", "抖音", "微信", "快手", "微视", "今日头条", ]
 		}
 	},
@@ -223,10 +219,17 @@ export default{
 		this.getNotice();    //获取公告
 		this.noticePadding = "0";  //重置公告弹窗
 		this.getNotReadMsgSum(); //查询未读消息数
-		this.getUserLevel();   //获取会员等级信息
 		this.getLevelDesc();   //获取全部会员信息
+		this.getTaskTree();  //获取任务大类和子类列表
 	},
 	methods:{
+		//获取任务大类和子类列表
+		getTaskTree(){
+			api.getTaskTree({}, (res)=>{
+				let data = api.getData(res);
+				this.workTree = data;
+			});
+		},
 		//获取全部会员信息
 		getLevelDesc(){
 			api.getLevelDesc({}, (res)=>{
@@ -234,13 +237,12 @@ export default{
 				storage.setLevelDescList(data);
 			});
 		},
-		//获取会员等级信息
-		getUserLevel(){
-			api.getLevelAll((res)=>{
-				let data = api.getData(res).data;
-				this.levelList = data;
-				storage.setLevelList(this.levelList);  //保存会员列表
-			});
+		//跳转到任务子类界面
+		toWorkClassify(data){
+			if(data.bigClassifyId == 2) return;
+			uni.navigateTo({
+				url: '/pages/index/workClassify/workClassify?title=' + data.name
+			})
 		},
 		//跳转到余额宝界面
 		toInterest(){
@@ -709,35 +711,17 @@ export default{
 	}
 	.work{
 		width:48%;
-		height:270rpx;
+		height:160rpx;
 		/* background-color: #F1F2F2; */
-		background-color: rgb(245,245,245);
 		border-radius:20rpx;
-		padding-top:20rpx;
-		box-sizing:border-box;
 		display:flex;
 		flex-direction: column;
 		margin-bottom:20rpx;
 	}
-	.work_num{
-		font-size:14px;
-		font-weight:bold;
-		margin-bottom:10rpx;
-		padding-left:20rpx;
-		box-sizing:border-box;
-	}
-	.work_text{
-		font-size:13px;
-		color: #808080;
-		margin-bottom:10rpx;
-		padding-left:20rpx;
-		box-sizing:border-box;
-	}
-	.work_img{
-		flex: 1;
-	}
 	.work_title{
+		margin:30rpx 0;
 		font-weight:bold;
+		text-align:center;
 	}
 	
 	
@@ -763,22 +747,22 @@ export default{
 		transform:rotate(-7deg);
 	}
 	.background_sort1{
-		background-image:linear-gradient(to right, rgb(242,113,22) , rgb(202,69,64));
-	}
-	.background_sort2{
 		background-image:linear-gradient(to right, rgb(51,47,160) , rgb(151,11,60));
 	}
-	.background_sort3{
-		background-image:linear-gradient(to right, rgb(34,162,101) , rgb(162,193,55));
-	}
-	.background_sort4{
+	.background_sort2{
 		background-image:linear-gradient(to right, rgb(238,43,41) , rgb(181,37,124));
 	}
-	.background_sort5{
+	.background_sort3{
 		background-image:linear-gradient(to right, rgb(116,16,192) , rgb(181,36,139));
 	}
-	.background_sort6{
+	.background_sort4{
+		background-image:linear-gradient(to right, rgb(242,113,22) , rgb(202,69,64));
+	}
+	.background_sort5{
 		background-image:linear-gradient(to right, rgb(255,142,48) , rgb(210,59,102));
+	}
+	.background_sort6{
+		background-image:linear-gradient(to right, rgb(34,162,101) , rgb(162,193,55));
 	}
 </style>
 

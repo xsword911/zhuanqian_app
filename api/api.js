@@ -24,190 +24,193 @@ const api = {
 	getPageList: function(res) {return res.data.data},
 	
 	//登录到网关
-	loginGate: function(postData, funSuccess) {httpUtil.post('gate/loginGate', postData, funSuccess);},
+	loginGate: function(postData, funSuccess, state = true) {httpUtil.post('gate/loginGate', postData, funSuccess, state);},
 	
 	//上传文件
-	uploadFileToCache: function(path, funSuccess) {httpUtil.upload('external/uploadFileToCache', path, 'file', funSuccess);},
+	uploadFileToCache: function(path, funSuccess, state = true) {httpUtil.upload('external/uploadFileToCache', path, 'file', funSuccess, state);},
 	
 	//第三方登录
-	loginByOth: function(path, funSuccess) {httpUtil.post('user/loginByOth', path, funSuccess);},
+	loginByOth: function(path, funSuccess, state = true) {httpUtil.post('user/loginByOth', path, funSuccess, state);},
 	
 	//登录
-	login: function(path, funSuccess) {httpUtil.post('user/login', path, funSuccess);},
+	login: function(path, funSuccess, state = true) {httpUtil.post('user/login', path, funSuccess, state);},
 	
 	//注册
-	register: function(path, funSuccess) {httpUtil.post('user/register', path, funSuccess);},
+	register: function(path, funSuccess, state = true) {httpUtil.post('user/register', path, funSuccess, state);},
 	
 	//查询用户详细信息
-	getUserByUid: function(path, funSuccess) {httpUtil.post('user/getUserByUid', path, funSuccess);},
+	getUserByUid: function(path, funSuccess, state = true) {httpUtil.post('user/getUserByUid', path, funSuccess, state);},
 	
 	//修改用户信息
-	setUser: function(path, funSuccess) {httpUtil.post('user/setUser', path, funSuccess);},
+	setUser: function(path, funSuccess, state = true) {httpUtil.post('user/setUser', path, funSuccess, state);},
 	
 	//查询全部用户详细信息
-	getUser: function(path, funSuccess) {httpUtil.post('user/getUser', path, funSuccess);},
+	getUser: function(path, funSuccess, state = true) {httpUtil.post('user/getUser', path, funSuccess, state);},
 	
 	//用户修改密码
-	updPwd: function(path, funSuccess) {httpUtil.post('user/updPwd', path, funSuccess);},
+	updPwd: function(path, funSuccess, state = true) {httpUtil.post('user/updPwd', path, funSuccess, state);},
 	
 	//用户修改资金密码
-	updCashPwd: function(path, funSuccess) {httpUtil.post('user/updCashPwd', path, funSuccess);},
+	updCashPwd: function(path, funSuccess, state = true) {httpUtil.post('user/updCashPwd', path, funSuccess, state);},
 	
 	//查询用户绑定银行卡
-	getUserBank: function(path, funSuccess) {httpUtil.post('user/getUserBank', path, funSuccess);},
+	getUserBank: function(path, funSuccess, state = true) {httpUtil.post('user/getUserBank', path, funSuccess, state);},
 	
 	//修改用户绑定银行
-	updUserBank: function(path, funSuccess) {httpUtil.post('user/updUserBank', path, funSuccess);},
+	updUserBank: function(path, funSuccess, state = true) {httpUtil.post('user/updUserBank', path, funSuccess, state);},
 	
 	//添加用户绑定银行
-	addUserBank: function(path, funSuccess) {httpUtil.post('user/addUserBank', path, funSuccess);},
+	addUserBank: function(path, funSuccess, state = true) {httpUtil.post('user/addUserBank', path, funSuccess, state);},
 	
 	//添加用户绑定银行
-	delUserBankArr: function(path, funSuccess) {httpUtil.post('user/delUserBankArr', path, funSuccess);},
+	delUserBankArr: function(path, funSuccess, state = true) {httpUtil.post('user/delUserBankArr', path, funSuccess, state);},
 	
 	//查询打工任务
-	getTask1: function(path, funSuccess) {httpUtil.post('activity/getTask1', path, funSuccess);},
+	getTask1: function(path, funSuccess, state = true) {httpUtil.post('activity/getTask1', path, funSuccess, state);},
 	
 	//查询赚赚任务
-	getTask2: function(path, funSuccess) {httpUtil.post('activity/getTask2', path, funSuccess);},
+	getTask2: function(path, funSuccess, state = true) {httpUtil.post('activity/getTask2', path, funSuccess, state);},
 	
 	//做一个任务
-	taskDo: function(path, funSuccess) {httpUtil.post('activity/taskDo', path, funSuccess);},
+	taskDo: function(path, funSuccess, state = true) {httpUtil.post('activity/taskDo', path, funSuccess, state);},
 	
 	//查询任务完成情况
-	getTaskDetails: function(path, funSuccess) {httpUtil.post('activity/getTaskDetails', path, funSuccess);},
+	getTaskDetails: function(path, funSuccess, state = true) {httpUtil.post('activity/getTaskDetails', path, funSuccess, state);},
 	
 	//查询今天统计金额
-	getStatisticsToday: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsToday', path, funSuccess);},
+	getStatisticsToday: function(path, funSuccess, state = true) {httpUtil.post('statistics/getStatisticsToday', path, funSuccess, state);},
 	
 	//发起提现申请
-	addMoneyDraw: function(path, funSuccess) {httpUtil.post('money/addMoneyDraw', path, funSuccess);},
+	addMoneyDraw: function(path, funSuccess, state = true) {httpUtil.post('money/addMoneyDraw', path, funSuccess, state);},
 	
 	//金额和金币转换
-	moneyTran: function(path, funSuccess) {httpUtil.post('money/moneyTran', path, funSuccess);},
+	moneyTran: function(path, funSuccess, state = true) {httpUtil.post('money/moneyTran', path, funSuccess, state);},
 	
 	//查询提现记录
-	getMoneyDraw: function(path, funSuccess) {httpUtil.post('money/getMoneyDraw', path, funSuccess);},
+	getMoneyDraw: function(path, funSuccess, state = true) {httpUtil.post('money/getMoneyDraw', path, funSuccess, state);},
 	
 	//查询提现记录
-	getMoneyTran: function(path, funSuccess) {httpUtil.post('money/getMoneyTran', path, funSuccess);},
+	getMoneyTran: function(path, funSuccess, state = true) {httpUtil.post('money/getMoneyTran', path, funSuccess, state);},
 	
 	//查询账变记录
-	getMoney: function(path, funSuccess) {httpUtil.post('money/getMoney', path, funSuccess);},
+	getMoney: function(path, funSuccess, state = true) {httpUtil.post('money/getMoney', path, funSuccess, state);},
 	
 	//查询金币账变记录
-	getGold: function(path, funSuccess) {httpUtil.post('money/getGold', path, funSuccess);},
+	getGold: function(path, funSuccess, state = true) {httpUtil.post('money/getGold', path, funSuccess, state);},
 	
 	//查询签到进度
-	getSignProgress: function(path, funSuccess) {httpUtil.post('activity/getSignProgress', path, funSuccess);},
+	getSignProgress: function(path, funSuccess, state = true) {httpUtil.post('activity/getSignProgress', path, funSuccess, state);},
 	
 	//签到领奖
-	sign: function(path, funSuccess) {httpUtil.post('activity/sign', path, funSuccess);},
+	sign: function(path, funSuccess, state = true) {httpUtil.post('activity/sign', path, funSuccess, state);},
 	
 	//查询月签到详情
-	getMonthSignDetails: function(path, funSuccess) {httpUtil.post('activity/getMonthSignDetails', path, funSuccess);},
+	getMonthSignDetails: function(path, funSuccess, state = true) {httpUtil.post('activity/getMonthSignDetails', path, funSuccess, state);},
 	
 	//玩家查询抽奖列表
-	getOpenLucky: function(path, funSuccess) {httpUtil.post('activity/getOpenLucky', path, funSuccess);},
+	getOpenLucky: function(path, funSuccess, state = true) {httpUtil.post('activity/getOpenLucky', path, funSuccess, state);},
 	
 	//进行幸运抽奖
-	openLucky: function(path, funSuccess) {httpUtil.post('activity/openLucky', path, funSuccess);},
+	openLucky: function(path, funSuccess, state = true) {httpUtil.post('activity/openLucky', path, funSuccess, state);},
 	
 	//查看抽奖历史记录
-	getLuckyDetails: function(path, funSuccess) {httpUtil.post('activity/getLuckyDetails', path, funSuccess);},
+	getLuckyDetails: function(path, funSuccess, state = true) {httpUtil.post('activity/getLuckyDetails', path, funSuccess, state);},
 	
 	//查询通知设置列表
-	getNotice: function(path, funSuccess) {httpUtil.post('message/getNotice', path, funSuccess);},
+	getNotice: function(path, funSuccess, state = true) {httpUtil.post('message/getNotice', path, funSuccess, state);},
 	
 	//查询消息列表
-	getMssage: function(path, funSuccess) {httpUtil.post('message/getMsg', path, funSuccess);},
+	getMssage: function(path, funSuccess, state = true) {httpUtil.post('message/getMsg', path, funSuccess, state);},
 	
 	//查询未读消息数
-	getNotReadMsgSum: function(path, funSuccess) {httpUtil.post('message/getNotReadMsgSum', path, funSuccess);},
+	getNotReadMsgSum: function(path, funSuccess, state = true) {httpUtil.post('message/getNotReadMsgSum', path, funSuccess, state);},
 	
 	//设置消息已读
-	readMsg: function(path, funSuccess) {httpUtil.post('message/readMsg', path, funSuccess);},
+	readMsg: function(path, funSuccess, state = true) {httpUtil.post('message/readMsg', path, funSuccess, state);},
 	
 	//查询可用的充值渠道(包括渠道大类)
-	getRechargeWayEnable: function(path, funSuccess) {httpUtil.post('money/rechargeWay/getRechargeWayEnable', path, funSuccess);},
+	getRechargeWayEnable: function(path, funSuccess, state = true) {httpUtil.post('money/rechargeWay/getRechargeWayEnable', path, funSuccess, state);},
 	
 	//申请充值
-	recharge: function(data, funSuccess) {httpUtil.post('money/rechargeWay/recharge', data, funSuccess);},
+	recharge: function(data, funSuccess, state = true) {httpUtil.post('money/rechargeWay/recharge', data, funSuccess, state);},
 	
 	//申请充值提交
-	rechargePut: function(path, funSuccess) {httpUtil.post('money/rechargeWay/rechargePut', path, funSuccess);},
+	rechargePut: function(path, funSuccess, state = true) {httpUtil.post('money/rechargeWay/rechargePut', path, funSuccess, state);},
 	
 	//查询充值记录
-	getMoneyRecharge: function(path, funSuccess) {httpUtil.post('money/getMoneyRecharge', path, funSuccess);},
+	getMoneyRecharge: function(path, funSuccess, state = true) {httpUtil.post('money/getMoneyRecharge', path, funSuccess, state);},
 	
 	//查询用户月报表
-	getStatisticsMonth: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsMonth', path, funSuccess);},
+	getStatisticsMonth: function(path, funSuccess, state = true) {httpUtil.post('statistics/getStatisticsMonth', path, funSuccess, state);},
 	
 	//查询日报表
-	getStatisticsDay: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsDay', path, funSuccess);},
+	getStatisticsDay: function(path, funSuccess, state = true) {httpUtil.post('statistics/getStatisticsDay', path, funSuccess, state);},
 	
 	//查询团队总览
-	getStatisticsMonthGroup: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsMonthGroup', path, funSuccess);},
+	getStatisticsMonthGroup: function(path, funSuccess, state = true) {httpUtil.post('statistics/getStatisticsMonthGroup', path, funSuccess, state);},
 	
 	//查询团队报表
-	getStatisticsDayGroup: function(path, funSuccess) {httpUtil.post('statistics/getStatisticsDayGroup', path, funSuccess);},
+	getStatisticsDayGroup: function(path, funSuccess, state = true) {httpUtil.post('statistics/getStatisticsDayGroup', path, funSuccess, state);},
 	
 	//查询系统配置
-	getConfig: function(path, funSuccess) {httpUtil.post('system/getConfig', path, funSuccess);},
+	getConfig: function(path, funSuccess, state = true) {httpUtil.post('system/getConfig', path, funSuccess, state);},
 	
 	//查询任务类型
-	getTaskType: function(path, funSuccess) {httpUtil.post('activity/getTaskType', path, funSuccess);},
+	getTaskType: function(path, funSuccess, state = true) {httpUtil.post('activity/getTaskType', path, funSuccess, state);},
 	
 	//添加任务
-	addTask: function(path, funSuccess) {httpUtil.post('activity/addTask', path, funSuccess);},
+	addTask: function(path, funSuccess, state = true) {httpUtil.post('activity/addTask', path, funSuccess, state);},
 	
 	//查询我发布的任务
-	getTaskInfo: function(path, funSuccess) {httpUtil.post('activity/getTaskInfo', path, funSuccess);},
+	getTaskInfo: function(path, funSuccess, state = true) {httpUtil.post('activity/getTaskInfo', path, funSuccess, state);},
 	
 	//修改任务
-	updTask: function(path, funSuccess) {httpUtil.post('activity/updTask', path, funSuccess);},
+	updTask: function(path, funSuccess, state = true) {httpUtil.post('activity/updTask', path, funSuccess, state);},
 	
 	//用户接受一个任务
-	receiveTask: function(path, funSuccess) {httpUtil.post('activity/receiveTask', path, funSuccess);},
+	receiveTask: function(path, funSuccess, state = true) {httpUtil.post('activity/receiveTask', path, funSuccess, state);},
 	
 	//用户放弃一个任务
-	cancelTask: function(path, funSuccess) {httpUtil.post('activity/cancelTask', path, funSuccess);},
+	cancelTask: function(path, funSuccess, state = true) {httpUtil.post('activity/cancelTask', path, funSuccess, state);},
 	
 	//查询任务完成情况
-	getTaskDetails: function(path, funSuccess) {httpUtil.post('activity/getTaskDetails', path, funSuccess);},
+	getTaskDetails: function(path, funSuccess, state = true) {httpUtil.post('activity/getTaskDetails', path, funSuccess, state);},
 	
 	//审核任务记录
-	auditTaskDetails: function(path, funSuccess) {httpUtil.post('activity/auditTaskDetails', path, funSuccess);},
+	auditTaskDetails: function(path, funSuccess, state = true) {httpUtil.post('activity/auditTaskDetails', path, funSuccess, state);},
 	
 	//用户提交一个任务
-	submitTask: function(path, funSuccess) {httpUtil.post('activity/submitTask', path, funSuccess);},
+	submitTask: function(path, funSuccess, state = true) {httpUtil.post('activity/submitTask', path, funSuccess, state);},
 	
 	//查询等级信息
-	getUserLevel: function (path, funSuccess) {httpUtil.post("user/getUserLevel", path, funSuccess);},
+	getUserLevel: function (path, funSuccess, state = true) {httpUtil.post("user/getUserLevel", path, funSuccess, state);},
 	
 	//返回会员等级下拉信息
-	getLevelDesc: function (path, funSuccess) {httpUtil.post("user/getLevelDesc", path, funSuccess);},
+	getLevelDesc: function (path, funSuccess, state = true) {httpUtil.post("user/getLevelDesc", path, funSuccess, state);},
 	
 	//购买等级
-	buyLevel: function (path, funSuccess) {httpUtil.post("user/buyLevel", path, funSuccess);},
+	buyLevel: function (path, funSuccess, state = true) {httpUtil.post("user/buyLevel", path, funSuccess, state);},
 	
 	//查询开放的所有等级
-	getLevelAll: function (funSuccess) {httpUtil.post("user/getLevelAll", {}, funSuccess);},
+	getLevelAll: function (funSuccess, state = true) {httpUtil.post("user/getLevelAll", {}, funSuccess, state);},
 	
 	//查询开启的存款利率
-	getPlanRateOpen: function (funSuccess) {httpUtil.post("activity/planRate/getPlanRateOpen", {}, funSuccess);},
+	getPlanRateOpen: function (funSuccess, state = true) {httpUtil.post("activity/planRate/getPlanRateOpen", {}, funSuccess, state);},
 	
 	//转入余额宝
-	planMoneyIn: function (path, funSuccess) {httpUtil.post("activity/planRate/planMoneyIn", path, funSuccess);},
+	planMoneyIn: function (path, funSuccess, state = true) {httpUtil.post("activity/planRate/planMoneyIn", path, funSuccess, state);},
 	
 	//查询余额宝存款记录
-	getPlanMoney: function (path, funSuccess) {httpUtil.post("activity/planRate/getPlanMoney", path, funSuccess);},
+	getPlanMoney: function (path, funSuccess, state = true) {httpUtil.post("activity/planRate/getPlanMoney", path, funSuccess, state);},
 	
 	//钱转出余额宝
-	planMoneyOut: function (path, funSuccess) {httpUtil.post("activity/planRate/planMoneyOut", path, funSuccess);},
+	planMoneyOut: function (path, funSuccess, state = true) {httpUtil.post("activity/planRate/planMoneyOut", path, funSuccess, state);},
 	
 	//查询用户利息宝总余额
-	getPlanMoneySumByUid: function (path, funSuccess) {httpUtil.post("activity/planRate/getPlanMoneySumByUid", path, funSuccess);},
+	getPlanMoneySumByUid: function (path, funSuccess, state = true) {httpUtil.post("activity/planRate/getPlanMoneySumByUid", path, funSuccess, state);},
+	
+	//返回大类和子类树形结构数据
+	getTaskTree: function (path, funSuccess, state = true) {httpUtil.post("activity/task/getTaskTree", path, funSuccess, state);},
 };
 
 export default api;

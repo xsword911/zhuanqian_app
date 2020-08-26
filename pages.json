@@ -311,9 +311,9 @@
 			"navigationBarTitleText": "公司资质"
 		}
 	},{
-		"path": "pages/webView/webView",
+		"path": "pages/index/workClassify/workClassify",
 		"style": {
-			"navigationBarTitleText": "打开链接"
+			"navigationBarTitleText": "任务"
 		}
 	}],
 	

@@ -248,9 +248,8 @@ export default {
 		this.loadding = true;
 		this.page = this.page + 1;
 		
-		api.getTaskDetails({
+		api.getGold({
 			uid: this.uid,
-			state: 1,
 			page: this.page,
 			count: 10
 		}, (res)=>{
@@ -264,7 +263,7 @@ export default {
 					this.incomeList.push(item);
 				});
 			}
-		});
+		}, false);
 	},
 };
 </script>

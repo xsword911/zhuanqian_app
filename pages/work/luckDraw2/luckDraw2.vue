@@ -135,6 +135,7 @@
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import audio from "@/common/audio.js";
+import util from "@/common/util.js";
 export default {
 	data() {
 		return {
@@ -157,6 +158,8 @@ export default {
 			LuckyList: [],  //转盘信息列表
 			getAwardImg: '',  //获得奖品的图片
 			getAwardTitle: '',  //获得奖品的标题
+			
+			luckUrl: '', //领奖后跳转Url
 		}
 	},
 	onShow() {
@@ -164,6 +167,7 @@ export default {
 		this.userEn = storage.getMyInfo();
 		this.getLucky();  //获取转盘信息
 		this.rotateId = 0;
+		this.getLuckUrl();  //获取领奖后跳转Url
 	},
 	onLoad() {
 		this.openEffectAnimation();  //打开转盘外部动画
@@ -178,6 +182,13 @@ export default {
 		//return true
 	}, 
 	methods: {
+		//获取领奖后跳转Url
+		getLuckUrl(){
+			api.getConfig({key: 'luckUrl'}, (res)=>{
+				let data = api.getData(res).data[0];
+				this.luckUrl = data.value;
+			});
+		},
 		//获取转盘信息
 		getLucky(){
 			api.getOpenLucky({}, (res)=>{
@@ -204,7 +215,8 @@ export default {
 		// 遮罩层控制
 		closeShadow(){
 			audio.playAudio();
-			this.shadow =  false;
+			this.shadow =  false;  //关闭遮罩层
+			util.openUrl(this.luckUrl);  //领取奖励后打开外部页面
 		},
 		//打开转盘外部动画
 		openEffectAnimation(){
