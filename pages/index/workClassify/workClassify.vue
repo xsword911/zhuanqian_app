@@ -4,7 +4,7 @@
 			<view class="lay_work">
 				<!-- <view class="work_title">任务大厅</view> -->
 				<view class="work_list">
-					<view class="work" @tap="toWork(item.id)"  v-for="(item,index) in levelList" :key="index">
+					<view class="work" @tap="toWork(item.level)"  v-for="(item,index) in levelList" :key="index">
 						<view class="work_num">{{item.levelName}}</view>
 						<view class="work_text">任务数量{{item.publishTaskSum}}单/天</view>
 						<view class="lay_sort" :class="'background_sort'+ item.id ">
@@ -27,24 +27,30 @@
 import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
+import tran from "@/common/tran.js";
 export default{
 	data() {
 		return {
 			levelList: [],  //会员等级信息
+			classifyData: '',
 		}
 	},
 	onLoad(res) {
-		util.setBarTitle(res.title + '任务');
+		this.classifyData = tran.url2Obj(res.title);
+		util.setBarTitle(this.classifyData.name + '任务');
 		this.getUserLevel();  //获取会员等级信息
-		this.getLevelDesc();   //获取全部会员信息
 	},
 	methods:{
-		//获取全部会员信息
-		getLevelDesc(){
-			api.getLevelDesc({}, (res)=>{
-				let data = api.getData(res);
-				storage.setLevelDescList(data);
-			});
+		//跳转到任务界面
+		toWork(level){
+			let data = {
+				bigClassifyId: this.classifyData.bigClassifyId,  //大类id
+				classifyId: this.classifyData.classifyId,		//子类id
+				level: level	//会员等级
+			};
+			uni.reLaunch({
+				url: '/pages/work/work1/work1?data=' + tran.obj2Url(data)
+			})
 		},
 		//获取会员等级信息
 		getUserLevel(){
@@ -60,7 +66,7 @@ export default{
 
 <style>
 	.lay_work{
-		padding:100rpx 20rpx 0;
+		padding:25rpx 20rpx 0;
 		box-sizing:border-box;
 		font-size:16px;
 	}

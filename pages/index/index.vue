@@ -106,12 +106,12 @@
 		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :text="runHorseEn.content" @tap="toRunHorseUrl"/>
 	</view>
 	
-	<!-- 任务大厅 -->
+	<!-- 任务 -->
 	<view class="lay_work">
 		<view class="" v-for="(item,index) in workTree" :key="index">
 			<view class="work_title">{{item.big.name}}</view>
 			<view class="work_list">
-				<view class="work" @tap="toWork(item2.id)"  v-for="(item2,index2) in item.list" :key="index2">
+				<view class="work" v-for="(item2,index2) in item.list" :key="index2">
 					<view class="lay_sort" :class="'background_sort'+ item2.order" @tap.stop="toWorkClassify(item2)">
 						<view class="">
 							<view class="">
@@ -228,6 +228,7 @@ export default{
 			api.getTaskTree({}, (res)=>{
 				let data = api.getData(res);
 				this.workTree = data;
+				storage.setTaskTree(data);
 			});
 		},
 		//获取全部会员信息
@@ -241,7 +242,7 @@ export default{
 		toWorkClassify(data){
 			if(data.bigClassifyId == 2) return;
 			uni.navigateTo({
-				url: '/pages/index/workClassify/workClassify?title=' + data.name
+				url: '/pages/index/workClassify/workClassify?title=' + tran.obj2Url(data)
 			})
 		},
 		//跳转到余额宝界面
@@ -301,12 +302,6 @@ export default{
 					url: '/pages/recharge/recharge'
 				});
 			}
-		},
-		//跳转到任务界面
-		toWork(id){
-			uni.reLaunch({
-				url: "/pages/work/work1/work1?id=" + id
-			})
 		},
 		//查询未读消息数
 		getNotReadMsgSum(){

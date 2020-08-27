@@ -1,12 +1,23 @@
 <template>
 	<view class="">
 		<view class="lay_navbar background_style">
-			<view class="uni-list-cell-db level_box" v-if="arrayLevel.length > 0">
+<!-- 			<view class="uni-list-cell-db level_box" v-if="arrayLevel.length > 0">
 				<picker @change="levelPickerChange" :value="arrayLevel[arrayLevelIndex].id" 
 				:range="arrayLevel" range-key="levelName" name="level">
 					<view class="uni-input" style="display: inline-block;">
 						{{arrayLevel[arrayLevelIndex].levelName}}任务
 					</view>
+					<view class="icon_down" style="display: inline-block;vertical-align: sub;">
+						<tui-icon name="arrowdown" :size="30" color="#FF7207"></tui-icon>
+					</view>
+				</picker>
+			</view> -->
+			<view class="uni-list-cell-db level_box" style="margin-left:20rpx;">
+				<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="multiIndex" :range="multiArray">
+					<view class="uni-input" style="display: inline-block;">
+						{{multiArray[0][multiIndex[0]]}}         {{multiArray[1][multiIndex[1]]}}         {{multiArray[2][multiIndex[2]]}}
+					</view>
+					
 					<view class="icon_down" style="display: inline-block;vertical-align: sub;">
 						<tui-icon name="arrowdown" :size="30" color="#FF7207"></tui-icon>
 					</view>
@@ -332,15 +343,33 @@ export default{
 			arrayLevelIndex: 0,
 			level: 0,	//选中的任务等级码
 			
+			arrayLevelName: [],  //任务等级名称列表
+			
 			loadding: false, //加载数据提示
 			pullUpOn: true,  //上拉加载数据
 			page: 1,  //查询页数
+			
+			multiArray: [
+				[],
+				[],
+				[]
+			],  //任务分类联级选择器
+			multiIndex: [0, 0, 0],  //任务分类联级选择器下标
+			
+			
+			arrClassifyName: [],  //分类名称
+			taskTree: [],  //任务大类和子类列表
+			classifyId: 1,  //选中的子类id
+			
+			resData: '',//传递过来的任务筛选信息 (大类id，子类id，会员等级)
 		}
 	},
 	onLoad(res) {
-		if(res.id){
-			this.arrayLevelIndex = parseInt(res.id) -1;  //获取标题栏显示内容id
-			this.level = parseInt(res.id);  //设置任务等级码
+		if(res.data){
+			this.resData = tran.url2Obj(res.data);  //获取任务筛选信息
+			let arrIndex = [this.resData.bigClassifyId -1, this.resData.classifyId -1, this.resData.level -1];  //组装筛选信息
+			this.level = this.resData.level;  //设置任务等级码
+			this.multiIndex = arrIndex;
 		}
 		// this.userEn = storage.getMyInfo();  //获取我的信息
 		// this.myCoin = this.userEn.gold;
@@ -355,34 +384,92 @@ export default{
 		this.getTaskList();  //获取任务列表
 		this.getSignProgress();  //查询奖励信息
 		this.timeAuto();  //开启计时器
-		this.getNotReadMsgSum(); //查询未读消息数
-		this.getLevelDesc(); //获取会员等级列表
-	},
-	//上拉获取更多任务数据
-	onReachBottom(){
-		if (!this.pullUpOn) return;
-		this.loadding = true;
-		this.page = this.page + 1;
-		
-		api.getTask1({
-			state: 1,
-			page: this.page,
-			count: 8,
-			level: parseInt(this.level)
-		}, (res)=>{
-			let data = api.getData(res).data;
-			if(util.isEmpty(data)){
-				this.loadding = false;
-				this.pullUpOn = false;
-			}else{
-				this.loadding = false;
-				data.forEach((item) =>{
-					this.activityList.push(item);
-				});
-			}
-		});
+		//this.getNotReadMsgSum(); //查询未读消息数
+		this.getTaskTree();  //获取任务大类和子类列表
 	},
 	methods:{
+		//获取任务大类和子类列表
+		getTaskTree(){
+			let data = storage.getTaskTree();
+			this.taskTree = data;  //保存任务大类和子类列表
+			this.multiArray[0] = [];
+			this.multiArray[1] = [];			
+			data.forEach((item, index) =>{
+				this.multiArray[0].push(item.big.name);  //获取大类名称
+				let arrClassifyName = [];  //子类名称数组
+				for(let i = 0; i < item.list.length; ++i){
+					arrClassifyName.push(item.list[i].name);  //获取每个子类名称
+				}
+				this.arrClassifyName.push(arrClassifyName);  //保存所有子类名称数组
+			});
+			this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
+			console.log(this.multiArray);
+			this.getClassifyId(); //获取默认选中的子类id
+			this.getLevelDesc(); //获取会员等级列表
+			
+			// api.getTaskTree({}, (res)=>{
+			// 	let data = api.getData(res);
+			// 	this.taskTree = data;  //保存任务大类和子类列表
+			// 	let arrBigClassifyName = [];
+			// 	this.multiArray[0] = [];
+			// 	this.multiArray[1] = [];
+			// 	this.multiArray[2] = [];
+			// 	data.forEach((item, index) =>{
+			// 		this.multiArray[0].push(item.big.name);  //获取大类名称
+			// 		let arrClassifyName = [];  //子类名称数组
+			// 		for(let i = 0; i < item.list.length; ++i){
+			// 			arrClassifyName.push(item.list[i].name);  //获取每个子类名称
+			// 		}
+			// 		arrBigClassifyName.push(arrClassifyName);
+			// 	});
+			// 	this.arrClassifyName = arrBigClassifyName;  //保存所有子类名称数组
+			// 	this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
+			// 	this.getClassifyId(); //获取默认选中的子类id
+			// });
+		},
+		//任务分类+会员等级 选择器操作
+		bindMultiPickerColumnChange: function(e) {
+			console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value);
+			this.multiIndex[e.detail.column] = e.detail.value;  //修改this.multiIndex对应下标
+			switch (e.detail.column) {
+				case 0: //拖动第1列(大类列)
+					switch (this.multiIndex[0]) {
+						case 0:
+							this.multiArray[1] = this.arrClassifyName[0];
+							break
+						case 1:
+							this.multiArray[1] = this.arrClassifyName[1];
+							break
+					}
+					break;
+				case 1: //拖动第2列(子类列)
+					this.getClassifyId(this.multiIndex);	//获取选中子类id
+					break;
+				case 2: //拖动第3列(会员等级列)
+					this.getLevelId(this.multiIndex);	//获取选中的会员等级id
+					break;
+			}
+			this.getTaskList();  //重新获取任务列表
+			this.$forceUpdate()
+		},
+		//获取选中子类id
+		getClassifyId(arr = [0, 0, 0]){
+			let arrSel = this.taskTree[arr[0]];
+			arrSel.list.forEach((item, index) =>{
+				if(index == arr[1]) this.classifyId = item.classifyId;
+			});
+			// console.log(this.classifyId);
+		},
+		//获取选中的会员等级id
+		getLevelId(arr = [0, 0, 0]){
+			this.arrayLevel.forEach((item, index) =>{
+				 //获取选中的任务状态码
+				if(arr[2] == index) this.level = item.id;  //重新获取选中的任务状态码
+			});
+		},
+		
+		
+		
 		//上拉刷新
 		onPullDownRefresh: function() {
 			//延时为了看效果
@@ -403,9 +490,11 @@ export default{
 		
 		//获取会员等级列表
 		getLevelDesc(){
-			api.getLevelAll((res)=>{
-				let data = api.getData(res).data;
-				this.arrayLevel = data;
+			this.multiArray[2] = [];
+			let data = storage.getLevelList();
+			this.arrayLevel = data;  //保存任务等级列表
+			data.forEach((item, index) =>{
+				this.multiArray[2].push(item.levelName);
 			});
 		},
 		//选择任务等级
@@ -413,10 +502,7 @@ export default{
 			this.arrayLevelIndex = e.detail.value;
 			this.arrayLevel.forEach((item, index) =>{
 				 //获取选中的任务状态码
-				if(this.arrayLevelIndex == index){
-					this.level = item.id;  //重新获取选中的任务状态码
-					this.getTaskList();  //重新获取任务列表
-				}
+				if(this.arrayLevelIndex == index) this.level = item.id;  //重新获取选中的任务状态码
 			});
 		},
 		//查询未读消息数
@@ -603,7 +689,8 @@ export default{
 				state: 1,
 				page: this.page,
 				count: 8,
-				level: parseInt(this.level)
+				level: parseInt(this.level),
+				classify: this.classifyId
 			}, (res)=> {
 				let data = api.getData(res).data;
 				this.activityList = data;
@@ -668,7 +755,32 @@ export default{
 				url: "/pages/workDetails/workDetails"
 			})
 		},
-	}
+	},
+	//上拉获取更多任务数据
+	onReachBottom(){
+		if (!this.pullUpOn) return;
+		this.loadding = true;
+		this.page = this.page + 1;
+		
+		api.getTask1({
+			state: 1,
+			page: this.page,
+			count: 8,
+			level: parseInt(this.level),
+			classify: this.classifyId
+		}, (res)=>{
+			let data = api.getData(res).data;
+			if(util.isEmpty(data)){
+				this.loadding = false;
+				this.pullUpOn = false;
+			}else{
+				this.loadding = false;
+				data.forEach((item) =>{
+					this.activityList.push(item);
+				});
+			}
+		});
+	},
 }
 </script>
 
@@ -967,9 +1079,11 @@ export default{
 		align-items: center;
 	}
 	.level_box{
-		width:60%;
+		/* width:70%; */
 		font-size:16px;
-		margin:auto;
+		padding:0 20rpx;
+		box-sizing:border-box;
+		/* margin:auto; */
 		color:#fff;
 		font-weight:bold;
 		display:flex;

@@ -16,7 +16,7 @@
 					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary">*</text>任务分类</view>
 						<view class="uni-list-cell-db" style="margin-left:20rpx;">
-							<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="multiIndex" :range="multiArray" name="">
+							<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="multiIndex" :range="multiArray">
 								<view class="uni-input">{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}</view>
 							</picker>
 						</view>
@@ -300,8 +300,10 @@ export default {
 			],  //任务分类联级选择器
 			multiIndex: [0, 0],  //任务分类联级选择器下标
 			
+			
 			arrClassifyName: [],  //分类名称
 			taskTree: [],  //任务大类和子类列表
+			classifyId: null,  //选中的子类id
 		} 
 	},
 	onLoad(res) {
@@ -317,19 +319,19 @@ export default {
 		getTaskTree(){
 			api.getTaskTree({}, (res)=>{
 				let data = api.getData(res);
-				console.log(data);
 				this.taskTree = data;  //保存任务大类和子类列表
 				let arrBigClassifyName = [];
 				data.forEach((item, index) =>{
 					this.multiArray[0].push(item.big.name);  //获取大类名称
 					let arrClassifyName = [];  //子类名称数组
 					for(let i = 0; i < item.list.length; ++i){
-						arrClassifyName.push(item.list[i].name);
+						arrClassifyName.push(item.list[i].name);  //获取每个子类名称
 					}
 					arrBigClassifyName.push(arrClassifyName);
 				});
 				this.arrClassifyName = arrBigClassifyName;  //保存所有子类名称数组
 				this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
+				this.getClassifyId(); //获取默认选中的子类id
 			});
 		},
 		//任务分类联级选择器操作
@@ -360,11 +362,12 @@ export default {
 		},
 		
 		//获取选中分类id
-		getClassifyId(arr = [0, 0]){
+		getClassifyId(arr = [0, 0, 0]){
 			let arrSel = this.taskTree[arr[0]];
 			arrSel.list.forEach((item, index) =>{
-				if(index == arr[1]) console.log(item);
+				if(index == arr[1]) this.classifyId = item.classifyId;
 			});
+			console.log(this.classifyId);
 		},
 		
 		
@@ -574,6 +577,7 @@ export default {
 				data.uid = this.uid;
 				data.doneLong = this.doneLongSecond;
 				data.auditLong = this.auditLongSecond;
+				data.classify = this.classifyId;
 				data.award = parseInt(data.award);
 				data.sum = parseInt(data.sum);
 				data.isDoneProve = parseInt(data.isDoneProve);
@@ -583,8 +587,6 @@ export default {
 				data.taskImg = "";
 				if(!util.isEmpty(this.imageData) && this.imageData != undefined) data.imgUrl = this.imageData;   //任务图片
 				if(!util.isEmpty(this.taskimageData) && this.taskimageData != undefined) data.taskImg = this.taskimageData;   //宣传图片
-				console.log(data);
-				return;
 				api.addTask(data, (res)=>{
 					let code = api.getCode(res);
 					if(code == 0){
