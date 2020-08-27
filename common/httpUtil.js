@@ -13,12 +13,12 @@ const httpUtil = {
 	
 	//进行http的post请求
 	post: function(url, postData, funSuccess, state) {
-		// if(state){
-		// 	uni.showLoading({
-		// 	    title: '加载中'
-		// 	});
-		// 	console.log(1);
-		// };
+		if(state){
+			uni.showLoading({
+			    title: '加载中'
+			});
+			//console.log(funSuccess);
+		};
 		let token = storage.getToken();
 		uni.request({
 			url: config.baseUrl + "/api/" + url,
@@ -28,15 +28,14 @@ const httpUtil = {
 			header: {
 			  'token': token  //上传token
 			},
-			success: (res) => {
-				// uni.hideLoading();
+			success: (res) => {				
 				let token = this.getToken(res);
 				//判断是否有token
 				if(!util.isEmpty(token) && token.length == 17)
 				{
 					let oldToken = storage.getToken();
 					//token不同时保存新token
-					console.log(token);
+					//console.log(token);
 					if(token != oldToken) storage.setToken(token);
 				}
 				
@@ -52,6 +51,9 @@ const httpUtil = {
 					return;
 				}
 				funSuccess(res);
+			},
+			complete: (res) => {
+				if (state) uni.hideLoading();
 			}
 		});
 	},
