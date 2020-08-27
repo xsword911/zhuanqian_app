@@ -14,6 +14,16 @@
 				</tui-list-cell>
 				<tui-list-cell :hover="false">
 					<view class="tui-line-cell">
+						<view class="tui-title"><text class="necessary">*</text>任务分类</view>
+						<view class="uni-list-cell-db" style="margin-left:20rpx;">
+							<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="multiIndex" :range="multiArray" name="">
+								<view class="uni-input">{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}</view>
+							</picker>
+						</view>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false">
+					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary">*</text>任务类型</view>
 						<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
 							<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
@@ -184,7 +194,7 @@
 						</view>
 					</view>
 				</tui-list-cell>
-				<tui-list-cell :hover="false" >
+<!-- 				<tui-list-cell :hover="false" >
 					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary">*</text>任务分类</view>
 						<view class="uni-list-cell-db" style="margin-left:20rpx;">
@@ -193,7 +203,7 @@
 							</picker>
 						</view>
 					</view>
-				</tui-list-cell>
+				</tui-list-cell> -->
 			
 				<tui-list-cell :hover="false" >
 					<view class="tui-line-cell">
@@ -248,8 +258,8 @@ export default {
 			arrayState: [{"state": "关闭", "key": 0}, {"state": "开启", "key": 1}],   //任务状态列表
 			arrayStateIndex: 0,
 			
-			arraySort: [{"sort": "热门活动", "key": 0}, {"sort": "限时推荐", "key": 1}],   //任务分类列表
-			arraySortIndex: 0,
+			// arraySort: [{"sort": "热门活动", "key": 0}, {"sort": "限时推荐", "key": 1}],   //任务分类列表
+			// arraySortIndex: 0,
 			
 			arrayCycle: [{"time": "每人只能完成一次", "key": 0},{"time": "每人每天只能完成一次", "key": 1}],   //任务刷新周期列表列表
 			arrayCycleIndex: 0,
@@ -283,16 +293,82 @@ export default {
 			imageData: "",   	 //上传图片地址
 			taskimageData: "",   //上传宣传图片地址
 			serverUrl: "",  //上传地址
+			
+			multiArray: [
+				[],
+				[]
+			],  //任务分类联级选择器
+			multiIndex: [0, 0],  //任务分类联级选择器下标
+			
+			arrClassifyName: [],  //分类名称
+			taskTree: [],  //任务大类和子类列表
 		} 
 	},
 	onLoad(res) {
 		this.getTaskType();  //获取任务类型列表
 		this.getLevelType();  //获取会员类型列表
 		this.uid = storage.getUid();  //获取uid
-		this.getLevelList();//获取会员表信息
-		this.serverUrl = api.getFileUrl();
+		this.getLevelList();  //获取会员表信息
+		this.serverUrl = api.getFileUrl();  //获取上传图片地址
+		this.getTaskTree();  //获取任务大类和子类列表
 	},
 	methods: {
+		//获取任务大类和子类列表
+		getTaskTree(){
+			api.getTaskTree({}, (res)=>{
+				let data = api.getData(res);
+				console.log(data);
+				this.taskTree = data;  //保存任务大类和子类列表
+				let arrBigClassifyName = [];
+				data.forEach((item, index) =>{
+					this.multiArray[0].push(item.big.name);  //获取大类名称
+					let arrClassifyName = [];  //子类名称数组
+					for(let i = 0; i < item.list.length; ++i){
+						arrClassifyName.push(item.list[i].name);
+					}
+					arrBigClassifyName.push(arrClassifyName);
+				});
+				this.arrClassifyName = arrBigClassifyName;  //保存所有子类名称数组
+				this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
+			});
+		},
+		//任务分类联级选择器操作
+		bindMultiPickerColumnChange: function(e) {
+			// console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value);
+			this.multiIndex[e.detail.column] = e.detail.value;
+			switch (e.detail.column) {
+				case 0: //拖动第1列
+					switch (this.multiIndex[0]) {
+						case 0:
+							this.multiArray[1] = this.arrClassifyName[0];
+							break
+						case 1:
+							this.multiArray[1] = this.arrClassifyName[1];
+							break
+					}
+					// console.log(this.multiIndex);
+					this.multiIndex.splice(2, 1);
+					break;
+				case 1: //拖动第2列
+					// console.log(this.multiIndex);
+					this.multiIndex.splice(2, 1);
+					break;
+			}
+			//this.multiIndex == [0, 0] 第一列下标 + 第二列下标
+			this.getClassifyId(this.multiIndex);
+			this.$forceUpdate();
+		},
+		
+		//获取选中分类id
+		getClassifyId(arr = [0, 0]){
+			let arrSel = this.taskTree[arr[0]];
+			arrSel.list.forEach((item, index) =>{
+				if(index == arr[1]) console.log(item);
+			});
+		},
+		
+		
+		
 		//添加宣传图片
 		taskImgResult: function(e) {
 			this.taskimageData = e.imgArr[0];
@@ -357,10 +433,10 @@ export default {
 		statePickerChange(e){
 			this.arrayStateIndex = e.detail.value;
 		},
-		//选择任务分类类型
-		sortPickerChange(e){
-			this.arraySortIndex = e.detail.value;
-		},
+		// //选择任务分类类型
+		// sortPickerChange(e){
+		// 	this.arraySortIndex = e.detail.value;
+		// },
 		//选择任务刷新周期
 		cyclePickerChange(e){
 			this.arrayCycleIndex = e.detail.value;
