@@ -46,19 +46,19 @@
 				接受时间：<text class="style_info">{{workInfo.receiveTime}}</text>
 			</view>
 			
-			<view class=""  v-if="taskType == 1">
+<!-- 			<view class=""  v-if="taskType == 1">
 				发布开始时间：<text class="style_info">{{workInfo.begTime}}</text>
 			</view>
 			
 			<view class=""  v-if="taskType == 1">
 				发布结束时间：<text class="style_info">{{workInfo.endTime}}</text>
-			</view>
+			</view> -->
 			
 			<view class="">
 				任务限时：<text class="style_info">{{doneLong}}</text>
 			</view>
 			
-			<view class="">
+			<view class="" v-if="workInfo.finishTime != null">
 				完成时间：<text class="style_info">{{workInfo.finishTime}}</text>
 			</view>
 			
@@ -144,7 +144,8 @@
 			
 			<view class="lay_button btn_style">
 				<button type="default" hover-class="btn_hover" v-if="workInfo.taskUrl != ''" @tap="openUrl">打开链接</button>
-				<button type="default" hover-class="btn_hover" v-if="taskType == 1" @tap="acceptTask">接受任务</button>
+				<button type="default" hover-class="btn_hover" v-if="taskType == 1 && !isReceive" @tap="acceptTask">接受任务</button>
+				<button type="default" hover-class="btn_hover" style="background-color: #808080;" v-if="taskType == 1 && isReceive">已接任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="giveUpTask">放弃任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.state == 0" @tap="submitTask">提交</button>
 			</view>
@@ -182,6 +183,8 @@ export default{
 			imageData: "",   //上传图片地址
 			//上传地址
 			serverUrl: "",
+			
+			isReceive: '',  //任务是否已接
 		}
 	},
 	onLoad(res) {
@@ -189,7 +192,12 @@ export default{
 		this.id = parseInt(res.id);
 		// res.type  1:查看任务列表 2:查看我接受的任务
 		this.taskType = parseInt(res.type);
-		if(this.taskType == 1) this.getTask(); 	// 查询任务
+		// 查询任务
+		if(this.taskType == 1){
+			this.getTask();
+			if(res.isReceive == 'false') this.isReceive = false;
+			else this.isReceive = true;
+		} 	
 		if(this.taskType == 2) this.getTaskDetails(); 	// 查询任务完成情况
 		this.serverUrl = api.getFileUrl();
 	},
@@ -322,6 +330,7 @@ export default{
 									title: "接受任务成功",
 									icon: "none"
 								});
+								_this.isReceive = true;  //任务已接
 							}else{
 								let msg = api.getMsg(res);
 								uni.showToast({

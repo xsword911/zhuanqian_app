@@ -25,4 +25,38 @@ module.exports = {
 	   return time;
 	},
 	
+	//获取今天的开始时间
+	getNowBeg(){
+		let day = new Date();
+		return this.getDateBeg(day);
+	},
+	
+	//获取今天的结束时间
+	getNowEnd(){
+		let day = new Date();
+		return this.getDateEnd(day);
+	},
+	
+	//
+	getDateBeg(date){
+		let day = this.formatYMD(date);
+		return day + " 00:00:00";
+	},
+	
+	getDateEnd(date){
+		let day = this.formatYMD(date);
+		return day + " 23:59:59";
+	},
+	
+	//格式化字符串为年月日格式
+	formatYMD(date){
+		let y = date.getFullYear();
+		let m = date.getMonth() + 1;
+		if(m < 10) m = '0' + m;
+		let d = date.getDate();
+		if(d < 10) d = '0' + d;
+		return y + '-' + m + '-' + d;
+	},
 }
+
+

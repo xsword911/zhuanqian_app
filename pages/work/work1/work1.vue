@@ -126,6 +126,7 @@
 						</view>
 						<view class="activity_test">
 							<view class="">
+								<text style="color:#D91D37;" v-if="item.isReceive">【已接】</text>
 								<text>{{item.title}}</text>
 									<view class="activity_tag" v-if="item.tip == 0">NEW <text></text></view>
 									<view class="activity_tag" v-if="item.tip == 1">HOT <text></text></view>
@@ -286,6 +287,7 @@
 </template>
 
 <script>
+import time from "@/common/time.js";
 import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import tuiModal from "@/components/tui-modal/tui-modal.vue";
@@ -369,7 +371,9 @@ export default{
 			this.resData = tran.url2Obj(res.data);  //获取任务筛选信息
 			let arrIndex = [this.resData.bigClassifyId -1, this.resData.classifyId -1, this.resData.level -1];  //组装筛选信息
 			this.level = this.resData.level;  //设置任务等级码
+			this.classifyId = this.resData.classifyId;  //设置子类id
 			this.multiIndex = arrIndex;
+			//this.onShow1();
 		}
 		// this.userEn = storage.getMyInfo();  //获取我的信息
 		// this.myCoin = this.userEn.gold;
@@ -385,9 +389,24 @@ export default{
 		this.getSignProgress();  //查询奖励信息
 		this.timeAuto();  //开启计时器
 		//this.getNotReadMsgSum(); //查询未读消息数
+		this.getLevelDesc(); //获取会员等级列表
 		this.getTaskTree();  //获取任务大类和子类列表
+		console.log(this.classifyId);
+		console.log(this.level);
 	},
 	methods:{
+		//查询数据
+		onShow1(){
+			this.uid = storage.getUid();  //获取uid
+			this.userEn = storage.getMyInfo();  //获取我的信息
+			this.getMyInfo();  //刷新我的信息
+			this.getTaskList();  //获取任务列表
+			this.getSignProgress();  //查询奖励信息
+			this.timeAuto();  //开启计时器
+			//this.getNotReadMsgSum(); //查询未读消息数
+			this.getLevelDesc(); //获取会员等级列表
+			this.getTaskTree();  //获取任务大类和子类列表
+		},
 		//获取任务大类和子类列表
 		getTaskTree(){
 			let data = storage.getTaskTree();
@@ -405,7 +424,6 @@ export default{
 			this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
 			console.log(this.multiArray);
 			this.getClassifyId(); //获取默认选中的子类id
-			this.getLevelDesc(); //获取会员等级列表
 			
 			// api.getTaskTree({}, (res)=>{
 			// 	let data = api.getData(res);
@@ -458,7 +476,7 @@ export default{
 			arrSel.list.forEach((item, index) =>{
 				if(index == arr[1]) this.classifyId = item.classifyId;
 			});
-			// console.log(this.classifyId);
+			console.log(this.classifyId);
 		},
 		//获取选中的会员等级id
 		getLevelId(arr = [0, 0, 0]){
@@ -502,7 +520,7 @@ export default{
 			this.arrayLevelIndex = e.detail.value;
 			this.arrayLevel.forEach((item, index) =>{
 				 //获取选中的任务状态码
-				if(this.arrayLevelIndex == index) this.level = item.id;  //重新获取选中的任务状态码
+				if(this.arrayLevelIndex == index) this.level = item.level;  //重新获取选中的任务状态码
 			});
 		},
 		//查询未读消息数
@@ -686,11 +704,14 @@ export default{
 		getTaskList(){
 			this.page = 1;
 			api.getTask1({
+				uid: this.uid,
 				state: 1,
 				page: this.page,
 				count: 8,
 				level: parseInt(this.level),
-				classify: this.classifyId
+				classify: this.classifyId,
+				begTime: time.getNowBeg(),
+				endTime: time.getNowEnd()
 			}, (res)=> {
 				let data = api.getData(res).data;
 				this.activityList = data;
@@ -704,7 +725,7 @@ export default{
 		//打开弹窗
 		show8(item) {
 			uni.navigateTo({
-				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=1" 
+				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=1&isReceive=" + item.isReceive
 			});
 			return;
 			audio.playAudio();
@@ -763,11 +784,14 @@ export default{
 		this.page = this.page + 1;
 		
 		api.getTask1({
+			uid: this.uid,
 			state: 1,
 			page: this.page,
 			count: 8,
 			level: parseInt(this.level),
-			classify: this.classifyId
+			classify: this.classifyId,
+			begTime: time.getNowBeg(),
+			endTime: time.getNowEnd()
 		}, (res)=>{
 			let data = api.getData(res).data;
 			if(util.isEmpty(data)){

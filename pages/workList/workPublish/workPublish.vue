@@ -587,6 +587,8 @@ export default {
 				data.taskImg = "";
 				if(!util.isEmpty(this.imageData) && this.imageData != undefined) data.imgUrl = this.imageData;   //任务图片
 				if(!util.isEmpty(this.taskimageData) && this.taskimageData != undefined) data.taskImg = this.taskimageData;   //宣传图片
+				console.log(data);
+				return;
 				api.addTask(data, (res)=>{
 					let code = api.getCode(res);
 					if(code == 0){

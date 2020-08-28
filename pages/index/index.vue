@@ -220,6 +220,7 @@ export default{
 		this.noticePadding = "0";  //重置公告弹窗
 		this.getNotReadMsgSum(); //查询未读消息数
 		this.getLevelDesc();   //获取全部会员信息
+		this.getLevelList();  //获取会员信息列表
 		this.getTaskTree();  //获取任务大类和子类列表
 	},
 	methods:{
@@ -231,11 +232,18 @@ export default{
 				storage.setTaskTree(data);
 			});
 		},
+		//获取会员信息列表
+		getLevelList(){
+			api.getUserLevel({}, (res)=>{
+				let data = api.getData(res).data;
+				storage.setLevelList(data);  //保存会员信息列表到本地
+			});
+		},
 		//获取全部会员信息
 		getLevelDesc(){
 			api.getLevelDesc({}, (res)=>{
 				let data = api.getData(res);
-				storage.setLevelDescList(data);
+				storage.setLevelDescList(data);  //保存全部会员信息列表到本地
 			});
 		},
 		//跳转到任务子类界面
