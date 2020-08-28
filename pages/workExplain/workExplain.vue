@@ -39,7 +39,7 @@
 			</view>
 			
 			<view class="" v-if="taskType == 1">
-				任务完成剩余量：<text class="style_info">{{workInfo.sum}}</text>
+				剩余数量：<text class="style_info">{{workInfo.sum}}</text>
 			</view>
 			
 			<view class="" v-if="taskType == 2">
