@@ -117,8 +117,8 @@
 							<view class="">
 								{{item2.name}}
 							</view>
-							<view class="" v-if="item2.bigClassifyId == 1">悬赏</view>
-							<view class="" v-if="item2.bigClassifyId != 1">开发中...</view>
+							<view class="" v-if="item2.state == 1">悬赏</view>
+							<view class="" v-if="item2.state == 2">开发中...</view>
 							<view class="sort_img">
 								<image :src="item2.imgUrl" mode=""></image>
 							</view>
@@ -199,7 +199,6 @@ export default{
 			noticeEn: [],    //公告信息
 			notReadMsgSum: null,  //未读消息数
 			
-			background: ['color1', 'color2', 'color3'],
 			indicatorDots: true,
 			autoplay: true,
 			interval: 3000,
@@ -248,7 +247,13 @@ export default{
 		},
 		//跳转到任务子类界面
 		toWorkClassify(data){
-			if(data.bigClassifyId == 2) return;
+			if(data.state == 2){
+				uni.showModal({
+					content: '正在开发中...',
+					showCancel: false
+				});
+				return;
+			}
 			uni.navigateTo({
 				url: '/pages/index/workClassify/workClassify?title=' + tran.obj2Url(data)
 			})

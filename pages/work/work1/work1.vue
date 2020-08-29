@@ -369,7 +369,7 @@ export default{
 	onLoad(res) {
 		if(res.data){
 			this.resData = tran.url2Obj(res.data);  //获取任务筛选信息
-			let arrIndex = [this.resData.bigClassifyId -1, this.resData.classifyId -1, this.resData.level -1];  //组装筛选信息
+			let arrIndex = [this.resData.bigClassifyId -1, this.resData.classifyId - 1, this.resData.level -1];  //组装筛选信息
 			this.level = this.resData.level;  //设置任务等级码
 			this.classifyId = this.resData.classifyId;  //设置子类id
 			this.multiIndex = arrIndex;
@@ -391,8 +391,8 @@ export default{
 		//this.getNotReadMsgSum(); //查询未读消息数
 		this.getLevelDesc(); //获取会员等级列表
 		this.getTaskTree();  //获取任务大类和子类列表
-		console.log(this.classifyId);
-		console.log(this.level);
+		// console.log(this.classifyId);
+		// console.log(this.level);
 	},
 	methods:{
 		//查询数据
@@ -410,40 +410,24 @@ export default{
 		//获取任务大类和子类列表
 		getTaskTree(){
 			let data = storage.getTaskTree();
+			console.log(data);
 			this.taskTree = data;  //保存任务大类和子类列表
 			this.multiArray[0] = [];
 			this.multiArray[1] = [];			
 			data.forEach((item, index) =>{
-				this.multiArray[0].push(item.big.name);  //获取大类名称
-				let arrClassifyName = [];  //子类名称数组
-				for(let i = 0; i < item.list.length; ++i){
-					arrClassifyName.push(item.list[i].name);  //获取每个子类名称
+				if(item.big.state == 1)  //任务大类状态为开启时
+				{
+					this.multiArray[0].push(item.big.name);  //获取大类名称
+					let arrClassifyName = [];  //子类名称数组
+					for(let i = 0; i < item.list.length; ++i){
+						if(item.list[i].state == 1) arrClassifyName.push(item.list[i].name);  //获取状态为开启的每个子类名称
+					}
+					this.arrClassifyName.push(arrClassifyName);  //保存所有子类名称数组
 				}
-				this.arrClassifyName.push(arrClassifyName);  //保存所有子类名称数组
 			});
-			this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
-			console.log(this.multiArray);
-			this.getClassifyId(); //获取默认选中的子类id
-			
-			// api.getTaskTree({}, (res)=>{
-			// 	let data = api.getData(res);
-			// 	this.taskTree = data;  //保存任务大类和子类列表
-			// 	let arrBigClassifyName = [];
-			// 	this.multiArray[0] = [];
-			// 	this.multiArray[1] = [];
-			// 	this.multiArray[2] = [];
-			// 	data.forEach((item, index) =>{
-			// 		this.multiArray[0].push(item.big.name);  //获取大类名称
-			// 		let arrClassifyName = [];  //子类名称数组
-			// 		for(let i = 0; i < item.list.length; ++i){
-			// 			arrClassifyName.push(item.list[i].name);  //获取每个子类名称
-			// 		}
-			// 		arrBigClassifyName.push(arrClassifyName);
-			// 	});
-			// 	this.arrClassifyName = arrBigClassifyName;  //保存所有子类名称数组
-			// 	this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
-			// 	this.getClassifyId(); //获取默认选中的子类id
-			// });
+			if(this.multiArray[1].length <= 0) this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
+			// console.log(this.multiArray);
+			// this.getClassifyId(); //获取默认选中的子类id
 		},
 		//任务分类+会员等级 选择器操作
 		bindMultiPickerColumnChange: function(e) {
@@ -476,7 +460,7 @@ export default{
 			arrSel.list.forEach((item, index) =>{
 				if(index == arr[1]) this.classifyId = item.classifyId;
 			});
-			console.log(this.classifyId);
+			// console.log(this.classifyId);
 		},
 		//获取选中的会员等级id
 		getLevelId(arr = [0, 0, 0]){
