@@ -528,12 +528,12 @@ export default {
 			// }, 
 			{
 				name: "award",
-				rule: ["required", "isNum"],
-				msg: ["请输入任务奖励", "任务奖励只能为数字"]
+				rule: ["required", "isAmount"],
+				msg: ["请输入任务奖励", "任务奖励必须为金额，保留2位小数"]
 			}, {
 				name: "sum",
 				rule: ["required", "isNum"],
-				msg: ["请输入任务数量", "任务数量只能为数字"]
+				msg: ["请输入任务数量", "任务数量必须为数字"]
 			}, {
 				name: "begTime",
 				rule: ["required"],
@@ -571,7 +571,7 @@ export default {
 				data.doneLong = this.doneLongSecond;
 				data.auditLong = this.auditLongSecond;
 				data.classify = this.classifyId;
-				data.award = parseInt(data.award);
+				data.award = parseFloat(data.award);
 				data.sum = parseInt(data.sum);
 				data.isDoneProve = parseInt(data.isDoneProve);
 				data.isDoneImg = parseInt(data.isDoneImg);
