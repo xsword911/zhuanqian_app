@@ -1,15 +1,27 @@
 <template>
 	<view class="container" style="background-color: #fff;font-size:14px;">
-		<view class="">
-			<view class="question">问：我要赚钱流程怎么操作？</view>
+		<view class="" v-for="(item,index) in guideList" :key="index">
+			<view class="question">{{item.title}}</view>
 			<view class="answer">
-			答：点击《任务》→《接单》任务→点击《记录》→《打开短视频》
-			观看视频点赞和关注→手机截图→提交上传《截图》→
-			《提交订单》→等待审核→任务完成佣金到账
+				<p style="white-space: pre-wrap;" v-html="item.content"></p>
 			</view>
 		</view>
 		
-		<view class="">
+<!-- 		<view class="">
+			<view class="question">问：怎么计算升级分佣和任务分佣奖励？</view>
+			<view class="answer">
+			答：
+			<text class="question">升级分佣--</text>例如你的下级A成功充值3000元升级铂金会员，
+			您可获得A升级分佣10%等于300元，以此类推。A的下级（B） 
+			升级会员你依然可以获得二级分佣2%，B的推的C 升级会员你还可以获得1%.
+			
+			<text class="question">任务分佣--</text>--例如你的下级A是铂金会员 他每天做任务可以获得175元，
+			您每天可以获得任务分佣17.5元，只要下级一直做任务，你每天就可以一直获得任务分佣。
+			B 级 C级以此类推。可以无限获得3级裂变收益，轻松月入过万。
+			</view>
+		</view> -->
+		
+<!-- 		<view class="">
 			<view class="question">问：怎么下载APP？</view>
 			<view class="answer">
 			答：登入平台首页，点击APP下载根据提示操作即可。
@@ -57,20 +69,6 @@
 			<view class="question">问：如何计算A/B/C三级分佣？</view>
 			<view class="answer">
 			答：直属代理用户为A层代理，A的直属代理为B层代理，B的直属代理为C层代理，您可以获得以上所有用户的升级分佣和任务分佣。
-			</view>
-		</view>
-		
-		<view class="">
-			<view class="question">问：怎么计算升级分佣和任务分佣奖励？</view>
-			<view class="answer">
-			答：
-			<text class="question">升级分佣--</text>例如你的下级A成功充值3000元升级铂金会员，
-			您可获得A升级分佣10%等于300元，以此类推。A的下级（B） 
-			升级会员你依然可以获得二级分佣2%，B的推的C 升级会员你还可以获得1%.
-			
-			<text class="question">任务分佣--</text>--例如你的下级A是铂金会员 他每天做任务可以获得175元，
-			您每天可以获得任务分佣17.5元，只要下级一直做任务，你每天就可以一直获得任务分佣。
-			B 级 C级以此类推。可以无限获得3级裂变收益，轻松月入过万。
 			</view>
 		</view>
 		
@@ -135,12 +133,33 @@
 			<view class="answer">
 			答：如遇以上此类作品不需要评论，只需点赞关注，上传任务截图即可。钻石、至尊会员可以接高价评论单
 			</view>
-		</view>
+		</view> -->
 		
 	</view>
 </template>
 
 <script>
+import api from "@/api/api.js";
+export default{
+	data() {
+		return {
+			guideList: [],  //新手指南列表
+		}
+	},
+	onShow() {
+		this.getInformation();  //获取新手指南列表
+	},
+	methods:{
+		getInformation(){
+			api.getInformation({type: 3, page: 1, count: 99}, (res)=>{
+				let data = api.getData(res).data;
+				this.guideList = data;
+				console.log(this.guideList);
+			});
+		},
+	}
+	
+}
 </script>
 
 <style>
@@ -148,10 +167,9 @@
 		color: #9b59b6;
 	}
 	.container{
-		margin-top:60rpx;
 	}
 	.container>view{
-		margin-bottom:100rpx;
+		margin-bottom:50rpx;
 	}
 </style>
 

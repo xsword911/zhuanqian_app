@@ -102,7 +102,8 @@ export default{
 		//跳转到规则说明界面
 		toRuleDescription(){
 			uni.navigateTo({
-				url: "/pages/ruleDescription/ruleDescription"
+				// url: "/pages/ruleDescription/ruleDescription"
+				url: "/pages/guide/guide"
 			})
 		},
 		//跳转到代理合作界面

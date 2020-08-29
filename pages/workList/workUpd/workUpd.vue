@@ -3,7 +3,7 @@
 		<form @submit="formSubmit" @reset="formReset">
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">任务会员类型</view>
+					<view class="tui-title"><text class="necessary">*</text>任务会员类型</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="levelType.length > 0">
 						<picker @change="levelPickerChange" :value="levelTypeIndex" :range="levelType" range-key="val" name="level">
 							<view class="uni-input">{{levelType[levelTypeIndex].val}}</view>
@@ -13,7 +13,17 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">任务类型</view>
+					<view class="tui-title"><text class="necessary">*</text>任务分类</view>
+					<view class="uni-list-cell-db" style="margin-left:20rpx;">
+						<picker mode="multiSelector" @columnchange="bindMultiPickerColumnChange" :value="multiIndex" :range="multiArray">
+							<view class="uni-input">{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}</view>
+						</picker>
+					</view>
+				</view>
+			</tui-list-cell>
+			<tui-list-cell :hover="false">
+				<view class="tui-line-cell">
+					<view class="tui-title"><text class="necessary">*</text>任务类型</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;" v-if="arrayType.length > 0">
 						<picker @change="typePickerChange" :value="arrayTypeIndex" :range="arrayType" range-key="val" name="type">
 							<view class="uni-input">{{arrayType[arrayTypeIndex].val}}</view>
@@ -23,27 +33,59 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">任务标题</view>
+					<view class="tui-title"><text class="necessary">*</text>任务标题</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="title" placeholder="请输入任务标题" 
 					maxlength="50" type="text" v-model="title" />
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">任务说明</view>
+					<view class="tui-title"><text class="necessary">*</text>任务说明</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="explain" placeholder="请输入任务说明" 
 					maxlength="50" type="text" v-model="explain"/>
 				</view>
 			</tui-list-cell>
-<!-- 			<tui-list-cell :hover="false">
-				<view class="tui-line-cell">
-					<view class="tui-title">任务规则</view>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="rule" placeholder="请输入任务规则" maxlength="50" type="text" />
-				</view>
-			</tui-list-cell> -->
+				<tui-list-cell :hover="false">
+					<view class="tui-line-cell">
+						<view class="tui-title"><text class="necessary" style="visibility: hidden;">*</text>任务图片</view>
+						<tui-upload :serverUrl="serverUrl" @complete="imgResult" @remove="remove" 
+						:limit="1" style="margin-left:20rpx;"></tui-upload>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false">
+					<view class="tui-line-cell">
+						<view class="tui-title"><text class="necessary" style="visibility: hidden;">*</text>宣传文本</view>
+						<input placeholder-class="tui-phcolor" class="tui-input" name="taskTxt" placeholder="请输入宣传文本" 
+						maxlength="50" type="text"  v-model="taskTxt"/>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false">
+					<view class="tui-line-cell">
+						<view class="tui-title"><text class="necessary" style="visibility: hidden;">*</text>宣传图片</view>
+						<tui-upload :serverUrl="serverUrl" @complete="taskImgResult" @remove="taskImgRemove"
+						:limit="1" style="margin-left:20rpx;"></tui-upload>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false">
+					<view class="tui-line-cell">
+						<view class="tui-title"><text class="necessary" style="visibility: hidden;">*</text>打开链接</view>
+						<input placeholder-class="tui-phcolor" class="tui-input" name="taskUrl" placeholder="请输入打开链接" 
+						maxlength="50" type="text" v-model="taskUrl"/>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell :hover="false">
+					<view class="tui-line-cell">
+						<view class="tui-title"><text class="necessary" style="visibility: hidden;">*</text>打开app</view>
+						<view class="uni-list-cell-db" style="margin-left:20rpx;">
+							<picker @change="appPickerChange" :value="arrayAppIndex" :range="arrayApp" range-key="name" name="taskApp">
+								<view class="uni-input">{{arrayApp[arrayAppIndex].name}}</view>
+							</picker>
+						</view>
+					</view>
+				</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">奖励类型</view>
+					<view class="tui-title"><text class="necessary">*</text>奖励类型</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;">
 						<picker @change="awardPickerChange" :value="arrayAwardIndex" :range="arrayAward" range-key="award" name="awardType">
 							<view class="uni-input">{{arrayAward[arrayAwardIndex].award}}</view>
@@ -53,21 +95,21 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">任务奖励</view>
+					<view class="tui-title"><text class="necessary">*</text>任务奖励</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" 
 					maxlength="50" type="number" v-model="award" />
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false">
 				<view class="tui-line-cell">
-					<view class="tui-title">任务数量</view>
+					<view class="tui-title"><text class="necessary">*</text>任务数量</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" 
 					maxlength="50" type="number" v-model="sum" />
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务刷新周期</view>
+					<view class="tui-title"><text class="necessary">*</text>任务刷新周期</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;">
 						<picker @change="cyclePickerChange" :value="arrayCycleIndex" :range="arrayCycle" range-key="time" name="cycle">
 							<view class="uni-input">{{arrayCycle[arrayCycleIndex].time}}</view>
@@ -77,28 +119,28 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">发布开始时间</view>
+					<view class="tui-title"><text class="necessary">*</text>发布开始时间</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="begTime" 
 					placeholder="请输入发布开始时间" maxlength="50" type="text" @tap="show(2, 1)" v-model="begTime" disabled="true"/>
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">发布结束时间</view>
+					<view class="tui-title"><text class="necessary">*</text>发布结束时间</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="endTime" 
 					placeholder="请输入发布结束时间" maxlength="50" type="text" @tap="show(2,2)" v-model="endTime" disabled="true"/>
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务限时</view>
+					<view class="tui-title"><text class="necessary">*</text>任务限时</view>
 					<input placeholder-class="tui-phcolor" class="tui-input" name="doneLong"
 					placeholder="请输入任务限时时间" maxlength="50" type="text" @tap="show(1,3)" v-model="doneLongTime" disabled="true"/>
 				</view>
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">审核时长</view>
+					<view class="tui-title"><text class="necessary">*</text>审核时长</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;">
 						<input placeholder-class="tui-phcolor" class="tui-input" name="auditLong"
 						placeholder="请输入任务限时时间" maxlength="50" type="text" @tap="show(1,4)" v-model="auditLongTime" disabled="true"/>
@@ -107,7 +149,7 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务是否需要凭证</view>
+					<view class="tui-title"><text class="necessary">*</text>任务是否需要凭证</view>
 					<radio-group class="radio-group" name="isDoneProve">
 						<label class="tui-radio">
 							<radio value="1" color="#5677fc" :checked="isDoneProve == 1"/>是
@@ -120,7 +162,7 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务是否需要截图</view>
+					<view class="tui-title"><text class="necessary">*</text>任务是否需要截图</view>
 					<radio-group class="radio-group" name="isDoneImg">
 						<label class="tui-radio">
 							<radio value="1" color="#5677fc" :checked="isDoneImg == 1"/>是
@@ -133,7 +175,7 @@
 			</tui-list-cell>
 			<tui-list-cell :hover="false" >
 				<view class="tui-line-cell">
-					<view class="tui-title">任务状态</view>
+					<view class="tui-title"><text class="necessary">*</text>任务状态</view>
 					<view class="uni-list-cell-db" style="margin-left:20rpx;">
 						<picker @change="statePickerChange" :value="arrayStateIndex" :range="arrayState" range-key="state" name="state">
 							<view class="uni-input">{{arrayState[arrayStateIndex].state}}</view>
@@ -197,10 +239,15 @@ export default {
 			arrayCycle: [{"time": "只能完成一次", "key": 0},{"time": "每天只能完成一次", "key": 1}],   //任务刷新周期列表列表
 			arrayCycleIndex: 0,
 			
+			arrayApp: [{"name": "不打开任何app", "key": 0}, {"name": "微信", "key": 1}, {"name": "抖音", "key": 2}, {"name": "快手", "key": 3}],   //app列表
+			arrayAppIndex: 0,
+			
 			title: "",   //任务标题
 			explain: "",   //任务说明
 			award: "",   //任务奖励
 			sum: "",   //任务任务数量
+			taskTxt: '',
+			taskUrl: '',
 			isDoneImg: 0,  //是否需要截图
 			isDoneProve: 0,  //是否需要凭证
 			desc: "",   //任务备注
@@ -225,6 +272,19 @@ export default {
 			uid: "",  //用户id
 			id: null,  //任务id
 			taskInfo: "",  //任务信息
+			serverUrl: "",  //上传地址
+			
+			
+			multiArray: [
+				[],
+				[]
+			],  //任务分类联级选择器
+			multiIndex: [0, 0],  //任务分类联级选择器下标
+			
+			
+			arrClassifyName: [],  //分类名称
+			taskTree: [],  //任务大类和子类列表
+			classifyId: null,  //选中的子类id
 		} 
 	},
 	onLoad(res) {
@@ -232,13 +292,73 @@ export default {
 		this.id = parseInt(res.id);
 		this.getTaskType();  //获取任务类型列表
 		this.getLevelType();  //获取会员类型列表
+		this.serverUrl = api.getFileUrl();  //获取上传图片地址
 		this.getTaskInfo(); //查看任务信息
+		this.getTaskTree();  //获取任务大类和子类列表
 	},
 	methods: {
+		//获取任务大类和子类列表
+		getTaskTree(){
+			api.getTaskTree({}, (res)=>{
+				let data = api.getData(res);
+				this.taskTree = data;  //保存任务大类和子类列表
+				let arrBigClassifyName = [];
+				data.forEach((item, index) =>{
+					this.multiArray[0].push(item.big.name);  //获取大类名称
+					let arrClassifyName = [];  //子类名称数组
+					for(let i = 0; i < item.list.length; ++i){
+						arrClassifyName.push(item.list[i].name);  //获取每个子类名称
+					}
+					arrBigClassifyName.push(arrClassifyName);
+				});
+				this.arrClassifyName = arrBigClassifyName;  //保存所有子类名称数组
+				this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称
+			});
+		},
+		
+		//任务分类联级选择器操作
+		bindMultiPickerColumnChange: function(e) {
+			// console.log('修改的列为：' + e.detail.column + '，值为：' + e.detail.value);
+			this.multiIndex[e.detail.column] = e.detail.value;
+			switch (e.detail.column) {
+				case 0: //拖动第1列
+					switch (this.multiIndex[0]) {
+						case 0:
+							this.multiArray[1] = this.arrClassifyName[0];
+							break
+						case 1:
+							this.multiArray[1] = this.arrClassifyName[1];
+							break
+					}
+					// console.log(this.multiIndex);
+					this.multiIndex.splice(2, 1);
+					break;
+				case 1: //拖动第2列
+					// console.log(this.multiIndex);
+					this.multiIndex.splice(2, 1);
+					break;
+			}
+			//this.multiIndex == [0, 0] 第一列下标 + 第二列下标
+			this.getClassifyId(this.multiIndex);
+			this.$forceUpdate();
+		},
+		
+		//获取选中分类id
+		getClassifyId(arr = [0, 0, 0]){
+			let arrSel = this.taskTree[arr[0]];
+			arrSel.list.forEach((item, index) =>{
+				if(index == arr[1]) this.classifyId = item.classifyId;
+			});
+			console.log(this.classifyId);
+		},
+		
+		
+		
 		//查看任务信息
 		getTaskInfo(){
 			api.getTaskInfo({id: this.id}, (res)=>{
 				let data = api.getData(res).data[0];
+				console.log(data);
 				this.taskInfo = data;
 				this.title = this.taskInfo.title;   	//任务标题
 				this.explain = this.taskInfo.explain;   //任务说明
@@ -247,6 +367,10 @@ export default {
 				this.begTime = this.taskInfo.begTime;   //任务开始时间
 				this.endTime = this.taskInfo.endTime;   //任务结束时间
 				this.desc = this.taskInfo.desc;         //备注
+				this.classifyId = this.taskInfo.classifyId;  //子类id
+				
+				this.taskUrl = this.taskInfo.taskUrl;
+				this.taskTxt = this.taskInfo.taskTxt;
 				
 				this.isDoneImg = this.taskInfo.isDoneImg;  		//是否需要截图
 				this.isDoneProve =  this.taskInfo.isDoneProve;  //是否需要凭证
@@ -261,6 +385,23 @@ export default {
 				this.auditLongTime = time.timeChange(this.taskInfo.auditLong);
 			});
 		},
+		//添加宣传图片
+		taskImgResult: function(e) {
+			this.taskimageData = e.imgArr[0];
+		},
+		//移除宣传图片
+		taskImgRemove: function(e) {
+			// let index = e.index
+		},
+		
+		//添加图片
+		imgResult: function(e) {
+			this.imageData = e.imgArr[0];
+		},
+		//移除图片
+		remove: function(e) {
+			// let index = e.index
+		},
 		//获取会员类型列表
 		getLevelType(){
 			api.getLevelDesc({}, (res)=>{
@@ -274,6 +415,10 @@ export default {
 				let data = api.getData(res);
 				this.arrayType = data;
 			});
+		},
+		//选择打开app类型
+		appPickerChange(e){
+			this.arrayAppIndex = e.detail.value;
 		},
 		//选择会员类型
 		levelPickerChange(e){
@@ -421,15 +566,20 @@ export default {
 			if (!checkRes) {
 				let data = e.detail.value;
 				//将数据转化为对应格式
-				data.id = this.id;
 				data.uid = this.uid;
+				data.id = this.taskInfo.id;
 				data.doneLong = this.doneLongSecond;
 				data.auditLong = this.auditLongSecond;
+				data.classify = this.classifyId;
 				data.award = parseInt(data.award);
 				data.sum = parseInt(data.sum);
 				data.isDoneProve = parseInt(data.isDoneProve);
 				data.isDoneImg = parseInt(data.isDoneImg);
-				data.imgUrl = "",
+				data.taskApp = parseInt(data.taskApp);
+				data.imgUrl = "";
+				data.taskImg = "";
+				if(!util.isEmpty(this.imageData) && this.imageData != undefined) data.imgUrl = this.imageData;   //任务图片
+				if(!util.isEmpty(this.taskimageData) && this.taskimageData != undefined) data.taskImg = this.taskimageData;   //宣传图片
 				api.updTask(data, (res)=>{
 					let code = api.getCode(res);
 					if(code == 0){
@@ -546,6 +696,11 @@ export default {
 		padding: 30rpx;
 		color: #999;
 		font-size: 24rpx;
+	}
+	
+	.necessary{
+		color:#D91D37;
+		font-weight:bold;
 	}
 </style>
 

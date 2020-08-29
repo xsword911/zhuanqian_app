@@ -211,6 +211,9 @@ const api = {
 	
 	//返回大类和子类树形结构数据
 	getTaskTree: function (path, funSuccess, state = false) {httpUtil.post("activity/task/getTaskTree", path, funSuccess, state);},
+	
+	//查询资讯列表
+	getInformation: function (path, funSuccess, state = false) {httpUtil.post("message/getInformation", path, funSuccess, state);},
 };
 
 export default api;

@@ -1,7 +1,7 @@
 <template>
 	<view class="container2">
 		<view class="" v-show="powerType == 1">
-			<form @submit="formSubmit" @reset="formReset"  >
+			<form @submit="formSubmit" @reset="formReset">
 				<tui-list-cell :hover="false">
 					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary">*</text>任务会员类型</view>
@@ -587,8 +587,6 @@ export default {
 				data.taskImg = "";
 				if(!util.isEmpty(this.imageData) && this.imageData != undefined) data.imgUrl = this.imageData;   //任务图片
 				if(!util.isEmpty(this.taskimageData) && this.taskimageData != undefined) data.taskImg = this.taskimageData;   //宣传图片
-				console.log(data);
-				return;
 				api.addTask(data, (res)=>{
 					let code = api.getCode(res);
 					if(code == 0){

@@ -1,14 +1,10 @@
 <template>
 	<view class="container" style="background-color: #fff;font-size:14px;">
-		<view class="introduce">
-			<view class="" style="font-weight:bold;">简介：</view>
-			<!-- <view class="">APP是深圳市趣凡网络科技有限公司旗下产品。</view> -->
-			<view class="">APP是XXXX有限公司旗下产品。</view>
-			<view class="">主要特色：</view>
-			<view class="">1、真实靠谱：用户发布需求后广告费由平台托管，确保用户佣金安全有保障。</view>
-			<view class="">2、任务众多：每天更新几千上万条任务需求，确保满足于用户需求。</view>
-			<view class="">3、及时结算：任务完成即可结算佣金，确保用户权益。</view>
-			<view class="">4、沟通即时：团队每日在线12小时，双休日轮流值班为您服务。</view>
+		<view class="introduce" v-for="(item,index) in guideList" :key="index">
+			<view class="" style="font-weight:bold;">{{item.title}}</view>
+			<view class="">
+				<p style="white-space: pre-wrap;" v-html="item.content"></p>
+			</view>
 		</view>
 		
 		<view class="company_img">
@@ -18,11 +14,31 @@
 </template>
 
 <script>
+import api from "@/api/api.js";
+export default{
+	data() {
+		return {
+			guideList: [],  //列表
+		}
+	},
+	onShow() {
+		this.getInformation();  //列表
+	},
+	methods:{
+		getInformation(){
+			api.getInformation({type: 7, page: 1, count: 99}, (res)=>{
+				let data = api.getData(res).data;
+				this.guideList = data;
+			});
+		},
+	}
+	
+}
 </script>
 
 <style>
 	.container{
-		margin-top:60rpx;
+		margin-top:20rpx;
 		padding:0 40rpx;
 		box-sizing:border-box;
 	}
