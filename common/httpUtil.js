@@ -43,11 +43,15 @@ const httpUtil = {
 				let code = this.getCode(res);
 				if(code == 10000)
 				{
+					//已经是设备号登陆。返回
+					if (utilCore.isLoginByDeviceId()) return;
 					//清理旧数据
 					storage.setToken("");
 					storage.setUid("");
+					storage.setMyInfo("");
 					//使用设备号登录
 					utilCore.loginByDevice();
+					utilCore.toLoginUiCanBack();//登陆界面
 					return;
 				}
 				funSuccess(res);

@@ -5,13 +5,13 @@ import storage from "@/api/storage.js";
 const utilCore = {
 
 	 //判断是否登录
-	isLogin: function(){
-		let user = uni.getStorageSync('myInfo');
-        return !util.isEmpty(user);
-	},
+	// isLogin(){
+	// 	let user = uni.getStorageSync('myInfo');
+ //        return !util.isEmpty(user);
+	// },
 	
 	//跳转登录界面
-	toLoginUi: function(){
+	toLoginUi(){
 		// uni.switchTab({
 		// 	url: '/pages/my/my'
 		// });
@@ -23,7 +23,7 @@ const utilCore = {
 		});
 	},
 	
-	toLoginUiCanBack: function(){
+	toLoginUiCanBack(){
 		uni.navigateTo({
 			url: '/pages/login/login'
 		})
@@ -37,6 +37,7 @@ const utilCore = {
 	
 	//设备号登录（游客登录）
 	loginByDevice(){
+		storage.setLoginType(0);   //保存登录方式，设备号登录
 		//取设备号
 		let device = util.getUuid();
 		
@@ -44,7 +45,7 @@ const utilCore = {
 			let uid = api.getData(res);
 			let token = api.getToken(res);
 			storage.setUid(uid);  //保存uid
-			storage.setLoginType(0);   //保存登录方式，设备号登录
+			//storage.setLoginType(0);   //保存登录方式，设备号登录
 		});
 	},
 };
