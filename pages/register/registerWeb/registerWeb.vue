@@ -69,12 +69,20 @@ export default{
 			isQuery: false, //验证码和倒计时切换显示
 			second: 60,  //验证码倒计时秒数
 			timerId: '',  //计时器id
+			regSubUrl: '',  //注册成功跳转url
 		}
 	},
 	onShow() {
 		this.uid = storage.getUid();  //获取uid
+		this.getRegSubUrl();  //获取注册成功跳转url
 	},
 	methods:{
+		//获取注册成功跳转url
+		getRegSubUrl(){
+			api.getConfig({key: 'reg_subUrl'}, (res)=>{
+				this.regSubUrl = api.getData(res).data[0].value;
+			});
+		},
 		//开启计时器
 		openTimer(){
 			api.sendTelCode({account: this.tel}, (res)=>{
@@ -163,11 +171,7 @@ export default{
 						showCancel:false,
 						success(res) {
 							if(res.confirm){
-								storage.setUid(uid);  //保存用户新uid
-								storage.setLoginType(1);  //保存登录方式
-								uni.reLaunch({
-									url: "/pages/index/index"
-								});
+								util.openUrl(_this.regSubUrl);  //注册成功跳转
 							}
 						}
 					})

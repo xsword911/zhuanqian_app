@@ -298,23 +298,32 @@ export default{
 		}
 	},
 	onLoad() {
-		this.uid = storage.getUid();  //获取uid
-		this.levelList = storage.getLevelList();  //获取会员表
-		this.userEn = storage.getMyInfo();  //获取我的信息
-		this.loginType = storage.getLoginType();  //获取登录方式
-		this.yqm = this.userEn.code;
-		this.currentCoin = this.userEn.gold;
-		this.profit = this.userEn.money;
-		this.getGoldAdd();  //获取今日金币
-		this.getMyLevelName();  //获取我的会员等级名称
+		this.getDataFromLocation();  //从本地取数据
 	},
 	onShow(){
-		this.uid = storage.getUid();  //获取uid
-		this.getMyInfo();  //刷新我的信息
-		this.getGoldAdd(); //获取今日金币
-		this.getNotReadMsgSum(); //查询未读消息数
+		this.getDataFromNet();  //获取网络数据到本地
+		this.getDataFromLocation();  //从本地取数据
 	},
 	methods:{
+		//获取网络数据到本地
+		getDataFromNet(){
+			this.uid = storage.getUid();  //获取uid
+			this.getMyInfo();  //刷新我的信息
+			this.getGoldAdd(); //获取今日金币
+			this.getNotReadMsgSum(); //查询未读消息数
+		},
+		//从本地取数据
+		getDataFromLocation(){
+			this.uid = storage.getUid();  //获取uid
+			this.levelList = storage.getLevelList();  //获取会员表
+			this.userEn = storage.getMyInfo();  //获取我的信息
+			this.loginType = storage.getLoginType();  //获取登录方式
+			this.yqm = this.userEn.code;
+			this.currentCoin = this.userEn.gold;
+			this.profit = this.userEn.money;
+			this.getGoldAdd();  //获取今日金币
+			this.getMyLevelName();  //获取我的会员等级名称
+		},
 		//获取我的会员等级名称
 		getMyLevelName(){
 			this.levelList.forEach((item, index) =>{

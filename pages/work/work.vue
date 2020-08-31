@@ -755,8 +755,8 @@ export default{
 	}
 	.countDown{
 		position:absolute;
-		top:-4rpx;
-		right:-6rpx;
+		top:-8px;
+		right:-12px;
 	}
 	.main{
 		margin-top:160rpx;

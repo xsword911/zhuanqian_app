@@ -323,7 +323,12 @@
 	},{
 		"path": "pages/version/version",
 		"style": {
-			"navigationBarTitleText": "版本号"
+			"navigationBarTitleText": "关于"
+		}
+	},{
+		"path": "pages/register/registerWeb/registerWeb",
+		"style": {
+			"navigationBarTitleText": "注册"
 		}
 	}],
 	
