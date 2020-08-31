@@ -271,6 +271,16 @@ export default{
 						toUrl:"/pages/notice/notice"
 					}]
 					//站内短信 网站公告
+				},
+				{
+					name: "关于我们",
+					current: -1,
+					disabled: false,
+					imgUrl:"/static/img/m11.png",
+					arrSub: [{
+						name: "关于",
+						toUrl:"/pages/version/version"
+					}]
 				}
 			],
 			userEn: [],  //我的信息

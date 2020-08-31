@@ -44,6 +44,11 @@
 			"navigationBarTitleText": "注册"
 		}
 	},{
+		"path": "pages/register/registerTel/registerTel",
+		"style": {
+			"navigationBarTitleText": "手机号注册"
+		}
+	},{
 		"path": "pages/work/work",
 		"style": {
 			"navigationBarTitleText": "任务",
@@ -314,6 +319,11 @@
 		"path": "pages/index/workClassify/workClassify",
 		"style": {
 			"navigationBarTitleText": "任务"
+		}
+	},{
+		"path": "pages/version/version",
+		"style": {
+			"navigationBarTitleText": "版本号"
 		}
 	}],
 	

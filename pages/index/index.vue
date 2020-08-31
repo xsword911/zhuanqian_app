@@ -67,9 +67,9 @@
 			</view>
 		</view>
 		
-		<view class="menu_box">
+		<view class="menu_box" @tap="toPower">
 			<view class="">
-				<view class="menu_img" @tap="toPower">
+				<view class="menu_img">
 					<image src="/static/img/sy6.png" mode=""></image>
 				</view>
 				<view class="menu_test">
@@ -78,7 +78,7 @@
 			</view>
 		</view>
 		
-		<view class="menu_box">
+		<view class="menu_box" @tap="toDownloadApp">
 			<view class="">
 				<view class="menu_img">
 					<image src="/static/img/sy7.png" mode=""></image>
@@ -204,6 +204,7 @@ export default{
 			interval: 3000,
 			duration: 500,
 			run: [],  //轮播图列表
+			downloadUrl: "",  //app下载地址
 			
 			workTree: [], //任务大类和子类列表
 			arrSortName: ["火山小视频", "抖音", "微信", "快手", "微视", "今日头条", ]
@@ -221,8 +222,15 @@ export default{
 		this.getLevelDesc();   //获取全部会员信息
 		this.getLevelList();  //获取会员信息列表
 		this.getTaskTree();  //获取任务大类和子类列表
+		this.getDownloadUrl();  //获取下载app地址
 	},
 	methods:{
+		//获取下载app地址
+		getDownloadUrl(){
+			api.getConfig({key: 'app_download_url'}, (res)=>{
+				this.downloadUrl = api.getData(res).data[0].value;
+			});
+		},
 		//获取任务大类和子类列表
 		getTaskTree(){
 			api.getTaskTree({}, (res)=>{
@@ -257,6 +265,10 @@ export default{
 			uni.navigateTo({
 				url: '/pages/index/workClassify/workClassify?title=' + tran.obj2Url(data)
 			})
+		},
+		//跳转到app下载界面
+		toDownloadApp(){
+			util.openUrl(this.downloadUrl);
 		},
 		//跳转到余额宝界面
 		toInterest(){

@@ -44,12 +44,12 @@
 			<button type="default" class="login_btn" @tap="bindLogin" hover-class="btn_hover">登录</button>
 		</view>
 		
-		<view class="loginByOth">
+		<view class="loginByOth" v-if="loginType != 0">
 			<view class="">其他方式登录</view>
 			<view class="login_bar" :class="{'login_bar1': loginBarCenter == 1}">
-				<view class="login_icon" v-show="loginType != 2">
+<!-- 				<view class="login_icon" v-show="loginType != 2">
 					<image src="/static/img/wx.jpg" mode="widthFix"></image>
-				</view>
+				</view> -->
 				
 				<view class="login_icon" v-show="loginType != 0" @tap="loginByDevice">
 					<image src="/static/img/phone.png" mode="widthFix"></image>
@@ -74,6 +74,8 @@ export default{
 			loginBarCenter: 0,
 			loginType: null, //登录方式
 			uid: "",  //uid
+			
+			regType: null,  //注册方式 0:用户名注册 1:手机注册
 		}
 	},
 	onLoad() {
@@ -86,7 +88,16 @@ export default{
 		this.loginType = storage.getLoginType();  //获取登录方式
 		this.loginBarCenter = this.loginType;
 	},
+	onShow() {
+		this.getRegType();  //获取注册方式
+	},
 	methods:{
+		//获取注册方式
+		getRegType(){
+			api.getConfig({key: 'reg_tel'}, (res)=>{
+				this.regType = api.getData(res).data[0].value;
+			});
+		},
 		//设备号登录
 		loginByDevice(){
 			uni.showModal({
@@ -109,11 +120,18 @@ export default{
 		isPassWord(){
 			this.isPwd = this.isPwd ? false : true;
 		},
-		//跳转到注册页
+		//跳转到注册页  this.regType注册类型 0:普通用户名注册 1:手机注册
 		toReg(){
-			uni.navigateTo({
-				url: '/pages/register/register'
-			});
+			if(this.regType == '0'){
+				uni.navigateTo({
+					url: '/pages/register/register'
+				});
+			}
+			if(this.regType == '1'){
+				uni.navigateTo({
+					url: '/pages/register/registerTel/registerTel'
+				});
+			}
 		},
 		//登录检测
 		bindLogin() {
@@ -261,7 +279,7 @@ export default{
 		justify-content: center;
 	}
 	.login_bar1{
-		justify-content:space-between;
+		justify-content:center;
 	}
 	.login_icon{
 		width:80rpx;

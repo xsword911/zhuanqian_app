@@ -214,6 +214,12 @@ const api = {
 	
 	//查询资讯列表
 	getInformation: function (path, funSuccess, state = false) {httpUtil.post("message/getInformation", path, funSuccess, state);},
+	
+	//发送手机验证码
+	sendTelCode: function (path, funSuccess, state = true) {httpUtil.post("user/sendTelCode", path, funSuccess, state);},
+	
+	//手机号注册
+	registerByTel: function (path, funSuccess, state = true) {httpUtil.post("user/registerByTel", path, funSuccess, state);},
 };
 
 export default api;
