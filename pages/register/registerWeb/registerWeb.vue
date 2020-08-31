@@ -167,7 +167,7 @@ export default{
 				if(code == 0){
 					let uid = api.getData(res);   //返回用户uid
 					uni.showModal({
-						content: msg,
+						content: '注册成功，去下载',
 						showCancel:false,
 						success(res) {
 							if(res.confirm){

@@ -10,7 +10,7 @@
 		
 		<view class="lay_update">
 			<view class="update_bar" @tap="checkUpdate">
-				<view class="">版本更新</view>
+				<view class="">版本更新（最新版本号：{{newVer}}）</view>
 				<tui-icon name="arrowright" :size="20"></tui-icon>
 			</view>
 		</view>
@@ -30,20 +30,50 @@ export default{
 			appName: '',
 			version: '',  //版本号
 			isUpdate: false,  //是否有最新版本
+			newVer: '',  //最新版本号
 		}
 	},
 	onShow() {
 		this.getAppConfig();  //获取app配置
 		this.getVersion();  //获取当前版本号
+		this.getNewVer();  //获取最新版本号
 	},
 	methods:{
+		//返回当前平台版本号的key
+		getVerKey(){
+			switch(uni.getSystemInfoSync().platform){
+			    case 'android':
+			       return 'android_ver';
+			       break;
+			    case 'ios':
+			       return 'ios_ver';
+			       break;
+			    default:
+			       return 'android_ver';
+			       break;
+			}
+		},
 		//更新
 		toUpdate(){
 			this.isUpdate = false;
 		},
+		//获取最新版本号
+		getNewVer(){
+			let verKey = this.getVerKey();  //获取当前平台版本号的key
+			api.getConfig({key: verKey}, (res)=>{
+				this.newVer = api.getData(res).data[0].value;
+			});
+		},
 		//检查更新版本号
 		checkUpdate(){
-			this.isUpdate = true;
+			console.log(this.newVer);
+			if(this.version < this.newVer) this.isUpdate = true;
+			else {
+				uni.showModal({
+					content: "当前已是最新版本",
+					showCancel:false
+				});
+			}
 		},
 		//获取当前版本号
 		getVersion(){
