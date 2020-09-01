@@ -32,7 +32,7 @@
 											用户：<text class="lay_group_title" style="font-weight:normal;">{{item.uid}}</text>
 										</view>
 										<view class="" style="width:50%; font-weight:bold;">
-											得到金币：<text class="lay_group_title" style="font-weight:normal;">￥{{item.goldAdd}}</text>
+											支出：<text class="lay_group_title" style="font-weight:normal;">￥{{item.moneyLose}}</text>
 										</view>
 									</view>
 			<!-- 					<view class="lay_group">
@@ -98,6 +98,15 @@
 									</view>
 									<view class="">
 										消耗金币：<text class="style_Numtest">{{item.goldLose}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										加款：<text class="style_Numtest">￥{{item.moneyIns}}</text>
+									</view>
+									<view class="">
+										扣款：<text class="style_Numtest">￥{{item.moneySubtract}}</text>
 									</view>
 								</view>
 								

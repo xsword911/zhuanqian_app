@@ -232,8 +232,15 @@
 								<text v-show="item.type == 1">提现审核失败</text>
 								<text v-show="item.type == 2">签到奖励</text>
 								<text v-show="item.type == 3">幸运抽奖获奖</text>
+								<text v-show="item.type == 4">充值</text>
+								<text v-show="item.type == 5">利息宝取出</text>
+								<text v-show="item.type == 10">加款</text>
+								<text v-show="item.type == 50">代理佣金</text>
 								<text v-show="item.type == 100">提现</text>
 								<text v-show="item.type == 101">余额转金币</text>
+								<text v-show="item.type == 102">升级</text>
+								<text v-show="item.type == 103">利息宝转入</text>
+								<text v-show="item.type == 104">扣款</text>
 								<view class="moneyTran_time">
 									{{item.addTime}}
 								</view>

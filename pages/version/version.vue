@@ -66,7 +66,6 @@ export default{
 		},
 		//检查更新版本号
 		checkUpdate(){
-			console.log(this.newVer);
 			if(this.version < this.newVer) this.isUpdate = true;
 			else {
 				uni.showModal({

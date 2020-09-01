@@ -3,31 +3,34 @@
 		<view class="lay_group">
 			<view class="lay_row">
 				<view class="lay_row_test">收款平台</view>
-				<view class="lay_row_info">{{recharge.platform}}</view>
+				<text class="lay_row_info" selectable="true">{{recharge.platform}}</text>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款金额</view>
-				<view class="lay_row_info">{{recharge.money}}</view>
+				<text class="lay_row_info" selectable="true">{{recharge.money}}</text>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">订单号</view>
-				<view class="lay_row_info">{{recharge.sn}}</view>
+				<text class="lay_row_info" selectable="true">{{recharge.sn}}</text>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款人</view>
-				<view class="lay_row_info">{{recharge.owner}}</view>
+				<text class="lay_row_info" selectable="true">{{recharge.owner}}</text>
 			</view>
 			
 			<view class="lay_row">
 				<view class="lay_row_test">收款账号</view>
-				<view class="lay_row_info">{{recharge.account}}</view>
+				<text class="lay_row_info" selectable="true">{{recharge.account}}</text>
 			</view>
 		</view>
 		
-
+		<view class="lay_test" style="color: #dc3b40;">
+			请备份订单号，填入进您的汇款备注栏。长按可复制信息
+		</view>
+		
 <!-- 		<view class="lay_test" style="color: #dc3b40;">
 			温馨提示：请保存二维码，点击可复制信息
 		</view> -->
@@ -38,7 +41,7 @@
 		
 		
 		<view class="lay_qrCode" v-if="recharge.imgUrl">
-			<image :src="recharge.imgUrl" mode=""></image>
+			<image :src="recharge.imgUrl" mode="" @tap="checkImg"></image>
 		</view>
 	</view>
 </template>
@@ -57,6 +60,12 @@ export default{
 		}
 	},
 	methods:{
+		//查看图片
+		checkImg(){
+			uni.previewImage({
+				urls: [this.recharge.imgUrl]
+			});
+		},
 		//提交
 		payConfirm(){
 			let _this = this;
@@ -129,6 +138,7 @@ export default{
 		text-align:right;
 	}
 	.lay_row_info{
+		display:inline-block;
 		padding-right:40rpx;
 		box-sizing:border-box;
 		flex: 1;
@@ -139,7 +149,7 @@ export default{
 	.lay_test{
 		width:100%;
 		text-align:center;
-		font-size:15px;
+		font-size:12px;
 		margin-bottom:30rpx;
 	}
 	.lay_test>text{

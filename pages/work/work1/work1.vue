@@ -85,7 +85,7 @@
 				<view class="countDown_box" @tap="toSign">
 					<view class="countDown" v-show="timeOut">
 						<tui-round-progress progressColor="#FF5357" fontColor="#fff"
-						:percentage="timeRoundProgress" :defaultShow="false" :diam="65" :percentText="time"
+						:percentage="timeRoundProgress" :defaultShow="false" :diam="circle" :percentText="time"
 						:lineWidth="5" :fontSize="16"></tui-round-progress>
 					</view>
 					<text v-show="!timeOut" style="font-size:16px; color: #fff;" @tap="receive(-2)">领取</text>
@@ -364,6 +364,7 @@ export default{
 			classifyId: 1,  //选中的子类id
 			
 			resData: '',//传递过来的任务筛选信息 (大类id，子类id，会员等级)
+			circle: 0,  //圆形进度条直径
 		}
 	},
 	onLoad(res) {
@@ -373,7 +374,6 @@ export default{
 			this.level = this.resData.level;  //设置任务等级码
 			this.classifyId = this.resData.classifyId;  //设置子类id
 			this.multiIndex = arrIndex;
-			//this.onShow1();
 		}
 		// this.userEn = storage.getMyInfo();  //获取我的信息
 		// this.myCoin = this.userEn.gold;
@@ -391,26 +391,33 @@ export default{
 		//this.getNotReadMsgSum(); //查询未读消息数
 		this.getLevelDesc(); //获取会员等级列表
 		this.getTaskTree();  //获取任务大类和子类列表
-		// console.log(this.classifyId);
-		// console.log(this.level);
+		let a = this.sizeDeal('126rpx');
+		this.circle  = a[0];
+		console.log(this.circle);
 	},
 	methods:{
-		//查询数据
-		onShow1(){
-			this.uid = storage.getUid();  //获取uid
-			this.userEn = storage.getMyInfo();  //获取我的信息
-			this.getMyInfo();  //刷新我的信息
-			this.getTaskList();  //获取任务列表
-			this.getSignProgress();  //查询奖励信息
-			this.timeAuto();  //开启计时器
-			//this.getNotReadMsgSum(); //查询未读消息数
-			this.getLevelDesc(); //获取会员等级列表
-			this.getTaskTree();  //获取任务大类和子类列表
-		},
+		sizeDeal(size) {
+				    const info = uni.getSystemInfoSync()
+				    this.scale = 750 / info.windowWidth;
+					// 分离字体大小和单位,rpx 转 px
+					let s = Number.isNaN(parseFloat(size)) ? 0 : parseFloat(size)
+					let u = size.toString().replace(/[0-9]/g, '').replace('-','')
+					if (u == 'rpx') {
+						s /= this.scale
+						u = 'px'
+					} else if (u == '') {
+						u = 'px'
+					}else if (u == 'vw') {
+						u = 'px'
+						s = s / 100 * 750 / this.scale
+					}
+					return [s, u, s + u]
+				},
+				
+				
 		//获取任务大类和子类列表
 		getTaskTree(){
 			let data = storage.getTaskTree();
-			console.log(data);
 			this.taskTree = data;  //保存任务大类和子类列表
 			this.multiArray[0] = [];
 			this.multiArray[1] = [];			
@@ -525,6 +532,7 @@ export default{
 			if(this.unit == '小时') this.timeRoundProgress = parseFloat(100 - [(this.range / 24) * 100]);
 			else if(this.unit == '分钟' || this.unit == '秒') this.timeRoundProgress = parseFloat(100 - [(this.range / 60) * 100]);
 			else if(this.unit == '天') this.timeRoundProgress = parseFloat(100 - [(this.range / 30) * 100]);
+			// console.log(this.timeRoundProgress);
 		},
 		//刷新我的信息
 		getMyInfo(){
@@ -544,13 +552,13 @@ export default{
 		getSignProgress(){
 			api.getSignProgress({uid: this.uid}, (res)=>{
 				let data = api.getData(res);
+				console.log(data);
 				//sign为空时表示没有可领取的奖励
 				if(util.isEmpty(data.sign)){
 					this.timeOut = true;
 					this.awardType = data.nextSign.awardType;
 					this.award = data.nextSign.award;
 					this.signSecond = data.nextSecond;
-					
 					//this.getShowTimeBySecond();
 
 				}else{
@@ -563,10 +571,9 @@ export default{
 			});
 		},
 		//把秒转换为对应显示格式
-		getShowTimeBySecond(){			
+		getShowTimeBySecond(){		
 			if(this.signSecond == null) return;
 			let sp = this.signSecond;
-			// console.log(sp);
 			//大于一小时转换为最小单位 分
 			if(sp > 3600){
 				let hour = parseInt(sp / 3600);  //获取小时
@@ -603,13 +610,13 @@ export default{
 		//领取奖励
 		receive(type){
 			audio.playAudio();
-			this.show8(type);
 			api.sign({
 				uid: this.uid, 
 				day: this.day
 			}, (res)=>{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
+				console.log(res);
 				if(code == 0){
 					this.getSignProgress();  //再次查询数据
 					uni.showModal({
@@ -699,6 +706,7 @@ export default{
 			}, (res)=> {
 				let data = api.getData(res).data;
 				this.activityList = data;
+				console.log(this.activityList);
 			});
 		},
 		//关闭弹窗
@@ -923,8 +931,10 @@ export default{
 		display:flex;
 	}
 	.activity_img{
-		width:80rpx;
-		height:80rpx;
+		width:90rpx;
+		height:90rpx;
+		border-radius:50%;
+		overflow:hidden;
 	}
 	.activity_test{
 		display:flex;

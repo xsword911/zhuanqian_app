@@ -401,7 +401,7 @@ export default{
 							id: _this.id,
 							doneUid: _this.uid
 						};
-						if(!util.isEmpty(_this.userName)) data.doneProv = _this.userName;
+						if(!util.isEmpty(_this.userName)) data.doneProve = _this.userName;
 						if(!util.isEmpty(_this.imageData)) data.doneImg = _this.imageData;
 						api.submitTask(data, (res)=>{
 							let code = api.getCode(res);

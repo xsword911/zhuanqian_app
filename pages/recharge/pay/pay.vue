@@ -18,9 +18,6 @@
 		<view class="lay_test">
 			温馨提示:最小金额：<text>{{moneyMin}}</text>；最大金额：<text>{{moneyMax}}</text>
 		</view>
-		<view class="lay_test" style="color: #dc3b40;">
-			请备份订单号，并填写进您的汇款备注栏！
-		</view>
 		
 		<view class="lay_btn btn_style">
 			<button type="default" @tap="getRechargeAccountEnable" hover-class="btn_hover">下一步</button>

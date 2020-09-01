@@ -151,7 +151,7 @@ export default{
 		    let data = {
 		        account: this.tel,
 		        pwd: this.passWord,
-				uid: this.uid,
+				uid: "0",   //推广注册uid写死0
 				telCode: this.telCode,
 				type: 0   //普通用户注册
 		    };

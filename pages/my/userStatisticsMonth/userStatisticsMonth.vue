@@ -68,6 +68,16 @@
 				<view class="">盈利金币</view>
 			</view>
 			
+			<view class="lay_box boderNone">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyIns}}</view>
+				<view class="">加款</view>
+			</view>
+			
+			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneySubtract}}</view>
+				<view class="">扣款</view>
+			</view>
+			
 			<view class="lay_desc">
 				<text class="">
 					盈利金额 = 增加金额 + 代理佣金 - 消费金额

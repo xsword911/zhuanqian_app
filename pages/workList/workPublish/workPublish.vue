@@ -99,13 +99,15 @@
 				<tui-list-cell :hover="false">
 					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary">*</text>任务奖励</view>
-						<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" maxlength="50" type="number" />
+						<input placeholder-class="tui-phcolor" class="tui-input" name="award" placeholder="请输入任务奖励" 
+						maxlength="50" type="number" @input="inputAward" v-model="award" />
 					</view>
 				</tui-list-cell>
 				<tui-list-cell :hover="false">
 					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary">*</text>任务数量</view>
-						<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" maxlength="50" type="number" />
+						<input placeholder-class="tui-phcolor" class="tui-input" name="sum" placeholder="请输入任务数量" 
+						maxlength="50" type="number" @input="inputSum" v-model="sum"/>
 					</view>
 				</tui-list-cell>
 				<tui-list-cell :hover="false" >
@@ -274,6 +276,9 @@ export default {
 			doneLongSecond: null,   //任务限时时间转换秒
 			auditLongSecond: null,  //任务审核时间转换秒
 			
+			award: null, //任务奖励
+			sum: null, //任务数量
+			
 			//时间选择器参数
 			type: 1,
 			startYear: 1980,
@@ -315,6 +320,31 @@ export default {
 		this.getTaskTree();  //获取任务大类和子类列表
 	},
 	methods: {
+		//任务奖励输入框
+		inputAward(val){
+			//禁止输入开头数为0
+			let str = '' + this.award;
+			if(str.substr(0, 1) == "0"){
+				str = str.slice(1);
+				this.award = str;
+			}
+		},
+		//任务数量输入框
+		inputSum(val){
+			//禁止输入小数
+			let str = '' + this.sum;
+			if (str.indexOf('.') !== -1) {
+				let arr = str.split('');
+			    arr.splice(arr.length - 1);
+				let str2 = arr.join('');
+				this.sum = +str2;
+			}
+			//禁止输入开头数为0
+			if(str.substr(0, 1) == "0"){
+				str = str.slice(1);
+				this.sum = str;
+			}
+		},
 		//获取任务大类和子类列表
 		getTaskTree(){
 			api.getTaskTree({}, (res)=>{
@@ -367,7 +397,7 @@ export default {
 			arrSel.list.forEach((item, index) =>{
 				if(index == arr[1]) this.classifyId = item.classifyId;
 			});
-			console.log(this.classifyId);
+			// console.log(this.classifyId);
 		},
 		
 		

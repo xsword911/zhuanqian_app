@@ -28,7 +28,7 @@
 				<button type="default" class="invite_btn" hover-class="btn_hover" @tap="toAgentExtend">邀请好友</button>
 			</view>
 			
-			<view class="gold_coin">
+			<view class="gold_coin" v-show="isOpenGold == 1">
 				<view class="coin">
 					<text>今日金币</text>
 					<text class="coin_num">{{todayCoin}}</text>
@@ -46,7 +46,7 @@
 		</view>
 		
 		<!-- 现金收益 -->
-		<view class="content profit">
+		<view class="content profit" :class="{'closeGold': isOpenGold != 1}">
 			<view class="lay_cash">
 				<view class="cap_cash">现金收益</view>
 				<view class="lay_cap_btn">
@@ -86,65 +86,6 @@
 			</block>
 		</view>
 		
-		
-		
-		
-<!-- 		<view class="func">
-			<button class="setting" @tap="toSetting" hover-class="func_hover" type="default">
-				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/more2.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">个人信息</text>
-				</view>
-				
-				<view class="func_right">
-					<tui-icon name="arrowright" :size="26"></tui-icon>
-				</view>
-			</button>
-			
-			<button class="share" hover-class="func_hover" type="default" @tap="toNotice">
-				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/share2.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">公告</text>
-				</view>
-				
-				<view class="func_right">
-					<tui-icon name="arrowright" :size="26"></tui-icon>
-				</view>
-			</button>
-			
-			<button class="share" hover-class="func_hover" type="default" @tap="toMessage">
-				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/msg.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">站内信</text>
-				</view>
-				
-				<view class="func_right lay_badge">
-					<view class="tui-badge-box" v-show="notReadMsgSum == 0 ? false : true">
-						<tui-badge type="danger">{{notReadMsgSum}}</tui-badge>
-					</view>
-					<tui-icon name="arrowright" :size="26"></tui-icon>
-				</view>
-			</button>
-			
-			<button class="more" @tap="toMore" hover-class="func_hover" type="default">
-				<view class="func_left">
-					<view class="func_img">
-						<image src="/static/img/setting2.png" mode="widthFix"></image>
-					</view>
-					<text class="func_test">更多</text>
-				</view>
-				
-				<view class="func_right">
-					<tui-icon name="arrowright" :size="26"></tui-icon>
-				</view>
-			</button>
-		</view> -->
 		
 		<!-- 退出/登录按钮 -->
 		<view class="btn btn_style">
@@ -295,6 +236,7 @@ export default{
 			notReadMsgSum: 0,  //未读消息数
 			levelName: "新人",  //我的会员等级名称
 			levelList: [],  //会员列表
+			isOpenGold: null,  //是否开启金币 0关闭 1开启
 		}
 	},
 	onLoad() {
@@ -311,6 +253,7 @@ export default{
 			this.getMyInfo();  //刷新我的信息
 			this.getGoldAdd(); //获取今日金币
 			this.getNotReadMsgSum(); //查询未读消息数
+			this.getOpenGold();  //获取是否开启金币 0关闭 1开启
 		},
 		//从本地取数据
 		getDataFromLocation(){
@@ -323,6 +266,13 @@ export default{
 			this.profit = this.userEn.money;
 			this.getGoldAdd();  //获取今日金币
 			this.getMyLevelName();  //获取我的会员等级名称
+			this.getOpenGold();  //获取是否开启金币 0关闭 1开启
+		},
+		//获取是否开启金币 0关闭 1开启
+		getOpenGold(){
+			api.getConfig({key: 'open_gold'}, (res)=>{
+				this.isOpenGold = api.getData(res).data[0].value;
+			});
 		},
 		//获取我的会员等级名称
 		getMyLevelName(){
@@ -618,13 +568,15 @@ export default{
 		width:96%;
 		height:160rpx;
 		background-color:#fff8de;
-		margin-top:200rpx;
 		margin:200rpx auto 0;
 		border-radius:10rpx;
 		padding:0 40rpx;
 		display:flex;
 		justify-content:space-between;
 	}
+	.closeGold{
+		margin-top:20rpx;
+	},
 	.detailed{
 		font-size:24rpx;
 		border:1px solid #879299;
