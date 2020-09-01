@@ -76,7 +76,7 @@ export default{
 	methods:{
 		//跳转到联系客服界面
 		toService(val){
-			util.openUrl(val);
+			util.openUrlInner(val);
 		},
 		//获取客服链接
 		getCustomerServiceUrl(){
