@@ -84,7 +84,7 @@
 				
 				<view class="countDown_box" @tap="toSign">
 					<view class="countDown" v-show="timeOut">
-						<tui-round-progress progressColor="#FF5357" fontColor="#fff"
+						<tui-round-progress progressColor="#FF5357" fontColor="#fff" v-if="circle > 0"
 						:percentage="timeRoundProgress" :defaultShow="false" :diam="circle" :percentText="time"
 						:lineWidth="5" :fontSize="16"></tui-round-progress>
 					</view>
@@ -375,6 +375,7 @@ export default{
 			this.classifyId = this.resData.classifyId;  //设置子类id
 			this.multiIndex = arrIndex;
 		}
+		this.circle = util.rpx2px('126rpx');
 		// this.userEn = storage.getMyInfo();  //获取我的信息
 		// this.myCoin = this.userEn.gold;
 		// this.getGoldAdd();   //查询今日金币
@@ -391,30 +392,9 @@ export default{
 		//this.getNotReadMsgSum(); //查询未读消息数
 		this.getLevelDesc(); //获取会员等级列表
 		this.getTaskTree();  //获取任务大类和子类列表
-		let a = this.sizeDeal('126rpx');
-		this.circle  = a[0];
-		console.log(this.circle);
+		
 	},
-	methods:{
-		sizeDeal(size) {
-				    const info = uni.getSystemInfoSync()
-				    this.scale = 750 / info.windowWidth;
-					// 分离字体大小和单位,rpx 转 px
-					let s = Number.isNaN(parseFloat(size)) ? 0 : parseFloat(size)
-					let u = size.toString().replace(/[0-9]/g, '').replace('-','')
-					if (u == 'rpx') {
-						s /= this.scale
-						u = 'px'
-					} else if (u == '') {
-						u = 'px'
-					}else if (u == 'vw') {
-						u = 'px'
-						s = s / 100 * 750 / this.scale
-					}
-					return [s, u, s + u]
-				},
-				
-				
+	methods:{				
 		//获取任务大类和子类列表
 		getTaskTree(){
 			let data = storage.getTaskTree();

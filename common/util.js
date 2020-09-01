@@ -145,4 +145,23 @@ module.exports = {
 		  window.location.href = url;  //H5平台打开外部网站
 		// #endif
 	},
+	
+	//rpx转px
+	rpx2px(size) {
+	    const info = uni.getSystemInfoSync()
+	    this.scale = 750 / info.windowWidth;
+		// 分离字体大小和单位,rpx 转 px
+		let s = Number.isNaN(parseFloat(size)) ? 0 : parseFloat(size)
+		let u = size.toString().replace(/[0-9]/g, '').replace('-','')
+		if (u == 'rpx') {
+			s /= this.scale
+			u = 'px'
+		} else if (u == '') {
+			u = 'px'
+		}else if (u == 'vw') {
+			u = 'px'
+			s = s / 100 * 750 / this.scale
+		}
+		return s;
+	},
 }
