@@ -134,4 +134,15 @@ module.exports = {
 		  window.location.href = url;  //H5平台打开外部网站
 		// #endif
 	},
+	
+	//打开内部网站
+	openUrlInner(url){
+		// #ifdef APP-PLUS
+			plus.runtime.openWeb(url);   //App平台使用内置浏览器打开外部网站
+		// #endif
+		
+		// #ifdef H5
+		  window.location.href = url;  //H5平台打开外部网站
+		// #endif
+	},
 }
