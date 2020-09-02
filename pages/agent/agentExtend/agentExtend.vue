@@ -2,13 +2,16 @@
 	<view class="content2">
 		<view class="canvas">
 			<canvas canvas-id="qrcode" :style="{width: `${qrcodeSize}px`, height: `${qrcodeSize}px`}" />
-			<view class="lay_test">注册链接</view>
+			<view class="lay_test">下载链接</view>
 			<text selectable="true">{{registerUrl}}</text>
 			
 			<view class="lay_test">我的邀请码：<text style="font-weight:bold;" selectable="true">{{code}}</text></view>
 		</view>
-		<view class="lay_tips">
+<!-- 		<view class="lay_tips">
 			通过二维码、注册链接、邀请码注册的用户将自动成为您的下级用户。
+		</view> -->
+		<view class="lay_tips">
+			注册时填入您邀请码的用户，将自动成为您的下级用户。
 		</view>
 <!-- 		<view class="image">
 			<image :src="qrcodeSrc" />

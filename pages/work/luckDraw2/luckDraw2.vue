@@ -399,6 +399,7 @@ export default {
 		height:750rpx;
 		position:absolute;
 		top:25vh;
+		/* transform:rotate(-300deg); */
 	}
 	.rotate{
 		width:750rpx;
@@ -527,8 +528,10 @@ export default {
 	.award{
 		text-align:center;
 		color:#ff9e23;
-		font-size:16px;
+		font-size:14px;
 		position:absolute;
+		width:200rpx;
+		height:170rpx;
 	}
 	.award_img{
 		margin:auto;
@@ -537,31 +540,31 @@ export default {
 	}
 	.award_1{
 		top:10%;
-		left:42%;
+		left:37%;
 	}
 	.award_6{
 		top:25%;
-		left:68%;
+		left:61%;
 		transform:rotate(60deg);
 	}
 	.award_5{
-		top:54%;
-		left:67%;
+		top:53%;
+		left:61%;
 		transform:rotate(120deg);
 	}
 	.award_4{
-		top:69%;
-		left:42%;
+		top:67%;
+		left:37%;
 		transform:rotate(180deg);
 	}
 	.award_3{
-		top:53%;
-		left:17%;
+		top:52%;
+		left:12%;
 		transform:rotate(240deg);
 	}
 	.award_2{
-		top:25%;
-		left:14%;
+		top:24%;
+		left:13%;
 		transform:rotate(300deg);
 	}
 	
@@ -649,7 +652,7 @@ export default {
 	.record{
 		position:absolute;
 		right: 0;
-		top:25%;
+		top:26%;
 		background-color: #F8F8F8;
 		width:180rpx;
 		height:70rpx;

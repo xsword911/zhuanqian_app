@@ -234,6 +234,7 @@
 								<text v-show="item.type == 3">幸运抽奖获奖</text>
 								<text v-show="item.type == 4">充值</text>
 								<text v-show="item.type == 5">利息宝取出</text>
+								<text v-show="item.type == 6">任务奖励</text>
 								<text v-show="item.type == 10">加款</text>
 								<text v-show="item.type == 50">代理佣金</text>
 								<text v-show="item.type == 100">提现</text>

@@ -150,7 +150,7 @@ export default {
 				{"state": "任务取消", "key": 10},
 			],   //任务状态列表
 			arrayStateIndex: 1,
-			state: null,	//选中的任务状态码
+			state: 1,	//选中的任务状态码
 			
 			loadding: false, //加载数据提示
 			pullUpOn: true,  //上拉加载数据

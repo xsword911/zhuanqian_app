@@ -21,7 +21,9 @@
 					</view>
 				</view>
 				<view class="lay_head_right">
-					<text class="lay_award">{{workInfo.award}}</text>金币
+					<text class="lay_award">{{workInfo.award}}</text>
+					<text v-if="workInfo.awardType == 0">金币</text>
+					<text v-if="workInfo.awardType == 1">现金</text>
 				</view>
 			</view>
 			

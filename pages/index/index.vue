@@ -153,6 +153,9 @@
 								</view>
 							</view>
 						</scroll-view>
+						<view class="lay_more">
+							<text @tap="toMore">更多...</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -352,8 +355,15 @@ export default{
 				}
 			});
 		},
+		//跳转到更多公告界面
+		toMore(){
+			uni.navigateTo({
+				url: '/pages/notice/notice'
+			});
+		},
 		//跑马灯点击跳转外部链接
 		toRunHorseUrl(){
+			if(util.isEmpty(this.runHorseEn.toUrl)) return;
 			util.openUrl(this.runHorseEn.toUrl);
 		},
 		//获取跑马灯文字内容
@@ -365,6 +375,7 @@ export default{
 		},
 		//轮播图点击跳转到外部链接
 		toUrl(url){
+			if(util.isEmpty(url)) return;
 			util.openUrl(url);
 		},
 		//获取轮播图列表
@@ -763,7 +774,7 @@ export default{
 		height:100rpx;
 		position:absolute;
 		right:-4rpx;
-		bottom: -8rpx;
+		bottom: -10rpx;
 		transform:rotate(-7deg);
 	}
 	.background_sort1{
@@ -783,6 +794,13 @@ export default{
 	}
 	.background_sort6{
 		background-image:linear-gradient(to right, rgb(34,162,101) , rgb(162,193,55));
+	}
+	
+	.lay_more{
+		text-align: right; 
+		padding:20rpx 10rpx 10rpx 0; 
+		box-sizing:border-box; 
+/* 		text-decoration:underline; */
 	}
 </style>
 

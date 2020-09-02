@@ -41,7 +41,7 @@
 				<view class="lack_box">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
-					<button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button>
+					<!-- <button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button> -->
 				</view>
 			</view>
 

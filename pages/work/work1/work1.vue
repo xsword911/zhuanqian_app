@@ -29,21 +29,21 @@
 			<view class="coin">
 				<view class="">
 					<view class="coin_num">
-						{{todayCoin}}
+						{{myMoney}}
 					</view>
 					<view class="coin_test">
-						今日金币
+						现金
 					</view>
 				</view>
 				
-				<view class="">
+<!-- 				<view class="">
 					<view class="coin_num">
 						{{myCoin}}
 					</view>
 					<view class="coin_test">
 						我的金币
 					</view>
-				</view>		
+				</view>	 -->	
 				
 				<view class="" @tap="toGoldDetails" class="extract_btn">
 					<button type="default">收益明细 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
@@ -88,7 +88,7 @@
 						:percentage="timeRoundProgress" :defaultShow="false" :diam="circle" :percentText="time"
 						:lineWidth="5" :fontSize="16"></tui-round-progress>
 					</view>
-					<text v-show="!timeOut" style="font-size:16px; color: #fff;" @tap="receive(-2)">领取</text>
+					<text v-show="!timeOut" style="font-size:16px; color: #fff;" @tap.stop="receive(-2)">领取</text>
 				</view>
 			</view>
 			
@@ -321,7 +321,7 @@ export default{
 		return {
 			userEn: [],  //我的信息
 			myCoin: 0,  //我的金币
-			todayCoin: 0,  //今日金币
+			myMoney: 0,  //现金
 			activityList: [],  //活动列表
 			modal8: false,  //控制金币换现金弹窗显示
 			text: null, //弹窗的文字内容
@@ -520,7 +520,8 @@ export default{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
 				this.myCoin = this.userEn.gold;
-				this.getGoldAdd();   //查询今日金币
+				this.myMoney =  this.userEn.money;
+				//this.getGoldAdd();   //查询今日金币
 			});
 		},
 		//开启定时器
@@ -664,13 +665,13 @@ export default{
 			});
 		},
 		//获取今日金币
-		getGoldAdd(){
-			api.getStatisticsToday({uid: this.uid}, (res) =>{
-				let data = api.getData(res);
-				if(util.isEmpty(data)) return;
-				else this.todayCoin = data.goldAdd;
-			});
-		},
+		// getGoldAdd(){
+		// 	api.getStatisticsToday({uid: this.uid}, (res) =>{
+		// 		let data = api.getData(res);
+		// 		if(util.isEmpty(data)) return;
+		// 		else this.todayCoin = data.goldAdd;
+		// 	});
+		// },
 		//获取任务列表
 		getTaskList(){
 			this.page = 1;
@@ -681,8 +682,8 @@ export default{
 				count: 8,
 				level: parseInt(this.level),
 				classify: this.classifyId,
-				begTime: time.getNowBeg(),
-				endTime: time.getNowEnd()
+				begTime: time.getNowTime(),
+				endTime: time.getNowTime()
 			}, (res)=> {
 				let data = api.getData(res).data;
 				this.activityList = data;

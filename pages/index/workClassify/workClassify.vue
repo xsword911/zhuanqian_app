@@ -6,7 +6,8 @@
 				<view class="work_list">
 					<view class="work" @tap="toWork(item.level)"  v-for="(item,index) in levelList" :key="index">
 						<view class="work_num">{{item.levelName}}</view>
-						<view class="work_text">任务数量{{item.publishTaskSum}}单/天</view>
+						<!-- <view class="work_text" v-if="item.publishTaskSum > 0">可发布任务{{item.publishTaskSum}}单/天</view> -->
+						<view class="work_text" v-if="item.receiveTaskSum > 0">可接受任务{{item.receiveTaskSum}}单/天</view>
 						<view class="lay_sort" :class="'background_sort'+ item.id ">
 							<view class="">
 								<view class="">
