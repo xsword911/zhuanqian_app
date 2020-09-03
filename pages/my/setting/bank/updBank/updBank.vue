@@ -36,6 +36,17 @@
 			
 			<view class="setting" @tap="">
 				<view class="func_left">
+					<text class="func_test">开户人姓名</text>
+				</view>
+				
+				<view class="func_right">
+					<view class=""><input type="text" value="" :placeholder="bankUserName" v-model="bankUserName"/></view>
+					<tui-icon name="arrowright" :size="26"></tui-icon>
+				</view>
+			</view>
+			
+			<view class="setting" @tap="">
+				<view class="func_left">
 					<text class="func_test">提现密码</text>
 				</view>
 				
@@ -88,6 +99,7 @@ export default{
 			userBank: null, //银行名称
 			bankBranch: null, //开户支行
 			bankCode: null, //银行卡号
+			bankUserName: null,//开户人姓名
 			pwd: null, //提现密码
 			pwdAgain: null, //确认提现密码
 			uid: "",  //uid
@@ -106,6 +118,8 @@ export default{
 			let code = storage.getMyBankInfo().bankCode;
 			this.bankCode = "000000000000" + code.substring(code.length - 4);  //银行卡号截取最后四位数
 			
+			this.bankUserName = storage.getMyBankInfo().bankUserName;//开户人姓名
+			
 			this.pwd = storage.getMyBankInfo().pwd;
 		}else{
 			util.setBarTitle('添加银行卡信息');
@@ -120,6 +134,7 @@ export default{
 				bank: this.userBank,
 				bankBranch: this.bankBranch,
 				bankCode: this.bankCode,
+				bankUserName: this.bankUserName,
 				pwd: md5(this.pwd)
 			};
 			api.updUserBank(data, (res)=>{
@@ -151,7 +166,9 @@ export default{
 		//添加银行卡
 		addSubmit(){
 			//判断信息是否填写完整
-			if(util.isEmpty(this.userBank) && util.isEmpty(this.bankBranch) && util.isEmpty(this.bankCode) && util.isEmpty(this.pwd)){
+			if(util.isEmpty(this.userBank) && util.isEmpty(this.bankBranch) 
+			&& util.isEmpty(this.bankCode) && util.isEmpty(this.bankUserName)
+			 && util.isEmpty(this.pwd)){
 				uni.showToast({
 					title: '信息填写不完整',
 					image: "/static/img/info-circle.png",
@@ -169,6 +186,7 @@ export default{
 					bank: this.userBank,
 					bankBranch: this.bankBranch,
 					bankCode: this.bankCode,
+					bankUserName: this.bankUserName,
 					pwd: md5(this.pwd)
 				};
 				api.addUserBank(data, (res)=>{
