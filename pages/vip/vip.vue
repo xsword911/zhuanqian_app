@@ -80,9 +80,10 @@
 					<view class="level_money" v-if="item.level <= 4">{{item.money}}元</view>
 					<view class="level_money" v-if="item.level > 4">开发中...</view>
 					<view class="">可接任务:{{item.receiveTaskSum}}/天</view>
+					<view class="" v-if="item.publishTaskSum > 0">可发任务:{{item.publishTaskSum}}/天</view>
 					<view class="">提现次数:{{item.drawSum}}/次</view>
 					<view class="">-</view>
-					<view class="">-</view>
+					<view class="" v-if="item.publishTaskSum == 0">-</view>
 					<view class="">开通会员:365天</view>
 				</view>
 			</view>
