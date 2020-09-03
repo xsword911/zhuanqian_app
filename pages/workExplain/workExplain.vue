@@ -333,6 +333,7 @@ export default{
 									icon: "none"
 								});
 								_this.isReceive = true;  //任务已接
+								_this.getTask();  //重新请求任务数据
 							}else{
 								let msg = api.getMsg(res);
 								uni.showToast({

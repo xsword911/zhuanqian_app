@@ -2,11 +2,18 @@
 	<view class="">
 		<!-- 我的信息 -->
 		<view class="my_info background_style">
-			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn" style="padding:0 0 0 15rpx;">
+			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn" style="padding:0 0 0 15rpx;" v-show="isOpenGold == 1">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
 				</view>
 				<text>金币明细</text>
+			</button>
+			
+			<button class="gold_details" @tap="toDetailed" hover-class="gold_btn" style="padding:0 0 0 15rpx;" v-show="isOpenGold != 1">
+				<view class="gole_img an">
+					<image src="/static/img/gold1.png" mode="widthFix"></image>
+				</view>
+				<text>账变明细</text>
 			</button>
 			
 			<view class="info_left">
@@ -266,12 +273,12 @@ export default{
 			this.profit = this.userEn.money;
 			this.getGoldAdd();  //获取今日金币
 			this.getMyLevelName();  //获取我的会员等级名称
-			this.getOpenGold();  //获取是否开启金币 0关闭 1开启
 		},
 		//获取是否开启金币 0关闭 1开启
 		getOpenGold(){
 			api.getConfig({key: 'open_gold'}, (res)=>{
 				this.isOpenGold = api.getData(res).data[0].value;
+				storage.setOpenGold(this.isOpenGold);
 			});
 		},
 		//获取我的会员等级名称
@@ -349,6 +356,12 @@ export default{
 					url: "/pages/moneyChange/moneyChange"
 				})
 			}
+		},
+		//跳转到账变明细界面
+		toDetailed(){
+			uni.navigateTo({
+				url: '/pages/my/detailed/detailed'
+			})
 		},
 		//跳转到邀请好友界面
 		toAgentExtend(){

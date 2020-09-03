@@ -29,7 +29,7 @@
 			<view class="coin">
 				<view class="">
 					<view class="coin_num">
-						{{myMoney}}
+						￥{{myMoney}}
 					</view>
 					<view class="coin_test">
 						现金
@@ -533,7 +533,6 @@ export default{
 		getSignProgress(){
 			api.getSignProgress({uid: this.uid}, (res)=>{
 				let data = api.getData(res);
-				console.log(data);
 				//sign为空时表示没有可领取的奖励
 				if(util.isEmpty(data.sign)){
 					this.timeOut = true;

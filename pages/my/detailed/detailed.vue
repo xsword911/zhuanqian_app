@@ -6,11 +6,11 @@
 		
         <swiper :current="current" class="swiper-box" style="flex: 1;" :duration="200" @change="ontabchange">
 			
-			<swiper-item class="swiper-item" style="flex: 1;">
+			<swiper-item class="swiper-item" style="flex: 1;" v-if="isOpenGold == 1">
 				<scroll-view scroll-y="true" class="sv" :show-scrollbar="true" style="flex: 1;" v-show="moneyTranShow" 
 				@scrolltolower="getMoneyTran(1)" lower-threshold="40" :refresher-enabled="true"
 				@refresherrefresh="onRefresh" @refresherrestore="onRestore" :refresher-triggered="triggered">
-					<view class="item0" >
+					<view class="item0">
 						<!-- 筛选时间 -->
 						<view class="search_column">
 							<view class="" style="display:flex; align-items:center;">
@@ -235,6 +235,7 @@
 								<text v-show="item.type == 4">充值</text>
 								<text v-show="item.type == 5">利息宝取出</text>
 								<text v-show="item.type == 6">任务奖励</text>
+								<text v-show="item.type == 7">幸运抽奖支出</text>
 								<text v-show="item.type == 10">加款</text>
 								<text v-show="item.type == 50">代理佣金</text>
 								<text v-show="item.type == 100">提现</text>
@@ -335,6 +336,9 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.getMoneyDraw(0);  //获取提现记录
 			this.getMoney(0);  //获取账变记录
 			this.getMoneyRecharge(0); //获取充值明细
+			this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
+			if(this.isOpenGold == 1) 
+				this.items = ['转换明细', '充值明细', '提现明细', '账变流水'];  //开启金币时查询列表添加转换明细表
 		},
         data() {
             return {
@@ -379,7 +383,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				moneyPullUpOn: true,  //提现明细上拉加载数据
 				
 				userEn: [], //我的信息
-				items: ['转换明细', '充值明细', '提现明细', '账变流水'],
+				items: ['充值明细', '提现明细', '账变流水'],
 				current: 0,
                 newsList: [],
                 cacheTab: [],
@@ -397,7 +401,8 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				setDateTime: "",
 				num: null,    //区分开始时间和结束时间的标识
 				uid: "",  //uid
-				triggered: false  //当前下拉刷新状态
+				triggered: false  ,//当前下拉刷新状态
+				isOpenGold: null,  //是否开启金币 0关闭 1开启
             }
         },
         onLoad(res) {

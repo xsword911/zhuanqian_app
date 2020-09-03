@@ -9,7 +9,8 @@ const uid = "uid"; //用户uid
 const loginType = "loginType"; //登录方式0:设备号(游客)登录 1：账号密码登录 2：微信登录
 const levelList = "levelList"; //会员列表
 const levelDesc = "levelDesc"; //全部会员列表
-const taskTree = "taskTree"  //任务分类树形结构数据
+const taskTree = "taskTree";   //任务分类树形结构数据
+const openGold = "openGold";   //是否开启金币 0关闭 1开启
 //封装保存本地数据操作
 module.exports = {
 	//保存我的数据
@@ -135,5 +136,15 @@ module.exports = {
 	//获取任务分类树形结构数据
 	getTaskTree() {
 		return uni.getStorageSync(taskTree);
+	},
+	
+	//保存是否开启金币
+	setOpenGold(data) {
+		uni.setStorageSync(openGold, data);
+	},
+	
+	//获取是否开启金币
+	getOpenGold() {
+		return uni.getStorageSync(openGold);
 	},
 }

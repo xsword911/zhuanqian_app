@@ -103,7 +103,8 @@
 	
 	<!-- 跑马灯 -->
 	<view class="example-body">
-		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :text="runHorseEn.content" @tap="toRunHorseUrl"/>
+		<uni-notice-bar :show-icon="true" :scrollable="true" :single="true" :speed="20"
+		:text="runHorseEn.content" @tap="toRunHorseUrl"/>
 	</view>
 	
 	<!-- 任务 -->

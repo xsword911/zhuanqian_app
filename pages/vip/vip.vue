@@ -77,7 +77,8 @@
 				<view class="level_box level_test" v-for="(item,index) in userLevel" :key="index"
 				@tap="openPay(item)" :class="index == clickBox ? 'click_box' : ''">
 					<view class="level_type">{{item.levelName}}</view>
-					<view class="level_money">{{item.money}}元</view>
+					<view class="level_money" v-if="item.level <= 4">{{item.money}}元</view>
+					<view class="level_money" v-if="item.level > 4">开发中...</view>
 					<view class="">可接任务:{{item.receiveTaskSum}}/天</view>
 					<view class="">提现次数:{{item.drawSum}}/次</view>
 					<view class="">-</view>
@@ -192,6 +193,7 @@ export default{
 		openPay(data){
 			//当前玩家会员等级大于点击会员盒子时return
 			if(data.id <= this.myLevel) return; 
+			if(data.level > 4) return;
 			this.payNum = data.money - this.myLevelMoney;  //显示购买金额
 			this.isShowPay = true;			//显示购买按钮
 			this.clickBox = data.id - 1;   //添加选中样式

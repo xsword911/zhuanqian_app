@@ -24,7 +24,7 @@
 											交易日期：<text class="lay_group_title" style="font-weight:normal;">{{item.addTime}}</text>
 										</view>
 										<view class="" style="width:50%; font-weight:bold;">
-											收入：<text class="lay_group_title" style="font-weight:normal;">￥{{item.moneyAdd}}</text>
+											充值：<text class="lay_group_title" style="font-weight:normal;">￥{{item.rechargeMoney}}</text>
 										</view>
 									</view>
 									<view class="lay_group">
@@ -32,7 +32,7 @@
 											用户：<text class="lay_group_title" style="font-weight:normal;">{{item.uid}}</text>
 										</view>
 										<view class="" style="width:50%; font-weight:bold;">
-											支出：<text class="lay_group_title" style="font-weight:normal;">￥{{item.moneyLose}}</text>
+											盈利：<text class="lay_group_title" style="font-weight:normal;">￥{{item.money}}</text>
 										</view>
 									</view>
 			<!-- 					<view class="lay_group">
@@ -61,16 +61,25 @@
 										前一天余额：<text class="style_Numtest">￥{{item.moneyOld}}</text>
 									</view>
 									<view class="">
-										收入：<text class="style_Numtest">￥{{item.moneyAdd}}</text>
+										任务收入：<text class="style_Numtest">￥{{item.moneyTaskAdd}}</text>
 									</view>
 								</view>
 								
 								<view class="lay_group">
 									<view class="" style="width:50%;">
-										代理佣金：<text class="style_Numtest">￥{{item.moneyAgency}}</text>
+										发布支出：<text class="style_Numtest">￥{{item.moneyTaskLose}}</text>
 									</view>
 									<view class="">
-										支出：<text class="style_Numtest">￥{{item.moneyLose}}</text>
+										任务次数：<text class="style_Numtest">￥{{item.taskSum}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
+										活动收入：<text class="style_Numtest">{{item.moneyActiveAdd}}</text>
+									</view>
+									<view class="">
+										活动支出：<text class="style_Numtest">{{item.moneyActiveLose}}</text>
 									</view>
 								</view>
 								
@@ -79,28 +88,19 @@
 										充值次数：<text class="style_Numtest">{{item.rechargeSum}}</text>
 									</view>
 									<view class="">
+										充值：<text class="style_Numtest">￥{{item.rechargeMoney}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="" style="width:50%;">
 										提现次数：<text class="style_Numtest">{{item.drawSum}}</text>
 									</view>
-								</view>
-								
-								<view class="lay_group">
-									<view class="" style="width:50%;">
-										前一天金币：<text class="style_Numtest">{{item.goldOld}}</text>
-									</view>
 									<view class="">
-										得到金币：<text class="style_Numtest">{{item.goldAdd}}</text>
+										提现：<text class="style_Numtest">￥{{item.drawMoney}}</text>
 									</view>
 								</view>
-								
-								<view class="lay_group">
-									<view class="" style="width:50%;">
-										代理奖励金币：<text class="style_Numtest">{{item.goldAgency}}</text>
-									</view>
-									<view class="">
-										消耗金币：<text class="style_Numtest">{{item.goldLose}}</text>
-									</view>
-								</view>
-								
+																
 								<view class="lay_group">
 									<view class="" style="width:50%;">
 										加款：<text class="style_Numtest">￥{{item.moneyIns}}</text>
@@ -112,12 +112,27 @@
 								
 								<view class="lay_group">
 									<view class="" style="width:50%;">
-										任务次数：<text class="style_Numtest">{{item.taskSum}}</text>
-									</view>
-									<view class="">
-										备注：<text class="style_Numtest">{{item.desc}}</text>
+										代理佣金：<text class="style_Numtest">{{item.moneyAgency}}</text>
 									</view>
 								</view>
+								
+								<!-- 		<view class="lay_group" v-if="isOpenGold == 1">
+												<view class="" style="width:50%;">
+													前一天金币：<text class="style_Numtest">{{item.goldOld}}</text>
+												</view>
+												<view class="">
+													得到金币：<text class="style_Numtest">{{item.goldAdd}}</text>
+												</view>
+											</view>
+										
+											<view class="lay_group" v-if="isOpenGold == 1">
+												<view class="" style="width:50%;">
+													代理奖励金币：<text class="style_Numtest">{{item.goldAgency}}</text>
+												</view>
+												<view class="">
+													消耗金币：<text class="style_Numtest">{{item.goldLose}}</text>
+												</view>
+											</view> -->						
 							</view>
 						</template>
 					</tui-collapse>
@@ -212,6 +227,8 @@ export default{
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
 			userName: "",  //输入的用户id
+			
+			isOpenGold: null,  //是否开启金币 0关闭 1开启
 	    };
 	},
 	onLoad(res) {
@@ -223,6 +240,7 @@ export default{
 	onShow() {
 		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
 		this.getStatisticsDay(this.uid);   //获取个人总览信息
+		this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
 	},
 	methods:{
 		//点击查询按钮
@@ -253,12 +271,31 @@ export default{
 			};
 			api.getStatisticsDay(data, (res)=>{
 				let data = api.getData(res).data;
+				console.log(data);
 				if(util.isEmpty(data)) this.statisticsDayShow = false;
 				else {
 					data.forEach((item, index) =>{
 						item.current = -1;
 						item.disabled = false;
 						if(index == 0) item.current = 0;
+						//保留二位小数处理						
+						item.moneyOld = parseFloat(item.moneyOld).toFixed(2);  //前一天余额
+						
+						item.moneyAgency = parseFloat(item.moneyAgency).toFixed(2);  //代理佣金
+						item.moneyIns = parseFloat(item.moneyIns).toFixed(2);  //加款
+						item.moneyActiveAdd = parseFloat(item.moneyActiveAdd).toFixed(2);  //活动收入
+						item.moneyTaskAdd = parseFloat(item.moneyTaskAdd).toFixed(2);  //任务收入
+						item.rechargeMoney = parseFloat(item.rechargeMoney).toFixed(2);  //充值
+						
+						item.moneyActiveLose = parseFloat(item.moneyActiveLose).toFixed(2);  //活动支出
+						item.moneyTaskLose = parseFloat(item.moneyTaskLose).toFixed(2);  //任务支出
+						item.moneySubtract = parseFloat(item.moneySubtract).toFixed(2);  //扣款
+						
+						//计算盈利金额
+						item.money = [parseFloat(item.moneyTaskAdd) + parseFloat(item.moneyAgency)
+						 + parseFloat(item.moneyActiveAdd) + parseFloat(item.moneyIns)] 
+						 - [parseFloat(item.moneyTaskLose) + parseFloat(item.moneyActiveLose)
+						 + parseFloat(item.moneySubtract)];
 					});
 					this.statisticsDayEn = data;
 					this.statisticsDayShow = true;

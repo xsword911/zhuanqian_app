@@ -14,18 +14,28 @@
 		
 		<view class="lay_info" v-show="statisticsMonthShow">
 			<view class="lay_box">
-				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyAdd}}</view>
-				<view class="">增加金额</view>
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyTaskAdd}}</view>
+				<view class="">任务收入</view>
 			</view>
 			
 			<view class="lay_box">
-				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyAgency}}</view>
-				<view class="">代理佣金</view>
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyTaskLose}}</view>
+				<view class="">发布支出</view>
 			</view>
 			
-			<view class="lay_box boderNone">
-				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyLose}}</view>
-				<view class="">消费金额</view>
+			<view class="lay_box">
+				<view class="style_Numtest">{{StatisticsMonthEn.taskSum}}</view>
+				<view class="">任务次数</view>
+			</view>
+			
+			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyActiveAdd}}</view>
+				<view class="">活动收入</view>
+			</view>
+			
+			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyActiveLose}}</view>
+				<view class="">活动支出</view>
 			</view>
 			
 			<view class="lay_box">
@@ -34,41 +44,21 @@
 			</view>
 			
 			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.rechargeMoney}}</view>
+				<view class="">充值</view>
+			</view>
+			
+			<view class="lay_box">
 				<view class="style_Numtest">{{StatisticsMonthEn.drawSum}}</view>
 				<view class="">提现次数</view>
 			</view>
 			
-			<view class="lay_box boderNone">
-				<view class="style_Numtest">{{StatisticsMonthEn.goldAdd}}</view>
-				<view class="">得到金币</view>
+			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.drawMoney}}</view>
+				<view class="">提现</view>
 			</view>
 			
 			<view class="lay_box">
-				<view class="style_Numtest">{{StatisticsMonthEn.goldAgency}}</view>
-				<view class="">代理奖励金币</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="style_Numtest">{{StatisticsMonthEn.goldLose}}</view>
-				<view class="">消耗金币</view>
-			</view>
-			
-			<view class="lay_box boderNone">
-				<view class="style_Numtest">{{StatisticsMonthEn.taskSum}}</view>
-				<view class="">任务次数</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="style_Numtest">￥{{money}}</view>
-				<view class="">盈利金额</view>
-			</view>
-			
-			<view class="lay_box">
-				<view class="style_Numtest">{{gold}}</view>
-				<view class="">盈利金币</view>
-			</view>
-			
-			<view class="lay_box boderNone">
 				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyIns}}</view>
 				<view class="">加款</view>
 			</view>
@@ -78,13 +68,49 @@
 				<view class="">扣款</view>
 			</view>
 			
+			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.moneyAgency}}</view>
+				<view class="">代理佣金</view>
+			</view>
+			
+			<view class="lay_box">
+				<view class="style_Numtest">￥{{money}}</view>
+				<view class="">盈利</view>
+			</view>
+			
+<!-- 			<view class="lay_box" v-if="isOpenGold == 1">
+				<view class="style_Numtest">{{StatisticsMonthEn.goldAdd}}</view>
+				<view class="">得到金币</view>
+			</view>
+			
+			<view class="lay_box" v-if="isOpenGold == 1">
+				<view class="style_Numtest">{{StatisticsMonthEn.goldAgency}}</view>
+				<view class="">代理奖励金币</view>
+			</view>
+			
+			<view class="lay_box" v-if="isOpenGold == 1">
+				<view class="style_Numtest">{{StatisticsMonthEn.goldLose}}</view>
+				<view class="">消耗金币</view>
+			</view> -->
+	
+			
+<!-- 			<view class="lay_box" v-if="isOpenGold == 1">
+				<view class="style_Numtest">{{gold}}</view>
+				<view class="">盈利金币</view>
+			</view> -->
+			
 			<view class="lay_desc">
-				<text class="">
-					盈利金额 = 增加金额 + 代理佣金 - 消费金额
-				</text>
-				<text class="">
+				<view class="">
+					<view class="">
+						盈利金额 = （任务收入 + 代理佣金 + 活动收入 + 加款）
+					</view>
+					<view class="">
+						- （任务发布支出 - 活动支出 - 扣款）
+					</view>
+				</view>
+<!-- 				<text class="" v-if="isOpenGold == 1">
 					盈利金币 = 得到金币 + 代理奖励金币 - 消费金币
-				</text>
+				</text> -->
 			</view>
 		</view>
 		
@@ -189,7 +215,9 @@ export default{
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
 			isSubAll: true, //单选框选中值 0:所有下级(true) 1:直属下级(false)
-			userName: "",  //输入的用户id
+			userName: "",  //输入的用户id	
+					
+			isOpenGold: null,  //是否开启金币 0关闭 1开启
 	    };
 	},
 	onLoad(res) {
@@ -201,6 +229,7 @@ export default{
 	onShow() {
 		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
 		this.getStatisticsMonth(this.uid);   //获取个人总览信息
+		this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
 	},
 	methods:{
 		//点击查询按钮
@@ -241,12 +270,25 @@ export default{
 				if(util.isEmpty(data)) this.statisticsMonthShow = false;
 				else {
 					this.StatisticsMonthEn = data[0];
+					//保留二位小数
+					this.StatisticsMonthEn.moneyTaskAdd = parseFloat(this.StatisticsMonthEn.moneyTaskAdd).toFixed(2);
+					this.StatisticsMonthEn.moneyAgency = parseFloat(this.StatisticsMonthEn.moneyAgency).toFixed(2);
+					this.StatisticsMonthEn.moneyActiveAdd = parseFloat(this.StatisticsMonthEn.moneyActiveAdd).toFixed(2);
+					this.StatisticsMonthEn.moneyIns = parseFloat(this.StatisticsMonthEn.moneyIns).toFixed(2);
+					
+					this.StatisticsMonthEn.moneyTaskLose = parseFloat(this.StatisticsMonthEn.moneyTaskLose).toFixed(2);
+					this.StatisticsMonthEn.moneyActiveLose = parseFloat(this.StatisticsMonthEn.moneyActiveLose).toFixed(2);
+					this.StatisticsMonthEn.moneySubtract = parseFloat(this.StatisticsMonthEn.moneySubtract).toFixed(2);
+					
 					//计算盈利金额
-					this.money = (parseFloat(this.StatisticsMonthEn.moneyAdd) + parseFloat(this.StatisticsMonthEn.moneyAgency))
-					 - parseFloat(this.StatisticsMonthEn.moneyLose);
-					 //计算盈利金币
-					this.gold = (parseFloat(this.StatisticsMonthEn.goldAdd) + parseFloat(this.StatisticsMonthEn.goldAgency))
-					 - parseFloat(this.StatisticsMonthEn.goldLose);
+					this.money = [parseFloat(this.StatisticsMonthEn.moneyTaskAdd) + parseFloat(this.StatisticsMonthEn.moneyAgency)
+					 + parseFloat(this.StatisticsMonthEn.moneyActiveAdd) + parseFloat(this.StatisticsMonthEn.moneyIns)] 
+					 - [parseFloat(this.StatisticsMonthEn.moneyTaskLose) + parseFloat(this.StatisticsMonthEn.moneyActiveLose)
+					 + parseFloat(this.StatisticsMonthEn.moneySubtract)];
+					 
+					//  //计算盈利金币
+					// this.gold = (parseFloat(this.StatisticsMonthEn.goldAdd) + parseFloat(this.StatisticsMonthEn.goldAgency))
+					//  - parseFloat(this.StatisticsMonthEn.goldLose);
 					 
 					this.statisticsMonthShow = true;
 				}
@@ -392,6 +434,9 @@ export default{
 		flex-wrap: wrap;
 		font-size:14px;
 	}
+	.lay_info>view:nth-child(3n+3){
+		border-right: none;
+	}
 	.lay_box{
 		width:33%;
 		height:160rpx;
@@ -416,13 +461,13 @@ export default{
 		margin-bottom:10rpx;
 	}
 	.lay_desc{
+		width:100%;
 		color: #dc3b40;
-		padding:20rpx 0;
+		padding:20rpx;
 		box-sizing:border-box;
 		border-bottom:1px solid #e3e3e3;
 	}
-	.lay_desc>text{
-		display:inline-block;
-		margin-left:60rpx;
+	.lay_desc>view{
+		width:100%;
 	}
 </style>

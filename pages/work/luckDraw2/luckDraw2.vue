@@ -160,6 +160,8 @@ export default {
 			getAwardTitle: '',  //获得奖品的标题
 			
 			luckUrl: '', //领奖后跳转Url
+			
+			luckSetting: '',  //抽奖配置
 		}
 	},
 	onShow() {
@@ -168,6 +170,7 @@ export default {
 		this.getLucky();  //获取转盘信息
 		this.rotateId = 0;
 		this.getLuckUrl();  //获取领奖后跳转Url
+		this.getLuckSetting();  //获取抽奖配置
 	},
 	onLoad() {
 		this.openEffectAnimation();  //打开转盘外部动画
@@ -182,6 +185,30 @@ export default {
 		//return true
 	}, 
 	methods: {
+		//获取抽奖配置
+		getLuckSetting(){
+			api.getConfig({key: "luck_open_type|luck_open_sum"}, (res)=>{
+				let data = api.getData(res).data;
+				let luckTypeSetting = "";
+				let luckSumSetting = "";
+				data.forEach((item) =>{
+					if(item.key == "luck_open_sum") luckSumSetting = item.value;
+					if(item.key == "luck_open_type"){
+						switch (item.value){
+							case "0":
+								luckTypeSetting = "金币"
+								break;
+							case "1":
+								luckTypeSetting = "现金"
+								break;
+							default:
+								break;
+						}
+					}
+				});			
+				this.luckSetting = luckSumSetting + luckTypeSetting;
+			});
+		},
 		//获取领奖后跳转Url
 		getLuckUrl(){
 			api.getConfig({key: 'luckUrl'}, (res)=>{
@@ -238,7 +265,7 @@ export default {
 			let _this = this;
 			uni.showModal({
 				title: "幸运抽奖",
-				content: "确定消耗10金币进行一次抽奖？",
+				content: "确定消耗" + _this.luckSetting + "进行一次抽奖？",
 				success(res) {
 					if(res.confirm){
 						_this.rotateId = 0;
