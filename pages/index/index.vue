@@ -358,6 +358,8 @@ export default{
 		},
 		//跳转到更多公告界面
 		toMore(){
+			//关闭弹窗
+			this.hide8();
 			uni.navigateTo({
 				url: '/pages/notice/notice'
 			});

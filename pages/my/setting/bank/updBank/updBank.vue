@@ -200,9 +200,13 @@ export default{
 							duration: 1500,
 							success() {
 								setTimeout(function(){ 
-									uni.navigateBack({
-										delta: 1
-									}) 
+									uni.switchTab({
+										url: '/pages/my/my'
+									});
+									
+									// uni.navigateBack({
+									// 	delta: 1
+									// }) 
 								}, 1600);
 							}
 						})
