@@ -117,7 +117,7 @@
 						盈利金额 = （任务收入 + 代理佣金 + 活动收入 + 加款）
 					</view>
 					<view class="">
-						- （任务发布支出 - 活动支出 - 扣款）
+						- （任务发布支出 + 活动支出 + 扣款）
 					</view>
 				</view>
 <!-- 				<view class="" v-show="isOpenGold == 1">
@@ -270,11 +270,12 @@ export default{
 					this.StatisticsMonthEn.moneySubtract = parseFloat(this.StatisticsMonthEn.moneySubtract).toFixed(2);
 
 					//计算盈利金额
-					this.money = [parseFloat(this.StatisticsMonthEn.moneyTaskAdd) + parseFloat(this.StatisticsMonthEn.moneyAgency)
-					 + parseFloat(this.StatisticsMonthEn.moneyActiveAdd) + parseFloat(this.StatisticsMonthEn.moneyIns)] 
-					 - [parseFloat(this.StatisticsMonthEn.moneyTaskLose) + parseFloat(this.StatisticsMonthEn.moneyActiveLose)
-					 + parseFloat(this.StatisticsMonthEn.moneySubtract)];
-					 
+					this.money = parseFloat(this.StatisticsMonthEn.moneyTaskAdd) + parseFloat(this.StatisticsMonthEn.moneyAgency)
+					 + parseFloat(this.StatisticsMonthEn.moneyActiveAdd) + parseFloat(this.StatisticsMonthEn.moneyIns)
+					 + parseFloat(this.StatisticsMonthEn.moneyTaskLose) + parseFloat(this.StatisticsMonthEn.moneyActiveLose)
+					 + parseFloat(this.StatisticsMonthEn.moneySubtract);
+					
+					this.money = this.money.toFixed(2);
 					//  //计算盈利金币
 					// this.gold = (parseFloat(this.StatisticsMonthEn.goldAdd) + parseFloat(this.StatisticsMonthEn.goldAgency))
 					//  - parseFloat(this.StatisticsMonthEn.goldLose);

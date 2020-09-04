@@ -308,7 +308,7 @@
 					</view>
 				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="queryData" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
 		 </tui-drawer>
@@ -390,7 +390,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
                 newsList: [],
                 cacheTab: [],
 				rightDrawer: false,//抽屉开关
-				drawerType: 0,  //抽屉类型
+				drawerType: 1,  //抽屉类型
 				drawerBegTime: '', //抽屉开始时间 
 				drawerEndTime: '', //抽屉结束时间 
                 tabIndex: 0,
@@ -412,11 +412,31 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.uid = storage.getUid();  //获取uid
         },
         methods: {
+			//抽屉查询数据
+			queryData(){
+				this.closeDrawer();
+				switch (this.drawerType){
+					case 0:
+						this.getMoneyTran(0);
+						break;
+					case 1:
+						this.getMoneyRecharge(0);
+						break;
+					case 2:
+						this.getMoneyDraw(0);
+						break;
+					case 4:
+						this.getMoney(0);
+						break;
+					default:
+						break;
+				}
+			},
 			//scroll-view开始上拉刷新
 			onRefresh(){
 				if(this.triggered) return;
 				this.triggered = true;
-				if(this.current == 0){
+				if(this.drawerType == 0){
 					//延时为了看效果
 					setTimeout(() => {
 						this.moneyTranPage = 1;
@@ -424,22 +444,22 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 						this.moneyTranPullUpOn = true;
 						this.moneyTranLoadding = false;
 					}, 200)
-				}else if(this.current == 1){
+				}else if(this.drawerType == 1){
 					setTimeout(() => {
 						this.moneyRechargePage = 1;
-						this.getMoneyDraw(0);
+						this.getMoneyRecharge(0);
 						this.moneyRechargePullUpOn = true;
 						this.moneyRechargeLoadding = false;
 					}, 200)
 				}
-				else if(this.current == 2){
+				else if(this.drawerType == 2){
 					setTimeout(() => {
 						this.moneyDrawPage = 1;
 						this.getMoneyDraw(0);
 						this.moneyDrawPullUpOn = true;
 						this.moneyDrawLoadding = false;
 					}, 200)
-				}else if(this.current == 3){
+				}else if(this.drawerType == 3){
 					setTimeout(() => {
 						this.moneyPage = 1;
 						this.getMoney(0);
@@ -603,7 +623,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			//打开抽屉
 			openDrawer(type) {
 				this.rightDrawer = true;
-				//抽屉类型 0：转换列表时间 1：提现列表时间 2：账变列表时间
+				//抽屉类型 0：转换列表时间 1：充值列表时间 2：提现列表时间 3：账变列表时间
 				switch (type){
 					case 0:
 						this.drawerType =  type;

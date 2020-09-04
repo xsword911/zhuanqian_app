@@ -70,16 +70,16 @@
 										发布支出：<text class="style_Numtest">￥{{item.moneyTaskLose}}</text>
 									</view>
 									<view class="">
-										任务次数：<text class="style_Numtest">￥{{item.taskSum}}</text>
+										任务次数：<text class="style_Numtest">{{item.taskSum}}</text>
 									</view>
 								</view>
 								
 								<view class="lay_group">
 									<view class="" style="width:50%;">
-										活动收入：<text class="style_Numtest">{{item.moneyActiveAdd}}</text>
+										活动收入：<text class="style_Numtest">￥{{item.moneyActiveAdd}}</text>
 									</view>
 									<view class="">
-										活动支出：<text class="style_Numtest">{{item.moneyActiveLose}}</text>
+										活动支出：<text class="style_Numtest">￥{{item.moneyActiveLose}}</text>
 									</view>
 								</view>
 								
@@ -112,7 +112,7 @@
 								
 								<view class="lay_group">
 									<view class="" style="width:50%;">
-										代理佣金：<text class="style_Numtest">{{item.moneyAgency}}</text>
+										代理佣金：<text class="style_Numtest">￥{{item.moneyAgency}}</text>
 									</view>
 								</view>
 								
@@ -292,10 +292,12 @@ export default{
 						item.moneySubtract = parseFloat(item.moneySubtract).toFixed(2);  //扣款
 						
 						//计算盈利金额
-						item.money = [parseFloat(item.moneyTaskAdd) + parseFloat(item.moneyAgency)
-						 + parseFloat(item.moneyActiveAdd) + parseFloat(item.moneyIns)] 
-						 - [parseFloat(item.moneyTaskLose) + parseFloat(item.moneyActiveLose)
-						 + parseFloat(item.moneySubtract)];
+						item.money = parseFloat(item.moneyTaskAdd) + parseFloat(item.moneyAgency)
+						 + parseFloat(item.moneyActiveAdd) + parseFloat(item.moneyIns) 
+						 + parseFloat(item.moneyTaskLose) + parseFloat(item.moneyActiveLose)
+						 + parseFloat(item.moneySubtract);
+						 
+						item.money = item.money.toFixed(2);
 					});
 					this.statisticsDayEn = data;
 					this.statisticsDayShow = true;

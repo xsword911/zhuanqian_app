@@ -68,7 +68,7 @@
 					</view>
 				</view>
 				<view class="search_btn btn_style">
-					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
+					<button type="default" @tap="getTaskDetails" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
 		</tui-drawer>
@@ -192,6 +192,7 @@
 			},
 			//获取金币收入明细表
 			getTaskDetails() {
+				this.closeDrawer();
 				this.page = 1;
 				let data = {
 					uid: this.uid,
