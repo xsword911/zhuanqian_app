@@ -311,7 +311,7 @@ export default {
 			classifyId: null,  //选中的子类id
 		} 
 	},
-	onLoad(res) {
+	onShow(res) {
 		this.getTaskType();  //获取任务类型列表
 		this.getLevelType();  //获取会员类型列表
 		this.uid = storage.getUid();  //获取uid
