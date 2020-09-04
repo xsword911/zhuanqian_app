@@ -57,6 +57,7 @@ export default{
 			recharge: "", //申请充值返回信息
 			wayId: null,  //渠道id
 			uid: "",  //用户id
+			desc: "",  //备注
 		}
 	},
 	methods:{
@@ -75,7 +76,8 @@ export default{
 				    if (res.confirm) {
 				        api.rechargePut({
 							id: _this.recharge.id,
-							uid: _this.uid
+							uid: _this.uid,
+							desc: _this.desc
 						}, (res)=>{
 							let code = api.getCode(res);
 							if(code == 0){
@@ -106,8 +108,8 @@ export default{
 		},
 	},
 	onLoad(res) {
+		this.desc = res.desc;
 		this.recharge = tran.url2Obj(res.rechargeAccountEn);  //获取充值信息
-		console.log(this.recharge);
 		this.wayId = parseInt(res.wayId);  //获取渠道id
 		this.uid = storage.getUid();  //获取uid
 	}
