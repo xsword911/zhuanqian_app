@@ -2,15 +2,15 @@
 	<view class="container" style="padding:20rpx 0; height:100vh;">
 		<view class="lay_group">
 			<view class="lay_row">
-				<view class="lay_row_test">存入金额</view>
+				<view class="lay_row_test"><text style="color:#dc3b40;">*</text>存入金额</view>
 				<view class="lay_row_input">
 					<input type="text" value="" v-model="money" placeholder="请输入金额"/>
 				</view>
 			</view>
 			<view class="lay_row">
-				<view class="lay_row_test">备注</view>
+				<view class="lay_row_test"><text style="color:#dc3b40;">*</text>备注</view>
 				<view class="lay_row_input">
-					<input type="text" value="" v-model="desc" placeholder="备注"/>
+					<input type="text" value="" v-model="desc" placeholder="请输入付款账户信息"/>
 				</view>
 			</view>
 		</view>
@@ -20,11 +20,13 @@
 		</view>
 		
 		<view class="lay_test" style="margin-bottom:0;">
-			备注填写任何可以识别您付款账户的信息
+			<text>备注填写任何可以识别您付款账户的信息（例</text>
 		</view>
-		
-		<view class="lay_test">
-			（例如支付人姓名），可以增加到款速度
+		<view class="lay_test" style="margin-bottom:0;">
+			<text>（例如支付人姓名，微信号，支付宝号），可</text>
+		</view>
+		<view class="lay_test">			
+			<text>增加到款速度</text>
 		</view>
 		
 		<view class="lay_btn btn_style">
@@ -59,7 +61,16 @@ export default{
 				    title: '存入金额不能为空'
 				});
 				return;
-			}else if(this.money > this.moneyMax || this.money < this.moneyMin){
+			}
+			else if(util.isEmpty(this.desc))
+			{
+				uni.showToast({
+				    icon: 'none',
+				    title: '请填写备注'
+				});
+				return;
+			}
+			else if(this.money > this.moneyMax || this.money < this.moneyMin){
 				uni.showToast({
 				    icon: 'none',
 				    title: '存入金额错误'

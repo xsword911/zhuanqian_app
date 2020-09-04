@@ -25,6 +25,10 @@
 				<view class="lay_row_test">收款账号</view>
 				<text class="lay_row_info" selectable="true">{{recharge.account}}</text>
 			</view>
+			<view class="lay_row" v-if="recharge.bankBranch != ''">
+				<view class="lay_row_test">开户支行</view>
+				<text class="lay_row_info" selectable="true">{{recharge.bankBranch}}</text>
+			</view>
 		</view>
 		
 		<view class="lay_test" style="color: #dc3b40;">
@@ -151,7 +155,7 @@ export default{
 	.lay_test{
 		width:100%;
 		text-align:center;
-		font-size:12px;
+		font-size:14px;
 		margin-bottom:30rpx;
 	}
 	.lay_test>text{
