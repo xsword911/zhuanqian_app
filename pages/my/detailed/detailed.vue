@@ -243,6 +243,8 @@
 								<text v-show="item.type == 102">升级</text>
 								<text v-show="item.type == 103">利息宝转入</text>
 								<text v-show="item.type == 104">扣款</text>
+								<text v-show="item.type == 105">发布任务</text>
+								<text v-show="item.type == 106">幸运抽奖支出</text>
 								<view class="moneyTran_time">
 									{{item.addTime}}
 								</view>

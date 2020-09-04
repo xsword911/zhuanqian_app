@@ -19,6 +19,14 @@
 			温馨提示:最小金额：<text>{{moneyMin}}</text>；最大金额：<text>{{moneyMax}}</text>
 		</view>
 		
+		<view class="lay_test" style="margin-bottom:0;">
+			备注填写任何可以识别您付款账户的信息
+		</view>
+		
+		<view class="lay_test">
+			（例如支付人姓名），可以增加到款速度
+		</view>
+		
 		<view class="lay_btn btn_style">
 			<button type="default" @tap="getRechargeAccountEnable" hover-class="btn_hover">下一步</button>
 		</view>

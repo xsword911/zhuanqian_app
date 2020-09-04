@@ -136,6 +136,7 @@ import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import audio from "@/common/audio.js";
 import util from "@/common/util.js";
+import str from "@/common/str.js";
 export default {
 	data() {
 		return {
@@ -243,7 +244,8 @@ export default {
 		closeShadow(){
 			audio.playAudio();
 			this.shadow =  false;  //关闭遮罩层
-			util.openUrl(this.luckUrl);  //领取奖励后打开外部页面
+			//跳转地址包含http就跳转
+			if(str.contains(this.luckUrl, "http")) util.openUrl(this.luckUrl);  //领取奖励后打开外部页面
 		},
 		//打开转盘外部动画
 		openEffectAnimation(){
