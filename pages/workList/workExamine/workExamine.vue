@@ -12,11 +12,11 @@
 						</view>
 						<view class="" style="font-size:14px;">
 							状&nbsp;&nbsp;&nbsp;&nbsp;态：
-							<text  class="state_fail" v-if="workInfo.state == 0">进行中</text>
-							<text  class="state_proceed" v-if="workInfo.state == 1">未审核</text>
-							<text  class="state_sucess" v-if="workInfo.state == 2">已完成</text>
-							<text  class="state_fail" v-if="workInfo.state == 3">任务失败</text>
-							<text  class="state_fail" v-if="workInfo.state == 10">任务取消</text>
+							<text  class="state_fail" v-if="workInfo.state == 0">进行中></text>
+							<text  class="state_proceed" v-if="workInfo.state == 1">未审核</text></text>
+							<text  class="state_sucess" v-if="workInfo.state == 2">已完成</text></text>
+							<text  class="state_fail" v-if="workInfo.state == 3">任务失败</text></text>
+							<text  class="state_fail" v-if="workInfo.state == 10">任务取消</text></text>
 						</view>
 					</view>
 				</view>

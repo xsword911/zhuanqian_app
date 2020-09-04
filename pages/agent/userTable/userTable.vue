@@ -13,20 +13,22 @@
 		
 		<view class="lay_table">
 			<view class="lay_table_title">
-				<view class="" style="width:20%;">用户</view>
-				<view class="" style="width:30%;">余额</view>
+				<view class="" style="width:30%;">用户</view>
+				<view class="" style="width:20%;">余额</view>
+				<view class="" style="width:20%;">直属</view>
 				<view class="" style="width:30%;">登录时间</view>
-				<view class="" style="width:20%;">状态</view>
+				<!-- <view class="" style="width:20%;">状态</view> -->
 			</view>
 			
 			<view class="lay_table_data lay_data" v-for="(item,index) in userTableEn" :key="index" @tap="actionsheet(item)">
-				<view :class="{'lay_upper': item.subSum > 0}" style="width:20%;"><text selectable="true">{{item.uid}}</text></view>
-				<view class="style_money" style="width:30%;">{{item.money}}</view>
+				<view :class="{'lay_upper': item.subSum > 0}" style="width:30%;"><text selectable="true">{{item.uid}}</text></view>
+				<view class="style_money" style="width:20%;">{{item.money}}</view>
+				<view class="style_money" style="width:20%;">{{item.subSum}}</view>
 				<view class="" style="width:30%;">{{item.loginTime}}</view>
-				<view class="" style="width:20%;">
+<!-- 				<view class="" style="width:20%;">
 					<text v-if="item.state == 0" class="style_state0">正常</text>
 					<text v-if="item.state != 0" class="style_state1">异常</text>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		
