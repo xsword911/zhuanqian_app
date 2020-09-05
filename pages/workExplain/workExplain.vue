@@ -253,7 +253,7 @@ export default{
 		//查看下载图片
 		imgCheck(){
 			uni.previewImage({
-				urls: ['/static/img/headImg.jpg'],
+				urls: [this.workInfo.taskImg],
 			});
 		},
 		//查看截图凭证
