@@ -343,7 +343,7 @@ export default{
 			
 			arrayLevel: [],   //任务等级列表
 			arrayLevelIndex: 0,
-			level: 0,	//选中的任务等级码
+			level: 1,	//选中的任务等级码
 			
 			arrayLevelName: [],  //任务等级名称列表
 			

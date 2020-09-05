@@ -56,6 +56,7 @@
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import md5 from "@/common/md5.js";
 export default{
 	data() {
 		return {
@@ -142,7 +143,7 @@ export default{
 			}
 		    let data = {
 		        account: this.tel,
-		        pwd: this.passWord,
+		        pwd: md5(this.passWord),
 				uid: this.uid,
 				telCode: this.telCode,
 				type: 0   //普通用户注册
@@ -165,8 +166,25 @@ export default{
 							if(res.confirm){
 								storage.setUid(uid);  //保存用户新uid
 								storage.setLoginType(1);  //保存登录方式
-								uni.reLaunch({
-									url: "/pages/index/index"
+								//跳转前进行一次登录操作
+								api.login({account: _this.tel, pwd: _this.passWord, type: 0}, (res)=>{
+									let code = api.getCode(res);
+									if(code == 0){
+										let userInfo = {
+											userName: _this.tel,
+											passWord: _this.passWord
+										}
+										storage.setUserPwd(userInfo);  //记住密码状态
+										uni.reLaunch({
+											url: "/pages/index/index"
+										});
+									}else{
+										let msg = api.getMsg(res);
+										uni.showModal({
+											content: msg,
+											showCancel:false
+										});
+									}
 								});
 							}
 						}

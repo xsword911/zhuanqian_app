@@ -7,11 +7,15 @@
 				<text>至</text>
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间"/> -->
 				任务状态：
-				<text v-if="arrayStateIndex == 0">进行中<text style="color: #dc3b40;">></text></text>
-				<text v-if="arrayStateIndex == 1">未审核<text style="color: #dc3b40;">></text></text>
-				<text v-if="arrayStateIndex == 2">已完成<text style="color: #dc3b40;">></text></text>
-				<text v-if="arrayStateIndex == 3">任务失败<text style="color: #dc3b40;">></text></text>
-				<text v-if="arrayStateIndex == 10">任务取消<text style="color: #dc3b40;">></text></text>
+				<view class="" style="display:flex; flex: 1; align-items: center; 
+				justify-content: space-between; padding-right:30rpx; box-sizing:border-box;">
+					<view v-if="state == 0">进行中</view>
+					<view v-if="state == 1">未审核</view>
+					<view v-if="state == 2">已完成</view>
+					<view v-if="state == 3">任务失败</view>
+					<view v-if="state == 10">任务取消</view>
+					<tui-icon name="arrowdown" :size="26"></tui-icon>
+				</view>
 			</view>
 			<view class="sea_btn btn_style">
 				<button type="default" @tap="getTaskDetails" hover-class="btn_hover" style="padding: 0;">查询</button>

@@ -78,6 +78,16 @@
 				<view class="">盈利</view>
 			</view>
 			
+			<view class="lay_box">
+				<view class="style_Numtest">{{userEn.subSum}}</view>
+				<view class="">子属下级</view>
+			</view>
+			
+			<view class="lay_box">
+				<view class="style_Numtest">{{userEn.allSubSum}}</view>
+				<view class="">所有下级</view>
+			</view>
+			
 <!-- 			<view class="lay_box" v-if="isOpenGold == 1">
 				<view class="style_Numtest">{{StatisticsMonthEn.goldAdd}}</view>
 				<view class="">得到金币</view>
@@ -218,6 +228,8 @@ export default{
 			userName: "",  //输入的用户id	
 					
 			isOpenGold: null,  //是否开启金币 0关闭 1开启
+			
+			userEn: [], //个人信息
 	    };
 	},
 	onLoad(res) {
@@ -230,6 +242,7 @@ export default{
 		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
 		this.getStatisticsMonth(this.uid);   //获取个人总览信息
 		this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
+		this.userEn = storage.getMyInfo();   //获取个人信息
 	},
 	methods:{
 		//点击查询按钮

@@ -56,6 +56,7 @@
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import md5 from "@/common/md5.js";
 export default{
 	data() {
 		return {
@@ -150,7 +151,7 @@ export default{
 			}
 		    let data = {
 		        account: this.tel,
-		        pwd: this.passWord,
+		        pwd: md5(this.passWord),
 				uid: "0",   //推广注册uid写死0
 				telCode: this.telCode,
 				type: 0   //普通用户注册

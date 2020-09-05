@@ -4,7 +4,7 @@
 		<view class="search_column" style="display:flex; align-items:center; justify-content: space-between;">
 			<view class="search_test">用户名</view>
 			<view class="search_ipt">
-				<input type="text" value="" v-model="userName"/>
+				<input type="text" value="" v-model="userName" placeholder="输入用户名"/>
 			</view>
 			<view class="sea_btn btn_style">
 				<button type="default" @tap="getUserByClick" hover-class="btn_hover" style="padding: 0;">查询</button>
@@ -13,18 +13,20 @@
 		
 		<view class="lay_table">
 			<view class="lay_table_title">
-				<view class="" style="width:30%;">用户</view>
-				<view class="" style="width:20%;">余额</view>
-				<view class="" style="width:20%;">直属</view>
-				<view class="" style="width:30%;">登录时间</view>
+				<view class="" style="width:28%;">用户</view>
+				<view class="" style="width:18%;">余额</view>
+				<view class="" style="width:12%;">直属</view>
+				<view class="" style="width:14%;">总人数</view>
+				<view class="" style="width:26%;">登录时间</view>
 				<!-- <view class="" style="width:20%;">状态</view> -->
 			</view>
 			
 			<view class="lay_table_data lay_data" v-for="(item,index) in userTableEn" :key="index" @tap="actionsheet(item)">
-				<view :class="{'lay_upper': item.subSum > 0}" style="width:30%;"><text selectable="true">{{item.uid}}</text></view>
-				<view class="style_money" style="width:20%;">{{item.money}}</view>
-				<view class="style_money" style="width:20%;">{{item.subSum}}</view>
-				<view class="" style="width:30%;">{{item.loginTime}}</view>
+				<view :class="{'lay_upper': item.subSum > 0}" style="width:28%;"><text selectable="true">{{item.uid}}</text></view>
+				<view class="style_money" style="width:18%;">{{item.money}}</view>
+				<view class="" style="width:12%;">{{item.subSum}}</view>
+				<view class="" style="width:14%;">{{item.allSubSum}}</view>
+				<view class="" style="width:26%;">{{item.loginTime}}</view>
 <!-- 				<view class="" style="width:20%;">
 					<text v-if="item.state == 0" class="style_state0">正常</text>
 					<text v-if="item.state != 0" class="style_state1">异常</text>
@@ -294,12 +296,12 @@ export default{
 	}
 	.lay_table_title, .lay_table_data{
 		background-color:#efeff4;
-		padding:20rpx;
+		padding:20rpx 8rpx;
 		box-sizing:border-box;
 		font-size:14px;
 		text-align:center;
 		display:flex;
-		/* justify-content: space-between; */
+		justify-content: space-between;
 		align-items: center;
 	}
 	.lay_data{

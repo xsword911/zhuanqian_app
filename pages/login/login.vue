@@ -64,6 +64,7 @@ import api from "@/api/api.js";
 import storage from "@/api/storage.js";
 import util from "@/common/util.js";
 import utilCore from "@/api/utilCore.js";
+import md5 from "@/common/md5.js";
 export default{
 	data() {
 		return {
@@ -151,7 +152,7 @@ export default{
 		    }
 		    let data = {
 		        account: this.userName,
-		        pwd: this.passWord,
+		        pwd: md5(this.passWord),
 				type: 0
 		    };
 			this.login(data);

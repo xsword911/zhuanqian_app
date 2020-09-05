@@ -46,6 +46,7 @@
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import storage from "@/api/storage.js";
+import md5 from "@/common/md5.js";
 export default{
 	data() {
 		return {
@@ -55,7 +56,6 @@ export default{
 			code: null,  //邀请码
 			isPwd: true, //密码输入框类型切换
 			uid: "", //uid
-			
 		}
 	},
 	onShow() {
@@ -91,7 +91,7 @@ export default{
 			}
 		    let data = {
 		        account: this.userName,
-		        pwd: this.passWord,
+		        pwd: md5(this.passWord),
 				uid: this.uid,
 				type: 0   //普通用户注册
 		    };
