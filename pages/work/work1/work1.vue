@@ -128,8 +128,8 @@
 							<view class="">
 								<text style="color:#D91D37;" v-if="item.isReceive">【已接】</text>
 								<text>{{item.title}}</text>
-									<view class="activity_tag" v-if="item.tip == 0">NEW <text></text></view>
-									<view class="activity_tag" v-if="item.tip == 1">HOT <text></text></view>
+									<view class="activity_tag" v-if="item.tip == 0 && !item.isReceive">NEW <text></text></view>
+									<view class="activity_tag" v-if="item.tip == 1 && !item.isReceive">HOT <text></text></view>
 							</view>
 							<view class="activity_test1">{{item.explain}}</view>
 						</view>

@@ -167,6 +167,7 @@
 								</view>
 								<view class="moneyTran_time">
 									<text v-show="item.state == 0">{{item.addTime}}</text>
+									<text v-show="item.state != 0">{{item.updTime}}</text>
 								</view>
 							</view>
 							
