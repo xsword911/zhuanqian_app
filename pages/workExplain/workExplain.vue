@@ -148,7 +148,7 @@
 				<button type="default" hover-class="btn_hover" v-if="workInfo.taskUrl != ''" @tap="openUrl">打开链接</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 1 && !isReceive" @tap="acceptTask">接受任务</button>
 				<button type="default" hover-class="btn_hover" style="background-color: #808080;" v-if="taskType == 1 && isReceive">已接任务</button>
-				<button type="default" hover-class="btn_hover" v-if="taskType == 2" @tap="giveUpTask">放弃任务</button>
+				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.state != 2 && workInfo.state != 10" @tap="giveUpTask">放弃任务</button>
 				<button type="default" hover-class="btn_hover" v-if="taskType == 2 && workInfo.state == 0" @tap="submitTask">提交</button>
 			</view>
 		</view>
@@ -172,7 +172,7 @@ export default{
 			userName: "",  //输入的账号名
 			id: null,  //任务id
 			uid: "",
-			taskType: null, 
+			taskType: null, //1:查看任务列表 2:查看我接受的任务
 			
 			counDown: "",  //倒计时
 			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
@@ -201,7 +201,8 @@ export default{
 			else this.isReceive = true;
 		} 	
 		if(this.taskType == 2) this.getTaskDetails(); 	// 查询任务完成情况
-		this.serverUrl = api.getFileUrl();
+		this.serverUrl = api.getFileUrl();		
+		console.log("ss");
 	},
 	methods:{
 		//打开链接
@@ -310,7 +311,11 @@ export default{
 			this.doneLong = time.timeChange(doneLongSecond);
 		},
 		result: function(e) {
-			this.imageData = e.imgArr[0];
+			console.log(e.imgArr);
+			if (e.imgArr.length > 0)
+				this.imageData = e.imgArr[0];
+			else
+				this.imageData = "";//清理数据
 		},
 		remove: function(e) {
 			//移除图片
@@ -380,6 +385,7 @@ export default{
 		//提交任务
 		submitTask(){
 			//需要任务凭证时
+			console.log(this.imageData);
 			if(this.workInfo.isDoneProve == 1 && util.isEmpty(this.userName)){
 				uni.showToast({
 					title: "任务凭证不能为空",
