@@ -151,7 +151,7 @@ export default{
 			uid: "",
 			
 			counDown: "",  //倒计时显示
-			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
+			resTime: null,//得到数据的时间
 			doneLongTimeStamp: null,//限时时间(秒)转时间戳(倒计时用)
 			setIntervalId: '',  //计时器id
 			
@@ -200,13 +200,12 @@ export default{
 		//获取倒计时
 		getCount(){
 			//获取倒计时
-			this.receiveTimeStamp = Date.parse(new Date(this.workInfo.finishTime));  //获取接受任务时间戳
-			this.doneLongTimeStamp = this.workInfo.doneLong*1000;   //限时时间(秒)转时间戳
+			this.resTime = Date.parse(new Date());  //得到数据时的时间戳
 			this.setIntervalId = setInterval(this.counDownTimeOut, 1000);  //获取计时器id
 		},
 		//倒计时计时器
 		counDownTimeOut(){
-			let counDown = this.doneLongTimeStamp - (Date.parse(new Date()) - this.receiveTimeStamp);  //获取时间差
+			let counDown = (this.workInfo.auditDown*1000) - (Date.parse(new Date()) - this.resTime);  //获取时间差
 
 			if(counDown < 0){
 				this.counDown = '审核超时';
@@ -223,7 +222,11 @@ export default{
 			this.auditLong = auditLong;
 		},
 		result: function(e) {
-			this.imageData = e.imgArr;
+			// this.imageData = e.imgArr;
+			if (e.imgArr.length > 0)
+				this.imageData = e.imgArr[0];
+			else
+				this.imageData = "";//清理数据
 		},
 		remove: function(e) {
 			//移除图片

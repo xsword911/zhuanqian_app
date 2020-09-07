@@ -24,6 +24,7 @@
 <script>
 import api from "@/api/api.js";
 import config from "@/static/app/config.js";
+import util from "@/common/util.js";
 export default{
 	data() {
 		return {
@@ -55,7 +56,12 @@ export default{
 		},
 		//更新
 		toUpdate(){
-			this.isUpdate = false;
+			//获取下载app地址
+			api.getConfig({key: 'app_download_url'}, (res)=>{
+				this.downloadUrl = api.getData(res).data[0].value;  //获取app更新地址
+				util.openUrl(this.downloadUrl);  //跳转到app更新地址
+				this.isUpdate = false;    //隐藏去更新按钮
+			});
 		},
 		//获取最新版本号
 		getNewVer(){
@@ -66,7 +72,16 @@ export default{
 		},
 		//检查更新版本号
 		checkUpdate(){
-			if(this.version < this.newVer) this.isUpdate = true;
+			if(this.version < this.newVer){
+				let _this = this;
+				uni.showModal({
+					content: "当前有更新版本",
+					showCancel:false,
+					success(res) {
+						if(res.confirm) _this.isUpdate = true;
+					}
+				});
+			}
 			else {
 				uni.showModal({
 					content: "当前已是最新版本",

@@ -74,21 +74,21 @@ export default{
 		            title: '账号最短为 3 个字符'
 		        });
 		        return;
-		    }
+		    };
 		    if (this.passWord.length < 3) {
 		        uni.showToast({
 		            icon: 'none',
 		            title: '密码最短为 3 个字符'
 		        });
 		        return;
-		    }
+		    };
 			if(this.passWord != this.passWordAgain){
 				uni.showToast({
 				    icon: 'none',
 				    title: '二次密码输入不一致'
 				});
 				return;
-			}
+			};
 		    let data = {
 		        account: this.userName,
 		        pwd: md5(this.passWord),
@@ -114,8 +114,24 @@ export default{
 							setTimeout(function(){
 								storage.setUid(uid);  //保存用户新uid
 								storage.setLoginType(1);  //保存登录方式
-								uni.reLaunch({
-									url: "/pages/index/index"
+								api.login({account: _this.userName, pwd: md5(_this.passWord), type: 0}, (res)=>{
+									let code = api.getCode(res);
+									if(code == 0){
+										let userInfo = {
+											userName: _this.userName,
+											passWord: _this.passWord
+										};
+										storage.setUserPwd(userInfo);  //记住密码状态
+										uni.reLaunch({
+											url: "/pages/index/index"
+										});
+									}else{
+										let msg = api.getMsg(res);
+										uni.showModal({
+											content: msg,
+											showCancel:false
+										});
+									}
 								});
 							}, 1600);
 						}

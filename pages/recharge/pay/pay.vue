@@ -43,16 +43,31 @@ import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
+			userEn: "", //用户信息
 			money: "",  //输入金额
 			desc: "",  //备注
 			rechargeData: '',  //上级页面传过来的充值信息
 			rechargeAccountEn: "", //收款账户
 			uid: "",  //用户id
-			moneyMin: 50, //充值最小金额
-			moneyMax: 10000, //充值最大金额
+			moneyMin: null, //充值最小金额
+			moneyMax: null, //充值最大金额
 		}
 	},
+	onLoad(res) {
+		this.rechargeData = tran.url2Obj(res.data);
+		this.uid = storage.getUid();  //获取uid
+		this.userEn = storage.getMyInfo();  //获取我的信息
+		this.getRechargeLimit();  //用户查询充值限制
+	},
 	methods:{
+		//用户查询充值限制
+		getRechargeLimit(){
+			api.getRechargeLimit({level: this.userEn.level}, (res)=>{
+				let data = api.getData(res);
+				this.moneyMin = data.min;   //获取充值最小金额
+				this.moneyMax = data.max;   //获取充值最大金额
+			});
+		},
 		//获取收款账户信息
 		getRechargeAccountEnable(){
 			if(util.isEmpty(this.money)){
@@ -105,10 +120,6 @@ export default{
 				+ "&desc=" + this.desc + "&wayId=" + this.rechargeData.wayId
 			})
 		},
-	},
-	onLoad(res) {
-		this.rechargeData = tran.url2Obj(res.data);
-		this.uid = storage.getUid();  //获取uid
 	}
 }
 </script>

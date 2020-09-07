@@ -220,6 +220,12 @@ const api = {
 	
 	//手机号注册
 	registerByTel: function (path, funSuccess, state = true) {httpUtil.post("user/registerByTel", path, funSuccess, state);},
+	
+	//用户查询取现限制
+	getDrawLimit: function (path, funSuccess, state = false) {httpUtil.post("money/getDrawLimit", path, funSuccess, state);},
+	
+	//用户查询充值限制
+	getRechargeLimit: function (path, funSuccess, state = false) {httpUtil.post("money/rechargeWay/getRechargeLimit", path, funSuccess, state);},
 };
 
 export default api;

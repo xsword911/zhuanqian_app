@@ -40,7 +40,7 @@
 				</view>
 				
 				<view class="lay_row">
-					出款上限：<text>1000000.00</text>；出款下限：<text>50</text>
+					出款上限：<text>{{moneyMax}}</text>；出款下限：<text>{{moneyMin}}</text>
 				</view>
 			</view>
 			
@@ -83,8 +83,11 @@ export default{
 			userBankName: "",   //绑定银行卡名称
 			uid: "",  //uid			
 			money: null,  //提现金额
-			pwdCash: "",  //提现密码
+			pwdCash: null,  //提现密码
 			isShowBank: 0,  //是否显示银行卡信息 0正在查询 1显示 2不显示 3未登录
+			
+			moneyMin: null,  //出款下限
+			moneyMax: null,  //出款上限限
 		}
 	},
 	onLoad(res) {
@@ -135,9 +138,18 @@ export default{
 					this.userBankCode = data[0].bankCode.substring(data[0].bankCode.length - 4);  //银行卡号截取最后四位数;
 					// storage.setMyBankInfo(data[0]);
 					this.isShowBank = 1;  //显示银行卡信息
+					this.getDrawLimit();  //用户查询取现限制
 				}else{
 					this.isShowBank = 2;  //不显示银行卡信息
 				}
+			});
+		},
+		//用户查询取现限制
+		getDrawLimit(){
+			api.getDrawLimit({uid: this.uid, level: this.userEn.level}, (res)=>{
+				let data = api.getData(res);
+				this.moneyMin = data.min;   //获取提现出款下限
+				this.moneyMax = data.max;   //获取提现出款上限
 			});
 		},
 		//确认提现
@@ -148,28 +160,34 @@ export default{
 			    content: '您确定提现？',
 			    success: function (res) {
 			        if (res.confirm) {
-			            if(util.isEmpty(_this.money) && util.isEmpty(_this.pwdCash)){
+			            if(util.isEmpty(_this.money) || util.isEmpty(_this.pwdCash)){
 							uni.showToast({
 								title: "请输入完整信息",
 								image: "/static/img/fail-circle.png",
 								duration: 2000
-							})
+							});
+							return;
 						}else if(parseInt(_this.sumMoney) < parseInt(_this.money)){
-								uni.showToast({
-									title: "可提现金额不足",
-									image: "/static/img/fail-circle.png",
-									duration: 2000
-								})
-								return;
-						}else{
-							if(parseInt(_this.money) < 50){
-								uni.showToast({
-									title: "出款下限最低为50",
-									image: "/static/img/fail-circle.png",
-									duration: 2000
-								})
-								return;
-							}
+							uni.showToast({
+								title: "可提现金额不足",
+								image: "/static/img/fail-circle.png",
+								duration: 2000
+							});
+							return;
+						}else if(parseInt(_this.money) < _this.moneyMin){
+							uni.showToast({
+								title: "出款下限最低为" + _this.moneyMin,
+								image: "/static/img/fail-circle.png",
+								duration: 2000
+							});
+							return;
+						}else if(parseInt(_this.money) > _this.moneyMax){
+							uni.showToast({
+								title: "出款上限最高为" + _this.moneyMax,
+								image: "/static/img/fail-circle.png",
+								duration: 2000
+							});
+							return;
 						}
 						_this.submitExtractMoney();
 			        }else if (res.cancel) {

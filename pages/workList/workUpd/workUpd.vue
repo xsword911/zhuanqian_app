@@ -387,7 +387,11 @@ export default {
 		},
 		//添加宣传图片
 		taskImgResult: function(e) {
-			this.taskimageData = e.imgArr[0];
+			// this.taskimageData = e.imgArr[0];
+			if (e.imgArr.length > 0)
+				this.taskimageData = e.imgArr[0];
+			else
+				this.taskimageData = "";//清理数据
 		},
 		//移除宣传图片
 		taskImgRemove: function(e) {
@@ -396,7 +400,11 @@ export default {
 		
 		//添加图片
 		imgResult: function(e) {
-			this.imageData = e.imgArr[0];
+			// this.imageData = e.imgArr[0];
+			if (e.imgArr.length > 0)
+				this.imageData = e.imgArr[0];
+			else
+				this.imageData = "";//清理数据
 		},
 		//移除图片
 		remove: function(e) {

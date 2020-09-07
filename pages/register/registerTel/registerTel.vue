@@ -167,7 +167,7 @@ export default{
 								storage.setUid(uid);  //保存用户新uid
 								storage.setLoginType(1);  //保存登录方式
 								//跳转前进行一次登录操作
-								api.login({account: _this.tel, pwd: _this.passWord, type: 0}, (res)=>{
+								api.login({account: _this.tel, pwd: md5(_this.passWord), type: 0}, (res)=>{
 									let code = api.getCode(res);
 									if(code == 0){
 										let userInfo = {

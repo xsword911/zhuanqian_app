@@ -552,8 +552,8 @@ export default {
 			//表单规则
 			let rules = [{
 				name: "title",
-				rule: ["required", "minLength:2", "maxLength:9"], //可使用区间，此处主要测试功能
-				msg: ["请输入任务标题", "任务标题必须2个或以上字符", "任务标题不能超过9个字符"]
+				rule: ["required", "minLength:2", "maxLength:8"], //可使用区间，此处主要测试功能
+				msg: ["请输入任务标题", "任务标题必须2个或以上字符", "任务标题不能超过8个字符"]
 			}, {
 				name: "explain",
 				rule: ["required", "minLength:2", "maxLength:30"], //可使用区间，此处主要测试功能

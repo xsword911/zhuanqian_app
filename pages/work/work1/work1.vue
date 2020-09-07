@@ -125,7 +125,7 @@
 							<image :src="item.imgUrl == ''? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
 						</view>
 						<view class="activity_test">
-							<view class="">
+							<view class="" style="display:flex;">
 								<text style="color:#D91D37;" v-if="item.isReceive">【已接】</text>
 								<text>{{item.title}}</text>
 									<view class="activity_tag" v-if="item.tip == 0 && !item.isReceive">NEW <text></text></view>

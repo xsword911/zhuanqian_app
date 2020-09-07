@@ -15,7 +15,8 @@ module.exports = {
 		
 		return res;
 	},
-	//倒计时转换时分秒
+	
+	//倒计时(时间戳)转换时分秒
 	toHHmmss (data) {
 	   var time;
 	   var hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

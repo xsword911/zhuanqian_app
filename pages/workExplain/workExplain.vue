@@ -175,7 +175,7 @@ export default{
 			taskType: null, //1:查看任务列表 2:查看我接受的任务
 			
 			counDown: "",  //倒计时
-			receiveTimeStamp: null,//接受任务时间戳(倒计时用)
+			resTime: null,//得到数据的时间
 			doneLongTimeStamp: null,//限时时间(秒)转时间戳(倒计时用)
 			setIntervalId: '',  //计时器id
 			
@@ -202,7 +202,6 @@ export default{
 		} 	
 		if(this.taskType == 2) this.getTaskDetails(); 	// 查询任务完成情况
 		this.serverUrl = api.getFileUrl();		
-		console.log("ss");
 	},
 	methods:{
 		//打开链接
@@ -286,14 +285,13 @@ export default{
 		//获取倒计时
 		getCount(){
 			//获取倒计时
-			if(this.taskType == 1) this.receiveTimeStamp = new Date(this.workInfo.begTime).getTime(); //获取开始任务时间戳
-			else this.receiveTimeStamp = new Date(this.workInfo.receiveTime).getTime();  //获取接受任务时间戳
-			this.doneLongTimeStamp = this.workInfo.doneLong*1000;   //限时时间(秒)转时间戳
+			if(this.taskType != 2) return;   //不是查看我接受的任务状态，没有倒计时
+			this.resTime = Date.parse(new Date());  //得到数据时的时间戳
 			this.setIntervalId = setInterval(this.counDownTimeOut, 1000);  //获取计时器id
 		},
 		//倒计时计时器
 		counDownTimeOut(){
-			let counDown = this.doneLongTimeStamp - (Date.parse(new Date()) - this.receiveTimeStamp);  //获取时间差
+			let counDown = (this.workInfo.receiveDown*1000) - (Date.parse(new Date()) - this.resTime);  //获取时间差
 			if(counDown < 0){
 				this.counDown = '任务超时';
 				clearInterval(this.setIntervalId);  //清除定时器
