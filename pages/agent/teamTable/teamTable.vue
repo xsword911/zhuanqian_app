@@ -86,25 +86,34 @@
 								
 								<view class="lay_group">
 									<view class="" style="width:50%;">
-										提现次数：<text class="style_Numtest">{{item.drawSum}}</text>
+										首充金额：<text class="style_Numtest">￥{{item.firstRechargeMoney}}</text>
 									</view>
-									<view class="">
-										提现：<text class="style_Numtest">￥{{item.drawMoney}}</text>
+									<view class="" style="width:50%;">
+										提现次数：<text class="style_Numtest">{{item.drawSum}}</text>
 									</view>
 								</view>
 								
 								<view class="lay_group">
+									<view class="" style="width:50%;">
+										提现：<text class="style_Numtest">￥{{item.drawMoney}}</text>
+									</view>
 									<view class="" style="width:50%;">
 										加款：<text class="style_Numtest">￥{{item.moneyIns}}</text>
 									</view>
-									<view class="">
-										扣款：<text class="style_Numtest">￥{{item.moneySubtract}}</text>
-									</view>
 								</view>
 								
 								<view class="lay_group">
 									<view class="" style="width:50%;">
+										扣款：<text class="style_Numtest">￥{{item.moneySubtract}}</text>
+									</view>
+									<view class="" style="width:50%;">
 										代理佣金：<text class="style_Numtest">{{item.moneyAgency}}</text>
+									</view>
+								</view>
+								
+								<view class="lay_group">
+									<view class="">
+										当天注册：<text class="style_Numtest">{{item.isRegisterTodayTip}}</text>
 									</view>
 								</view>
 							</view>
@@ -304,6 +313,9 @@ export default{
 						 + parseFloat(item.moneySubtract);
 						 
 						 item.money = item.money.toFixed(2);
+						 
+						 if(item.isRegisterToday == 0) item.isRegisterTodayTip = "否";
+						 if(item.isRegisterToday == 1) item.isRegisterTodayTip = "是";
 					});
 					this.teamTableEn = data;
 					this.teamTableShow = true;

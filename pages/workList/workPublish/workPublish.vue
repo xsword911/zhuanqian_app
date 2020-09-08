@@ -400,30 +400,32 @@ export default {
 			// console.log(this.classifyId);
 		},
 		
-		
-		
 		//添加宣传图片
 		taskImgResult: function(e) {
-			this.taskimageData = e.imgArr[0];
+			if(e.status == 3) this.taskimageData = "";	//上传图片失败清理数据
+			else this.taskimageData = e.imgArr[0];
 		},
 		//移除宣传图片
 		taskImgRemove: function(e) {
 			// let index = e.index
+			this.taskimageData = "";
 		},
 		
 		//添加图片
 		imgResult: function(e) {
-			this.imageData = e.imgArr[0];
+			if(e.status == 3) this.imageData = "";
+			else this.imageData = e.imgArr[0];
 		},
 		//移除图片
 		remove: function(e) {
+			this.imageData = "";
 			// let index = e.index
 		},
 		//跳转到VIP升级界面
 		toVip(){
 			uni.navigateTo({
 				url: "/pages/vip/vip"
-			})
+			});
 		},
 		//获取会员表信息
 		getLevelList(){

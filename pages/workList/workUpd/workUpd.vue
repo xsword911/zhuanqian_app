@@ -48,7 +48,7 @@
 				<tui-list-cell :hover="false">
 					<view class="tui-line-cell">
 						<view class="tui-title"><text class="necessary" style="visibility: hidden;">*</text>任务图片</view>
-						<tui-upload :serverUrl="serverUrl" @complete="imgResult" @remove="remove" 
+						<tui-upload :serverUrl="serverUrl" @complete="imgResult" @remove="remove"
 						:limit="1" style="margin-left:20rpx;"></tui-upload>
 					</view>
 				</tui-list-cell>
@@ -359,6 +359,7 @@ export default {
 			api.getTaskInfo({id: this.id}, (res)=>{
 				let data = api.getData(res).data[0];
 				console.log(data);
+				
 				this.taskInfo = data;
 				this.title = this.taskInfo.title;   	//任务标题
 				this.explain = this.taskInfo.explain;   //任务说明
@@ -387,27 +388,31 @@ export default {
 		},
 		//添加宣传图片
 		taskImgResult: function(e) {
-			// this.taskimageData = e.imgArr[0];
-			if (e.imgArr.length > 0)
-				this.taskimageData = e.imgArr[0];
-			else
-				this.taskimageData = "";//清理数据
+			if(e.status == 3) this.taskimageData = "";
+			else this.taskimageData = e.imgArr[0];
+			// if (e.imgArr.length > 0)
+			// 	this.taskimageData = e.imgArr[0];
+			// else
+			// 	this.taskimageData = "";//清理数据
 		},
 		//移除宣传图片
 		taskImgRemove: function(e) {
+			this.taskimageData = "";
 			// let index = e.index
 		},
 		
 		//添加图片
 		imgResult: function(e) {
-			// this.imageData = e.imgArr[0];
-			if (e.imgArr.length > 0)
-				this.imageData = e.imgArr[0];
-			else
-				this.imageData = "";//清理数据
+			if(e.status == 3) this.imageData = "";
+			else this.imageData = e.imgArr[0];
+			// if (e.imgArr.length > 0)
+			// 	this.imageData = e.imgArr[0];
+			// else
+			// 	this.imageData = "";//清理数据
 		},
 		//移除图片
 		remove: function(e) {
+			this.imageData = "";
 			// let index = e.index
 		},
 		//获取会员类型列表

@@ -696,11 +696,11 @@ export default{
 		},
 		//打开弹窗
 		show8(item) {
+			audio.playAudio();
 			uni.navigateTo({
 				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=1&isReceive=" + item.isReceive
 			});
 			return;
-			audio.playAudio();
 			if(item.type == 4) return;
 			this.modal8 = true;
 			if(item == -2){

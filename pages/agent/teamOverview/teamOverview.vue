@@ -49,6 +49,11 @@
 			</view>
 			
 			<view class="lay_box">
+				<view class="style_Numtest">￥{{StatisticsMonthEn.firstRechargeMoney}}</view>
+				<view class="">首充金额</view>
+			</view>
+			
+			<view class="lay_box">
 				<view class="style_Numtest">{{StatisticsMonthEn.drawSum}}</view>
 				<view class="">提现次数</view>
 			</view>
@@ -86,6 +91,11 @@
 			<view class="lay_box">
 				<view class="style_Numtest">{{userEn.allSubSum}}</view>
 				<view class="">所有下级</view>
+			</view>
+			
+			<view class="lay_box">
+				<view class="style_Numtest">{{StatisticsMonthEn.isRegisterToday}}</view>
+				<view class="">注册人数</view>
 			</view>
 			
 <!-- 			<view class="lay_box" v-if="isOpenGold == 1">

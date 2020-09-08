@@ -201,7 +201,7 @@ export default{
 			else this.isReceive = true;
 		} 	
 		if(this.taskType == 2) this.getTaskDetails(); 	// 查询任务完成情况
-		this.serverUrl = api.getFileUrl();		
+		this.serverUrl = api.getFileUrl();	//获取上传图片地址
 	},
 	methods:{
 		//打开链接
@@ -221,7 +221,6 @@ export default{
 				url: 'http://120.78.217.149:8027/storage/cache/202008251609454195474913.jpg',
 				success(res) {
 					if (res.statusCode === 200) {
-					    console.log('下载成功');
 						let url = res.tempFilePath;   //获取图片本地路径
 						_this.imgSaveToPhotosAlbum(url);  //保存到本地
 					}
@@ -309,15 +308,21 @@ export default{
 			this.doneLong = time.timeChange(doneLongSecond);
 		},
 		result: function(e) {
-			console.log(e.imgArr);
-			if (e.imgArr.length > 0)
-				this.imageData = e.imgArr[0];
-			else
-				this.imageData = "";//清理数据
+			console.log(e);
+			if(e.status == 3) this.imageData = "";	//上传图片失败清理数据
+			else this.imageData = e.imgArr[0];
+			console.log(this.imageData);
+			// if (e.imgArr.length > 0)
+			// 	this.imageData = e.imgArr[0];
+			// else
+			// 	this.imageData = "";//清理数据
 		},
 		remove: function(e) {
 			//移除图片
-			// let index = e.index
+			this.imageData = "";	//清理数据
+			console.log(this.imageData);
+			// let index = e.index;
+			// console.log(index);
 		},
 		
 		
@@ -383,7 +388,6 @@ export default{
 		//提交任务
 		submitTask(){
 			//需要任务凭证时
-			console.log(this.imageData);
 			if(this.workInfo.isDoneProve == 1 && util.isEmpty(this.userName)){
 				uni.showToast({
 					title: "任务凭证不能为空",
@@ -392,7 +396,7 @@ export default{
 				return;
 			}
 			//需要任务截图时
-			else if(this.workInfo.isDoneImg == 1 && util.isEmpty(this.imageData)){
+			else if(this.workInfo.isDoneImg == 1 && util.isEmpty(this.imageData) || this.imageData == undefined){
 				uni.showToast({
 					title: "任务截图不能为空",
 					icon: "none"
