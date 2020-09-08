@@ -105,18 +105,18 @@ export default{
 				let code = api.getCode(res);
 				let msg = api.getMsg(res);
 				if(code == 0){
-					let uid = api.getData(res);   //返回用户uid
 					uni.showToast({
 						title: msg,
 						image: "/static/img/check-circle.png",
 						duration: 1500,
 						success() {
 							setTimeout(function(){
-								storage.setUid(uid);  //保存用户新uid
 								storage.setLoginType(1);  //保存登录方式
 								api.login({account: _this.userName, pwd: md5(_this.passWord), type: 0}, (res)=>{
 									let code = api.getCode(res);
 									if(code == 0){
+										let uid = api.getData(res);   //返回用户uid
+										storage.setUid(uid);  //保存用户新uid
 										let userInfo = {
 											userName: _this.userName,
 											passWord: _this.passWord
