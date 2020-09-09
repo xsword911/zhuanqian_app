@@ -483,7 +483,7 @@ export default{
 			let data = storage.getLevelList();
 			this.arrayLevel = data;  //保存任务等级列表
 			data.forEach((item, index) =>{
-				this.multiArray[2].push(item.levelName);
+				if(item.state == 1) this.multiArray[2].push(item.levelName);	//获取状态为开启的每个任务等级名称
 			});
 		},
 		//选择任务等级

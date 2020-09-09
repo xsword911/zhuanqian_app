@@ -9,6 +9,10 @@
 		<view class="lay_time">
 			{{noticeEn.updTime}}
 		</view>
+		
+		<view class="btn btn_style" v-show="noticeEn.toUrl != ''">
+			<button type="default" hover-class="btn_hover" @tap="toNoticeUrl">打开链接</button>
+		</view>
 	</view>
 </template>
 
@@ -16,6 +20,7 @@
 import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
+import str from "@/common/str.js";
 export default{
 	data() {
 		return {
@@ -28,6 +33,11 @@ export default{
 		this.getNoticeList();  //获取公告列表
 	},
 	methods:{
+		//公告外部链接跳转
+		toNoticeUrl(){
+			//跳转地址包含http就跳转
+			if(str.contains(this.noticeEn.toUrl, "http")) util.openUrl(this.noticeEn.toUrl);
+		},
 		//获取公告列表
 		getNoticeList(){
 			let data = {
@@ -64,5 +74,13 @@ export default{
 		margin-top:60rpx;
 		padding:0 20rpx;
 		box-sizing:border-box;
+	}
+	.btn{
+		margin-top:40rpx;
+	}
+	.btn>button{
+		width:40%;
+		font-size:14px;
+		padding:0;
 	}
 </style>

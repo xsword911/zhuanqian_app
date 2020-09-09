@@ -188,7 +188,7 @@ export default {
     onShow(){
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息				
-		this.getLevelDesc(); //获取会员等级列表
+		this.getLevelDesc(); //获取全部会员等级列表
 		this.getWorkTypeList();  //获取任务类型列表
 	},
 	methods:{
@@ -202,7 +202,7 @@ export default {
 		},
 		//获取会员等级列表
 		getLevelDesc(){
-			this.arrayLevel = storage.getLevelDescList();
+			this.arrayLevel = storage.getLevelDescList(); //获取全部会员等级列表
 		},
 		//选择任务等级
 		levelPickerChange(e){
