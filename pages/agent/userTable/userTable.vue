@@ -109,7 +109,7 @@ export default{
 				this.userTableEn = data;
 			});
 		},
-		//上拉刷新
+		//下拉刷新
 		onPullDownRefresh: function() {
 			//延时为了看效果
 			setTimeout(() => {
@@ -236,7 +236,7 @@ export default{
 		this.page = this.page + 1;
 		
 		api.getUser({
-			uid: this.uid,
+			upper: this.uid,
 			type: 0,
 			page: this.page,
 			count: 10
