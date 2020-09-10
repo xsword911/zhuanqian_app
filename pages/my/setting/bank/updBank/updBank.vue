@@ -168,7 +168,7 @@ export default{
 			//判断信息是否填写完整
 			if(util.isEmpty(this.userBank) && util.isEmpty(this.bankBranch) 
 			&& util.isEmpty(this.bankCode) && util.isEmpty(this.bankUserName)
-			 && util.isEmpty(this.pwd)){
+			&& util.isEmpty(this.pwd)){
 				uni.showToast({
 					title: '信息填写不完整',
 					image: "/static/img/info-circle.png",
@@ -179,7 +179,7 @@ export default{
 					title: '密码输入不一致',
 					image: "/static/img/fail-circle.png",
 					duration: 2000
-				})
+				});
 			}else{
 				let data = {
 					uid: this.uid,
@@ -209,13 +209,13 @@ export default{
 									// }) 
 								}, 1600);
 							}
-						})
+						});
 					}else{
 						uni.showToast({
 							title: msg,
 							image: "/static/img/fail-circle.png",
 							duration: 2000
-						})
+						});
 					}
 				});
 			}

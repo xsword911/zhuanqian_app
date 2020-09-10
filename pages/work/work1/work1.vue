@@ -402,6 +402,7 @@ export default{
 			this.multiArray[0] = [];
 			this.multiArray[1] = [];			
 			data.forEach((item, index) =>{
+				console.log(data);
 				if(item.big.state == 1)  //任务大类状态为开启时
 				{
 					this.multiArray[0].push(item.big.name);  //获取大类名称
@@ -686,7 +687,6 @@ export default{
 			}, (res)=> {
 				let data = api.getData(res).data;
 				this.activityList = data;
-				console.log(this.activityList);
 			});
 		},
 		//关闭弹窗

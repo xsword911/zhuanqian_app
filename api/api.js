@@ -226,6 +226,9 @@ const api = {
 	
 	//用户查询充值限制
 	getRechargeLimit: function (path, funSuccess, state = false) {httpUtil.post("money/rechargeWay/getRechargeLimit", path, funSuccess, state);},
+	
+	//取系统当前时间
+	getSystemTimeNow: function (path, funSuccess, state = false) {httpUtil.post("system/getSystemTimeNow", path, funSuccess, state);},
 };
 
 export default api;

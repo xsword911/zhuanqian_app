@@ -56,8 +56,11 @@ export default{
 		//获取会员等级信息
 		getUserLevel(){
 			api.getLevelAll((res)=>{
+				this.levelList = [];
 				let data = api.getData(res).data;
-				this.levelList = data;
+				data.forEach((item, index) =>{
+					if(item.state == 1) this.levelList.push(item);  //获取状态为开启的会员等级信息
+				});
 				storage.setLevelList(this.levelList);  //保存会员列表
 			});
 		},

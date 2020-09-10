@@ -538,9 +538,12 @@ export default {
 		//获取会员类型列表
 		getLevelType(){
 			api.getLevelDesc({}, (res)=>{
+				this.levelType = [];
 				let data = api.getData(res);
-				this.levelType = data;
-				storage.setLevelDescList(data);
+				data.forEach((item, index) =>{
+					if(item.state == 1) this.levelType.push(item);	//获取状态为开启的每个任务等级信息
+				});
+				storage.setLevelDescList(this.levelType);
 			});
 		},
 		//获取任务类型列表
