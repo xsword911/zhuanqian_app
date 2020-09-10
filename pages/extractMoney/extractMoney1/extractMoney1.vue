@@ -129,8 +129,7 @@ export default{
 				api.getSystemTimeNow({}, (res)=>{
 					let time = api.getData(res);
 					time = time.substring(11)  //获取当前系统时间 HH-mm-ss
-					if(time > this.drawEndTime.value && time < this.drawBegTime.value)
-						 this.isDrawTime = false;  //当前时间不在提现时间内
+					if(time > this.drawEndTime.value || time < this.drawBegTime.value) this.isDrawTime = false;  //当前时间不在提现时间内
 					else this.isDrawTime = true;   //当前时间在提现时间内
 				});
 			});
