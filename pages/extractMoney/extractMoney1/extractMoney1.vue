@@ -44,8 +44,12 @@
 				</view>
 			</view>
 			
-			<view class="lay_btn btn_style">
-				<button type="default" @tap="confirm">提交</button>
+			<view class="draw_time" v-if="!isDrawTime">
+				每日提现时间为{{drawBegTime.value}}至{{drawEndTime.value}}
+			</view>
+			
+			<view class="lay_btn btn_style" :class="{'missTime': !isDrawTime}">
+				<button type="default" @tap="confirm" hover-class="btn_hover">提交</button>
 			</view>
 		</view>
 		
@@ -73,6 +77,7 @@ import storage from "@/api/storage.js";
 import util from "@/common/util.js";
 import api from "@/api/api.js";
 import md5 from "@/common/md5.js";
+import time from "@/common/time.js";
 export default{
 	data() {
 		return {
@@ -88,6 +93,10 @@ export default{
 			
 			moneyMin: null,  //出款下限
 			moneyMax: null,  //出款上限限
+			
+			isDrawTime: true,  //是否在提现时间内
+			drawBegTime: "",  //提现开始时间
+			drawEndTime: "",  //提现结束时间
 		}
 	},
 	onLoad(res) {
@@ -98,10 +107,33 @@ export default{
 		}else {
 			this.uid = storage.getUid();  //获取uid
 			this.getMyInfo();  //刷新我的信息
-			this.getMyBankInfo();//查询用户绑定银行卡信息
+			// this.getMyBankInfo();//查询用户绑定银行卡信息
+			this.getDrawTime();  //获取提现限制时间
 		}
 	},
 	methods:{
+		//获取提现限制时间
+		getDrawTime(){
+			let postData = {
+				page: 1,
+				count: 5,
+				key: "draw_time_max|draw_time_min"
+			};
+			api.getConfig(postData, (res)=>{
+				let data = api.getData(res).data;
+				data.forEach((item, index) =>{
+					if(item.key == 'draw_time_max') this.drawEndTime = item;
+					if(item.key == 'draw_time_min') this.drawBegTime = item;
+				});
+				//获取当前时间系统时间
+				api.getSystemTimeNow({}, (res)=>{
+					let time = api.getData(res);
+					time = time.substring(11)  //获取当前系统时间 HH-mm-ss
+					if(time > this.drawEndTime.value || time < this.drawBegTime.value) this.isDrawTime = false;  //当前时间不在提现时间内
+					else this.isDrawTime = true;   //当前时间在提现时间内
+				});
+			});
+		},
 		//跳转到登录界面
 		toLogin(){
 			uni.navigateTo({
@@ -154,6 +186,7 @@ export default{
 		},
 		//确认提现
 		confirm(){
+			if(!this.isDrawTime) return;  //不在提现时间内
 			let _this = this;
 			uni.showModal({
 			    title: '提示',
@@ -262,7 +295,6 @@ export default{
 		margin-top:20rpx;
 		border-top:1px solid #f9f7fa;
 		border-bottom:1px solid #f9f7fa;
-		margin-bottom:30rpx;
 		padding-left:30rpx;
 		box-sizing:border-box;
 		background-color:#fff;
@@ -292,6 +324,7 @@ export default{
 	.lay_btn>button{
 		font-size:14px;
 		width:80%;
+		margin-top:40rpx;
 	}
 	.lay_bank{
 		color:#999999;
@@ -334,5 +367,15 @@ export default{
 	}
 	.coin_query::after{
 		border:none;
+	}
+	
+	.draw_time{
+		color:#DC3B40;
+		text-align:center;
+		font-size:14px;
+		margin-top:40rpx;
+	}
+	.missTime>button{
+		background-color:#E3E3E3;
 	}
 </style>

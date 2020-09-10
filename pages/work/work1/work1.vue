@@ -402,6 +402,7 @@ export default{
 			this.multiArray[0] = [];
 			this.multiArray[1] = [];			
 			data.forEach((item, index) =>{
+				console.log(data);
 				if(item.big.state == 1)  //任务大类状态为开启时
 				{
 					this.multiArray[0].push(item.big.name);  //获取大类名称
@@ -483,7 +484,7 @@ export default{
 			let data = storage.getLevelList();
 			this.arrayLevel = data;  //保存任务等级列表
 			data.forEach((item, index) =>{
-				this.multiArray[2].push(item.levelName);
+				if(item.state == 1) this.multiArray[2].push(item.levelName);	//获取状态为开启的每个任务等级名称
 			});
 		},
 		//选择任务等级
@@ -686,7 +687,6 @@ export default{
 			}, (res)=> {
 				let data = api.getData(res).data;
 				this.activityList = data;
-				console.log(this.activityList);
 			});
 		},
 		//关闭弹窗

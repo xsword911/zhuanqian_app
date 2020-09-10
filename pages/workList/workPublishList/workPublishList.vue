@@ -175,12 +175,12 @@ export default {
 		this.uid = storage.getUid();  //获取uid
 		this.userEn = storage.getMyInfo();  //获取我的信息		
 		this.getTaskDetails();  //获取金币收入明细表		
-		this.getLevelDesc(); //获取会员等级列表
+		this.getLevelDesc(); //获取全部会员等级列表
 	},
 	methods:{
 		//获取会员等级列表
 		getLevelDesc(){
-			this.arrayLevel = storage.getLevelDescList();
+			this.arrayLevel = storage.getLevelDescList(); //获取全部会员等级列表
 		},
 		//选择任务状态
 		statePickerChange(e){

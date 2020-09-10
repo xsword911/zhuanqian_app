@@ -54,6 +54,11 @@
 			</view>
 			
 			<view class="lay_box">
+				<view class="style_Numtest">{{StatisticsMonthEn.firstRechargeMoneyNum}}</view>
+				<view class="">首充人数</view>
+			</view>
+			
+			<view class="lay_box">
 				<view class="style_Numtest">{{StatisticsMonthEn.drawSum}}</view>
 				<view class="">提现次数</view>
 			</view>

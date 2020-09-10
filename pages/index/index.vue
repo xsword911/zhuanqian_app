@@ -155,6 +155,7 @@
 							</view>
 						</scroll-view>
 						<view class="lay_more">
+							<text @tap="toNoticeUrl" v-show="noticeEn.toUrl != ''">打开链接</text>
 							<text @tap="toMore">更多...</text>
 						</view>
 					</view>
@@ -174,6 +175,7 @@ import tuiRoundProgress from '@/components/tui-round-progress/tui-round-progress
 import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 import tran from "@/common/tran.js";
 import utilCore from "@/api/utilCore.js";
+import str from "@/common/str.js";
 export default{
 	comments:{
 		tuiModal,
@@ -247,7 +249,11 @@ export default{
 		getLevelList(){
 			api.getUserLevel({}, (res)=>{
 				let data = api.getData(res).data;
-				storage.setLevelList(data);  //保存会员信息列表到本地
+				let data2 = [];
+				data.forEach((item, index) =>{
+					if(item.state == 1) data2.push(item);	//获取状态为开启的每个任务等级信息
+				});
+				storage.setLevelList(data2);  //保存会员信息列表到本地
 			});
 		},
 		//获取全部会员信息
@@ -350,6 +356,7 @@ export default{
 			api.getNotice({type: 2, state: 1}, (res)=>{
 				let data = api.getData(res).data;
 				this.noticeEn = data[0];
+				// console.log(this.noticeEn);
 				if(this.noticeId < this.noticeEn.id){
 					this.noticeId = this.noticeEn.id;
 					this.show8(100);  //公告弹窗
@@ -364,10 +371,15 @@ export default{
 				url: '/pages/notice/notice'
 			});
 		},
+		//公告外部链接跳转
+		toNoticeUrl(){
+			//跳转地址包含http就跳转
+			if(str.contains(this.noticeEn.toUrl, "http")) util.openUrl(this.noticeEn.toUrl);
+		},
 		//跑马灯点击跳转外部链接
 		toRunHorseUrl(){
-			if(util.isEmpty(this.runHorseEn.toUrl)) return;
-			util.openUrl(this.runHorseEn.toUrl);
+			//跳转地址包含http就跳转
+			if(str.contains(this.runHorseEn.toUrl, "http")) util.openUrl(this.runHorseEn.toUrl);
 		},
 		//获取跑马灯文字内容
 		getRunHorse(){
@@ -378,8 +390,8 @@ export default{
 		},
 		//轮播图点击跳转到外部链接
 		toUrl(url){
-			if(util.isEmpty(url)) return;
-			util.openUrl(url);
+			//跳转地址包含http就跳转
+			if(str.contains(url, "http")) util.openUrl(url);
 		},
 		//获取轮播图列表
 		getRun(){
@@ -800,10 +812,18 @@ export default{
 	}
 	
 	.lay_more{
-		text-align: right; 
-		padding:20rpx 10rpx 10rpx 0; 
+		padding:20rpx 10rpx 10rpx; 
 		box-sizing:border-box; 
-/* 		text-decoration:underline; */
+		/* text-decoration:underline; */
+	}
+	.lay_more>text{
+		display:inline-block;
+	}
+	.lay_more>text:nth-child(1){
+		float:left;
+	}
+	.lay_more>text:nth-child(2){
+		float:right;
 	}
 </style>
 

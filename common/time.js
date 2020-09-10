@@ -26,7 +26,7 @@ module.exports = {
 	   return time;
 	},
 	
-	//获取当前时间
+	//获取当前时间  yyyy-MM-dd-HH-mm-ss
 	getNowTime(){
 		var date = new Date();
 		//年
@@ -48,6 +48,23 @@ module.exports = {
 		if(ss < 10) ss = "0" + ss;
 		
 		var rq = year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
+		return rq;
+	},
+	
+	//获取当前时间  HH-mm-ss
+	getNowTimeHMS(){
+		var date = new Date();
+		//时
+		var hh = date.getHours();
+		if(hh < 10) hh = "0" + hh;
+		//分
+		var mm = date.getMinutes();
+		if(mm < 10) mm = "0" + mm;
+		//秒
+		var ss = date.getSeconds();
+		if(ss < 10) ss = "0" + ss;
+		
+		var rq = hh + ":" + mm + ":" + ss;
 		return rq;
 	},
 	

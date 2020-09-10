@@ -309,9 +309,11 @@ export default{
 		},
 		result: function(e) {
 			console.log(e);
-			if(e.status == 3) this.imageData = "";	//上传图片失败清理数据
-			else this.imageData = e.imgArr[0];
-			console.log(this.imageData);
+			//上传状态：1-上传成功 2-上传中 3-上传失败
+			if(e.status == 1) 
+				this.imageData = e.imgArr[0];  //上传成功状态获取图片路径
+			else 
+				this.imageData = "";  //上传失败、上传中状态清空图片路径
 			// if (e.imgArr.length > 0)
 			// 	this.imageData = e.imgArr[0];
 			// else

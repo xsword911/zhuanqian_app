@@ -388,8 +388,11 @@ export default {
 		},
 		//添加宣传图片
 		taskImgResult: function(e) {
-			if(e.status == 3) this.taskimageData = "";
-			else this.taskimageData = e.imgArr[0];
+			//上传状态：1-上传成功 2-上传中 3-上传失败
+			if(e.status == 1) 
+				this.taskimageData = e.imgArr[0];  //上传成功状态获取图片路径
+			else 
+				this.taskimageData = "";  //上传失败、上传中状态清空图片路径
 			// if (e.imgArr.length > 0)
 			// 	this.taskimageData = e.imgArr[0];
 			// else
@@ -402,9 +405,12 @@ export default {
 		},
 		
 		//添加图片
-		imgResult: function(e) {
-			if(e.status == 3) this.imageData = "";
-			else this.imageData = e.imgArr[0];
+		imgResult: function(e) {			
+			//上传状态：1-上传成功 2-上传中 3-上传失败
+			if(e.status == 1) 
+				this.imageData = e.imgArr[0];  //上传成功状态获取图片路径
+			else 
+				this.imageData = "";  //上传失败、上传中状态清空图片路径
 			// if (e.imgArr.length > 0)
 			// 	this.imageData = e.imgArr[0];
 			// else
@@ -418,8 +424,11 @@ export default {
 		//获取会员类型列表
 		getLevelType(){
 			api.getLevelDesc({}, (res)=>{
+				this.levelType = [];
 				let data = api.getData(res);
-				this.levelType = data;
+				data.forEach((item, index) =>{
+					if(item.state == 1) this.levelType.push(item);	//获取状态为开启的每个任务等级信息
+				});
 			});
 		},
 		//获取任务类型列表
