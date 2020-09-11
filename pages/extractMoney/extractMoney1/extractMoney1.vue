@@ -28,7 +28,7 @@
 				<view class="lay_row">
 					<view class="lay_row_test">提款金额</view>
 					<view class="lay_row_input">
-						<input type="text" value="" placeholder="请输入提款金额" v-model="money" />
+						<input type="number" value="" placeholder="请输入提款金额" v-model="money" />
 					</view>
 				</view>
 				
@@ -221,6 +221,13 @@ export default{
 								duration: 2000
 							});
 							return;
+						}else if(!_this.isNum(parseFloat(_this.money))){
+							uni.showToast({
+								title: "提现金额只能是整数",
+								image: "/static/img/fail-circle.png",
+								duration: 2000
+							});
+							return;
 						}
 						_this.submitExtractMoney();
 			        }else if (res.cancel) {
@@ -228,6 +235,11 @@ export default{
 			        }
 			    }
 			});
+		},
+		//判断是否是纯数字
+		isNum(value){
+			const reg = /^[0-9]*$/;
+			return reg.test(value);
 		},
 		//提交提现申请
 		submitExtractMoney(){

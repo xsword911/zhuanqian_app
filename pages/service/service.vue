@@ -63,6 +63,7 @@
 <script>
 import api from "@/api/api.js";
 import util from "@/common/util.js";
+import storage from "@/api/storage.js";
 export default{
 	data() {
 		return {
@@ -76,7 +77,22 @@ export default{
 	methods:{
 		//跳转到联系客服界面
 		toService(val){
-			util.openUrlInner(val);
+			let state = storage.getLoginType();
+			//游客登录跳转到登录界面
+			if(state == 0) {
+				uni.showModal({
+					content: "需要登录账号",
+					showCancel:false,
+					success(res) {
+						if(res.confirm) {
+							uni.navigateTo({
+								url: '/pages/login/login'
+							});
+						}
+					}
+				})
+			}
+			else util.openUrlInner(val);
 		},
 		//获取客服链接
 		getCustomerServiceUrl(){

@@ -350,14 +350,19 @@ export default {
 			api.getTaskTree({}, (res)=>{
 				let data = api.getData(res);
 				this.taskTree = data;  //保存任务大类和子类列表
+				this.multiArray[0] = [];
+				this.multiArray[1] = [];	
 				let arrBigClassifyName = [];
 				data.forEach((item, index) =>{
-					this.multiArray[0].push(item.big.name);  //获取大类名称
-					let arrClassifyName = [];  //子类名称数组
-					for(let i = 0; i < item.list.length; ++i){
-						arrClassifyName.push(item.list[i].name);  //获取每个子类名称
+					//获取状态为开启的大类和子类列表
+					if(item.big.state == 1){
+						this.multiArray[0].push(item.big.name);  //获取大类名称
+						let arrClassifyName = [];  //子类名称数组
+						for(let i = 0; i < item.list.length; ++i){
+							arrClassifyName.push(item.list[i].name);  //获取每个子类名称
+						}
+						arrBigClassifyName.push(arrClassifyName);
 					}
-					arrBigClassifyName.push(arrClassifyName);
 				});
 				this.arrClassifyName = arrBigClassifyName;  //保存所有子类名称数组
 				this.multiArray[1] = this.arrClassifyName[0]; //设置显示默认子类名称

@@ -241,8 +241,11 @@ export default{
 		getTaskTree(){
 			api.getTaskTree({}, (res)=>{
 				let data = api.getData(res);
-				this.workTree = data;
-				storage.setTaskTree(data);
+				this.workTree = [];
+				data.forEach((item, index) =>{
+					if(item.big.state == 1) this.workTree.push(item); //获取状态为开启的任务大类和子类列表
+				});
+				storage.setTaskTree(this.workTree);
 			});
 		},
 		//获取会员信息列表
