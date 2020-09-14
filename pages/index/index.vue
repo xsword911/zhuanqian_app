@@ -176,6 +176,7 @@ import uniNoticeBar from '@/components/uni-notice-bar/uni-notice-bar.vue';
 import tran from "@/common/tran.js";
 import utilCore from "@/api/utilCore.js";
 import str from "@/common/str.js";
+import config from "@/static/app/config.js";
 export default{
 	comments:{
 		tuiModal,
@@ -213,7 +214,10 @@ export default{
 			downloadUrl: "",  //app下载地址
 			
 			workTree: [], //任务大类和子类列表
-			arrSortName: ["火山小视频", "抖音", "微信", "快手", "微视", "今日头条", ]
+			arrSortName: ["火山小视频", "抖音", "微信", "快手", "微视", "今日头条", ],
+			
+			upgradeForce: false,  //是否强制更新
+			newVer: '', //最新版本号
 		}
 	},
 	onShow(){
@@ -222,7 +226,6 @@ export default{
 		this.getMyInfo();  //刷新我的信息
 		this.getRun();//获取轮播图列表
 		this.getRunHorse();   //获取跑马灯内容
-		this.getNotice();    //获取公告
 		this.noticePadding = "0";  //重置公告弹窗
 		this.getNotReadMsgSum(); //查询未读消息数
 		this.getLevelDesc();   //获取全部会员信息
@@ -233,9 +236,37 @@ export default{
 	methods:{
 		//获取下载app地址
 		getDownloadUrl(){
-			api.getConfig({key: 'app_download_url'}, (res)=>{
-				this.downloadUrl = api.getData(res).data[0].value;
+			let key = util.getVerKey();
+			api.getConfig({key: 'app_download_url|upgrade_force|' + key}, (res)=>{
+				let data = api.getData(res).data;
+				data.forEach((item, index) =>{
+					if(item.key == 'app_download_url') this.downloadUrl = item.value;
+					if(item.key == 'upgrade_force'){
+						if(item.value == '1') this.upgradeForce = true;  //强制更新
+						else this.upgradeForce = false;  //不强制更新
+					}
+					if(item.key == key) this.newVer = item.value;
+				});
+				if(!this.isNewVer(this.newVer)){
+					let _this = this;
+					uni.showModal({
+						content: '当前最新版本号为' + this.newVer 
+						+ '，请更新到最新版本',
+						showCancel: !this.upgradeForce,
+						success(res) {
+							if(res.confirm) util.openUrl(_this.downloadUrl);  //跳转到app更新地址
+							else _this.getNotice();    //获取公告
+						}
+					});
+				}
+				else this.getNotice();    //获取公告
 			});
+		},
+		//判断当前版本号是否是最新
+		isNewVer(newVer){
+			let ver = config.version;   //获取当前版本号
+			if(newVer > ver) return false;
+			return true;
 		},
 		//获取任务大类和子类列表
 		getTaskTree(){

@@ -211,10 +211,10 @@ export default{
 							}
 						});
 					}else{
-						uni.showToast({
-							title: msg,
-							image: "/static/img/fail-circle.png",
-							duration: 2000
+						uni.showModal({
+							title: "错误",
+							content: msg,
+							showCancel: false
 						});
 					}
 				});

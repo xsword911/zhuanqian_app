@@ -40,20 +40,6 @@ export default{
 		this.getNewVer();  //获取最新版本号
 	},
 	methods:{
-		//返回当前平台版本号的key
-		getVerKey(){
-			switch(uni.getSystemInfoSync().platform){
-			    case 'android':
-			       return 'android_ver';
-			       break;
-			    case 'ios':
-			       return 'ios_ver';
-			       break;
-			    default:
-			       return 'android_ver';
-			       break;
-			}
-		},
 		//更新
 		toUpdate(){
 			//获取下载app地址
@@ -65,7 +51,7 @@ export default{
 		},
 		//获取最新版本号
 		getNewVer(){
-			let verKey = this.getVerKey();  //获取当前平台版本号的key
+			let verKey = util.getVerKey();  //获取当前平台版本号的key
 			api.getConfig({key: verKey}, (res)=>{
 				this.newVer = api.getData(res).data[0].value;
 			});

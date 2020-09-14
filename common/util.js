@@ -164,4 +164,18 @@ module.exports = {
 		}
 		return s;
 	},
+	//返回当前平台版本号的key
+	getVerKey(){
+		switch(uni.getSystemInfoSync().platform){
+		    case 'android':
+		       return 'android_ver';
+		       break;
+		    case 'ios':
+		       return 'ios_ver';
+		       break;
+		    default:
+		       return 'android_ver';
+		       break;
+		}
+	},
 }

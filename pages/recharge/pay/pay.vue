@@ -4,7 +4,7 @@
 			<view class="lay_row">
 				<view class="lay_row_test"><text style="color:#dc3b40;">*</text>存入金额</view>
 				<view class="lay_row_input">
-					<input type="text" value="" v-model="money" placeholder="请输入金额"/>
+					<input type="number" value="" v-model="money" placeholder="请输入金额"/>
 				</view>
 			</view>
 			<view class="lay_row">

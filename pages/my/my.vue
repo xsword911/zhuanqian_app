@@ -241,7 +241,7 @@ export default{
 			uid: "",  //uid
 			loginType: null, //登录方式
 			notReadMsgSum: 0,  //未读消息数
-			levelName: "新人",  //我的会员等级名称
+			levelName: " ",  //我的会员等级名称
 			levelList: [],  //会员列表
 			isOpenGold: null,  //是否开启金币 0关闭 1开启
 		}
@@ -283,9 +283,10 @@ export default{
 		},
 		//获取我的会员等级名称
 		getMyLevelName(){
+			this.levelList = storage.getLevelDescList();
 			this.levelList.forEach((item, index) =>{
-				if(item.id == this.userEn.level) this.levelName = item.levelName;
-			});
+				if(item.key == this.userEn.level) this.levelName = item.val;
+			});	
 		},
 		//折叠面板
 		change3(e) {

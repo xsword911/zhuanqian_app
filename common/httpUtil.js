@@ -20,6 +20,7 @@ const httpUtil = {
 			//console.log(funSuccess);
 		};
 		let token = storage.getToken();
+		let version = config.version;
 		uni.request({
 			url: config.baseUrl + "/api/" + url,
 			method: 'post',
@@ -27,6 +28,7 @@ const httpUtil = {
 			data: postData,
 			header: {
 			  'token': token  //上传token
+			  //'v': version  //上传版本号
 			},
 			success: (res) => {				
 				let token = this.getToken(res);
