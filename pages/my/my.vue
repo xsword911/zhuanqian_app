@@ -136,7 +136,7 @@ export default{
 					name: "账户管理",
 					current: 0,
 					disabled: false,
-					imgUrl:"/static/img/m1.png",
+					imgUrl:"/static/img/style/my/m1.png",
 					arrSub: [{
 						name: "用户资料",
 						toUrl:"/pages/my/setting/setting"
@@ -154,7 +154,7 @@ export default{
 					name: "任务管理",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/m2.png",
+					imgUrl:"/static/img/style/my/m2.png",
 					arrSub: [{
 						name: "我发布的任务",
 						toUrl:"/pages/workList/workPublishList/workPublishList"
@@ -170,7 +170,7 @@ export default{
 					name: "资金管理",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/m3.png",
+					imgUrl:"/static/img/style/my/m3.png",
 					arrSub: [{
 						name: "个人总览",
 						toUrl:"/pages/my/userStatisticsMonth/userStatisticsMonth"
@@ -187,7 +187,7 @@ export default{
 					name: "代理管理",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/m8.png",
+					imgUrl:"/static/img/style/my/m4.png",
 					arrSub: [{
 						name: "代理说明",
 						toUrl:"/pages/agent/agentExplain/agentExplain"
@@ -210,7 +210,7 @@ export default{
 					name: "短信公告",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/m7.png",
+					imgUrl:"/static/img/style/my/m5.png",
 					arrSub: [{
 						name: "站内短信",
 						toUrl:"/pages/message/message"
@@ -224,7 +224,7 @@ export default{
 					name: "关于我们",
 					current: -1,
 					disabled: false,
-					imgUrl:"/static/img/m11.png",
+					imgUrl:"/static/img/style/my/m6.png",
 					arrSub: [{
 						name: "关于",
 						toUrl:"/pages/version/version"
@@ -527,8 +527,8 @@ export default{
 	}
 	.yqm{
 		font-size:15px;
-		background-color:#fcdb63;
-		padding:10rpx;
+/* 		background-color:#fcdb63;
+		padding:10rpx; */
 		margin-top:10rpx;
 	}
 	.info_right>button{
@@ -649,8 +649,8 @@ export default{
 		right: 0;
 	}
 	.func_img{
-		width:60rpx;
-		height:60rpx;
+		width:70rpx;
+		height:70rpx;
 	}
 	.func_left{
 		font-size:14px;

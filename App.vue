@@ -4,14 +4,25 @@ import storage from "@/api/storage.js";
 import api from "@/api/api.js";
 import util from "@/common/util.js";
 export default {
+	data() {
+		return {
+			
+		}
+	},
 	onLaunch: function() {
 		console.log('App Launch');
 	},
 	onShow: function() {
 		console.log('App Show');
+		
 		this.uid = storage.getUid();  //获取uid
 		this.getNotReadMsgSum(); //查询未读消息数
 		// plus.navigator.setFullscreen(true);
+		
+		// uni.setNavigationBarColor({
+		//     frontColor: '#000000', //前景颜色值，包括按钮、标题、状态栏的颜色，仅支持 #ffffff 和 #000000
+		//     backgroundColor: '#808080', //背景颜色值，有效值为十六进制颜色
+		// })
 	},
 	onHide: function() {
 		console.log('App Hide');
@@ -73,12 +84,6 @@ export default {
 	}
 	.btn_hover{
 		transform:scale(0.9)
-	}
-	.background_style{
-		background-color:#fcd030;
-	}
-	.btn_style>button{
-		background-color:#fcd030;
 	}
 	
 	

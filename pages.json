@@ -343,31 +343,32 @@
 	        // "selectedIconPath": "static/img/game_active.png",
 	        // "text": "游戏",
 			"pagePath": "pages/index/index",
-			"iconPath": "static/img/game.png",
-			"selectedIconPath": "static/img/game_active.png",
+			"iconPath": "static/img/style/bar/game.png",
+			"selectedIconPath": "static/img/style/bar/game_active.png",
 			"text": "首页"
 	    },{
 	        "pagePath": "pages/work/work1/work1",
-	        "iconPath": "static/img/work.png",
-	        "selectedIconPath": "/static/img/work_active.png",
+	        "iconPath": "static/img/style/bar/work.png",
+	        "selectedIconPath": "static/img/style/bar/work_active.png",
 	        "text": "任务"
 	    },{
 	        "pagePath": "pages/workList/workPublish/workPublish",
-	        "iconPath": "/static/img/extractMoney.png",
-	        "selectedIconPath": "static/img/extractMoney_active.png",
+	        "iconPath": "static/img/style/bar/extractMoney.png",
+	        "selectedIconPath": "static/img/style/bar/extractMoney_active.png",
 	        "text": "发布"
 	    },{
 	        "pagePath": "pages/service/service",
-	        "iconPath": "static/img/kefu1.png",
-	        "selectedIconPath": "/static/img/kefu_active.png",
+	        "iconPath": "static/img/style/bar/kefu1.png",
+	        "selectedIconPath": "static/img/style/bar/kefu1_active.png",
 	        "text": "客服"
 	    },{
 	        "pagePath": "pages/my/my",
-	        "iconPath": "static/img/my.png",
-	        "selectedIconPath": "static/img/my_active.png",
+	        "iconPath": "static/img/style/bar/my.png",
+	        "selectedIconPath": "static/img/style/bar/my_active.png",
 	        "text": "我的"
 	    }]
 	},
+	
 	
 	"globalStyle": {
 		"pageOrientation": "portrait",
@@ -376,4 +377,12 @@
 		"navigationBarBackgroundColor": "#fcd030",  //#1E9FFF  fcd030
 		"backgroundColor": "#FFFFFF"
 	}
+	
+	// "globalStyle": {
+	// 	"pageOrientation": "portrait",
+	// 	"navigationBarTextStyle": "white",
+	// 	"navigationBarTitleText": "uni-app",
+	// 	"navigationBarBackgroundColor": "#DC3B40",  //#1E9FFF  fcd030
+	// 	"backgroundColor": "#FFFFFF"
+	// }
 }

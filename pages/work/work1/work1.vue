@@ -24,7 +24,7 @@
 				</picker>
 			</view>
 		</view>
-		<view class="head_box">
+		<view class="head_box background_style">
 			<!-- 金币信息 -->
 			<view class="coin">
 				<view class="">
@@ -122,7 +122,10 @@
 				<view class="activity_column" v-for="(item, index) in activityList" :key="index">
 					<view class="activity_left">
 						<view class="activity_img">
-							<image :src="item.imgUrl == ''? '/static/img/work_img.png' : item.imgUrl" mode="widthFix"></image>
+							<image :src="item.imgUrl == ''? '/static/img/style/task/new.png' : item.imgUrl" 
+							mode="widthFix" v-if="item.tip == 0"></image>
+							<image :src="item.imgUrl == ''? '/static/img/style/task/hot.png' : item.imgUrl" 
+							mode="widthFix" v-if="item.tip == 1"></image>
 						</view>
 						<view class="activity_test">
 							<view class="" style="display:flex;">
@@ -138,7 +141,8 @@
 					<view class="activity_right" @tap="show8(item)">
 						<button class="activity_btn" hover-class="btn_hover">
 							<view class="activity_btnImg">
-								<image src="/static/img/work_btn.png" mode="widthFix"></image>
+								<!-- <image src="/static/img/work_btn.png" mode="widthFix"></image> -->
+								<image src="/static/img/style/task/money.png" mode="widthFix"></image>
 							</view>
 							<text>+{{item.award}}</text>
 						</button>
@@ -789,7 +793,7 @@ export default{
 		box-sizing:border-box;
 		position:relative;
 		border-radius:0 0 20rpx 20rpx;
-		background-color:#FEC40B;
+		/* background-color:#FEC40B; */
 	}
 	.coin{
 		width:100%;
@@ -974,7 +978,7 @@ export default{
 		display:flex;
 		align-items:center;
 		border-radius:60rpx;
-		box-shadow: 0px 3px 0px rgb(232, 11, 12), 0px 3px 0px rgb(232, 11, 12);
+		/* box-shadow: 0px 3px 0px rgb(232, 11, 12), 0px 3px 0px rgb(232, 11, 12); */
 	}
 	.activity_btnImg{
 		width:50rpx;

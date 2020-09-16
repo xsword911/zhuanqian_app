@@ -26,6 +26,19 @@ module.exports = {
 	   return time;
 	},
 	
+	//获取前n天或者后n天的日期
+	getDateNext(date, day){		
+		date = this.getDate2Time(date);
+		let val = new Date(date + (day * 24 * 3600 * 1000));
+		return this.formatYMD(val);
+	},
+	
+	//日期字符串转时间戳
+	getDate2Time(date){
+		let val = new Date(date).getTime();
+		return val
+	},
+	
 	//获取当前时间  yyyy-MM-dd-HH-mm-ss
 	getNowTime(){
 		var date = new Date();
