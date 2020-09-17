@@ -14,7 +14,7 @@
 				<view class="sort_box" @tap="toService(service1.value)">
 					<view class="sort_title">在线客服</view>
 					<view class="sort_img">
-						<image src="/static/img/msg.d401713.png" mode=""></image>
+						<image src="/static/img/serve1.png" mode=""></image>
 					</view>
 					<view class="kefu">
 						<view class="kefu_img">
@@ -29,7 +29,7 @@
 				<view class="sort_box" @tap="toService(service2.value)">
 					<view class="sort_title">充值问题，提现问题</view>
 					<view class="sort_img">
-						<image src="/static/img/msg.d401713.png" mode=""></image>
+						<image src="/static/img/serve2.jpg" mode=""></image>
 					</view>
 					<view class="kefu">
 						<view class="kefu_img">
@@ -44,16 +44,16 @@
 			
 			<view class="lay_introduce">
 				<view class="introduce_img" @tap="toIntroduce">
-					<image src="/static/img/k1.png" mode=""></image>
+					<image src="/static/img/k5.png" mode=""></image>
 				</view>
 				<view class="introduce_img" @tap="toRuleDescription">
-					<image src="/static/img/k2.png" mode=""></image>
+					<image src="/static/img/k6.png" mode=""></image>
 				</view>
 				<view class="introduce_img" @tap="toCooperation">
-					<image src="/static/img/k3.png" mode=""></image>
+					<image src="/static/img/k7.png" mode=""></image>
 				</view>
 				<view class="introduce_img" @tap="toCompany">
-					<image src="/static/img/k4.png" mode=""></image>
+					<image src="/static/img/k8.png" mode=""></image>
 				</view>
 			</view>
 		</view>
@@ -114,26 +114,26 @@ export default{
 		toIntroduce(){
 			uni.navigateTo({
 				url: "/pages/introduce/introduce"
-			})
+			});
 		},
 		//跳转到规则说明界面
 		toRuleDescription(){
 			uni.navigateTo({
 				// url: "/pages/ruleDescription/ruleDescription"
 				url: "/pages/guide/guide"
-			})
+			});
 		},
 		//跳转到代理合作界面
 		toCooperation(){
 			uni.navigateTo({
 				url: "/pages/cooperation/cooperation"
-			})
+			});
 		},
 		//跳转到公司资质界面
 		toCompany(){
 			uni.navigateTo({
 				url: "/pages/company/company"
-			})
+			});
 		},
 	}
 }

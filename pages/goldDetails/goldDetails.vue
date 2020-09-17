@@ -44,7 +44,7 @@
 			</view>
 			
 			<view class="data_lack" v-show="!showIncome">
-				<view class="lack_box">
+				<view class="lack_box btn_style">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
 					<button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button>
@@ -300,7 +300,6 @@ export default {
 	}
 	.coin_query{
 		margin-top:40rpx;
-		background-color:#fcd030;
 		font-size:16px;
 		border-radius:40rpx;
 		width:400rpx;

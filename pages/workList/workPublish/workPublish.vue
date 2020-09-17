@@ -228,7 +228,9 @@
 				<view class="lack_test">
 					最低需要升级到<text style="color:#dc3b40;">{{powerName}}</text>才能发布任务
 				</view>
-				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toVip" style="background-color:#fcd030;">去升级</button>
+				<view class="btn_style">
+					<button type="default" class="coin_query" hover-class="btn_hover" @tap="toVip">去升级</button>
+				</view>
 			</view>
 		</view>
 		
@@ -764,7 +766,6 @@ export default {
 	}
 	.coin_query{
 		margin-top:40rpx;
-		background-color:#fcd030;
 		font-size:16px;
 		border-radius:40rpx;
 		width:400rpx;

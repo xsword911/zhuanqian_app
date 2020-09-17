@@ -1,24 +1,57 @@
-	/* 主题色1 */
+	/* background_style  主题色*/
+	/* btn_style>button  按钮 */
+	/* text_style  任务界面  收益明细文字颜色+ */
+	/* text_style>button  任务界面  收益明细按钮文字颜色 */
+	/* tag:before  任务界面  收益明细图标色 */
+	/* gold_style  我的界面  金币明细背景色 */
+	/* profit_style 现金收益框背景色 */
+	
+	/* 主题色  黄色 */
 	.background_style{
 		background-color:#fcd030;
 	}
-	/* 按钮 */
 	.btn_style>button{
 		background-color:#fcd030;
 		color:#000;
 	}
+	.text_style{
+		color:#FFCA00;
+	}
+	.text_style>button{
+		color:#FFCA00;
+	}
+	.tag:before{
+		color:#FFCA00;
+	}
+	.gold_style{
+		background-color: #FEF1C1;
+	}
+	.profit_style{
+		background-color:#fff8de;
+	}
 	
 	
 	
-	
-	
-	
-	
-	/* 主题色2 */
+	/* 主题色  红色 */
 /* 	.background_style{
-		background-color:#DC3B50;
+		background-image:linear-gradient(to right, rgb(247,61,59) , rgb(255,98,73));
 	}
 	.btn_style>button{
-		background-color:#EB0909;
-		color:#e3e3e3;
+		background-color:#DC3E43;
+		color:#fff;
+	}
+	.text_style{
+		color:#DC3E43;
+	}
+	.text_style>button{
+		color:#DC3E43;
+	}
+	.tag:before{
+		color:#DC3E43;
+	}
+	.gold_style{
+		background-color:#FBA38D;
+	}
+	.profit_style{
+		background-color:#FFF5EE;
 	} */

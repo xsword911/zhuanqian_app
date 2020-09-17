@@ -54,18 +54,18 @@
 		</view>
 		
 		<view class="data_lack" v-if="isShowBank == 2" style="width:100%; height:100vh; background-color: #fff;">
-			<view class="lack_box">
+			<view class="lack_box btn_style">
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还没有绑定银行卡</text>
-				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toAddBank" style="background-color:#fcd030;">去绑定</button>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toAddBank">去绑定</button>
 			</view>
 		</view>
 		
 		<view class="data_lack" v-if="isShowBank == 3" style="width:100%; height:100vh; background-color: #fff;">
-			<view class="lack_box">
+			<view class="lack_box btn_style">
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还没有登录账号</text>
-				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toLogin" style="background-color:#fcd030;">去登录</button>
+				<button type="default" class="coin_query" hover-class="btn_hover" @tap="toLogin">去登录</button>
 			</view>
 		</view>
 		
@@ -372,7 +372,6 @@ export default{
 	}
 	.coin_query{
 		margin-top:40rpx;
-		background-color:#fcd030;
 		font-size:16px;
 		border-radius:40rpx;
 		width:400rpx;

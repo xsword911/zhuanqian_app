@@ -174,12 +174,14 @@ export default{
 					image: "/static/img/info-circle.png",
 					duration: 2000
 				});
+				return;
 			}else if(this.pwd != this.pwdAgain){
 				uni.showToast({
 					title: '密码输入不一致',
 					image: "/static/img/fail-circle.png",
 					duration: 2000
 				});
+				return;
 			}else{
 				let data = {
 					uid: this.uid,

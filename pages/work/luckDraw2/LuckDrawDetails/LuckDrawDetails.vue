@@ -7,7 +7,7 @@
 				<text>至</text>
 				<input type="text" value="" v-model="endTime" :disabled="true" @tap="openDrawer" placeholder="结束时间" />
 			</view>
-			<view class="sea_btn">
+			<view class="sea_btn btn_style">
 				<button type="default" @tap="getTaskDetails" hover-class="btn_hover" style="padding: 0;">查询</button>
 			</view>
 		</view>
@@ -39,7 +39,7 @@
 			</view>
 
 			<view class="data_lack" v-show="!showIncome">
-				<view class="lack_box">
+				<view class="lack_box btn_style">
 					<tui-icon name="nodata" :size="120"></tui-icon>
 					<text class="lack_test">暂无数据</text>
 					<button type="default" class="coin_query" hover-class="btn_hover">去获取金币</button>
@@ -68,7 +68,7 @@
 						<input type="text" value="" @tap="show(2)" v-model="endTime" :disabled="true" />
 					</view>
 				</view>
-				<view class="search_btn">
+				<view class="search_btn btn_style">
 					<button type="default" @tap="closeDrawer" hover-class="btn_hover">确定</button>
 				</view>
 			</view>
@@ -296,7 +296,6 @@
 
 	.coin_query {
 		margin-top: 40rpx;
-		background-color: #fcd030;
 		font-size: 16px;
 		border-radius: 40rpx;
 		width: 400rpx;
@@ -374,7 +373,6 @@
 
 	.sea_btn button {
 		font-size: 12px;
-		background-color: #FCD030;
 		color: #fff;
 		width: 120rpx;
 	}
@@ -403,7 +401,6 @@
 
 	.search_btn button {
 		font-size: 14px;
-		background-color: #FCD030;
 		color: #fff;
 		border-radius: 40rpx;
 		padding: 0 !important;

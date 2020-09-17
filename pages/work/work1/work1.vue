@@ -18,8 +18,8 @@
 						{{multiArray[0][multiIndex[0]]}}         {{multiArray[1][multiIndex[1]]}}         {{multiArray[2][multiIndex[2]]}}
 					</view>
 					
-					<view class="icon_down" style="display: inline-block;vertical-align: sub;">
-						<tui-icon name="arrowdown" :size="30" color="#FF7207"></tui-icon>
+					<view class="icon_down drop_icon" style="display: inline-block;vertical-align: sub;">
+						<tui-icon color="#fff" name="arrowdown" :size="30"></tui-icon>
 					</view>
 				</picker>
 			</view>
@@ -45,7 +45,7 @@
 					</view>
 				</view>	 -->	
 				
-				<view class="" @tap="toGoldDetails" class="extract_btn">
+				<view class="" @tap="toGoldDetails" class="extract_btn text_style">
 					<button type="default">收益明细 <tui-icon name="arrowright" :size="15" class="tag"></tui-icon></button>
 				</view>
 				
@@ -815,12 +815,8 @@ export default{
 	.extract_btn>button{
 		font-size:14px;
 		border-radius: 60rpx;
-		color:#FFCA00;
 		padding:0 40rpx;
 		box-sizing:border-box;
-	}
-	.tag:before{
-		color:#FFCA00;
 	}
 	.signIn_box{
 		width:100%;

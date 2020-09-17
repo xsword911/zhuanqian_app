@@ -1,9 +1,9 @@
 <template>
 	<view class="">
-		<view class="lay_head">
+		<view class="lay_head background_style">
 			<view class="head_info">
 				<view class="head_img">
-					<image src="/static/img/head.png" mode=""></image>
+					<image :src="userImg" mode=""></image>
 				</view>
 				<view class="">
 					会员等级：{{levelName}}
@@ -98,6 +98,7 @@ export default{
 	data() {
 		return {
 			uid: "",  //uid
+			userImg: '',   //用户头像
 			isShowPay: false,  //是否显示支付盒子
 			levelName: "",   //会员等级名称
 			workNum: null,  //当前每天可接任务数
@@ -125,6 +126,7 @@ export default{
 			this.myLevel = 0;
 			this.myLevelMoney = 0;
 			this.buyLevel = 0;
+			this.userImg = "";
 		},
 		//购买等级
 		pay(){
@@ -169,6 +171,7 @@ export default{
 			api.getUserByUid({uid: this.uid}, (res)=>{
 				let data = api.getData(res);
 				this.myLevel = data.level;   //获取我的会员等级
+				this.userImg = data.headUrl;   //获取我的头像
 				storage.setMyInfo(data);	 //保存我的信息
 				this.setUserLevel();  //设置我的等级信息
 			});
@@ -208,7 +211,7 @@ export default{
 	.lay_head{
 		width:100%;
 		height:380rpx;
-		background-image:linear-gradient(to right, rgb(42,164,249) , rgb(139,114,245));
+		/* background-image:linear-gradient(to right, rgb(42,164,249) , rgb(139,114,245)); */
 		color:#fff;
 		font-size:14px;
 		padding:60rpx 40rpx;
@@ -225,9 +228,11 @@ export default{
 		font-size:17px;
 	}
 	.head_img{
-		width:120rpx;
-		height:120rpx;
+		width:140rpx;
+		height:140rpx;
 		margin-right:20rpx;
+		border-radius:50%;
+		overflow:hidden;
 	}
 	.vip{
 		width:200rpx;

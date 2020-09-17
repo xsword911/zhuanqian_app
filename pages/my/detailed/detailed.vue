@@ -60,7 +60,7 @@
 			
 				
 				<view class="data_lack" v-show="!moneyTranShow">
-					<view class="lack_box">
+					<view class="lack_box btn_style">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
 						<button type="default" class="coin_query" hover-class="btn_hover" @tap="toMoneyChange">去转换</button>
@@ -131,7 +131,7 @@
 				</scroll-view>
 				
 				<view class="data_lack" v-show="!moneyRechargeShow">
-					<view class="lack_box">
+					<view class="lack_box btn_style">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
 						<button type="default" class="coin_query" hover-class="btn_hover" @tap="toExtractMoney">去充值</button>
@@ -201,7 +201,7 @@
 				</scroll-view>
 				
 				<view class="data_lack" v-show="!moneyDrawShow">
-					<view class="lack_box">
+					<view class="lack_box btn_style">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
 						<button type="default" class="coin_query" hover-class="btn_hover" @tap="toExtractMoney">去提现</button>
@@ -275,7 +275,7 @@
 				</scroll-view>
 				
 				<view class="data_lack" v-show="!moneyShow">
-					<view class="lack_box">
+					<view class="lack_box btn_style">
 						<tui-icon name="nodata" :size="120"></tui-icon>
 						<text class="lack_test">暂无数据</text>
 					</view>
@@ -1169,7 +1169,6 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 	}
 	.lack_box>button{
 		margin-top:40rpx;
-		background-color:#fcd030;
 		font-size:16px;
 		border-radius:40rpx;
 		width:400rpx;

@@ -30,7 +30,7 @@
 			<view class="input-row savePwd">
 			    <text class="title login_info text-df margin-right-sm" style="width: 50%;">记住密码：</text>
 			    <!-- <switch @change="SetShadow" :class="shadow?'checked':''" color="#39B54A"></switch> -->
-				<switch @change="SetShadow" checked color="#FCD030"></switch>
+				<switch @change="SetShadow" checked color="#FFCA00"></switch>
 			</view>
 		</view>
 		
@@ -203,7 +203,11 @@ export default{
 }
 </script>
 
-<style>
+<style scoped>
+	.example {
+	    color: #FF0000;
+	}
+	
 	.page{
 		padding-top:20rpx;
 		box-sizing:border-box;
@@ -251,7 +255,6 @@ export default{
 	}
 	.login>button{
 		border-radius:60rpx;
-		color:#000;
 		font-size:15px;
 		/* padding:10rpx 0; */
 	}

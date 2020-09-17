@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="bank" v-show="isBankShow">
-			<view class="bank_info">
+			<view class="bank_info background_style">
 				<view class="bank_test">
 					<view class="bank_name">
 						<text>{{bankName}}</text>
@@ -111,7 +111,6 @@ export default{
 		margin:20rpx auto 0 auto;
 		width:90%;
 		height:200rpx;
-		background:#FFCA00;
 		/* background-image:linear-gradient(to right, rgb(255, 71, 31) , rgb(255, 120, 3)); */
 		border-radius:20rpx;
 		padding:20rpx;

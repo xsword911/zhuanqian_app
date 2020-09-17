@@ -369,7 +369,7 @@
 	    }]
 	},
 	
-	
+	//主题色  黄色
 	"globalStyle": {
 		"pageOrientation": "portrait",
 		"navigationBarTextStyle": "white",
@@ -378,11 +378,12 @@
 		"backgroundColor": "#FFFFFF"
 	}
 	
+	//主题色  红色
 	// "globalStyle": {
 	// 	"pageOrientation": "portrait",
 	// 	"navigationBarTextStyle": "white",
 	// 	"navigationBarTitleText": "uni-app",
-	// 	"navigationBarBackgroundColor": "#DC3B40",  //#1E9FFF  fcd030
+	// 	"navigationBarBackgroundColor": "#DC3E43",
 	// 	"backgroundColor": "#FFFFFF"
-	// }
+	// } 
 }

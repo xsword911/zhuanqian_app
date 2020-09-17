@@ -2,7 +2,7 @@
 	<view class="">
 		<!-- 我的信息 -->
 		<view class="my_info background_style">
-			<button class="gold_details" @tap="toGoldDetails" hover-class="gold_btn" style="padding:0 0 0 15rpx;" v-show="isOpenGold == 1">
+			<button class="gold_details gold_style" @tap="toGoldDetails" hover-class="gold_btn" style="padding:0 0 0 15rpx;" v-show="isOpenGold == 1">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
 				</view>
@@ -53,7 +53,7 @@
 		</view>
 		
 		<!-- 现金收益 -->
-		<view class="content profit" :class="{'closeGold': isOpenGold != 1}">
+		<view class="content profit profit_style" :class="{'closeGold': isOpenGold != 1}">
 			<view class="lay_cash">
 				<view class="cap_cash">现金收益</view>
 				<view class="lay_cap_btn">
@@ -468,7 +468,6 @@ export default{
 		position:relative;
 	}
 	.gold_details{
-		background-color: #FEF1C1;
 		width:240rpx;
 		height:80rpx;
 		position:absolute;
@@ -581,7 +580,6 @@ export default{
 	.profit{
 		width:96%;
 		height:160rpx;
-		background-color:#fff8de;
 		margin:200rpx auto 0;
 		border-radius:10rpx;
 		padding:0 40rpx;

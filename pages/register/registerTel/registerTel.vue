@@ -235,7 +235,6 @@ export default{
 	}
 	.login>button{
 		border-radius:60rpx;
-		color:#000;
 		font-size:15px;
 	}
 	.pwd_ipt{
