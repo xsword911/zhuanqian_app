@@ -34,8 +34,13 @@
 				
 				<view class="lay_row">
 					<view class="lay_row_test">提现密码</view>
-					<view class="lay_row_input">
-						<input type="text" value="" placeholder="请输入提现密码" v-model="pwdCash" />
+					<view class="lay_pwd">
+						<view class="lay_row_input">
+							<input type="text" value="" placeholder="请输入提现密码" v-model="pwdCash" :password="isPwd"/>
+						</view>
+						<view class="open_pwd" @tap="isPassWord">
+							<tui-icon name="eye" :size="30"></tui-icon>
+						</view>
 					</view>
 				</view>
 				
@@ -97,6 +102,8 @@ export default{
 			isDrawTime: true,  //是否在提现时间内
 			drawBegTime: "",  //提现开始时间
 			drawEndTime: "",  //提现结束时间
+			
+			isPwd: true,  //是否是密码框
 		}
 	},
 	onLoad(res) {
@@ -112,6 +119,10 @@ export default{
 		}
 	},
 	methods:{
+		//查看密码
+		isPassWord(){
+			this.isPwd = this.isPwd ? false : true;
+		},
 		//获取提现限制时间
 		getDrawTime(){
 			let postData = {
@@ -388,5 +399,10 @@ export default{
 	}
 	.missTime>button{
 		background-color:#E3E3E3;
+	}
+	
+	.lay_pwd{
+		display:flex;
+		align-items:center;
 	}
 </style>
