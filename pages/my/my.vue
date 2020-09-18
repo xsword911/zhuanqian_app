@@ -673,7 +673,7 @@ export default{
 		align-items: center;
 	}
 	.btn{
-		margin-top:40rpx;
+		margin:40rpx 0;
 	}
 	.btn>button{
 		width:90%;
