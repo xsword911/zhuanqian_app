@@ -133,7 +133,7 @@
 		<!-- 任务提示弹窗 -->
 		<tui-modal :show="modal8" @cancel="hide8" :custom="true" 
 		style="position:relative;" 
-		:padding="noticePadding">	
+		padding="0">	
 			<view class="tui-modal-custom">
 				<view class="close" @tap="hide8"><tui-icon name="shut" :size="16"></tui-icon></view>	
 				<view class="info">			
@@ -222,18 +222,32 @@ export default{
 	},
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
-		this.userEn = storage.getMyInfo();  //获取我的信息
-		this.getMyInfo();  //刷新我的信息
-		this.getRun();//获取轮播图列表
-		this.getRunHorse();   //获取跑马灯内容
-		this.noticePadding = "0";  //重置公告弹窗
-		this.getNotReadMsgSum(); //查询未读消息数
-		this.getLevelDesc();   //获取全部会员信息
-		this.getLevelList();  //获取会员信息列表
-		this.getTaskTree();  //获取任务大类和子类列表
-		this.getDownloadUrl();  //获取下载app地址
+		
+		//没有uid时使用设备号登录
+		if(util.isEmpty(this.uid))
+			utilCore.loginByDevice(this.loginByDeviceFinish);
+		else 
+			this.getData();
 	},
 	methods:{
+		//设备号登录成功回调
+		loginByDeviceFinish(res)
+		{
+			this.getData();
+			console.log(1);
+		},
+		//登录成功
+		getData(){
+			this.userEn = storage.getMyInfo();  //获取我的信息
+			this.getMyInfo();  //刷新我的信息
+			this.getRun();//获取轮播图列表
+			this.getRunHorse();   //获取跑马灯内容
+			this.getNotReadMsgSum(); //查询未读消息数
+			this.getLevelDesc();   //获取全部会员信息
+			this.getLevelList();  //获取会员信息列表
+			this.getTaskTree();  //获取任务大类和子类列表
+			this.getDownloadUrl();  //获取下载app地址
+		},
 		//获取下载app地址
 		getDownloadUrl(){
 			let key = util.getVerKey();

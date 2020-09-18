@@ -36,7 +36,7 @@ const utilCore = {
 	},
 	
 	//设备号登录（游客登录）
-	loginByDevice(){
+	loginByDevice(fun = null){
 		storage.setLoginType(0);   //保存登录方式，设备号登录
 		//取设备号
 		let device = util.getUuid();
@@ -46,6 +46,8 @@ const utilCore = {
 			let token = api.getToken(res);
 			storage.setUid(uid);  //保存uid
 			//storage.setLoginType(0);   //保存登录方式，设备号登录
+			//回调监听
+			if(fun != null) fun(res);
 		});
 	},
 };
