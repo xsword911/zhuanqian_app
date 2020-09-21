@@ -3,7 +3,7 @@
 		<view class="content func">
 			<view class="setting" @tap="">
 				<view class="func_left">
-					<text class="func_test">银行</text>
+					<text class="func_test"><text style="color:#dc3b40;">*</text>银行</text>
 				</view>
 				
 				<view class="func_right">
@@ -14,7 +14,7 @@
 			
 			<view class="setting" @tap="">
 				<view class="func_left">
-					<text class="func_test">开户支行</text>
+					<text class="func_test"><text style="color:#dc3b40;">*</text>开户支行</text>
 				</view>
 				
 				<view class="func_right">
@@ -25,7 +25,7 @@
 			
 			<view class="setting" @tap="">
 				<view class="func_left">
-					<text class="func_test">银行卡号</text>
+					<text class="func_test"><text style="color:#dc3b40;">*</text>银行卡号</text>
 				</view>
 				
 				<view class="func_right">
@@ -36,7 +36,7 @@
 			
 			<view class="setting" @tap="">
 				<view class="func_left">
-					<text class="func_test">开户人姓名</text>
+					<text class="func_test"><text style="color:#dc3b40;">*</text>开户人姓名</text>
 				</view>
 				
 				<view class="func_right">
@@ -47,7 +47,7 @@
 			
 			<view class="setting" @tap="">
 				<view class="func_left">
-					<text class="func_test">提现密码</text>
+					<text class="func_test"><text style="color:#dc3b40;">*</text>提现密码</text>
 				</view>
 				
 				<view class="func_right">
@@ -63,7 +63,7 @@
 			
 			<view class="setting" @tap="" v-if="type == '1'">
 				<view class="func_left">
-					<text class="func_test">密码确认</text>
+					<text class="func_test"><text style="color:#dc3b40;">*</text>密码确认</text>
 				</view>
 				
 				<view class="func_right">
