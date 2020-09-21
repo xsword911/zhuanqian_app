@@ -166,9 +166,9 @@ export default{
 		//添加银行卡
 		addSubmit(){
 			//判断信息是否填写完整
-			if(util.isEmpty(this.userBank) && util.isEmpty(this.bankBranch) 
-			&& util.isEmpty(this.bankCode) && util.isEmpty(this.bankUserName)
-			&& util.isEmpty(this.pwd)){
+			if(util.isEmpty(this.userBank) || util.isEmpty(this.bankBranch) 
+			|| util.isEmpty(this.bankCode) || util.isEmpty(this.bankUserName)
+			|| util.isEmpty(this.pwd)){
 				uni.showToast({
 					title: '信息填写不完整',
 					image: "/static/img/info-circle.png",
