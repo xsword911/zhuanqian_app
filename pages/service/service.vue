@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="lay_head">
+		<view class="lay_head" :style="{height: stateBarHeight + 'px'}">
 			<view class="head_title">客服中心</view>
 			<view class="head_tips">如遇到问题需要帮助请您尽快联系在线客服</view>
 		</view>
@@ -70,9 +70,13 @@ export default{
 		return {
 			service1: "",  //在线客服信息
 			service2: "",  //充值提现客服信息
+			stateBarHeight: 0,  //状态栏高度
 		}
 	},
 	onShow() {
+		let h = util.getStateBarHeight();
+		console.log(h);
+		this.stateBarHeight = h + 150;
 		this.getCustomerServiceUrl();  //获取客服链接
 	},
 	methods:{
@@ -142,9 +146,8 @@ export default{
 <style>
 	.lay_head{
 		width:100%;
-		height:260rpx;
 		background-color:#BAC3D2;
-		padding:40rpx;
+		padding:80rpx 40rpx 40rpx ;
 		box-sizing:border-box;
 		font-size:12px;
 	}

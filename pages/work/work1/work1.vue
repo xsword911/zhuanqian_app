@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<view class="lay_navbar background_style">
+		<view class="lay_navbar background_style" :style="{height: stateBarHeight + 'px'}">
 <!-- 			<view class="uni-list-cell-db level_box" v-if="arrayLevel.length > 0">
 				<picker @change="levelPickerChange" :value="arrayLevel[arrayLevelIndex].id" 
 				:range="arrayLevel" range-key="levelName" name="level">
@@ -369,6 +369,8 @@ export default{
 			
 			resData: '',//传递过来的任务筛选信息 (大类id，子类id，会员等级)
 			circle: 0,  //圆形进度条直径
+			
+			stateBarHeight: 0,  //状态栏高度
 		}
 	},
 	onLoad(res) {
@@ -388,6 +390,9 @@ export default{
 	},
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
+		let h = util.getStateBarHeight();
+		console.log(h);
+		this.stateBarHeight = h + 44;
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
 		this.getTaskList();  //获取任务列表
@@ -396,7 +401,6 @@ export default{
 		//this.getNotReadMsgSum(); //查询未读消息数
 		this.getLevelDesc(); //获取会员等级列表
 		this.getTaskTree();  //获取任务大类和子类列表
-		
 	},
 	methods:{				
 		//获取任务大类和子类列表
@@ -406,7 +410,6 @@ export default{
 			this.multiArray[0] = [];
 			this.multiArray[1] = [];			
 			data.forEach((item, index) =>{
-				console.log(data);
 				if(item.big.state == 1)  //任务大类状态为开启时
 				{
 					this.multiArray[0].push(item.big.name);  //获取大类名称
@@ -1071,7 +1074,6 @@ export default{
 
 	.lay_navbar{
 		width:100%;
-		height:88rpx;
 		display:flex;
 		justify-content: center;
 		align-items: center;

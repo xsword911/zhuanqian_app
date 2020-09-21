@@ -118,7 +118,7 @@ module.exports = {
 		// #endif
 		
 		// #ifdef H5
-		let uuid = "00813494be90";  //H5平台设置设备唯一标识号
+		let uuid = "00813494be9";  //H5平台设置设备唯一标识号
 		// #endif
 		return uuid;
 	},
@@ -178,4 +178,9 @@ module.exports = {
 		       break;
 		}
 	},
+	
+	//获取状态栏高度
+	getStateBarHeight(){
+		return uni.getSystemInfoSync().statusBarHeight;
+	}
 }
