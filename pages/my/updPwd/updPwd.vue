@@ -116,7 +116,7 @@ export default{
 	},
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
-		this.userEn = storage.getMyInfo();
+		this.userEn = storage.getMyInfo();   //获取我的信息
 		this.tryIsDeviceLoginDo();  //登录方式为设备号时强制跳转到登录页
 	},
 	onLoad(res){
@@ -137,7 +137,7 @@ export default{
 							});
 							uni.navigateTo({
 								url: '/pages/login/login'
-							})
+							});
 						}
 					}
 				});				
