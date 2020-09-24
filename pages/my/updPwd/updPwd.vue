@@ -10,7 +10,8 @@
 						<text>旧登录密码</text>
 						<input type="text" v-model="pwdOld" :password="isOldPwd" />
 						<view class="open_pwd" @tap="isOldPassWord">
-							<tui-icon name="eye" :size="30"></tui-icon>
+							<tui-icon name="eye" :size="30" v-show="!isOldPwd"></tui-icon>
+							<tui-icon name="unseen" :size="30" v-show="isOldPwd"></tui-icon>
 						</view>
 					</view>
 					
@@ -18,7 +19,8 @@
 						<text>新登录密码</text>
 						<input type="text" v-model="pwd" :password="isPwd" />
 						<view class="open_pwd" @tap="isPassWord">
-							<tui-icon name="eye" :size="30"></tui-icon>
+							<tui-icon name="eye" :size="30" v-show="!isPwd"></tui-icon>
+							<tui-icon name="unseen" :size="30" v-show="isPwd"></tui-icon>
 						</view>
 					</view>
 					

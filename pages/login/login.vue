@@ -22,7 +22,8 @@
 				:adjust-position="false" maxlength="30" :password="isPwd" />
 			</view>
 			<view class="open_pwd" @tap="isPassWord">
-				<tui-icon name="eye" :size="30"></tui-icon>
+				<tui-icon name="eye" :size="30" v-show="!isPwd"></tui-icon>
+				<tui-icon name="unseen" :size="30" v-show="isPwd"></tui-icon>
 			</view>
 		</view>
 		

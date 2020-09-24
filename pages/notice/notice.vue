@@ -1,7 +1,7 @@
 <template>
 	<view class="">
 		<!-- 功能栏 -->
-		<view class=" func">			
+		<view class=" func" v-show="isShow == 1">			
 			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;"
 			v-for="(item, index) in noticeList" :key="index"
 			@tap="toNoticeDetails(item.title)">
@@ -14,9 +14,15 @@
 					<tui-icon name="arrowright" :size="26"></tui-icon>
 				</view>
 			</button>
-			
-			
 		</view>
+		
+		<view class="data_lack" v-show="isShow == 2">
+			<view class="lack_box btn_style">
+				<tui-icon name="nodata" :size="120"></tui-icon>
+				<text class="lack_test">暂无数据</text>
+			</view>
+		</view>
+		
 	</view>
 </template>
 
@@ -30,6 +36,7 @@ export default{
 			userEn: [],  //我的信息
 			uid: "",  //uid
 			noticeList: [],    //公告列表
+			isShow: 0,  //是否显示列表  0正在请求 1显示 2不显示
 		}
 	},
 	onShow() {
@@ -48,7 +55,12 @@ export default{
 			};
 			api.getNotice(data, (res)=>{
 				let data = api.getData(res).data;
-				this.noticeList = data;
+				if(util.isEmpty(data)) this.isShow = 2;
+				else{
+					this.noticeList = data;
+					this.isShow = 1;
+				}
+				
 			});
 		},
 		//跳转到公告详情页
@@ -92,6 +104,21 @@ export default{
 	}
 	.setting_hover[type = default]{
 		background-color:#EEEEEE;
+	}
+	
+	
+	.lack_box{
+		width:100%;
+		height:700rpx;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		flex-direction:column;
+	}
+	.lack_test{
+		font-size:16px;
+		margin-top:20rpx;
+		display:inline-block;
 	}
 </style>
 
