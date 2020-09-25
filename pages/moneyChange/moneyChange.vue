@@ -91,7 +91,7 @@ export default{
 	onShow() {
 		this.uid = storage.getUid();  //获取uid
 		this.loginType = storage.getLoginType();  //获取登录方式
-		//this.isDeviceId();   //是否是游客登录
+		this.isDeviceId();   //是否是游客登录
 	},
 	methods:{
 		//登录方式为设备号时强制跳转到登录页
@@ -197,12 +197,15 @@ export default{
 						showCancel: false,
 						success(res) {
 							if (res.confirm) {
-								uni.switchTab({
-									url: "/pages/my/my"
-								});
+								// uni.switchTab({
+								// 	url: "/pages/my/my"
+								// });
+								// uni.navigateTo({
+								// 	url: "/pages/my/detailed/detailed?type=0"
+								// });
 								uni.navigateTo({
-									url: "/pages/my/detailed/detailed?type=0"
-								});
+									url: "/pages/my/detailed/detailed?type=moneyTran"
+								})
 							};
 						}
 					});

@@ -269,7 +269,7 @@ export default{
 						success(res) {
 							if (res.confirm) {
 								uni.navigateTo({
-									url: "/pages/my/detailed/detailed?type=1"
+									url: "/pages/my/detailed/detailed?type=draw"
 								})
 							};
 						}

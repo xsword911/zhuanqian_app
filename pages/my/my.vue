@@ -9,7 +9,7 @@
 				<text>金币明细</text>
 			</button>
 			
-			<button class="gold_details" @tap="toDetailed" hover-class="gold_btn" style="padding:0 0 0 15rpx;" v-show="isOpenGold != 1">
+			<button class="gold_details gold_style" @tap="toDetailed" hover-class="gold_btn" style="padding:0 0 0 15rpx;" v-show="isOpenGold != 1">
 				<view class="gole_img an">
 					<image src="/static/img/gold1.png" mode="widthFix"></image>
 				</view>

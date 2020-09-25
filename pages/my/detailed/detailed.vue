@@ -340,8 +340,29 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.getMoney(0);  //获取账变记录
 			this.getMoneyRecharge(0); //获取充值明细
 			this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
-			if(this.isOpenGold == 1) 
+			if(this.isOpenGold == 1)
 				this.items = ['转换明细', '充值明细', '提现明细', '账变流水'];  //开启金币时查询列表添加转换明细表
+				
+			if(!util.isEmpty(this.selectType)) {
+				switch (this.selectType){
+					case 'moneyTran':
+						this.current = 0;
+						break;
+					case 'recharge':
+						this.current = 1;
+						break;
+					case 'draw':
+						this.current = 2;
+						break;
+					case 'change':
+						this.current = 3;
+						break;
+					default:
+						break;
+				}
+				if(this.isOpenGold == 0) this.current -= 1;
+				
+			}
 		},
         data() {
             return {
@@ -387,7 +408,8 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				
 				userEn: [], //我的信息
 				items: ['充值明细', '提现明细', '账变流水'],
-				current: 0,
+				current: 0,  //当前显示index
+				selectType: '',  //当前显示选项卡  moneyTran转换明细 recharge充值明细 draw提现明细 change账变流水
                 newsList: [],
                 cacheTab: [],
 				rightDrawer: false,//抽屉开关
@@ -409,7 +431,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
             }
         },
         onLoad(res) {
-			if(res.type) this.current = parseInt(res.type);
+			if(res.type) this.selectType = res.type;
 			this.uid = storage.getUid();  //获取uid
         },
         methods: {

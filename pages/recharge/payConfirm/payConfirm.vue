@@ -143,9 +143,12 @@ export default{
 									showCancel: false,
 									success(res) {
 										if(res.confirm){
-											uni.reLaunch({
-											    url: '/pages/my/my'
-											});
+											// uni.reLaunch({
+											//     url: '/pages/my/my'
+											// });
+											uni.navigateTo({
+												url: "/pages/my/detailed/detailed?type=recharge"
+											})
 										}
 									}
 								});
