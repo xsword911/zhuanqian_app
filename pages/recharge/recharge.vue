@@ -159,6 +159,7 @@ export default{
 	.lay_box_test{
 		font-size:14px;
 		margin-top:10rpx;
+		line-height:1.5;
 	}
 	.lay_hover[type = default]{
 		background-color:#F8F8F8;
