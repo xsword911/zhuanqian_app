@@ -25,7 +25,7 @@
 					<view class="level">
 						{{levelName}}
 					</view>
-					<view class="yqm">
+					<view class="yqm" v-if="yqm != ''">
 						邀请码：<text selectable="true">{{yqm}}</text>
 					</view>
 				</view>
