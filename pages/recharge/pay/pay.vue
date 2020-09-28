@@ -92,6 +92,14 @@ export default{
 				});
 				return;
 			}
+			else if(!this.isNum(parseFloat(this.money))){
+				uni.showToast({
+					title: "充值金额只能是整数",
+					image: "/static/img/fail-circle.png",
+					duration: 2000
+				});
+				return;
+			}
 			api.recharge({
 				wayId: this.rechargeData.wayId, 
 				money: this.money,
@@ -119,6 +127,11 @@ export default{
 				url: "/pages/recharge/payConfirm/payConfirm?rechargeAccountEn=" + tran.obj2Url(this.rechargeAccountEn)
 				+ "&desc=" + this.desc + "&wayId=" + this.rechargeData.wayId
 			})
+		},
+		//判断是否是纯数字
+		isNum(value){
+			const reg = /^[0-9]*$/;
+			return reg.test(value);
 		},
 	}
 }
