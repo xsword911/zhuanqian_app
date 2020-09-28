@@ -24,7 +24,7 @@
 		
 		
 		<view class="data_lack" v-if="isShowQrcode == 0">
-			<view class="lack_box">
+			<view class="lack_box necessary">
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还没有邀请下级的权限</text>
 				<view class="lack_test">
@@ -174,6 +174,5 @@ export default{
 	
 	.necessary{
 		color:#D91D37;
-		font-weight:bold;
 	}
 </style>

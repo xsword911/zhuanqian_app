@@ -37,7 +37,8 @@
 				</view>
 			</button>
 			
-			<button class="setting" hover-class="setting_hover" type="default" style="line-height: 1.8;">
+			<button class="setting" hover-class="setting_hover" type="default" 
+			style="line-height: 1.8;" v-if="userEn.code != ''">
 				<view class="func_left">
 					<text class="func_test">邀请码</text>
 				</view>
