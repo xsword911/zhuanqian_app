@@ -28,7 +28,7 @@
 				<tui-icon name="nodata" :size="120"></tui-icon>
 				<text class="lack_test">您还没有邀请下级的权限</text>
 				<view class="lack_test">
-					联系客服获取您的专属邀请码
+					请联系客服获取您的专属邀请码
 				</view>
 				<view class="btn_style">
 					<button type="default" class="coin_query" hover-class="btn_hover" @tap="toService">联系客服</button>
