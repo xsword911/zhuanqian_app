@@ -62,7 +62,7 @@ export default{
 	methods:{
 		//用户查询充值限制
 		getRechargeLimit(){
-			api.getRechargeLimit({level: this.userEn.level}, (res)=>{
+			api.getRechargeLimit({level: this.userEn.level, wayId: this.rechargeData.id}, (res)=>{
 				let data = api.getData(res);
 				this.moneyMin = data.min;   //获取充值最小金额
 				this.moneyMax = data.max;   //获取充值最大金额
