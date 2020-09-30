@@ -40,9 +40,9 @@
 				<text v-if="workInfo.type == 4"  class="style_info">点赞</text>
 			</view>
 			
-			<view class="" v-if="taskType == 1">
+			<!-- <view class="" v-if="taskType == 1">
 				剩余数量：<text class="style_info">{{workInfo.sum}}</text>
-			</view>
+			</view> -->
 			
 			<view class="" v-if="taskType == 2">
 				接受时间：<text class="style_info">{{workInfo.receiveTime}}</text>
