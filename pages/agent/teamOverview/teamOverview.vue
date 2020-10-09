@@ -181,10 +181,10 @@
 					<view>
 						<radio-group @change="radioChange">
 							<label class="radio" style="margin-right: 30rpx;">
-								<radio value="1" :checked="isSubAll == 1" color="#FFCC33" style="transform:scale(0.8)"/>直属下级
+								<radio value="1" :checked="subType == 1" color="#FFCC33" style="transform:scale(0.8)"/>直属下级
 							</label>
 							<label class="radio">
-								<radio value="0" color="#FFCC33" :checked="isSubAll == 0" style="transform:scale(0.8)"/>所有下级
+								<radio value="2" color="#FFCC33" :checked="subType == 2" style="transform:scale(0.8)"/>所有下级
 							</label>
 						</radio-group>
 					</view>
@@ -239,7 +239,7 @@ export default{
 			setDateTime: "",
 			num: null,    //区分开始时间和结束时间的标识
 			uid: "",  //uid
-			isSubAll: true, //单选框选中值 0:所有下级(true) 1:直属下级(false)
+			subType: 1, //单选框选中值 1:直属下级 2:所有下级
 			userName: "",  //输入的用户id	
 					
 			isOpenGold: null,  //是否开启金币 0关闭 1开启
@@ -272,9 +272,7 @@ export default{
 		},
 		//单选框操作
 		radioChange(evt){
-			let radio = parseInt(evt.detail.value);
-			if(radio == 0) this.isSubAll = true;
-			if(radio == 1) this.isSubAll = false;
+			this.subType = parseInt(evt.detail.value);
 		},
 		//获取个人总览信息
 		getStatisticsMonth(uid){
@@ -283,8 +281,9 @@ export default{
 				uid: uid,
 				page: 1,
 				count: 10,
-				isSubAll: this.isSubAll
+				subType: this.subType
 			};
+			console.log(data);
 			if(!util.isEmpty(this.begTime)){
 				let time = this.begTime + " 00:00:00";
 				data.begFinishTime = time

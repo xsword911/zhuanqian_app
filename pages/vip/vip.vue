@@ -14,9 +14,9 @@
 				每天可接：<text>{{workNum}}</text>(任务)
 			</view>
 			
-			<view class="">
+<!-- 			<view class="">
 				会员到期时间：21-08-07 17:02:38
-			</view>
+			</view> -->
 			
 			<view class="vip" @tap="toPower">
 				会员详情
@@ -210,7 +210,7 @@ export default{
 <style>
 	.lay_head{
 		width:100%;
-		height:380rpx;
+		height:360rpx;
 		/* background-image:linear-gradient(to right, rgb(42,164,249) , rgb(139,114,245)); */
 		color:#fff;
 		font-size:14px;

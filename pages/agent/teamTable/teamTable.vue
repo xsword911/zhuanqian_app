@@ -167,10 +167,10 @@
 					<view>
 						<radio-group @change="radioChange">
 							<label class="radio" style="margin-right: 30rpx;">
-								<radio value="1" :checked="isSubAll == 1" color="#FFCC33" style="transform:scale(0.8)"/>直属下级
+								<radio value="1" :checked="subType == 1" color="#FFCC33" style="transform:scale(0.8)"/>直属下级
 							</label>
 							<label class="radio">
-								<radio value="0" color="#FFCC33" :checked="isSubAll == 0" style="transform:scale(0.8)"/>所有下级
+								<radio value="2" color="#FFCC33" :checked="subType == 2" style="transform:scale(0.8)"/>所有下级
 							</label>
 						</radio-group>
 					</view>
@@ -222,7 +222,7 @@ export default{
 			begTime: "", //开始时间
 			endTime: "", //结束时间
 			userName: "", //输入的用户名
-			isSubAll: true, //单选框选中值 0:所有下级(true) 1:直属下级(false)
+			subType: 1, //单选框选中值 1:直属下级 2:所有下级
 			type: 0,
 			startYear: 1980,
 			endYear: 2030,
@@ -249,9 +249,7 @@ export default{
 	methods:{
 		//单选框操作
 		radioChange(evt){
-			let radio = parseInt(evt.detail.value);
-			if(radio == 0) this.isSubAll = true;
-			if(radio == 1) this.isSubAll = false;
+			this.subType = parseInt(evt.detail.value);
 		},
 		//点击查询按钮
 		getUserByClick(){
@@ -276,7 +274,7 @@ export default{
 				uid: uid,
 				page: this.page,
 				count: 10,
-				isSubAll: this.isSubAll
+				subType: this.subType
 			};
 			if(!util.isEmpty(this.begTime)){
 				let time = this.begTime + " 00:00:00";
