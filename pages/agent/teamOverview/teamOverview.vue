@@ -254,12 +254,21 @@ export default{
 		}
 	},
 	onShow() {
-		if(util.isEmpty(this.userName)) this.uid = storage.getUid();  //获取uid
+		if(util.isEmpty(this.userName)){
+			this.uid = storage.getUid();  //获取uid
+			this.userEn = storage.getMyInfo();   //获取个人信息
+		}
+		else this.getUser();  //根据uid获取个人信息
 		this.getStatisticsMonth(this.uid);   //获取个人总览信息
 		this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
-		this.userEn = storage.getMyInfo();   //获取个人信息
 	},
 	methods:{
+		//根据uid获取个人信息
+		getUser(){
+			api.getUserByUid({uid: this.userName}, (res)=>{
+				this.userEn = api.getData(res);
+			});
+		},
 		//点击查询按钮
 		getUserByClick(){
 			if(util.isEmpty(this.userName)){
@@ -283,7 +292,6 @@ export default{
 				count: 10,
 				subType: this.subType
 			};
-			console.log(data);
 			if(!util.isEmpty(this.begTime)){
 				let time = this.begTime + " 00:00:00";
 				data.begFinishTime = time

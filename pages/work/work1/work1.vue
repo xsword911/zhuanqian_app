@@ -138,7 +138,7 @@
 						</view>
 					</view>
 					
-					<view class="activity_right" @tap="show8(item)">
+					<view class="activity_right" @tap="toChenckTask(item)">
 						<button class="activity_btn" hover-class="btn_hover">
 							<view class="activity_btnImg">
 								<!-- <image src="/static/img/work_btn.png" mode="widthFix"></image> -->
@@ -150,136 +150,6 @@
 				</view>
 			</view>
 		</view>
-		
-		<!-- 任务提示弹窗 -->
-		<tui-modal :show="modal8" @cancel="hide8" :custom="true" style="position:relative;">
-			<view class="tui-modal-custom">
-				<view class="close" @tap="hide8"><tui-icon name="shut" :size="16"></tui-icon></view>
-				<view class="info">
-					<view class="box" v-show="type == 0">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>我的邀请码：</text>
-							<text selectable="true">{{userEn.code}}</text>
-						</view>
-						<view class="work_test mar_b">
-							<text>下载链接：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>复制邀请码与链接邀请好友即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == 1">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>复制内容到朋友圈：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>发送内容到朋友圈即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == 2">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>添加微信好友：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>添加微信好友即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == 3">
-						<text class="mar_b info_title">{{title}}</text>
-						<view class="work_test mar_b">
-							<text>下载链接：</text>
-							<text selectable="true">{{text}}</text>
-						</view>
-						
-						<view class="mar_b">
-							<text>下载APP试玩即可获得金币!</text>
-						</view>
-						
-						<view class="copy">
-							<button type="default" @tap="toWx">复制内容并跳转</button>
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == -1">
-						<view class="info">
-							<view class="info_test">
-								<view class="">
-									我的金币
-								</view>
-								<view class="num ">
-									{{myCoin}}
-								</view>
-								<view class="num tips">
-									100金币=1元
-								</view>
-							</view>
-							
-							<view class="info_test">
-								<view class="">
-									可兑换现金
-								</view>
-								<view class="num ">
-									￥{{myCoin | cashExchange}}
-								</view>
-							</view>
-						</view>
-						
-						<view class="">
-							<button type="default" class="exChange">立即兑换</button>
-						</view>
-						
-						<view class="exchange_tips">
-							金币只能兑换100的倍数
-						</view>
-					</view>
-					
-					<view class="box" v-show="type == -2">
-						<view class="receive_btn">
-							<view class="receive_title receive_btnB">领取奖励</view>
-							
-							<view class="receive_btnB">
-								<view class="" v-show="awardType == 0">
-									恭喜你获得<text class="tips_text">{{award}}金币</text>
-								</view>
-								
-								<view class="" v-show="awardType == 1">
-									恭喜你获得：<text class="tips_text">{{award}}现金</text>
-								</view>
-							</view>
-							
-							<view class="receive_Mbtn">
-								<button type="default" @tap="hide8">确定</button>
-							</view>
-						</view>
-					</view>
-					
-				</view>
-			</view>
-		</tui-modal>
 		
 		<!--加载loadding-->
 		<tui-loadmore v-if="loadding" :index="3" type="primary"></tui-loadmore>
@@ -327,10 +197,6 @@ export default{
 			myCoin: 0,  //我的金币
 			myMoney: 0,  //现金
 			activityList: [],  //活动列表
-			modal8: false,  //控制金币换现金弹窗显示
-			text: null, //弹窗的文字内容
-			type: 0, //弹窗类型
-			title: '', //弹窗标题
 			id: null ,//任务id
 			timeOut: true, //控制时间倒计时显示
 			time: "",  //倒计时
@@ -391,7 +257,6 @@ export default{
 	onShow(){
 		this.uid = storage.getUid();  //获取uid
 		let h = util.getStateBarHeight();
-		console.log(h);
 		this.stateBarHeight = h + 44;
 		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
@@ -642,35 +507,6 @@ export default{
 				url: '/pages/work/luckDraw2/luckDraw2'
 			})
 		},
-		//复制内容并跳转到微信
-		toWx(){
-			audio.playAudio();
-			let test = '';
-			test = this.text;
-			if(this.type == 0) test = '我的邀请码是' + this.userEn.code + "下载链接是" + this.text;
-			this.taskDo();
-			// ifdef H5
-			return;
-			// endif
-			uni.setClipboardData({
-				data: test,
-				success() {
-					// if (plus.os.name == "iOS") {  
-					//     plus.runtime.openURL("weixin://")  
-					// } else if (plus.os.name == "andriod") {  
-					//     var Intent = plus.android.importClass("android.content.Intent");  
-					//     var ComponentName = plus.android.importClass('android.content.ComponentName')  
-					//     var intent = new Intent();  
-					//     intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));  
-					//     //intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);  
-					//     intent.setFlags(335544320);  
-					//     intent.setAction("android.intent.action.VIEW");  
-					//     var main = plus.android.runtimeMainActivity();  
-					//     main.startActivity(intent);  
-					// }  
-				}
-			});
-		},
 		//获取今日金币
 		// getGoldAdd(){
 		// 	api.getStatisticsToday({uid: this.uid}, (res) =>{
@@ -696,28 +532,12 @@ export default{
 				this.activityList = data;
 			});
 		},
-		//关闭弹窗
-		hide8() {
-			audio.playAudio();
-			this.modal8 = false;
-		},
-		//打开弹窗
-		show8(item) {
+		//查看任务详情
+		toChenckTask(item){
 			audio.playAudio();
 			uni.navigateTo({
 				url: "/pages/workExplain/workExplain?id=" + item.id + "&type=1&isReceive=" + item.isReceive
 			});
-			return;
-			if(item.type == 4) return;
-			this.modal8 = true;
-			if(item == -2){
-				this.type = item;
-				return;
-			};
-			this.type = item.type;
-			this.text = item.rule;
-			this.title = item.title;
-			this.id = item.id;
 		},
 		//做一个任务
 		taskDo(){

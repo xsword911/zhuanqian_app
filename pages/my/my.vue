@@ -25,8 +25,8 @@
 					<view class="level">
 						{{levelName}}
 					</view>
-					<view class="yqm" v-if="yqm != ''">
-						邀请码：<text selectable="true">{{yqm}}</text>
+					<view class="yqm" v-if="userEn.code != ''">
+						邀请码：<text selectable="true">{{userEn.code}}</text>
 					</view>
 				</view>
 			</view>
@@ -43,7 +43,7 @@
 				
 				<view class="coin">
 					<text>当前金币</text>
-					<text class="coin_num">{{currentCoin}}</text>
+					<text class="coin_num">{{userEn.gold}}</text>
 				</view>
 				
 				<view class="exchange">
@@ -57,7 +57,7 @@
 			<view class="lay_cash">
 				<view class="cap_cash">现金收益</view>
 				<view class="lay_cap_btn">
-					<view>￥<text class="profit_num">{{profit}}</text></view>
+					<view>￥<text class="profit_num">{{userEn.money}}</text></view>
 					<!-- <button class="detailed" @tap="toDetailed" hover-class="btn_hover">明细</button> -->
 				</view>
 			</view>
@@ -116,17 +116,6 @@ export default{
 		tuiCollapse,
 		tuiListCell
 	},	
-	filters:{
-		//金币转换现金计算
-		cashExchange(val){
-			if(val < 100) return 0;
-			else{
-				let num = val/100;
-				num = num.toFixed(2);
-				return num;
-			}
-		},
-	},
 	data() {
 		return {
 			//手风琴效果
@@ -233,11 +222,10 @@ export default{
 			],
 			userEn: [],  //我的信息
 			userName: '',  //用户账号
-			yqm: '',  //邀请码
+			// yqm: '',  //邀请码
 			todayCoin: null,   //今日金币
-			currentCoin: 0,  //当前金币
-			profit: ''  ,//现金收益
-			modal8: false,  //控制金币换现金弹窗显示
+			// currentCoin: 0,  //当前金币
+			// profit: ''  ,//现金收益
 			uid: "",  //uid
 			loginType: null, //登录方式
 			notReadMsgSum: 0,  //未读消息数
@@ -247,11 +235,23 @@ export default{
 		}
 	},
 	onLoad() {
-		this.getDataFromLocation();  //从本地取数据
+		//this.getDataFromLocation();  //从本地取数据
+		
+		this.uid = storage.getUid();  //获取uid
+		this.levelList = storage.getLevelList();  //获取会员表
+		this.loginType = storage.getLoginType();  //获取登录方式
+		this.getGoldAdd();  //获取今日金币
+		this.getMyLevelName();  //获取我的会员等级名称
+		
 	},
 	onShow(){
-		this.getDataFromNet();  //获取网络数据到本地
-		this.getDataFromLocation();  //从本地取数据
+		//this.getDataFromNet();  //获取网络数据到本地
+		//this.getDataFromLocation();  //从本地取数据
+		
+		this.uid = storage.getUid();  //获取uid
+		this.getMyInfo();  //刷新我的信息
+		this.getGoldAdd(); //获取今日金币
+		this.getOpenGold();  //获取是否开启金币 0关闭 1开启
 	},
 	methods:{
 		//获取网络数据到本地
@@ -268,9 +268,6 @@ export default{
 			this.levelList = storage.getLevelList();  //获取会员表
 			this.userEn = storage.getMyInfo();  //获取我的信息
 			this.loginType = storage.getLoginType();  //获取登录方式
-			this.yqm = this.userEn.code;
-			this.currentCoin = this.userEn.gold;
-			this.profit = this.userEn.money;
 			this.getGoldAdd();  //获取今日金币
 			this.getMyLevelName();  //获取我的会员等级名称
 		},
@@ -328,9 +325,6 @@ export default{
 			api.getUserByUid({uid: this.uid}, (res)=>{
 				storage.setMyInfo(api.getData(res));
 				this.userEn = api.getData(res);
-				this.yqm = this.userEn.code;
-				this.currentCoin = this.userEn.gold;
-				this.profit = this.userEn.money;
 				this.getName();  //获取用户名
 			});
 		},

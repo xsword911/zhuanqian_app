@@ -106,6 +106,7 @@ export default{
 				data.forEach((item) =>{
 					if(!util.isEmpty(item.loginTime))  item.loginTime = item.loginTime.slice(0, 10);  //登录时间筛选
 				});
+				console.log(data);
 				this.userTableEn = data;
 			});
 		},
@@ -113,7 +114,7 @@ export default{
 		onPullDownRefresh: function() {
 			//延时为了看效果
 			setTimeout(() => {
-				this.getUserTable(0);
+				this.getUserTable(this.uid);
 				this.pullUpOn = true;
 				this.loadding = false;
 				uni.stopPullDownRefresh();
