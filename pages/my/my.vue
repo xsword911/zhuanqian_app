@@ -249,9 +249,11 @@ export default{
 		//this.getDataFromLocation();  //从本地取数据
 		
 		this.uid = storage.getUid();  //获取uid
+		this.userEn = storage.getMyInfo();  //获取我的信息
 		this.getMyInfo();  //刷新我的信息
 		this.getGoldAdd(); //获取今日金币
 		this.getOpenGold();  //获取是否开启金币 0关闭 1开启
+		this.getMyLevelName();  //获取我的会员等级名称
 	},
 	methods:{
 		//获取网络数据到本地
