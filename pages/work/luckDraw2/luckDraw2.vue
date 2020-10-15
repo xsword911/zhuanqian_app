@@ -19,24 +19,45 @@
 			<!-- 外部进度条 -->
 			<view class="botline"> 
 				<!-- 内部进度条 -->
-				<view class="topline" :style="{width:width + '%'}"></view>
-			</view>
-			<!-- 奖励红包 -->
-			<view class="progress_award">
-				<image src="/static/img/luck/2baa8604a9b148c7451de22336a6557e.png" mode="widthFix"></image>
-			</view>
-			<view class="progress_award awardT">
-				<image src="/static/img/luck/2baa8604a9b148c7451de22336a6557e.png" mode="widthFix"></image>
-			</view>
-			<view class="progress_award awardS">
-				<image src="/static/img/luck/2baa8604a9b148c7451de22336a6557e.png" mode="widthFix"></image>
-			</view>
-			<view class="">
-				<view class="progress_award awardF">
-					<image src="/static/img/luck/3584f21da8adbe692696a04e1633d966.png" mode="widthFix"></image>
+				<view class="">
+					<view class="topline" :style="{width:width + '%'}"></view>
 				</view>
-				<view class="award_test"><image src="/static/img/luck/76163e615c7627425fb89448d46baaa2.png" mode=""></image></view>
+				
+				
+				<!-- 有奖励红包列表 -->
+				<view class="luckRed" v-for="(item,index) in luckRedList" :key="index" 
+				:style="{left:item.position + '%', transform: 'translate(-' + item.position + '%, -60%)'}" 
+				v-if="isShowLuckRed">
+					<view class="progress_award" v-if="item.type == 0" 
+					:class="[item.isOpen ? 'luckRedReceive' : '']"
+					@tap="LuckRedCase(item)">
+						<image src="/static/img/luck/2baa8604a9b148c7451de22336a6557e.png" mode="widthFix"></image>
+					</view>
+					<view class="progress_award" v-if="item.type == 1" 
+					:class="[item.isOpen ? 'luckRedReceive' : '']"
+					@tap="LuckRedCase(item)">
+						<image src="/static/img/luck/6b409b67de90070099dfbf74556f12bc.png" mode="widthFix"></image>
+					</view>
+					<view class="luckRedTest" v-if="item.type == 1">
+						<text>{{item.randomMax}}元</text>
+						<text class="arrow"></text>
+					</view>
+				</view>
+				
+				<!-- 没有奖励红包列表 -->
+				<view class="luckRed" style="left: 90%"  v-if="!isShowLuckRed"
+				:style="{transform: 'translateY(-60%)'}">
+					<view class="progress_award">
+						<image src="/static/img/luck/6b409b67de90070099dfbf74556f12bc.png" mode="widthFix"></image>
+					</view>
+					<view class="luckRedTest">
+						<text>敬请期待</text>
+						<text class="arrow"></text>
+					</view>
+				</view>
+				
 			</view>
+			
 		</view>
 		
 		<!-- 历史记录 -->
@@ -105,11 +126,15 @@
 			<button class="pointer" @tap="openLucky" hover-class="pointer_hover" style="background-color:transparent;">
 				<!-- <image src="/static/img/luck/ef5b234566bdb5d9f3d261c814fe44b0.png" mode=""></image> -->
 			</button>
+			<!-- 红包领取提示对话框 -->
+			   <min-modal ref="modal">
+			     <view>
+					 <view class="">红包金额: {{checkLuckRedMoney}}</view>
+			       <view>你已进行转盘抽奖{{luckNum}}次</view>
+			       <view>领取红包需要抽奖{{checkLuckRedNum}}次</view>
+			     </view>
+			   </min-modal>
 		</view>
-		
-		
-		
-		
 		
 		<!-- 遮罩层 -->
 		<view class="shadow" v-show="shadow">
@@ -127,6 +152,20 @@
 				</button>
 			</view>
 		</view>
+		
+		<!-- 领取转盘红包遮罩层 -->
+		<view class="shadow" v-show="luckRedShadow">
+			<view class="main">
+				<image src="/static/img/luck/luckRed.png" mode="widthFix"></image>
+				<view class="luckRedAward">
+					<text>{{luckRedMoney}}元</text>
+				</view>
+				
+				<button class="reward_btn luckRed_btn" @click.stop="closeLuckRed" hover-class="rewardBtn_hover" style="background-color:transparent;">
+					<!-- <image src="/static/img/luck/reward.png" mode=""></image> -->
+				</button>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -137,13 +176,18 @@ import storage from "@/api/storage.js";
 import audio from "@/common/audio.js";
 import util from "@/common/util.js";
 import str from "@/common/str.js";
+import minModal from '@/components/min-modal/min-modal'
 export default {
+	components: {
+	  minModal
+	},
 	data() {
 		return {
 			userEn: [], //我的信息
-			width: 28, 		//进度条长度
+			width: 0, 		//进度条长度
 			effect: true,   //转盘外部动画控制
-			shadow: false,  //遮罩层
+			shadow: false,  //转盘抽奖遮罩层
+			luckRedShadow: false,  //转盘红包遮罩层
 			animation: {
 				openRotate1: false,  //转盘动画1
 				openRotate2: false,  //转盘动画2
@@ -163,6 +207,13 @@ export default {
 			luckUrl: '', //领奖后跳转Url
 			
 			luckSetting: '',  //抽奖配置
+			luckRed: "",  //红包数据(红包列表，领取记录，转盘次数)
+			luckRedList: "",  //红包列表			
+			isShowLuckRed: false,  //是否显示幸运红包
+			luckNum: null, //用户转盘次数
+			luckRedMoney: null,  //转盘红包金额
+			checkLuckRedNum: null,  //选中红包需要的领取次数
+			checkLuckRedMoney: null,  //选中红包金额
 		}
 	},
 	onShow() {
@@ -172,6 +223,7 @@ export default {
 		this.rotateId = 0;
 		this.getLuckUrl();  //获取领奖后跳转Url
 		this.getLuckSetting();  //获取抽奖配置
+		this.getLuckRedProgress();  //获取红包进度
 	},
 	onLoad() {
 		this.openEffectAnimation();  //打开转盘外部动画
@@ -186,6 +238,101 @@ export default {
 		//return true
 	}, 
 	methods: {
+		//判断红包领取情况
+		LuckRedCase(luckRed){
+			if(luckRed.isOpen) this.luckRedReceive(luckRed);  //领取转盘红包奖励
+			else this.showLuckRedModal(luckRed);  //提示红包不可领取对话框
+		},
+		//提示红包不可领取对话框
+		showLuckRedModal(luckRed){
+			console.log(luckRed);
+			//获取红包领取需要次数
+			this.checkLuckRedNum = luckRed.num;
+			//获取红包金额
+			if(luckRed.type == 1) this.checkLuckRedMoney = luckRed.randomMin + '元';
+			else this.checkLuckRedMoney = '随机红包';
+			let title = "";
+			//设置提示标题
+			if(luckRed.num <= this.luckNum) title = '已领取';
+			else title = '转盘次数不足';
+			
+			this.$refs.modal.handleShow({
+			  title: title,
+			  showCancel: false,
+			  // 有content选项时solt插槽将失效
+			})
+		},
+		//领取转盘红包奖励
+		luckRedReceive(luckRed){
+			// console.log(luckRed);
+			api.luckRedReceive({uid: this.uid, redId: luckRed.id}, (res)=>{
+				let code = api.getCode(res);
+				let data = api.getData(res);
+				if(code == 0) {
+					this.luckRedMoney = data.award;  //设置遮罩层显示金额
+					this.luckRedShadow = true;  //打开红包遮罩层
+					this.getLuckRedProgress();  //重新获取红包进度
+				}
+				else{					
+					let msg = api.getMsg(res);
+					uni.showModal({
+						content: msg,
+						showCancel: false,
+					});
+				}
+			});
+		},
+		//关闭转盘红包遮罩层
+		closeLuckRed(){
+			this.luckRedShadow = false;
+		},
+		//获取红包进度
+		getLuckRedProgress(){
+			api.getLuckRedProgress({uid: this.uid}, (res)=>{
+				let data = api.getData(res);
+				// console.log(data);
+				//判断是否有转盘红包数据
+				if(!util.isEmpty(data.luckRed.data)) this.isShowLuckRed = true;
+				else {
+					this.isShowLuckRed = false;  //不显示红包列表
+					this.width = 0;   //转盘次数进度条清零
+					return;
+				};
+				this.luckRedList = data.luckRed.data;  //获取红包列表
+				if(!util.isEmpty(data.luckRedNum))
+					this.luckNum = data.luckRedNum.num;  //获取用户转盘次数
+				this.setLuckRedSite();  //计算红包和进度条位置
+			});
+		},
+		//计算红包、进度条位置、是否开启动画
+		setLuckRedSite(){
+			let lastIndex = this.luckRedList.length -1;  //最后一个红包下标
+			let redMax = this.luckRedList[lastIndex].num; //红包最大次数
+			this.luckRedList.forEach((item, index) =>{
+					item.isOpen = false;  //设置是否开启动画默认值
+					let pst = item.num / redMax;
+					item.position = parseInt(pst*100);  //设定红包在进度条中的位置
+			});
+			this.width = parseInt((this.luckNum / redMax)*100);  //计算进度条位置
+			this.width = Math.min(this.width, 100);  //防止进度条超过100%
+			this.getLuckRedDetails();  //查询红包是否已领取
+		},
+		//查询红包是否已领取
+		getLuckRedDetails(){
+			api.getLuckyRedDetails({uid: this.uid}, (res)=>{
+				let myRedList = api.getData(res).data;  //我的已领取记录
+				this.luckRedList.forEach((red) =>{	
+					let isHasRed = false;  //红包未领取
+					myRedList.forEach((myRed) =>{
+						if(myRed.redId === red.id) {
+							isHasRed = true;  //红包已领取
+						}
+					});
+					//如果红包没有领取并且需要次数已达成
+					if((!isHasRed) && (red.num <= this.luckNum)) red.isOpen = true;
+				});
+			});
+		},
 		//获取抽奖配置
 		getLuckSetting(){
 			api.getConfig({key: "luck_open_type|luck_open_sum"}, (res)=>{
@@ -244,6 +391,7 @@ export default {
 		closeShadow(){
 			audio.playAudio();
 			this.shadow =  false;  //关闭遮罩层
+			this.getLuckRedProgress();  //重新获取红包信息
 			//跳转地址包含http就跳转
 			if(str.contains(this.luckUrl, "http")) util.openUrl(this.luckUrl);  //领取奖励后打开外部页面
 		},
@@ -376,34 +524,33 @@ export default {
 		z-index:5;
 	}
 	.botline{
-		width:500rpx;
+		position:relative;
+		width:600rpx;
 		height:20rpx;
 		border-radius:10rpx;
 		border:1px solid #fff3dd;
 		background-color:rgba(255, 217, 147 ,.6);
+		margin:0;
+		padding:0;
 	}
 	.topline{
 		height:20rpx;
 		background-color:#91dc0d;
 		border-radius:10rpx;
 	}
+	.luckRed{
+		position: absolute;
+		display:flex;
+		flex-direction:column;
+		justify-content:center;
+		align-items:center;
+	}
 	.progress_award{
 		width:70rpx;
 		height:80rpx;
-		position: absolute;
-		transform:translateY(-60%);
-		left:10%;
+		transform-origin:center;/*定义bai动画的旋转中心点*/
 	}
-	.awardT{
-		left:30%;
-	}
-	.awardS{
-		left:50%;
-	}
-	.awardF{
-		top:7rpx;
-		left:83%;
-	}
+
 	.award_test{
 		width:158rpx;
 		height:40rpx;
@@ -458,6 +605,18 @@ export default {
 		transform:rotate(300deg);
 	}
 	
+	.luckRedReceive{
+		animation:luckRedReceive1 2s ease;
+		animation-iteration-count: infinite;
+	}
+	@keyframes luckRedReceive1 {
+		0%{transform:rotate(10deg);}
+		8%{transform:rotate(-10deg);}
+		16%{transform:rotate(10deg);}
+		24%{transform:rotate(-10deg);}
+		32%{transform:rotate(0deg);}
+		100%{transform:rotate(0deg);}
+	}
 	
 	.open_rotate1{
 		animation:rotate1 3s ease 1;
@@ -654,6 +813,9 @@ export default {
 		background-size: 100%;
 		transform-origin: 0 50%;
 	}
+	.luckRed_btn{
+		top:52%;
+	}
 	.rewardBtn_hover{
 		transform:scale(0.9) translate(-50%, 0);
 	}
@@ -672,6 +834,16 @@ export default {
 		transform: translateX(-50%);
 		text-align:center;
 		color:#FF0000;
+	}
+	.luckRedAward{
+		position:absolute;
+		top:36%;
+		left:50%;
+		transform: translateX(-50%);
+		text-align:center;
+		color:#FFE4BF;
+		font-size:36px;
+		font-weight:bold;
 	}
 	.getaward_img{
 		width:220rpx;
@@ -694,5 +866,33 @@ export default {
 	}
 	.gold_btn{
 		opacity:0.8;
+	}
+	
+	
+	.luckRedTest{
+		position: absolute; 
+		top:42px;
+		font-size:12px;
+		padding:5rpx 10rpx;
+		box-sizing:border-box;
+		background-color:#fe2d2b;
+		color:#fef1c4;
+		border:1px solid #fef1c4;
+		border-radius:10rpx;
+		display:flex;
+		justify-content:center;
+		align-items:center;
+		white-space:nowrap;
+	}
+	.arrow{
+		display:inline-block;
+		width: 0;
+		height: 0;
+		border-top: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-bottom: 5px solid #fe2d2b;
+		border-left: 5px solid transparent;
+		position:absolute;
+		top:-10px;
 	}
 </style>

@@ -229,6 +229,21 @@ const api = {
 	
 	//取系统当前时间
 	getSystemTimeNow: function (path, funSuccess, state = false) {httpUtil.post("system/getSystemTimeNow", path, funSuccess, state);},
+	
+	//查询红包进度
+	getLuckRedProgress: function (path, funSuccess, state = false) {httpUtil.post("activity/luckRed/getLuckRedProgress", path, funSuccess, state);},
+	
+	//领取转盘红包奖励
+	luckRedReceive: function (path, funSuccess, state = false) {httpUtil.post("activity/luckRed/luckRedReceive", path, funSuccess, state);},
+	
+	//查询玩家领取红包记录
+	getLuckyRedDetails: function (path, funSuccess, state = false) {httpUtil.post("activity/luckRed/getLuckyRedDetails", path, funSuccess, state);},
+	
+	//查询金额收入类别
+	getMoneyInType: function(path, funSuccess, state = false) {httpUtil.post('money/getMoneyInType', path, funSuccess, state);},
+	
+	//查询金额支出类别
+	getMoneyOutType: function(path, funSuccess, state = false) {httpUtil.post('money/getMoneyOutType', path, funSuccess, state);},
 };
 
 export default api;

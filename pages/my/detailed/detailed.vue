@@ -229,23 +229,7 @@
 						</view>
 						<view class="income" v-for="(item,index) in moneyList" :key='index' @tap="moneyOpen(item.id)">
 							<view class="incomeTime">
-								<text v-show="item.type == 0">金币转换现金</text>
-								<text v-show="item.type == 1">提现审核失败</text>
-								<text v-show="item.type == 2">签到奖励</text>
-								<text v-show="item.type == 3">幸运抽奖获奖</text>
-								<text v-show="item.type == 4">充值</text>
-								<text v-show="item.type == 5">利息宝取出</text>
-								<text v-show="item.type == 6">任务奖励</text>
-								<text v-show="item.type == 7">幸运抽奖支出</text>
-								<text v-show="item.type == 10">加款</text>
-								<text v-show="item.type == 50">代理佣金</text>
-								<text v-show="item.type == 100">提现</text>
-								<text v-show="item.type == 101">余额转金币</text>
-								<text v-show="item.type == 102">升级</text>
-								<text v-show="item.type == 103">利息宝转入</text>
-								<text v-show="item.type == 104">扣款</text>
-								<text v-show="item.type == 105">发布任务</text>
-								<text v-show="item.type == 106">幸运抽奖支出</text>
+								<text>{{item.typeTest}}</text>
 								<view class="moneyTran_time">
 									{{item.addTime}}
 								</view>
@@ -337,7 +321,6 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.userEn = storage.getMyInfo();  //获取我的信息
 			this.getMoneyTran(0);  //获取金额转换记录
 			this.getMoneyDraw(0);  //获取提现记录
-			this.getMoney(0);  //获取账变记录
 			this.getMoneyRecharge(0); //获取充值明细
 			this.isOpenGold = storage.getOpenGold();  //获取是否开启金币
 			if(this.isOpenGold == 1)
@@ -363,6 +346,7 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				if(this.isOpenGold == 0) this.current -= 1;
 				
 			}
+			this.getMoneyInType();   //获取金额类型
 		},
         data() {
             return {
@@ -428,6 +412,8 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 				uid: "",  //uid
 				triggered: false  ,//当前下拉刷新状态
 				isOpenGold: null,  //是否开启金币 0关闭 1开启
+				
+				moneyType: [],  //金额类型
             }
         },
         onLoad(res) {
@@ -435,6 +421,28 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 			this.uid = storage.getUid();  //获取uid
         },
         methods: {
+			//获取金额收入类型
+			getMoneyInType(){
+				api.getMoneyInType({}, (res)=>{
+					let data = api.getData(res);
+					data.forEach((item) =>{
+						item.key = parseInt(item.key);
+					});
+					this.moneyType = data;
+					this.getMoneyOutType();  //获取金额支出类型
+				});
+			},
+			//获取金额支出类型
+			getMoneyOutType(){
+				api.getMoneyOutType({}, (res)=>{
+					let data = api.getData(res);
+					data.forEach((item) =>{
+						item.key = parseInt(item.key);
+					});
+					this.moneyType = this.moneyType.concat(data);
+					this.getMoney(0);  //获取账变记录
+				});
+			},
 			//抽屉查询数据
 			queryData(){
 				this.closeDrawer();
@@ -781,6 +789,10 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 						else{
 							data.forEach((item) =>{
 								item.openMoneyTag = false;
+								item.typeTest = "";
+								this.moneyType.forEach((item1) =>{
+									if(item1.key === item.type) item.typeTest = item1.val;
+								});
 							});
 							this.moneyList = data;
 							this.moneyShow = true;
@@ -794,6 +806,10 @@ import tuiNomore from "@/components/tui-nomore/tui-nomore.vue";
 							this.moneyLoadding = false;
 							data.forEach((item) =>{
 								item.openMoneyTag = false;
+								item.typeTest = "";
+								this.moneyType.forEach((item1) =>{
+									if(item1.key === item.type) item.typeTest = item1.val;
+								});
 								this.moneyList.push(item);
 							});
 							this.moneyShow = true;
