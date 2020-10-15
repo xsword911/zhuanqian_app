@@ -331,6 +331,7 @@ export default {
 					//如果红包没有领取并且需要次数已达成
 					if((!isHasRed) && (red.num <= this.luckNum)) red.isOpen = true;
 				});
+				console.log(this.luckRedList);
 			});
 		},
 		//获取抽奖配置
@@ -520,7 +521,7 @@ export default {
 	}
 	.list{
 		position:absolute;
-		top:16vh;
+		top:17vh;
 		z-index:5;
 	}
 	.botline{
@@ -574,7 +575,7 @@ export default {
 		width:750rpx;
 		height:750rpx;
 		position:absolute;
-		top:25vh;
+		top:28vh;
 		/* transform:rotate(-300deg); */
 	}
 	.rotate{
@@ -853,7 +854,7 @@ export default {
 	.record{
 		position:absolute;
 		right: 0;
-		top:26%;
+		top:27vh;
 		background-color: #F8F8F8;
 		width:180rpx;
 		height:70rpx;
